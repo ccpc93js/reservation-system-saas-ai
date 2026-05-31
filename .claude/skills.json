@@ -1,0 +1,45 @@
+{
+  "enabled_skills": [
+    "superpowers",
+    "obsidian-markdown",
+    "obsidian-cli",
+    "ui-ux-pro-max",
+    "impeccable",
+    "caveman",
+    "caveman-stats",
+    "caveman-review"
+  ],
+  "project_type": "next.js-saas",
+  "stack": {
+    "frontend": "Next.js 13+, React, TypeScript, Tailwind CSS",
+    "backend": "Supabase (PostgreSQL)",
+    "auth": "Supabase Auth",
+    "database": "PostgreSQL via Supabase"
+  },
+  "skill_preferences": {
+    "superpowers": {
+      "focus": "rapid-feature-development",
+      "code_style": "typescript-react"
+    },
+    "ui-ux-pro-max": {
+      "design_system": "tailwind",
+      "target_screens": ["booking", "dashboard", "admin"]
+    },
+    "impeccable": {
+      "check_linting": true,
+      "check_types": true,
+      "check_accessibility": true
+    },
+    "caveman": {
+      "data_sources": ["database", "analytics"],
+      "focus_areas": ["booking-patterns", "user-metrics"]
+    }
+  },
+  "development_workflow": {
+    "phase_1": "Plan & Document (Obsidian)",
+    "phase_2": "Build Features (Superpowers)",
+    "phase_3": "Design UX (UI UX Pro Max)",
+    "phase_4": "Review Code (Impeccable)",
+    "phase_5": "Analyze Data (Caveman)"
+  }
+}

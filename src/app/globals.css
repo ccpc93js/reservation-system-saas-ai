@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── HostelHub Design Tokens ──────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg: 60 9% 98%;              /* #FAFAF7 — warm off-white page bg */
+  --surface: 0 0% 100%;         /* #FFFFFF — cards, panels */
+  --border: 40 14% 89%;         /* #E7E5DE — dividers */
+
+  /* Tailwind/shadcn-compatible aliases */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-fg);
+  --secondary: var(--border);
+  --secondary-foreground: var(--text);
+  --muted: var(--border);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent);
+  --accent-foreground: var(--accent-fg);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-fg);
+  --input: var(--border);
+  --ring: var(--accent);
+
+  /* Text */
+  --text: 0 0% 9%;              /* #171717 — primary text */
+  --text-muted: 40 4% 41%;      /* #6B6B66 — secondary text */
+
+  /* Accent — teal */
+  --accent: 161 74% 24%;        /* #0F6E56 */
+  --accent-fg: 0 0% 100%;       /* white text on accent */
+  --accent-hover: 161 74% 20%;  /* slightly darker on hover */
+
+  /* Status colors */
+  --success: 96 73% 24%;        /* #3B6D11 */
+  --success-fg: 96 73% 95%;
+  --success-bg: 96 73% 96%;
+
+  --warning: 33 83% 28%;        /* #854F0B */
+  --warning-fg: 33 83% 98%;
+  --warning-bg: 33 83% 96%;
+
+  --danger: 0 57% 41%;          /* #A32D2D */
+  --danger-fg: 0 57% 98%;
+  --danger-bg: 0 57% 97%;
+
+  /* Misc */
+  --radius: 0.5rem;
+  --sidebar-width: 240px;
+}
+
+/* ─── Dark Mode ─────────────────────────────────────────────────────────────── */
+.dark {
+  --bg: 40 7% 9%;               /* #161614 */
+  --surface: 40 7% 12%;         /* #1E1E1B */
+  --border: 40 7% 18%;          /* #2E2E2A */
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-fg);
+  --secondary: var(--border);
+  --secondary-foreground: var(--text);
+  --muted: var(--border);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent);
+  --accent-foreground: var(--accent-fg);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-fg);
+  --input: var(--border);
+  --ring: var(--accent);
+
+  --text: 60 9% 96%;            /* #F5F5F2 */
+  --text-muted: 40 4% 64%;      /* #A3A39D */
+
+  --accent: 160 45% 58%;        /* #5DCAA5 */
+  --accent-fg: 161 74% 12%;     /* #04342C */
+
+  --success: 86 44% 56%;        /* #97C459 */
+  --warning: 38 84% 55%;        /* #EF9F27 */
+  --danger: 0 72% 76%;          /* #F09595 */
+}
+
+/* ─── Base Styles ───────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: hsl(var(--bg));
+  color: hsl(var(--text));
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--text-muted));
+}
+
+/* ─── Focus styles ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* ─── Status pill utility classes ───────────────────────────────────────────── */
+.status-confirmed  { background: hsl(var(--success-bg)); color: hsl(var(--success)); }
+.status-pending    { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
+.status-checked_in { background: hsl(161 74% 90%); color: hsl(var(--accent)); }
+.status-cancelled  { background: hsl(var(--danger-bg));  color: hsl(var(--danger));  }
+.status-no_show    { background: hsl(var(--border)); color: hsl(var(--text-muted)); }
+
+/* ─── Tape Chart Scrollbar ───────────────────────────────────────────────────── */
+.tape-chart-container::-webkit-scrollbar {
+  height: 6px;
+}
+.tape-chart-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.tape-chart-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.tape-chart-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
