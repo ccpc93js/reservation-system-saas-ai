@@ -1,0 +1,219 @@
+
+> hostelhub@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.2 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.138:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 620ms
+ ✓ Ready in 3.3s
+ ○ Compiling / ...
+ ✓ Compiled / in 3.8s
+ GET / 307 in 4470ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.3s
+ GET /dashboard 200 in 4330ms
+ GET /dashboard 200 in 3370ms
+ GET /dashboard 200 in 2756ms
+ ✓ Compiled in 511ms
+ ✓ Compiled /dashboard in 165ms
+ GET /dashboard 200 in 731ms
+ ○ Compiling /calendar ...
+ ✓ Compiled /calendar in 4.4s
+ GET /calendar 200 in 525ms
+ GET /calendar 200 in 5401ms
+ ✓ Compiled in 1382ms
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6189:225
+    at SupabaseAuthClient._useSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5989:26)
+    at async SupabaseAuthClient._getUser (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6174:20)
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6158:20
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5937:28 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6189:225
+    at SupabaseAuthClient._useSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5989:26)
+    at async SupabaseAuthClient._getUser (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6174:20)
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6158:20
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5937:28 {
+  
+}
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.5s
+ GET /login 200 in 3153ms
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:42
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:615:11
+    at new Promise (<anonymous>)
+    at retryable (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:597:21)
+    at SupabaseAuthClient._refreshAccessToken (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7555:224)
+    at SupabaseAuthClient._callRefreshToken (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7711:48)
+    at SupabaseAuthClient.__loadSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6058:57)
+    at async SupabaseAuthClient._useSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5988:28)
+    at async SupabaseAuthClient._emitInitialSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7186:16) {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+AuthRetryableFetchError: fetch failed {
+  __isAuthError: true,
+  status: 0,
+  code: undefined
+}
+AuthRetryableFetchError: fetch failed {
+  __isAuthError: true,
+  status: 0,
+  code: undefined
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:42
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:615:11
+    at new Promise (<anonymous>)
+    at retryable (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:597:21)
+    at SupabaseAuthClient._refreshAccessToken (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7555:224)
+    at SupabaseAuthClient._callRefreshToken (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7711:48)
+    at SupabaseAuthClient.__loadSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:6058:57)
+    at async SupabaseAuthClient._useSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:5988:28)
+    at async SupabaseAuthClient._emitInitialSession (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7186:16) {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+Error: fetch failed
+    at context.fetch (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\node_modules\next\dist\server\web\sandbox\context.js:322:60)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:528:23
+    at _handleRequest (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:904:24)
+    at _request (C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:891:24)
+    at C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:7560:225
+    at async C:\Users\crist\OneDrive\Documentos\Claude\Projects\Reservation System SASS AI-Powered\.next\server\edge\chunks\node_modules_@supabase_auth-js_dist_module_e443dca4._.js:603:36 {
+  
+}
+AuthRetryableFetchError: fetch failed {
+  __isAuthError: true,
+  status: 0,
+  code: undefined
+}
+AuthRetryableFetchError: fetch failed {
+  __isAuthError: true,
+  status: 0,
+  code: undefined
+}
+ GET /login 200 in 222ms

@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit*)",
+            "command": "bash .claude/update-docs.sh 2>/dev/null || true",
+            "statusMessage": "Updating documentation...",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

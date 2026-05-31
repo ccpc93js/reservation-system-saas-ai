@@ -1,3 +1,27 @@
+## [ec6ca50] - 2026-05-31
+
+### Auto-Documentation Update Hook
+
+Implement automated documentation synchronization on every commit.
+
+**Features:**
+- PostToolUse hook analyzes git commits after they complete
+- Automatically updates CHANGELOG.md with commit details
+- Maps file changes to relevant documentation areas (architecture, design, phases)
+- Script detects changes in src/, supabase/, and configuration files
+- Non-blocking execution — hook failures don't affect commits
+
+**Files:**
+- `.claude/settings.json` - Hook configuration
+- `.claude/update-docs.sh` - Documentation analysis script
+- `docs/guides/DEVELOPMENT.md` - Development workflow guide
+
+**Impact:**
+Documentation stays synchronized with code in every commit, creating an atomic record of what changed and why. Developers don't need to manually update CHANGELOG or flag affected documentation areas.
+
+**Usage:**
+Simply commit as normal — the hook runs automatically and updates relevant docs before completing the commit.
+
 # Changelog
 
 All notable changes to this project are documented in this file.
