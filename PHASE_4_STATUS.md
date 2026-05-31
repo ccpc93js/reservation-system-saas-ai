@@ -38,6 +38,15 @@
 - [x] Update UI buttons: "Use Existing" and "Merge Records"
 - [x] Close dialog and refresh guest list after successful merge
 
+#### Enhancement: Document Upload in New Guest Form
+- [x] Add `newlyCreatedGuestId` state to track newly created guests
+- [x] After guest creation, show upload section instead of closing
+- [x] Hide form inputs in "upload mode", show success message
+- [x] Display DocumentUpload component with newly created guest ID
+- [x] Allow optional document uploads after guest creation
+- [x] Show "Done" button instead of form submission buttons
+- [x] Properly call `onGuestCreated` callback after done
+
 ---
 
 ## 🧪 Testing Completed
@@ -59,6 +68,9 @@
 - [x] Merge with multiple documents from both guests
 - [x] Merge dialog handles loading state correctly
 - [x] Cancel button closes dialog without merging
+- [x] Document upload after guest creation persists correctly
+- [x] Upload documents show in guest edit view after creation
+- [x] Closing and reopening guest shows uploaded documents
 
 ---
 
@@ -107,8 +119,9 @@ Phase 4 successfully delivers a complete **duplicate guest resolution system** w
 3. **Safe Merging**: User controls which data to keep, combine, or override
 4. **Data Preservation**: All documents and notes are merged intelligently
 5. **Seamless UX**: Dialog-based workflow integrated into guest creation flow
+6. **Document Upload Enhancement**: Users can upload documents immediately after creating a guest
 
-The system prevents data loss when users accidentally create duplicate guest entries while maintaining data integrity through selective merging and proper record cleanup.
+The system prevents data loss when users accidentally create duplicate guest entries while maintaining data integrity through selective merging and proper record cleanup. The integrated document upload streamlines the guest creation workflow by allowing immediate document attachment post-creation.
 
 ---
 
