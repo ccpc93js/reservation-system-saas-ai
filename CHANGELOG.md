@@ -1,3 +1,18 @@
+## [901eb4e] - 2026-05-31
+
+Phase 4: Update status documentation - 100% complete
+
+## [ee100a6] - 2026-05-31
+
+Phase 4: Implement duplicate guest merge UI with field-by-field selection
+
+- New component: duplicate-merge-dialog.tsx for side-by-side guest comparison
+- New API route: POST /api/guests/merge for merging guest records
+- Enhanced guest-dialog.tsx to show merge dialog on duplicate detection
+- Users can now select which guest fields to keep or combine
+- Document arrays are automatically merged, notes are combined with timestamp
+- Fully functional merge workflow with preview before confirming
+
 ## [abe5504] - 2026-05-31
 
 Phase 3: Complete guest management with deduplication and document upload

@@ -49,6 +49,7 @@ export default function GuestDialog({
   const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [forceCreateDuplicate, setForceCreateDuplicate] = useState(false);
   const [existingDocuments, setExistingDocuments] = useState<any[]>([]);
+  const [newlyCreatedGuestId, setNewlyCreatedGuestId] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const submitFormRef = useRef<HTMLFormElement>(null);
 
@@ -189,10 +190,18 @@ export default function GuestDialog({
       }
 
       toast.success(guestId ? "Guest updated!" : "Guest created!");
-      onOpenChange(false);
-      reset();
+
+      // For new guests, show document upload screen instead of closing
+      if (!guestId && result.id) {
+        setNewlyCreatedGuestId(result.id);
+        reset();
+      } else {
+        // For updates, close the dialog
+        onOpenChange(false);
+        reset();
+      }
       setForceCreateDuplicate(false);
-      guestId ? onGuestUpdated?.() : onGuestCreated?.();
+      guestId ? onGuestUpdated?.() : null;
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error saving guest");
@@ -354,6 +363,17 @@ export default function GuestDialog({
             })}
             className="space-y-4"
           >
+            {/* Post-creation upload mode */}
+            {newlyCreatedGuestId && (
+              <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50">
+                <p className="text-sm font-semibold text-emerald-900 mb-2">✓ Guest created successfully!</p>
+                <p className="text-xs text-emerald-800">Now you can upload documents. (Optional)</p>
+              </div>
+            )}
+
+            {/* Form fields (hidden in upload mode) */}
+            {!newlyCreatedGuestId && (
+              <>
             {/* First & Last Name */}
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -712,15 +732,17 @@ export default function GuestDialog({
                 </div>
               )}
             </div>
+            </>
+            )}
 
             {/* Document Upload */}
-            {guestId && (
+            {(guestId || newlyCreatedGuestId) && (
               <div className="rounded-lg border p-4" style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))" }}>
                 <h3 className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
                   Upload Document
                 </h3>
                 <DocumentUpload
-                  guestId={guestId}
+                  guestId={guestId || newlyCreatedGuestId || ""}
                   existingDocuments={existingDocuments}
                   onUploadComplete={(url, fileName) => {
                     toast.success(`Document uploaded: ${fileName}`);
@@ -733,7 +755,8 @@ export default function GuestDialog({
             )}
 
             {/* Notes */}
-            <div>
+            {!newlyCreatedGuestId && (
+              <div>
               <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
                 Notes (optional)
               </label>
@@ -751,6 +774,7 @@ export default function GuestDialog({
                 <p className="text-xs text-red-500 mt-1">{String(errors.notes?.message ?? "")}</p>
               )}
             </div>
+            )}
 
             {/* Delete button — danger zone */}
             {guestId && (
@@ -774,20 +798,38 @@ export default function GuestDialog({
 
             {/* Footer */}
             <div className="flex gap-2 justify-end pt-4 border-t border-border">
-              <button
-                type="button"
-                onClick={() => onOpenChange(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-background text-foreground border border-border hover:bg-muted"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                {isSubmitting ? "Saving..." : guestId ? "Save Changes" : "Create Guest"}
-              </button>
+              {newlyCreatedGuestId ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onOpenChange(false);
+                      setNewlyCreatedGuestId(null);
+                      onGuestCreated?.();
+                    }}
+                    className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    Done
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => onOpenChange(false)}
+                    className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-background text-foreground border border-border hover:bg-muted"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    {isSubmitting ? "Saving..." : guestId ? "Save Changes" : "Create Guest"}
+                  </button>
+                </>
+              )}
             </div>
           </form>
         </Dialog.Content>
