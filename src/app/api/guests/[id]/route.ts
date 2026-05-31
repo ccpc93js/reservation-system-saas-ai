@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { updateGuestSchema } from "@/lib/validations/guest";
 import crypto from "crypto";
 
@@ -34,10 +34,10 @@ export async function GET(
       );
     }
 
-    // Fetch guest
+    // Fetch guest (including document_url)
     const { data: guest, error: guestError } = await supabase
       .from("guests")
-      .select("*")
+      .select("*, document_url")
       .eq("id", id)
       .eq("organization_id", (membership as any).organization_id)
       .single();
@@ -72,20 +72,21 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const supabase = await createServerClient();
+    const authClient = await createServerClient();
+    const supabase = await createServiceClient();
 
     // Get current user
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await authClient.auth.getUser();
 
     if (userError || !user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
+    const { data: membership, error: membershipError } = await authClient
       .from("memberships")
       .select("organization_id")
       .eq("user_id", user.id)
@@ -98,7 +99,7 @@ export async function PATCH(
       );
     }
 
-    // Verify guest exists and belongs to org
+    // Verify guest exists and belongs to org (using service client)
     const { data: guest, error: guestError } = await supabase
       .from("guests")
       .select("id")
@@ -192,20 +193,21 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const supabase = await createServerClient();
+    const authClient = await createServerClient();
+    const supabase = await createServiceClient();
 
     // Get current user
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await authClient.auth.getUser();
 
     if (userError || !user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
+    const { data: membership, error: membershipError } = await authClient
       .from("memberships")
       .select("organization_id")
       .eq("user_id", user.id)

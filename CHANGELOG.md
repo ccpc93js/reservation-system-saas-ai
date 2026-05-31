@@ -1,3 +1,16 @@
+## [4cc7c4e] - 2026-05-31
+
+Add auto-documentation update hook on commits
+
+- Configure PostToolUse hook to analyze git commits
+- Update CHANGELOG.md with commit details automatically
+- Identify when architecture, design, or phase docs are affected
+- Script analyzes file changes and flags relevant documentation
+- Hook runs silently after each commit (non-blocking)
+
+This ensures documentation stays synchronized with code changes
+without requiring manual updates for every commit.
+
 ## [ec6ca50] - 2026-05-31
 
 ### Auto-Documentation Update Hook

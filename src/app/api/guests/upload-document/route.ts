@@ -1,10 +1,10 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { randomUUID } from "crypto";
 import { DocumentMetadata } from "@/lib/types/database";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createServerClient();
+    const supabase = await createServiceClient();
 
     // Get current user
     const {

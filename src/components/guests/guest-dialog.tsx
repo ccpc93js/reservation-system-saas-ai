@@ -46,6 +46,7 @@ export default function GuestDialog({
   const [expandDocumentInfo, setExpandDocumentInfo] = useState(false);
   const [duplicateGuest, setDuplicateGuest] = useState<any>(null);
   const [forceCreateDuplicate, setForceCreateDuplicate] = useState(false);
+  const [existingDocuments, setExistingDocuments] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const submitFormRef = useRef<HTMLFormElement>(null);
 
@@ -100,6 +101,20 @@ export default function GuestDialog({
         const res = await fetch(`/api/guests/${guestId}`);
         const data = await res.json();
         setGuest(data);
+
+        // Parse existing documents
+        if (data.document_url) {
+          try {
+            const docs = typeof data.document_url === 'string'
+              ? JSON.parse(data.document_url)
+              : data.document_url;
+            setExistingDocuments(Array.isArray(docs) ? docs : []);
+          } catch (e) {
+            console.error('Error parsing documents:', e);
+            setExistingDocuments([]);
+          }
+        }
+
         reset({
           first_name: data.first_name || "",
           last_name: data.last_name || "",
@@ -664,6 +679,7 @@ export default function GuestDialog({
                 </h3>
                 <DocumentUpload
                   guestId={guestId}
+                  existingDocuments={existingDocuments}
                   onUploadComplete={(url, fileName) => {
                     toast.success(`Document uploaded: ${fileName}`);
                   }}

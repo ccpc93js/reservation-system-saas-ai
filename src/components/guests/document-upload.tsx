@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Upload, X, FileText, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { DocumentMetadata, UploadDocumentResponse } from "@/lib/types/database";
 
 interface DocumentUploadProps {
   guestId: string;
+  existingDocuments?: DocumentMetadata[];
   onUploadComplete?: (fileUrl: string, fileName: string) => void;
   onError?: (error: string) => void;
 }
 
 export default function DocumentUpload({
   guestId,
+  existingDocuments = [],
   onUploadComplete,
   onError,
 }: DocumentUploadProps) {
@@ -20,7 +22,40 @@ export default function DocumentUpload({
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<{ url: string; name: string } | null>(null);
+  const [documents, setDocuments] = useState<DocumentMetadata[]>(existingDocuments);
+  const [documentUrls, setDocumentUrls] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setDocuments(existingDocuments);
+    // Generate signed URLs for existing documents
+    generateSignedUrls(existingDocuments);
+  }, [existingDocuments]);
+
+  const generateSignedUrls = async (docs: DocumentMetadata[]) => {
+    const urls: Record<string, string> = {};
+    for (const doc of docs) {
+      if (doc.filePath) {
+        try {
+          const res = await fetch("/api/guests/document-url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filePath: doc.filePath,
+              guestId: guestId,
+            }),
+          });
+          const result = await res.json();
+          if (result.success) {
+            urls[doc.filePath] = result.url;
+          }
+        } catch (e) {
+          console.error("Error generating signed URL:", e);
+        }
+      }
+    }
+    setDocumentUrls(urls);
+  };
 
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"];
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -81,6 +116,14 @@ export default function DocumentUpload({
         url: result.url,
         name: result.fileName,
       });
+
+      // Add to documents list
+      setDocuments(prev => [...prev, {
+        url: result.url,
+        fileName: result.fileName,
+        uploadedAt: new Date().toISOString(),
+        type: 'application/octet-stream'
+      }]);
 
       toast.success("Document uploaded successfully!");
       onUploadComplete?.(result.url, result.fileName);
@@ -196,6 +239,39 @@ export default function DocumentUpload({
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Existing Documents List */}
+      {documents.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-medium text-muted-foreground">Uploaded Documents:</p>
+          {documents.map((doc, idx) => (
+            <div key={idx} className="rounded-lg border p-3" style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))" }}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  {doc.type?.startsWith('image/') ? (
+                    <img src={doc.url} alt="thumb" className="w-12 h-12 rounded object-cover flex-shrink-0" />
+                  ) : (
+                    <FileText className="w-12 h-12 text-muted-foreground flex-shrink-0" />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <a
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium truncate text-blue-600 hover:underline block"
+                    >
+                      {doc.fileName}
+                    </a>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {new Date(doc.uploadedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
