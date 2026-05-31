@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { createGuestSchema, updateGuestSchema, type CreateGuestInput } from "@/lib/validations/guest";
 import { createBrowserClient } from "@/lib/supabase/client";
 import DocumentUpload from "./document-upload";
+import DuplicateMergeDialog from "./duplicate-merge-dialog";
 
 interface GuestDialogProps {
   open: boolean;
@@ -45,6 +46,7 @@ export default function GuestDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [expandDocumentInfo, setExpandDocumentInfo] = useState(false);
   const [duplicateGuest, setDuplicateGuest] = useState<any>(null);
+  const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [forceCreateDuplicate, setForceCreateDuplicate] = useState(false);
   const [existingDocuments, setExistingDocuments] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -178,6 +180,7 @@ export default function GuestDialog({
         // Handle duplicate guest (409 Conflict)
         if (response.status === 409 && result.duplicate && !forceCreateDuplicate) {
           setDuplicateGuest(result.existingGuest);
+          setShowMergeDialog(true);
           return;
         }
 
@@ -227,6 +230,36 @@ export default function GuestDialog({
     }
   };
 
+  const handleMerge = async (mergeSelections: any) => {
+    try {
+      const response = await fetch("/api/guests/merge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          existingGuestId: duplicateGuest.id,
+          newGuestData: watch(),
+          mergeSelections,
+          orgId,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Merge failed");
+      }
+
+      toast.success("Guests merged successfully!");
+      onOpenChange(false);
+      reset();
+      setShowMergeDialog(false);
+      setDuplicateGuest(null);
+      onGuestCreated?.();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Merge failed");
+    }
+  };
+
   if (isLoading) {
     return (
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -240,6 +273,22 @@ export default function GuestDialog({
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+    );
+  }
+
+  // Show merge dialog if needed
+  if (showMergeDialog && duplicateGuest) {
+    return (
+      <DuplicateMergeDialog
+        newGuestData={watch()}
+        existingGuest={duplicateGuest}
+        orgId={orgId}
+        onMerge={handleMerge}
+        onCancel={() => {
+          setShowMergeDialog(false);
+          setDuplicateGuest(null);
+        }}
+      />
     );
   }
 
@@ -286,18 +335,11 @@ export default function GuestDialog({
                     <button
                       type="button"
                       onClick={() => {
-                        setDuplicateGuest(null);
-                        setForceCreateDuplicate(true);
-                        // Trigger form submission after state is set
-                        setTimeout(() => {
-                          submitFormRef.current?.dispatchEvent(
-                            new Event("submit", { bubbles: true, cancelable: true })
-                          );
-                        }, 0);
+                        // Merge dialog will be shown by showMergeDialog state
                       }}
                       className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-900 hover:bg-amber-200 transition-colors"
                     >
-                      Create Anyway
+                      Merge Records
                     </button>
                   </div>
                 </div>

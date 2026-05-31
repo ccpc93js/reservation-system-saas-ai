@@ -1,3 +1,34 @@
+## [abe5504] - 2026-05-31
+
+Phase 3: Complete guest management with deduplication and document upload
+
+Features:
+- Guest deduplication prevents duplicate entries by document hash
+- 409 conflict response when duplicate detected with existing guest details
+- All 9 Serbia-required fields in form (place_of_birth, country_of_birth, etc.)
+- Document upload to Supabase Storage with persistence
+- Document metadata stored as jsonb array
+- Document download with public bucket access
+
+Fixes:
+- Use createServiceClient for write operations (API routes now bypass RLS)
+- Document persistence: documents now reload when guest is re-opened
+- Bucket made public for document downloads
+- Fixed document-upload component to display existing documents
+
+Testing:
+- ✅ Deduplication warning appears for duplicate guests
+- ✅ Documents upload and persist across sessions
+- ✅ All Serbia fields save and load correctly
+- ✅ Document downloads work via public URLs
+
+Related files modified:
+- src/app/api/guests/create/route.ts
+- src/app/api/guests/[id]/route.ts
+- src/app/api/guests/upload-document/route.ts
+- src/components/guests/guest-dialog.tsx
+- src/components/guests/document-upload.tsx
+
 ## [4cc7c4e] - 2026-05-31
 
 Add auto-documentation update hook on commits
