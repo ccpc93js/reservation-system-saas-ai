@@ -1,3 +1,21 @@
+## [44cebdf] - 2026-06-05
+
+Update Phase 4 status: Add document upload enhancement
+
+## [44cebdf] - 2026-05-31
+
+Update Phase 4 status: Add document upload enhancement
+
+## [445bcb2] - 2026-05-31
+
+Add document upload to new guest form
+
+- Documents can now be uploaded immediately after guest creation
+- Form hides input fields after creation and shows upload section
+- Users see success message and can optionally upload documents
+- Post-upload UI flows smoothly back to guest list
+- Maintains all existing document upload functionality
+
 ## [901eb4e] - 2026-05-31
 
 Phase 4: Update status documentation - 100% complete

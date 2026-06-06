@@ -60,6 +60,16 @@ export default function GuestDialog({
     }
   }, [duplicateGuest]);
 
+  const handleExtractedData = (extractedFields: Record<string, any>) => {
+    // Pre-fill form fields with extracted data
+    Object.entries(extractedFields).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== "") {
+        setValue(key, value);
+      }
+    });
+    toast.success("Document data extracted and pre-filled!");
+  };
+
   const schema = guestId ? updateGuestSchema : createGuestSchema;
 
   const {
@@ -314,7 +324,14 @@ export default function GuestDialog({
             <Dialog.Title className="text-lg font-semibold text-foreground">
               {guestId ? "Edit Guest" : "New Guest"}
             </Dialog.Title>
-            <Dialog.Close className="rounded p-1 hover:bg-muted transition-colors">
+            <Dialog.Close
+              onClick={() => {
+                if (newlyCreatedGuestId) {
+                  onGuestCreated?.();
+                  setNewlyCreatedGuestId(null);
+                }
+              }}
+              className="rounded p-1 hover:bg-muted transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
             </Dialog.Close>
           </div>
@@ -363,6 +380,29 @@ export default function GuestDialog({
             })}
             className="space-y-4"
           >
+            {/* OCR Upload Section - Show at TOP for new guests */}
+            {!guestId && (
+              <div className="rounded-lg border p-4 bg-blue-50 border-blue-200">
+                <h3 className="text-sm font-medium mb-3 text-blue-900">
+                  📸 Upload ID/Passport to Auto-Fill Form
+                </h3>
+                <p className="text-xs text-blue-800 mb-3">
+                  Upload a clear photo to automatically extract and fill all guest information
+                </p>
+                <DocumentUpload
+                  guestId=""
+                  existingDocuments={[]}
+                  onUploadComplete={(url, fileName) => {
+                    toast.success(`Document uploaded: ${fileName}`);
+                  }}
+                  onExtractedData={handleExtractedData}
+                  onError={(error) => {
+                    console.error("Upload error:", error);
+                  }}
+                />
+              </div>
+            )}
+
             {/* Post-creation upload mode */}
             {newlyCreatedGuestId && (
               <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50">
@@ -747,6 +787,7 @@ export default function GuestDialog({
                   onUploadComplete={(url, fileName) => {
                     toast.success(`Document uploaded: ${fileName}`);
                   }}
+                  onExtractedData={handleExtractedData}
                   onError={(error) => {
                     console.error("Upload error:", error);
                   }}

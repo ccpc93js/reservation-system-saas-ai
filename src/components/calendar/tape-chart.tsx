@@ -143,6 +143,48 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
     [reservations]
   );
 
+  // Merge overlapping blocks for each bed into continuous blocks
+  const mergedBlocksByBed = useMemo(() => {
+    const merged: Record<string, ReservationBlock[]> = {};
+
+    Object.entries(blocksByBed).forEach(([bedId, blocks]) => {
+      if (blocks.length === 0) {
+        merged[bedId] = [];
+        return;
+      }
+
+      const sorted = [...blocks].sort((a, b) =>
+        new Date(a.check_in).getTime() - new Date(b.check_in).getTime()
+      );
+
+      const result: ReservationBlock[] = [];
+      let current = sorted[0];
+
+      for (let i = 1; i < sorted.length; i++) {
+        const next = sorted[i];
+        const currentEnd = new Date(current.check_out);
+        const nextStart = new Date(next.check_in);
+
+        if (nextStart <= currentEnd) {
+          if (new Date(next.check_out) > currentEnd) {
+            current = {
+              ...current,
+              check_out: next.check_out,
+            };
+          }
+        } else {
+          result.push(current);
+          current = next;
+        }
+      }
+
+      result.push(current);
+      merged[bedId] = result;
+    });
+
+    return merged;
+  }, [blocksByBed]);
+
   if (beds.length === 0) {
     return (
       <div className="rounded-xl border border-border flex items-center justify-center bg-surface shadow-sm" style={{ height: 320 }}>
@@ -163,15 +205,16 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
           <span>Past dates locked</span>
         </div>
       </div>
-      <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-200px)] tape-chart-container relative">
+      {/* Scrollable Container - Content and Header inside */}
+      <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-240px)] tape-chart-container relative">
         <div style={{ width: LABEL_WIDTH + days.length * DAY_WIDTH, minWidth: "100%" }}>
-          {/* Header Row */}
+          {/* Header Row - Sticky to top, scrolls with horizontal content */}
           <div className="flex sticky top-0 z-40 bg-surface border-b border-border shadow-sm">
             <div
-              className="shrink-0 bg-muted/60 border-r border-border flex items-center px-4 sticky left-0 z-50"
+              className="shrink-0 bg-muted border-r border-border flex items-center px-4 sticky left-0 z-50"
               style={{ width: LABEL_WIDTH, height: 48 }}
             >
-              <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Property / Unit</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-foreground">Property / Unit</span>
             </div>
             <div className="flex bg-muted/40 backdrop-blur-sm">
               {days.map((day) => {
@@ -192,8 +235,6 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
               })}
             </div>
           </div>
-        </div>
-      </div>
 
       {/* Body */}
       <div className="pb-12">
@@ -229,7 +270,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                 return aPos - bPos || a.name.localeCompare(b.name);
               })
               .map((bed, bedIndex) => {
-              const blocks = blocksByBed[bed.id] ?? [];
+              const blocks = mergedBlocksByBed[bed.id] ?? [];
               return (
                 <div
                   key={bed.id}
@@ -292,12 +333,13 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                       const guestFirst = block.reservations?.guests?.first_name ?? "Unknown";
                       const guestLast = block.reservations?.guests?.last_name ?? "";
                       const fullName = `${guestFirst} ${guestLast}`.trim();
+                      const totalPrice = block.price_per_night * durationDays;
 
                       return (
                         <div
                           key={block.id}
                           className={cn(
-                            "absolute top-1.5 bottom-1.5 rounded-md border shadow-sm flex items-center px-2 cursor-pointer transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 z-10",
+                            "absolute top-1.5 bottom-1.5 rounded-md border shadow-sm flex flex-col px-2 py-1 cursor-pointer transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 z-10",
                             colors.bg,
                             colors.border
                           )}
@@ -305,7 +347,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                             left: offsetDays * DAY_WIDTH + 2,
                             width: Math.max(durationDays * DAY_WIDTH - 4, 30),
                           }}
-                          title={`${fullName} · ${block.check_in} to ${block.check_out}`}
+                          title={`${fullName} · $${totalPrice.toFixed(2)} total · ${block.check_in} to ${block.check_out}`}
                           onClick={() => {
                             if (block.reservations?.id) onExistingBlock?.(block.reservations.id);
                           }}
@@ -318,12 +360,15 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                             }
                           }}
                         >
-                          <div className="flex items-center gap-2 overflow-hidden w-full">
-                            <div className={cn("w-5 h-5 rounded-sm flex items-center justify-center shrink-0 bg-white/60", colors.text)}>
-                              <Icon className="w-3 h-3" />
+                          <div className="flex items-center gap-1 overflow-hidden w-full">
+                            <div className={cn("w-4 h-4 rounded-sm flex items-center justify-center shrink-0 bg-white/60", colors.text)}>
+                              <Icon className="w-2.5 h-2.5" />
                             </div>
-                            <span className={cn("truncate text-[11px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
+                            <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
                           </div>
+                          <span className={cn("truncate text-[8px] font-medium", colors.text)}>
+                            ${totalPrice.toFixed(2)} total
+                          </span>
                         </div>
                       );
                     })}
@@ -333,6 +378,8 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
             })}
           </div>
         ))}
+      </div>
+        </div>
       </div>
     </div>
   );

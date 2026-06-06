@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Upload, X, FileText, AlertCircle } from "lucide-react";
+import { Upload, X, FileText, AlertCircle, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { DocumentMetadata, UploadDocumentResponse } from "@/lib/types/database";
+import OCRExtractionDialog from "./ocr-extraction-dialog";
 
 interface DocumentUploadProps {
   guestId: string;
   existingDocuments?: DocumentMetadata[];
   onUploadComplete?: (fileUrl: string, fileName: string) => void;
+  onExtractedData?: (data: Record<string, any>) => void;
   onError?: (error: string) => void;
 }
 
@@ -16,6 +18,7 @@ export default function DocumentUpload({
   guestId,
   existingDocuments = [],
   onUploadComplete,
+  onExtractedData,
   onError,
 }: DocumentUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
@@ -24,6 +27,10 @@ export default function DocumentUpload({
   const [uploadedFile, setUploadedFile] = useState<{ url: string; name: string } | null>(null);
   const [documents, setDocuments] = useState<DocumentMetadata[]>(existingDocuments);
   const [documentUrls, setDocumentUrls] = useState<Record<string, string>>({});
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [extractionData, setExtractionData] = useState<any>(null);
+  const [showExtractDialog, setShowExtractDialog] = useState(false);
+  const [lastExtractedImageUrl, setLastExtractedImageUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -90,8 +97,13 @@ export default function DocumentUpload({
       setPreview(null);
     }
 
-    // Upload file
-    await uploadFile(file);
+    // For existing guests, auto-upload. For new guests, just show preview (they extract first)
+    if (guestId) {
+      await uploadFile(file);
+    } else {
+      // For new guests, just get the preview for OCR - don't upload yet
+      toast.success("Image ready! Click 'Extract Data' to auto-fill the form");
+    }
   };
 
   const uploadFile = async (file: File) => {
@@ -162,6 +174,47 @@ export default function DocumentUpload({
     }
   };
 
+  const handleExtractOCR = async () => {
+    // For new guests, extract from preview (base64). For existing guests, extract from uploaded URL
+    const imageToExtract = preview || (uploadedFile?.url);
+
+    if (!imageToExtract) return;
+
+    setIsExtracting(true);
+    try {
+      const response = await fetch("/api/guests/extract-ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageUrl: imageToExtract,  // base64 or URL
+          documentType: uploadedFile?.name.split(".").pop()?.toLowerCase() || fileName?.split(".").pop()?.toLowerCase(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "OCR extraction failed");
+      }
+
+      setExtractionData(result);
+      setLastExtractedImageUrl(imageToExtract);
+      setShowExtractDialog(true);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : "OCR extraction failed";
+      toast.error(errorMsg);
+      onError?.(errorMsg);
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
+  const handleExtractedDataApply = (correctedData: Record<string, any>) => {
+    setShowExtractDialog(false);
+    onExtractedData?.(correctedData);
+    toast.success("Data extracted and applied!");
+  };
+
   return (
     <div className="w-full space-y-3">
       {/* Upload Area */}
@@ -204,12 +257,24 @@ export default function DocumentUpload({
 
       {/* Preview - Image */}
       {preview && (
-        <div className="relative rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+        <div className="relative rounded-lg overflow-hidden border space-y-2" style={{ borderColor: "hsl(var(--border))" }}>
           <img src={preview} alt="Document preview" className="w-full h-auto max-h-64 object-cover" />
           {isUploading && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <div className="text-white text-sm font-medium">Uploading...</div>
             </div>
+          )}
+          {/* Extract Data button for preview (before upload) */}
+          {!isUploading && (
+            <button
+              type="button"
+              onClick={handleExtractOCR}
+              disabled={isExtracting}
+              className="w-full mt-2 text-sm px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              {isExtracting ? "Extracting..." : "Extract Data from Image"}
+            </button>
           )}
         </div>
       )}
@@ -229,6 +294,17 @@ export default function DocumentUpload({
                   {uploadedFile.name}
                 </p>
                 <p className="text-xs text-emerald-600 mt-1">✓ Uploaded successfully</p>
+                {preview && (
+                  <button
+                    type="button"
+                    onClick={handleExtractOCR}
+                    disabled={isExtracting}
+                    className="mt-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50 flex items-center gap-1"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    {isExtracting ? "Extracting..." : "Extract Data"}
+                  </button>
+                )}
               </div>
             </div>
             <button
@@ -282,6 +358,26 @@ export default function DocumentUpload({
           Upload a clear photo or scan of the guest's passport, ID, or driver's license. Required for police registration in Serbia.
         </p>
       </div>
+
+      {/* OCR Extraction Dialog */}
+      {showExtractDialog && extractionData && (
+        <OCRExtractionDialog
+          imageUrl={lastExtractedImageUrl || ""}
+          documentType={uploadedFile?.name.split(".").pop()?.toLowerCase()}
+          extractedData={{
+            extractedFields: extractionData.extractedFields,
+            confidence: extractionData.confidence,
+            warnings: extractionData.warnings || [],
+          }}
+          onApply={handleExtractedDataApply}
+          onCancel={() => {
+            setShowExtractDialog(false);
+            setExtractionData(null);
+            setLastExtractedImageUrl(null);
+          }}
+          isLoading={isExtracting}
+        />
+      )}
     </div>
   );
 }
