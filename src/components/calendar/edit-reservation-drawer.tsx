@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X, LogOut, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
 import { createBrowserClient } from "@/lib/supabase/client";
+import CheckoutDialog from "@/components/reservations/checkout-dialog";
+import CancelReservationDialog from "@/components/reservations/cancel-reservation-dialog";
 
 interface EditReservationDrawerProps {
   open: boolean;
@@ -42,8 +44,14 @@ export default function EditReservationDrawer({
 }: EditReservationDrawerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdatingDates, setIsUpdatingDates] = useState(false);
   const [reservation, setReservation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [editingDates, setEditingDates] = useState(false);
+  const [newCheckIn, setNewCheckIn] = useState("");
+  const [newCheckOut, setNewCheckOut] = useState("");
 
   const {
     register,
@@ -97,9 +105,9 @@ export default function EditReservationDrawer({
           .from("reservations")
           .select(
             `
-            id, reservation_number, status, check_in, check_out, notes,
+            id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount,
             guests(first_name, last_name),
-            reservation_items(price_per_night)
+            reservation_items(price_per_night, beds(name, rooms(name)))
           `
           )
           .eq("id", reservationId)
@@ -107,6 +115,8 @@ export default function EditReservationDrawer({
 
         if (error) throw error;
         setReservation(data);
+        setNewCheckIn((data as any).check_in || "");
+        setNewCheckOut((data as any).check_out || "");
         reset({
           status: (data as any).status || "pending",
           notes: (data as any).notes || "",
@@ -122,6 +132,45 @@ export default function EditReservationDrawer({
 
     fetchReservation();
   }, [open, reservationId, reset]);
+
+  const handleUpdateDates = async () => {
+    if (!newCheckIn || !newCheckOut) {
+      toast.error("Both check-in and check-out dates are required");
+      return;
+    }
+
+    if (new Date(newCheckOut) <= new Date(newCheckIn)) {
+      toast.error("Check-out date must be after check-in date");
+      return;
+    }
+
+    setIsUpdatingDates(true);
+    try {
+      const response = await fetch(`/api/reservations/${reservationId}/update-dates`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          check_in: newCheckIn,
+          check_out: newCheckOut,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || "Failed to update dates");
+        return;
+      }
+
+      toast.success("Reservation dates updated!");
+      setEditingDates(false);
+      onReservationUpdated?.();
+    } catch (error) {
+      toast.error("Error updating dates");
+      console.error(error);
+    } finally {
+      setIsUpdatingDates(false);
+    }
+  };
 
   const onSubmit = async (data: UpdateReservationInput) => {
     if (!reservationId) {
@@ -188,10 +237,10 @@ export default function EditReservationDrawer({
     return (
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm" />
+          <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[9999]" />
           <Dialog.Content
             aria-describedby={undefined}
-            className="fixed right-0 top-0 z-50 w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-6"
+            className="fixed right-0 top-0 z-[10000] w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-6"
           >
             <p className="text-muted-foreground">Loading...</p>
           </Dialog.Content>
@@ -205,10 +254,10 @@ export default function EditReservationDrawer({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[9999]" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed right-0 top-0 z-50 w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-0 overflow-y-auto transition-all duration-300 data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right"
+          className="fixed right-0 top-0 z-[10000] w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-0 overflow-y-auto transition-all duration-300 data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right"
         >
           <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 z-10 bg-surface">
             <div>
@@ -223,7 +272,7 @@ export default function EditReservationDrawer({
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
-            {/* Reservation number */}
+            {/* Reservation Details */}
             <div className="rounded-xl border border-border bg-muted/30 p-3 transition-colors duration-200 hover:bg-muted/40">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Reservation #{reservation.reservation_number}
@@ -249,6 +298,59 @@ export default function EditReservationDrawer({
                 </span>
               </p>
             </div>
+
+            {/* Edit Dates Section */}
+            {!editingDates ? (
+              <button
+                type="button"
+                onClick={() => setEditingDates(true)}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+              >
+                Edit Dates
+              </button>
+            ) : (
+              <div className="space-y-3 p-3 rounded-lg border border-indigo-200 bg-indigo-50">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
+                    Check-in
+                  </label>
+                  <input
+                    type="date"
+                    value={newCheckIn}
+                    onChange={(e) => setNewCheckIn(e.target.value)}
+                    className="w-full rounded-lg border border-indigo-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
+                    Check-out
+                  </label>
+                  <input
+                    type="date"
+                    value={newCheckOut}
+                    onChange={(e) => setNewCheckOut(e.target.value)}
+                    className="w-full rounded-lg border border-indigo-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingDates(false)}
+                    className="flex-1 px-3 py-2 text-sm rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleUpdateDates}
+                    disabled={isUpdatingDates}
+                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                  >
+                    {isUpdatingDates ? "Updating..." : "Update"}
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Status dropdown */}
             <div>
@@ -279,14 +381,34 @@ export default function EditReservationDrawer({
               />
             </div>
 
+            {/* Action Buttons */}
+            {status === "checked_in" && (
+              <button
+                type="button"
+                onClick={() => setShowCheckoutDialog(true)}
+                className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Check Out Guest
+              </button>
+            )}
+
             {/* Delete button — danger zone */}
-            <div className="p-3 rounded-lg border border-red-200 bg-red-50/40">
+            <div className="p-3 rounded-lg border border-red-200 bg-red-50/40 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-1">Danger Zone</p>
+              <button
+                type="button"
+                onClick={() => setShowCancelDialog(true)}
+                className="w-full text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-150 px-3 py-2 rounded border border-red-200 hover:bg-red-100 flex items-center justify-center gap-2"
+              >
+                <AlertTriangle className="w-4 h-4" />
+                Cancel Reservation
+              </button>
               <button
                 type="button"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-150 disabled:opacity-50"
+                className="w-full text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-150 disabled:opacity-50"
               >
                 {isDeleting ? "Deleting..." : "Delete this reservation"}
               </button>
@@ -310,6 +432,41 @@ export default function EditReservationDrawer({
               </button>
             </div>
           </form>
+
+          {/* Checkout Dialog */}
+          {showCheckoutDialog && (
+            <CheckoutDialog
+              reservationId={reservationId!}
+              guestName={`${reservation.guests?.first_name} ${reservation.guests?.last_name}`}
+              reservationNumber={reservation.reservation_number}
+              checkIn={reservation.check_in}
+              checkOut={reservation.check_out}
+              roomName={reservation.reservation_items?.[0]?.beds?.rooms?.name || "Unknown"}
+              bedName={reservation.reservation_items?.[0]?.beds?.name || "Unknown"}
+              totalAmount={reservation.total_amount || 0}
+              paidAmount={reservation.paid_amount || 0}
+              onComplete={() => {
+                setShowCheckoutDialog(false);
+                onOpenChange(false);
+                onReservationUpdated?.();
+              }}
+              onCancel={() => setShowCheckoutDialog(false)}
+            />
+          )}
+
+          {/* Cancel Dialog */}
+          {showCancelDialog && (
+            <CancelReservationDialog
+              reservationId={reservationId!}
+              guestName={`${reservation.guests?.first_name} ${reservation.guests?.last_name}`}
+              onCancel={() => setShowCancelDialog(false)}
+              onConfirm={() => {
+                setShowCancelDialog(false);
+                onOpenChange(false);
+                onReservationUpdated?.();
+              }}
+            />
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

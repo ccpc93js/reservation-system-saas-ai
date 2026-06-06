@@ -40,7 +40,8 @@ export default function CalendarClient({
   };
 
   const handleRefetch = () => {
-    router.refresh();
+    // Force reload the page to clear all caches
+    window.location.reload();
   };
 
   return (

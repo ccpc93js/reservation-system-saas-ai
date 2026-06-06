@@ -78,5 +78,38 @@ export const updateReservationSchema = yup.object().shape({
     .max(500, 'Notes must be 500 characters or less'),
 });
 
+export const updateReservationDatesSchema = yup.object().shape({
+  check_in: yup.string()
+    .test('valid-date', 'Invalid check-in date', function(value) {
+      if (!value) return true;
+      return !isNaN(Date.parse(value));
+    }),
+  check_out: yup.string()
+    .test('valid-date', 'Invalid check-out date', function(value) {
+      if (!value) return true;
+      return !isNaN(Date.parse(value));
+    }),
+}).test('checkout-after-checkin', 'Check-out date must be after check-in date', function(value) {
+  const { check_in, check_out } = value;
+  if (!check_in || !check_out) return true;
+  return new Date(check_out) > new Date(check_in);
+});
+
+export const checkoutReservationSchema = yup.object().shape({
+  paid_amount: yup.number()
+    .typeError('Payment amount must be a number')
+    .min(0, 'Payment amount cannot be negative'),
+});
+
+export const cancelReservationSchema = yup.object().shape({
+  cancellation_reason: yup.string()
+    .oneOf(['guest_request', 'overbooking', 'property_issue', 'other'], 'Invalid cancellation reason'),
+  cancellation_notes: yup.string()
+    .max(500, 'Cancellation notes must be 500 characters or less'),
+});
+
 export type CreateReservationInput = yup.InferType<typeof createReservationSchema>;
 export type UpdateReservationInput = yup.InferType<typeof updateReservationSchema>;
+export type UpdateReservationDatesInput = yup.InferType<typeof updateReservationDatesSchema>;
+export type CheckoutReservationInput = yup.InferType<typeof checkoutReservationSchema>;
+export type CancelReservationInput = yup.InferType<typeof cancelReservationSchema>;

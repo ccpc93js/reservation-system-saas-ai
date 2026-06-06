@@ -1,3 +1,38 @@
+## [6db984a] - 2026-06-06
+
+Phase 5: Implement OCR document extraction and calendar improvements
+
+**OCR Integration:**
+- Add Claude Vision API integration for passport/ID scanning (/api/guests/extract-ocr)
+- Extract 10 guest fields with confidence scoring (0-1 scale)
+- Support front-side extraction with base64 preview for new guests
+- Support back-side ID extraction and field merging
+- Color-coded confidence indicators (green ≥90%, yellow 70-90%, red <70%)
+- Dialog with percentage tracker showing fields completed
+- Loading spinner during extraction
+
+**Form Integration:**
+- Auto-fill form fields using React Hook Form setValue
+- Only set non-null, non-empty extracted values
+- Pre-fill confirmation toast feedback
+
+**Calendar Enhancements:**
+- Merge overlapping/consecutive reservation blocks into continuous spans
+- Days header scrolls horizontally with content, sticky to top vertically
+- Room section headers sticky on left side (don't scroll horizontally)
+- Property/Unit header with full opacity
+- Display total reservation price per block (price_per_night × duration)
+- Improved scroll UX for better date tracking
+
+**Key Features:**
+✅ New guest workflow: Upload ID → Extract → Auto-fill → Create
+✅ Existing guest workflow: Upload documents with OCR
+✅ Back-side support: Extract missing fields from ID back side
+✅ Confidence scoring and field merging strategies
+✅ Calendar visual improvements with pricing and multi-day blocks
+
+All Phase 5 objectives completed and tested.
+
 ## [44cebdf] - 2026-06-05
 
 Update Phase 4 status: Add document upload enhancement

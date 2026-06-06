@@ -135,11 +135,16 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
 
   const blocksByBed = useMemo(
     () =>
-      reservations.reduce<Record<string, ReservationBlock[]>>((acc, block) => {
-        if (!acc[block.bed_id]) acc[block.bed_id] = [];
-        acc[block.bed_id].push(block);
-        return acc;
-      }, {}),
+      reservations
+        .filter((res) => {
+          const status = res.reservations?.status;
+          return status !== "cancelled" && status !== "no_show";
+        })
+        .reduce<Record<string, ReservationBlock[]>>((acc, block) => {
+          if (!acc[block.bed_id]) acc[block.bed_id] = [];
+          acc[block.bed_id].push(block);
+          return acc;
+        }, {}),
     [reservations]
   );
 
