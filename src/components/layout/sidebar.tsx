@@ -9,6 +9,7 @@ import {
   BedDouble,
   Settings,
   LogOut,
+  BookOpen,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ import { cn } from "@/lib/utils";
 const mainNavItems = [
   { href: "/dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
   { href: "/calendar", label: "Tape Calendar", icon: CalendarDays },
+  { href: "/reservations", label: "Reservations", icon: BookOpen },
   { href: "/guests", label: "Guest Directory", icon: Users },
   { href: "/rooms", label: "Room Inventory", icon: BedDouble },
 ];
