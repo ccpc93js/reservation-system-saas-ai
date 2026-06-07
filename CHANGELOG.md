@@ -1,3 +1,34 @@
+## [d20c0b7] - 2026-06-07
+
+feat: install superpowers-zh + caveman + antigravity skill frameworks
+
+- superpowers-zh: 20 skills in .claude/skills/ (TDD, debugging, planning, agents)
+- antigravity-awesome-skills: 2903 global skills in ~/.claude/skills/
+- caveman hooks wired in ~/.claude/settings.json (token compression mode)
+- superpowers + caveman slash commands in ~/.claude/commands/
+- CLAUDE.md updated with skills reference
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+## [06717be] - 2026-06-07
+
+Phase 6: Complete reservation management - all features tested and working
+
+**Fully Implemented & Tested:**
+✅ Edit reservation dates with real-time calendar updates
+✅ Checkout flow with payment tracking & guest info review
+✅ Cancel reservation with reason capture & audit trail
+✅ Automatic calendar refresh when status changes
+✅ Cancelled/no_show reservations hidden from calendar
+✅ Price recalculation on date changes
+✅ Conflict detection for overlapping dates
+
+**Key Changes:**
+- Client-side filtering in tape-chart excludes cancelled/no_show status
+- Force page reload on updates to clear all caches
+- Comprehensive error handling and validation
+- Full reservation lifecycle: create → edit → checkout/cancel
+
 ## [6db984a] - 2026-06-06
 
 Phase 5: Implement OCR document extraction and calendar improvements
