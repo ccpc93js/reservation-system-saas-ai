@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, DoorOpen } from "lucide-react";
 import { toast } from "sonner";
 import RoomsDialog from "./rooms-dialog";
 import { Room } from "@/lib/types/database";
+import { TableSkeleton } from "@/components/loading-skeleton";
+import { EmptyState } from "@/components/empty-state";
 
 interface RoomsListClientProps {
   initialRooms: Room[];
@@ -127,7 +129,10 @@ export default function RoomsListClient({
             </tr>
           </thead>
           <tbody>
-            {rooms.map((room) => {
+            {isLoading ? (
+              <TableSkeleton rows={5} cols={5} />
+            ) : (
+              rooms.map((room) => {
               const roomType = (room as any).room_types;
               return (
                 <tr key={room.id} className="border-b hover:bg-gray-50">
@@ -160,15 +165,35 @@ export default function RoomsListClient({
                   </td>
                 </tr>
               );
-            })}
+              })
+            )}
           </tbody>
         </table>
       </div>
 
       {rooms.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No rooms found
-        </div>
+        <EmptyState
+          icon={<DoorOpen className="w-8 h-8" />}
+          title={search ? "No rooms found" : "No rooms yet"}
+          description={
+            search
+              ? "Try adjusting your search to find the room you're looking for."
+              : "Start by creating your first room and assigning it to a room type."
+          }
+          action={
+            !search && (
+              <button
+                onClick={() => {
+                  setEditingRoomId(null);
+                  setOpenDialog(true);
+                }}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                Create a room →
+              </button>
+            )
+          }
+        />
       )}
 
       <div className="flex justify-between items-center">

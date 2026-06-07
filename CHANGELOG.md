@@ -1,3 +1,11 @@
+## [3ee9d71] - 2026-06-07
+
+Phase 7: Fix search - support name and room/bed queries
+
+- Search now queries across: reservation #, guest name, room name, bed name
+- Remove default cancelled/no_show filter - show all reservations
+- Updated placeholder text to reflect search capabilities
+
 ## [d20c0b7] - 2026-06-07
 
 feat: install superpowers-zh + caveman + antigravity skill frameworks

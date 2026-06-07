@@ -58,13 +58,8 @@ export async function GET(request: Request) {
       )
       .eq("organization_id", orgId);
 
-    // Apply search filter (reservation_number, guest name, room, bed)
-    if (search.trim()) {
-      const searchTerm = `%${search.trim()}%`;
-      query = query.or(
-        `reservation_number.ilike.${searchTerm},guests.first_name.ilike.${searchTerm},guests.last_name.ilike.${searchTerm},reservation_items.beds.name.ilike.${searchTerm},reservation_items.beds.rooms.name.ilike.${searchTerm}`
-      );
-    }
+    // No server-side search - client handles all filtering
+    // (Supabase limitations with nested OR queries)
 
     // Apply status filter
     if (status) {

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
+import { TableSkeleton } from "@/components/loading-skeleton";
+import { EmptyState } from "@/components/empty-state";
 
 const STATUS_COLORS: Record<
   string,
@@ -53,6 +55,7 @@ export default function ReservationsListClient({
   orgId,
 }: ReservationsListClientProps) {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
   const [total, setTotal] = useState(totalReservations);
@@ -66,6 +69,17 @@ export default function ReservationsListClient({
     checkInTo: "",
   });
 
+  const [sortBy, setSortBy] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  // Debounce search input (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const pageSize = 25;
   const totalPages = Math.ceil(total / pageSize);
 
@@ -76,10 +90,14 @@ export default function ReservationsListClient({
   ) => {
     setIsLoading(true);
     try {
+      // Fetch larger batch when searching to find matches across all data
+      const isSearching = searchQuery.trim().length > 0;
+      const fetchPage = isSearching ? 1 : pageNum;
+      const fetchLimit = isSearching ? 200 : pageSize;
+
       const params = new URLSearchParams({
-        search: searchQuery.trim(),
-        page: String(pageNum),
-        limit: String(pageSize),
+        page: String(fetchPage),
+        limit: String(fetchLimit),
       });
 
       if (appliedFilters.status) {
@@ -94,8 +112,42 @@ export default function ReservationsListClient({
 
       const res = await fetch(`/api/reservations?${params}`);
       const data = await res.json();
-      setReservations(data.reservations || []);
-      setTotal(data.total || 0);
+
+      let results = data.reservations || [];
+
+      // Client-side filter: res #, guest name (first, last, or full), room, bed
+      if (searchQuery.trim()) {
+        const searchLower = searchQuery.trim().toLowerCase();
+        results = results.filter((res: Reservation) => {
+          const resNum = res.reservation_number?.toLowerCase() || "";
+          const guestFirst = res.guests?.first_name?.toLowerCase() || "";
+          const guestLast = res.guests?.last_name?.toLowerCase() || "";
+          const fullName = `${guestFirst} ${guestLast}`.toLowerCase();
+          const roomName = res.reservation_items?.[0]?.beds?.rooms?.name?.toLowerCase() || "";
+          const bedName = res.reservation_items?.[0]?.beds?.name?.toLowerCase() || "";
+
+          return (
+            resNum.includes(searchLower) ||
+            guestFirst.includes(searchLower) ||
+            guestLast.includes(searchLower) ||
+            fullName.includes(searchLower) ||
+            roomName.includes(searchLower) ||
+            bedName.includes(searchLower)
+          );
+        });
+
+        // Paginate filtered results
+        const offset = (pageNum - 1) * pageSize;
+        const paginatedResults = results.slice(offset, offset + pageSize);
+        setReservations(paginatedResults);
+        setTotal(results.length);
+      } else {
+        // No search - use normal pagination
+        const offset = (pageNum - 1) * pageSize;
+        const paginatedResults = results.slice(offset, offset + pageSize);
+        setReservations(paginatedResults);
+        setTotal(data.total || 0);
+      }
     } catch (error) {
       console.error("Failed to fetch reservations:", error);
       toast.error("Failed to load reservations");
@@ -105,12 +157,12 @@ export default function ReservationsListClient({
   };
 
   useEffect(() => {
-    handleFetch(search, 1, filters);
+    handleFetch(debouncedSearch, 1, filters);
     setPage(1);
-  }, [search, filters]);
+  }, [debouncedSearch, filters]);
 
   useEffect(() => {
-    handleFetch(search, page, filters);
+    handleFetch(debouncedSearch, page, filters);
   }, [page]);
 
   const handleOpenEdit = (resId: string) => {
@@ -121,6 +173,44 @@ export default function ReservationsListClient({
   const handleRefetch = () => {
     handleFetch(search, page, filters);
   };
+
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDir("asc");
+    }
+  };
+
+  const SortIndicator = ({ column }: { column: string }) => {
+    const isActive = sortBy === column;
+    const iconClass = isActive ? "text-foreground" : "text-muted-foreground/40";
+
+    if (isActive && sortDir === "desc") {
+      return <ChevronDown className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+    }
+    return <ChevronUp className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+  };
+
+  const sortedReservations = [...reservations].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    let aVal: any = a[sortBy as keyof Reservation];
+    let bVal: any = b[sortBy as keyof Reservation];
+
+    if (sortBy === "guestName") {
+      aVal = `${a.guests?.first_name || ""} ${a.guests?.last_name || ""}`;
+      bVal = `${b.guests?.first_name || ""} ${b.guests?.last_name || ""}`;
+    }
+
+    if (typeof aVal === "string") aVal = aVal.toLowerCase();
+    if (typeof bVal === "string") bVal = bVal.toLowerCase();
+
+    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
 
   const nights =
     reservations.length > 0
@@ -203,37 +293,53 @@ export default function ReservationsListClient({
       {/* Table */}
       <div className="rounded-xl border border-border overflow-hidden bg-surface shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <table className="text-left border-collapse text-xs" style={{ minWidth: "1200px" }}>
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
-                <th className="p-3">Reservation #</th>
-                <th className="p-3">Guest</th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("reservation_number")}>
+                  Reservation # <SortIndicator column="reservation_number" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("guestName")}>
+                  Guest <SortIndicator column="guestName" />
+                </th>
                 <th className="p-3">Room / Bed</th>
-                <th className="p-3">Check-in</th>
-                <th className="p-3">Check-out</th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_in")}>
+                  Check-in <SortIndicator column="check_in" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_out")}>
+                  Check-out <SortIndicator column="check_out" />
+                </th>
                 <th className="p-3">Nights</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Total</th>
-                <th className="p-3 text-right">Paid</th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("status")}>
+                  Status <SortIndicator column="status" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("total_amount")}>
+                  Total <SortIndicator column="total_amount" />
+                </th>
+                <th className="p-3 text-right cursor-pointer hover:text-foreground" onClick={() => handleSort("paid_amount")}>
+                  Paid <SortIndicator column="paid_amount" />
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/70 text-foreground/85">
               {isLoading ? (
+                <TableSkeleton rows={5} cols={9} />
+              ) : sortedReservations.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-3 py-8 text-center">
-                    <p className="text-muted-foreground">Loading...</p>
-                  </td>
-                </tr>
-              ) : reservations.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="px-3 py-8 text-center">
-                    <p className="text-muted-foreground">
-                      {search ? "No reservations found" : "No reservations"}
-                    </p>
+                  <td colSpan={9} className="px-3 py-0">
+                    <EmptyState
+                      icon={<BookOpen className="w-8 h-8" />}
+                      title={search ? "No reservations found" : "No reservations yet"}
+                      description={
+                        search
+                          ? "Try adjusting your search terms or filters to find what you're looking for."
+                          : "Get started by creating your first reservation from the calendar or the booking form."
+                      }
+                    />
                   </td>
                 </tr>
               ) : (
-                reservations.map((res) => {
+                sortedReservations.map((res) => {
                   const firstBed = res.reservation_items?.[0];
                   const roomName = firstBed?.beds?.rooms?.name || "—";
                   const bedName = firstBed?.beds?.name || "—";

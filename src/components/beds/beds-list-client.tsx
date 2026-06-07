@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Bed as BedIcon } from "lucide-react";
 import { toast } from "sonner";
 import BedsDialog from "./beds-dialog";
 import { Bed } from "@/lib/types/database";
+import { TableSkeleton } from "@/components/loading-skeleton";
+import { EmptyState } from "@/components/empty-state";
 
 interface BedsListClientProps {
   initialBeds: Bed[];
@@ -127,7 +129,10 @@ export default function BedsListClient({
             </tr>
           </thead>
           <tbody>
-            {beds.map((bed) => {
+            {isLoading ? (
+              <TableSkeleton rows={5} cols={6} />
+            ) : (
+              beds.map((bed) => {
               const room = (bed as any).rooms;
               const roomType = room?.room_types;
               return (
@@ -171,15 +176,35 @@ export default function BedsListClient({
                   </td>
                 </tr>
               );
-            })}
+              })
+            )}
           </tbody>
         </table>
       </div>
 
       {beds.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No beds found
-        </div>
+        <EmptyState
+          icon={<BedIcon className="w-8 h-8" />}
+          title={search ? "No beds found" : "No beds yet"}
+          description={
+            search
+              ? "Try adjusting your search to find the bed you're looking for."
+              : "Create a room first, then add beds to it."
+          }
+          action={
+            !search && (
+              <button
+                onClick={() => {
+                  setEditingBedId(null);
+                  setOpenDialog(true);
+                }}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                Create a bed →
+              </button>
+            )
+          }
+        />
       )}
 
       <div className="flex justify-between items-center">

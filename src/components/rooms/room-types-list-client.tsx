@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, LayoutGrid } from "lucide-react";
 import { toast } from "sonner";
 import RoomTypeDialog from "./room-types-dialog";
 import { RoomType } from "@/lib/types/database";
+import { TableSkeleton } from "@/components/loading-skeleton";
+import { EmptyState } from "@/components/empty-state";
 
 interface RoomTypesListClientProps {
   initialRoomTypes: RoomType[];
@@ -128,7 +130,10 @@ export default function RoomTypesListClient({
             </tr>
           </thead>
           <tbody>
-            {roomTypes.map((roomType) => (
+            {isLoading ? (
+              <TableSkeleton rows={5} cols={6} />
+            ) : (
+              roomTypes.map((roomType) => (
               <tr key={roomType.id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm">{roomType.name}</td>
                 <td className="px-4 py-3 text-sm capitalize">{roomType.type}</td>
@@ -157,15 +162,35 @@ export default function RoomTypesListClient({
                   </button>
                 </td>
               </tr>
-            ))}
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {roomTypes.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No room types found
-        </div>
+        <EmptyState
+          icon={<LayoutGrid className="w-8 h-8" />}
+          title={search ? "No room types found" : "No room types yet"}
+          description={
+            search
+              ? "Try adjusting your search to find the room type you're looking for."
+              : "Define room types to categorize your rooms (e.g., Dorm, Private, Suite)."
+          }
+          action={
+            !search && (
+              <button
+                onClick={() => {
+                  setEditingRoomTypeId(null);
+                  setOpenDialog(true);
+                }}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                Create a room type →
+              </button>
+            )
+          }
+        />
       )}
 
       <div className="flex justify-between items-center">

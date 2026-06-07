@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users } from "lucide-react";
 import { toast } from "sonner";
 import GuestDialog from "@/components/guests/guest-dialog";
+import { TableSkeleton } from "@/components/loading-skeleton";
+import { EmptyState } from "@/components/empty-state";
 
 interface Guest {
   id: string;
@@ -149,17 +151,32 @@ export default function GuestListClient({
             </thead>
             <tbody className="divide-y divide-border/70 text-foreground/85">
               {isLoading ? (
-                <tr>
-                  <td colSpan={6} className="px-3 py-8 text-center">
-                    <p className="text-muted-foreground">Loading...</p>
-                  </td>
-                </tr>
+                <TableSkeleton rows={5} cols={6} />
               ) : guests.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-3 py-8 text-center">
-                    <p className="text-muted-foreground">
-                      {search ? "No guests found matching your search" : "No guests yet"}
-                    </p>
+                  <td colSpan={6} className="px-3 py-0">
+                    <EmptyState
+                      icon={<Users className="w-8 h-8" />}
+                      title={search ? "No guests found" : "No guests yet"}
+                      description={
+                        search
+                          ? "Try adjusting your search to find the guest you're looking for."
+                          : "Guests will appear here once you create your first reservation."
+                      }
+                      action={
+                        !search && (
+                          <button
+                            onClick={() => {
+                              setEditingGuestId(null);
+                              setOpenDialog(true);
+                            }}
+                            className="text-sm font-medium text-primary hover:text-primary/80"
+                          >
+                            Create a guest →
+                          </button>
+                        )
+                      }
+                    />
                   </td>
                 </tr>
               ) : (
