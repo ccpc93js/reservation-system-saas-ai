@@ -12,6 +12,7 @@ import {
   BookOpen,
   X,
   ChevronLeft,
+  BarChart3,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ const mainNavItems = [
   { href: "/dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
   { href: "/calendar", label: "Tape Calendar", icon: CalendarDays },
   { href: "/reservations", label: "Reservations", icon: BookOpen },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/guests", label: "Guest Directory", icon: Users },
   { href: "/rooms", label: "Room Inventory", icon: BedDouble },
 ];

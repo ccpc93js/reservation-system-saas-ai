@@ -1,3 +1,14 @@
+## [b485315] - 2026-06-09
+
+feat: drawer sidebar, table improvements, and sticky first column
+
+- Convert sidebar to collapsible drawer on all screen sizes
+- Add hamburger menu button in header to toggle sidebar
+- Main content shifts right when sidebar opens (ml-72 margin)
+- Add sticky Reservation # column for horizontal scroll
+- Add gradient fade indicator on right edge of table
+- Increase table minWidth to 1400px for better spacing
+
 ## [5f7fcab] - 2026-06-09
 
 feat: add column sorting to all list pages (guests, rooms, beds, room types)
