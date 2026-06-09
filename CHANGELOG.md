@@ -1,3 +1,33 @@
+## [34d9401] - 2026-06-08
+
+Phase 7: Complete - search, filtering, and professional UX
+
+**Phase 7 Features:**
+- Multi-field search (res #, guest name, room, bed)
+- Filters: status, check-in date range
+- Debounced search (300ms)
+- Table min-width with horizontal scroll
+
+**UX Enhancements:**
+
+1. Loading Skeleton:
+   - Reusable component applied to all lists
+   - Smooth placeholder rows instead of text
+
+2. Empty States:
+   - Context-aware messaging (search vs. no data)
+   - Quick action buttons
+   - Icons for visual clarity
+   - Applied to all 5 list pages
+
+3. Column Sorting:
+   - Click headers to sort
+   - Sort indicator always visible (muted/bold)
+   - Ascending/descending toggle
+   - Supports string and numeric columns
+
+All criteria met. Professional, polished UX.
+
 ## [3ee9d71] - 2026-06-07
 
 Phase 7: Fix search - support name and room/bed queries

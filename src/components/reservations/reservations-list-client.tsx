@@ -71,6 +71,7 @@ export default function ReservationsListClient({
 
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null);
 
   // Debounce search input (300ms)
   useEffect(() => {
@@ -180,6 +181,33 @@ export default function ReservationsListClient({
     } else {
       setSortBy(column);
       setSortDir("asc");
+    }
+  };
+
+  const handleStatusChange = async (resId: string, newStatus: string) => {
+    setUpdatingStatusId(resId);
+    try {
+      const response = await fetch(`/api/reservations/${resId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || "Failed to update status");
+        return;
+      }
+
+      setReservations(prev =>
+        prev.map(res => (res.id === resId ? { ...res, status: newStatus } : res))
+      );
+      toast.success("Status updated");
+    } catch (error) {
+      console.error("Status update error:", error);
+      toast.error("Failed to update status");
+    } finally {
+      setUpdatingStatusId(null);
     }
   };
 
@@ -370,10 +398,20 @@ export default function ReservationsListClient({
                         {new Date(res.check_out).toLocaleDateString()}
                       </td>
                       <td className="p-3 text-center">{daysCount}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${colors.bg} ${colors.text}`}>
-                          {res.status.replace("_", " ")}
-                        </span>
+                      <td className="p-3" onClick={(e) => e.stopPropagation()}>
+                        <select
+                          value={res.status}
+                          onChange={(e) => handleStatusChange(res.id, e.target.value)}
+                          disabled={updatingStatusId === res.id}
+                          className={`px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer disabled:opacity-50 ${colors.bg} ${colors.text}`}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="checked_in">Checked In</option>
+                          <option value="checked_out">Checked Out</option>
+                          <option value="cancelled">Cancelled</option>
+                          <option value="no_show">No Show</option>
+                        </select>
                       </td>
                       <td className="p-3 font-medium">${res.total_amount.toFixed(2)}</td>
                       <td className="p-3 text-right">${res.paid_amount.toFixed(2)}</td>
