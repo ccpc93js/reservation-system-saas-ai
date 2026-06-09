@@ -10,10 +10,13 @@ import {
   Settings,
   LogOut,
   BookOpen,
+  X,
+  ChevronLeft,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const mainNavItems = [
   { href: "/dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
@@ -31,9 +34,11 @@ interface SidebarProps {
   org: { id: string; name: string; slug: string };
   userRole: string;
   user?: { email?: string };
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ org, user }: SidebarProps) {
+export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createBrowserClient();
@@ -47,9 +52,24 @@ export default function Sidebar({ org, user }: SidebarProps) {
   const userInitials = user?.email?.slice(0, 2).toUpperCase() ?? "??";
 
   return (
-    <aside className="w-72 bg-surface border-r border-border flex flex-col shrink-0">
-      {/* Logo / org name */}
-      <div className="px-6 py-6 border-b border-border/70">
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={cn(
+        "w-72 bg-surface border-r border-border flex flex-col shrink-0",
+        "fixed inset-y-0 left-0 z-40",
+        "transition-transform duration-300 ease-in-out",
+        !isOpen && "-translate-x-full"
+      )}>
+        {/* Logo / org name */}
+        <div className="px-6 py-6 border-b border-border/70 lg:pt-6 flex items-center justify-between">
         <div className="flex items-center gap-3 mb-1">
           <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
             {org.name.charAt(0)}
@@ -64,6 +84,13 @@ export default function Sidebar({ org, user }: SidebarProps) {
             </p>
           </div>
         </div>
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+          title="Collapse sidebar"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -137,6 +164,7 @@ export default function Sidebar({ org, user }: SidebarProps) {
           Logout
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

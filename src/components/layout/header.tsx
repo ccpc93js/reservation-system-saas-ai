@@ -2,27 +2,36 @@
 
 import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
-import { Plus, Bell } from "lucide-react";
+import { Plus, Bell, Menu } from "lucide-react";
 
 interface HeaderProps {
   org: { id: string; name: string; slug: string };
   user: User;
+  onMenuClick?: () => void;
 }
 
-export default function Header({ org, user }: HeaderProps) {
+export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const pathname = usePathname();
   const initials = user.email?.slice(0, 2).toUpperCase() ?? "??";
 
   const pageTitle = {
     "/dashboard": "Dashboard",
     "/calendar": "Tape Calendar",
+    "/reservations": "Reservations",
     "/guests": "Guest Directory",
     "/rooms": "Room Inventory",
   }[pathname] || "Dashboard";
 
   return (
-    <header className="h-16 bg-surface border-b border-border px-8 flex items-center justify-between shrink-0">
+    <header className="h-16 bg-surface border-b border-border px-6 lg:px-8 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="p-2 hover:bg-muted rounded-lg transition-colors"
+          title="Toggle menu"
+        >
+          <Menu className="w-5 h-5 text-muted-foreground" />
+        </button>
         <h2 className="text-lg font-semibold text-foreground">{pageTitle}</h2>
       </div>
 

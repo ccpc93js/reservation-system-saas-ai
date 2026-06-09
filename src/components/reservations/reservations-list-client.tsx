@@ -321,7 +321,7 @@ export default function ReservationsListClient({
       {/* Table */}
       <div className="rounded-xl border border-border overflow-hidden bg-surface shadow-sm">
         <div className="overflow-x-auto">
-          <table className="text-left border-collapse text-xs" style={{ minWidth: "1200px" }}>
+          <table className="text-left border-collapse text-xs" style={{ minWidth: "1400px" }}>
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("reservation_number")}>

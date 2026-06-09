@@ -1,3 +1,7 @@
+## [5f7fcab] - 2026-06-09
+
+feat: add column sorting to all list pages (guests, rooms, beds, room types)
+
 ## [6f6910d] - 2026-06-09
 
 feat: quick status change - inline dropdown and action buttons (checkout/cancel)
