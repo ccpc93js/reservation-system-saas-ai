@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, LayoutGrid } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, LayoutGrid, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import RoomTypeDialog from "./room-types-dialog";
 import { RoomType } from "@/lib/types/database";
@@ -24,6 +24,8 @@ export default function RoomTypesListClient({
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingRoomTypeId, setEditingRoomTypeId] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   const pageSize = 25;
   const totalPages = Math.ceil(total / pageSize);
@@ -90,6 +92,39 @@ export default function RoomTypesListClient({
     handleFetch(search, page);
   };
 
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDir("asc");
+    }
+  };
+
+  const SortIndicator = ({ column }: { column: string }) => {
+    const isActive = sortBy === column;
+    const iconClass = isActive ? "text-foreground" : "text-muted-foreground/40";
+
+    if (isActive && sortDir === "desc") {
+      return <ChevronDown className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+    }
+    return <ChevronUp className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+  };
+
+  const sortedRoomTypes = [...roomTypes].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    let aVal: any = a[sortBy as keyof RoomType];
+    let bVal: any = b[sortBy as keyof RoomType];
+
+    if (typeof aVal === "string") aVal = aVal.toLowerCase();
+    if (typeof bVal === "string") bVal = bVal.toLowerCase();
+
+    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center gap-4">
@@ -121,10 +156,18 @@ export default function RoomTypesListClient({
         <table className="w-full">
           <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm">Name</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Type</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Capacity</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Base Price</th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
+                Name <SortIndicator column="name" />
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("type")}>
+                Type <SortIndicator column="type" />
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("capacity")}>
+                Capacity <SortIndicator column="capacity" />
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("base_price")}>
+                Base Price <SortIndicator column="base_price" />
+              </th>
               <th className="px-4 py-3 text-left font-medium text-sm">Rooms</th>
               <th className="px-4 py-3 text-left font-medium text-sm">Actions</th>
             </tr>
@@ -133,7 +176,7 @@ export default function RoomTypesListClient({
             {isLoading ? (
               <TableSkeleton rows={5} cols={6} />
             ) : (
-              roomTypes.map((roomType) => (
+              sortedRoomTypes.map((roomType) => (
               <tr key={roomType.id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm">{roomType.name}</td>
                 <td className="px-4 py-3 text-sm capitalize">{roomType.type}</td>

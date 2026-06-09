@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Bed as BedIcon } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Bed as BedIcon, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import BedsDialog from "./beds-dialog";
 import { Bed } from "@/lib/types/database";
@@ -24,6 +24,8 @@ export default function BedsListClient({
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingBedId, setEditingBedId] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   const pageSize = 25;
   const totalPages = Math.ceil(total / pageSize);
@@ -90,6 +92,39 @@ export default function BedsListClient({
     handleFetch(search, page);
   };
 
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDir("asc");
+    }
+  };
+
+  const SortIndicator = ({ column }: { column: string }) => {
+    const isActive = sortBy === column;
+    const iconClass = isActive ? "text-foreground" : "text-muted-foreground/40";
+
+    if (isActive && sortDir === "desc") {
+      return <ChevronDown className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+    }
+    return <ChevronUp className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+  };
+
+  const sortedBeds = [...beds].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    let aVal: any = a[sortBy as keyof Bed];
+    let bVal: any = b[sortBy as keyof Bed];
+
+    if (typeof aVal === "string") aVal = aVal.toLowerCase();
+    if (typeof bVal === "string") bVal = bVal.toLowerCase();
+
+    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center gap-4">
@@ -121,10 +156,16 @@ export default function BedsListClient({
         <table className="w-full">
           <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm">Bed Name</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Room</th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
+                Bed Name <SortIndicator column="name" />
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("room_id")}>
+                Room <SortIndicator column="room_id" />
+              </th>
               <th className="px-4 py-3 text-left font-medium text-sm">Type</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Status</th>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("is_active")}>
+                Status <SortIndicator column="is_active" />
+              </th>
               <th className="px-4 py-3 text-left font-medium text-sm">Actions</th>
             </tr>
           </thead>
@@ -132,7 +173,7 @@ export default function BedsListClient({
             {isLoading ? (
               <TableSkeleton rows={5} cols={6} />
             ) : (
-              beds.map((bed) => {
+              sortedBeds.map((bed) => {
               const room = (bed as any).rooms;
               const roomType = room?.room_types;
               return (

@@ -1,3 +1,7 @@
+## [6f6910d] - 2026-06-09
+
+feat: quick status change - inline dropdown and action buttons (checkout/cancel)
+
 ## [34d9401] - 2026-06-08
 
 Phase 7: Complete - search, filtering, and professional UX

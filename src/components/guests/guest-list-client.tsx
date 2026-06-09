@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import GuestDialog from "@/components/guests/guest-dialog";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -35,6 +35,8 @@ export default function GuestListClient({
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   const pageSize = 25;
   const totalPages = Math.ceil(total / pageSize);
@@ -105,6 +107,44 @@ export default function GuestListClient({
     setOpenDialog(false);
   };
 
+  const handleSort = (column: string) => {
+    if (sortBy === column) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(column);
+      setSortDir("asc");
+    }
+  };
+
+  const SortIndicator = ({ column }: { column: string }) => {
+    const isActive = sortBy === column;
+    const iconClass = isActive ? "text-foreground" : "text-muted-foreground/40";
+
+    if (isActive && sortDir === "desc") {
+      return <ChevronDown className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+    }
+    return <ChevronUp className={`w-4 h-4 inline ml-1 ${iconClass}`} />;
+  };
+
+  const sortedGuests = [...guests].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    let aVal: any = a[sortBy as keyof Guest];
+    let bVal: any = b[sortBy as keyof Guest];
+
+    if (sortBy === "full_name") {
+      aVal = `${a.first_name} ${a.last_name}`;
+      bVal = `${b.first_name} ${b.last_name}`;
+    }
+
+    if (typeof aVal === "string") aVal = aVal.toLowerCase();
+    if (typeof bVal === "string") bVal = bVal.toLowerCase();
+
+    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -141,11 +181,21 @@ export default function GuestListClient({
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
-                <th className="p-3">Guest Name</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Phone</th>
-                <th className="p-3">Nationality</th>
-                <th className="p-3">Created</th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("full_name")}>
+                  Guest Name <SortIndicator column="full_name" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("email")}>
+                  Email <SortIndicator column="email" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("phone")}>
+                  Phone <SortIndicator column="phone" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("nationality")}>
+                  Nationality <SortIndicator column="nationality" />
+                </th>
+                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("created_at")}>
+                  Created <SortIndicator column="created_at" />
+                </th>
                 <th className="p-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -180,7 +230,7 @@ export default function GuestListClient({
                   </td>
                 </tr>
               ) : (
-                guests.map((guest) => (
+                sortedGuests.map((guest) => (
                   <tr key={guest.id} className="hover:bg-muted/40">
                     <td className="p-3 font-medium text-foreground">
                       {guest.first_name} {guest.last_name}
