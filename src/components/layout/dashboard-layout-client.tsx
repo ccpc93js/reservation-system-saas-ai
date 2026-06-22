@@ -23,10 +23,10 @@ export default function DashboardLayoutClient({
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
       {/* Mobile overlay */}
-      {!sidebarOpen && (
+      {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(true)}
+          onClick={() => setSidebarOpen(false)}
         />
       )}
 

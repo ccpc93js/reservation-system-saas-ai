@@ -215,6 +215,26 @@ export default function DocumentUpload({
     toast.success("Data extracted and applied!");
   };
 
+  const handleExtractFromDoc = async (imageUrl: string) => {
+    setIsExtracting(true);
+    try {
+      const response = await fetch("/api/guests/extract-ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "OCR extraction failed");
+      setExtractionData(result);
+      setLastExtractedImageUrl(imageUrl);
+      setShowExtractDialog(true);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "OCR extraction failed");
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
   return (
     <div className="w-full space-y-3">
       {/* Upload Area */}
@@ -343,6 +363,17 @@ export default function DocumentUpload({
                     <p className="text-xs text-muted-foreground mt-1">
                       {new Date(doc.uploadedAt).toLocaleDateString()}
                     </p>
+                    {doc.type?.startsWith("image/") && (
+                      <button
+                        type="button"
+                        onClick={() => handleExtractFromDoc(doc.url)}
+                        disabled={isExtracting}
+                        className="mt-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50 flex items-center gap-1"
+                      >
+                        <Sparkles className="h-3 w-3" />
+                        {isExtracting ? "Extracting..." : "Extract Data"}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

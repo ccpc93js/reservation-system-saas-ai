@@ -108,6 +108,12 @@ create table reservations (
   special_requests            text,
   online_checkin_token        text unique,
   online_checkin_completed_at timestamptz,
+  check_in_token              uuid unique default uuid_generate_v4(),
+  self_check_in_submitted_at  timestamptz,
+  self_check_in_data          jsonb,
+  id_photos                   jsonb,
+  check_in_verified_at        timestamptz,
+  check_in_verified_by        uuid references auth.users(id) on delete set null,
   created_by                  uuid references auth.users(id) on delete set null,
   created_at                  timestamptz not null default now(),
   updated_at                  timestamptz not null default now(),
@@ -160,6 +166,8 @@ create table audit_log (
 
 create index idx_reservations_org_dates    on reservations(organization_id, check_in, check_out);
 create index idx_reservations_status       on reservations(organization_id, status);
+create index idx_reservations_check_in_token on reservations(check_in_token);
+create index idx_reservations_self_check_in on reservations(organization_id, self_check_in_submitted_at desc);
 create index idx_reservation_items_bed     on reservation_items(bed_id, check_in, check_out);
 create index idx_reservation_items_res     on reservation_items(reservation_id);
 create index idx_beds_room                 on beds(room_id);

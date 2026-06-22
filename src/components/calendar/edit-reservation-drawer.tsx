@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, LogOut, AlertTriangle } from "lucide-react";
+import { X, LogOut, AlertTriangle, User } from "lucide-react";
 import { toast } from "sonner";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import CheckoutDialog from "@/components/reservations/checkout-dialog";
 import CancelReservationDialog from "@/components/reservations/cancel-reservation-dialog";
+import CheckInLinkButton from "@/components/dashboard/check-in-link-button";
+import GuestDialog from "@/components/guests/guest-dialog";
 
 interface EditReservationDrawerProps {
   open: boolean;
@@ -49,6 +51,11 @@ export default function EditReservationDrawer({
   const [isLoading, setIsLoading] = useState(false);
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showGuestDialog, setShowGuestDialog] = useState(false);
+  const [changingGuest, setChangingGuest] = useState(false);
+  const [guestSearch, setGuestSearch] = useState("");
+  const [guestResults, setGuestResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [editingDates, setEditingDates] = useState(false);
   const [newCheckIn, setNewCheckIn] = useState("");
   const [newCheckOut, setNewCheckOut] = useState("");
@@ -105,7 +112,7 @@ export default function EditReservationDrawer({
           .from("reservations")
           .select(
             `
-            id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount,
+            id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id,
             guests(first_name, last_name),
             reservation_items(price_per_night, beds(name, rooms(name)))
           `
@@ -230,6 +237,44 @@ export default function EditReservationDrawer({
       console.error(error);
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleGuestSearch = async (query: string) => {
+    setGuestSearch(query);
+    if (query.length < 2) { setGuestResults([]); return; }
+    setIsSearching(true);
+    const supabase = createBrowserClient();
+    const { data } = await supabase
+      .from("guests")
+      .select("id, first_name, last_name, email")
+      .eq("organization_id", reservation?.organization_id)
+      .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%,email.ilike.%${query}%`)
+      .limit(6);
+    setGuestResults(data || []);
+    setIsSearching(false);
+  };
+
+  const handleAssignGuest = async (guest: any) => {
+    try {
+      const response = await fetch(`/api/reservations/${reservationId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guest_id: guest.id, status: reservation.status }),
+      });
+      if (!response.ok) throw new Error();
+      setReservation((prev: any) => ({
+        ...prev,
+        guest_id: guest.id,
+        guests: { first_name: guest.first_name, last_name: guest.last_name },
+      }));
+      setChangingGuest(false);
+      setGuestSearch("");
+      setGuestResults([]);
+      toast.success(`Guest changed to ${guest.first_name} ${guest.last_name}`);
+      onReservationUpdated?.();
+    } catch {
+      toast.error("Failed to change guest");
     }
   };
 
@@ -381,6 +426,84 @@ export default function EditReservationDrawer({
               />
             </div>
 
+            {/* Guest section */}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Guest
+              </label>
+
+              {!changingGuest ? (
+                <div className="flex gap-2">
+                  {reservation?.guest_id && (
+                    <button
+                      type="button"
+                      onClick={() => setShowGuestDialog(true)}
+                      className="flex-1 px-3 py-2 text-sm rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors flex items-center gap-2"
+                    >
+                      <User className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{reservation.guests?.first_name} {reservation.guests?.last_name}</span>
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setChangingGuest(true)}
+                    className="px-3 py-2 text-sm rounded-lg border border-border bg-background text-muted-foreground hover:bg-muted transition-colors shrink-0"
+                  >
+                    Change
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={guestSearch}
+                      onChange={(e) => handleGuestSearch(e.target.value)}
+                      placeholder="Search by name or email..."
+                      autoFocus
+                      className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => { setChangingGuest(false); setGuestSearch(""); setGuestResults([]); }}
+                      className="px-3 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:bg-muted"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  {isSearching && <p className="text-xs text-muted-foreground px-1">Searching...</p>}
+                  {guestResults.length > 0 && (
+                    <div className="rounded-lg border border-border bg-background shadow-md overflow-hidden">
+                      {guestResults.map((g) => (
+                        <button
+                          key={g.id}
+                          type="button"
+                          onClick={() => handleAssignGuest(g)}
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors border-b border-border last:border-0"
+                        >
+                          <span className="font-medium text-foreground">{g.first_name} {g.last_name}</span>
+                          {g.email && <span className="text-xs text-muted-foreground ml-2">{g.email}</span>}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {guestSearch.length >= 2 && !isSearching && guestResults.length === 0 && (
+                    <p className="text-xs text-muted-foreground px-1">No guests found</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Guest Check-In Link */}
+            {reservation?.check_in_token && (
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-2 text-muted-foreground">
+                  Guest Check-In Link
+                </label>
+                <CheckInLinkButton checkInToken={reservation.check_in_token} />
+              </div>
+            )}
+
             {/* Action Buttons */}
             {status === "checked_in" && (
               <button
@@ -451,6 +574,17 @@ export default function EditReservationDrawer({
                 onReservationUpdated?.();
               }}
               onCancel={() => setShowCheckoutDialog(false)}
+            />
+          )}
+
+          {/* Guest Dialog */}
+          {showGuestDialog && (
+            <GuestDialog
+              open={showGuestDialog}
+              onOpenChange={setShowGuestDialog}
+              guestId={reservation.guest_id}
+              orgId={reservation.organization_id}
+              onGuestCreated={() => setShowGuestDialog(false)}
             />
           )}
 

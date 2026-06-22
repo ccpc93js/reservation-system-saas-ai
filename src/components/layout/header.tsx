@@ -18,6 +18,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
     "/dashboard": "Dashboard",
     "/calendar": "Tape Calendar",
     "/reservations": "Reservations",
+    "/check-in-pending": "Pending Check-Ins",
     "/analytics": "Analytics",
     "/guests": "Guest Directory",
     "/rooms": "Room Inventory",

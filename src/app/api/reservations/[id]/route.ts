@@ -72,6 +72,7 @@ export async function PATCH(
       .update({
         ...(updateData.status && { status: updateData.status }),
         ...(updateData.notes !== undefined && { notes: updateData.notes }),
+        ...(updateData.guest_id && { guest_id: updateData.guest_id }),
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);

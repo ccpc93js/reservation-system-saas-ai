@@ -101,12 +101,12 @@ Extract these fields (return null if not found or unreadable):
 - last_name
 - date_of_birth (YYYY-MM-DD format)
 - gender (M/F/Other)
-- nationality (ISO 2-letter code or full name)
+- nationality (full adjective form, e.g. "Serbian", "Colombian", "American" — never ISO codes like SRB, COL, USA)
 - document_number
 - document_expiry (YYYY-MM-DD format)
 - document_type (passport/national_id/drivers_license)
-- place_of_birth
-- country_of_birth
+- place_of_birth (city name)
+- country_of_birth (full country name, e.g. "Serbia", "Colombia", "United States" — never ISO codes)
 
 For each field, also include a confidence level (0-1) in a separate "confidence" object.
 Include "warnings" array for any unreadable or unclear fields.

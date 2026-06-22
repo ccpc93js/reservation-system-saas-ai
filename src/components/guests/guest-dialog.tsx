@@ -4,8 +4,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { COUNTRIES } from "@/lib/countries";
 import { createGuestSchema, updateGuestSchema, type CreateGuestInput } from "@/lib/validations/guest";
 import { createBrowserClient } from "@/lib/supabase/client";
 import DocumentUpload from "./document-upload";
@@ -48,6 +49,8 @@ export default function GuestDialog({
   const [duplicateGuest, setDuplicateGuest] = useState<any>(null);
   const [showMergeDialog, setShowMergeDialog] = useState(false);
   const [forceCreateDuplicate, setForceCreateDuplicate] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
   const [existingDocuments, setExistingDocuments] = useState<any[]>([]);
   const [newlyCreatedGuestId, setNewlyCreatedGuestId] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -103,6 +106,11 @@ export default function GuestDialog({
       unique_master_citizen: "",
     },
   });
+
+  const nationalityValue = watch("nationality") || "";
+  const filteredCountries = COUNTRIES.filter((country) =>
+    country.toLowerCase().includes(countrySearch.toLowerCase())
+  );
 
   // Fetch guest data if editing
   useEffect(() => {
@@ -283,10 +291,10 @@ export default function GuestDialog({
     return (
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[10001]" />
           <Dialog.Content
             aria-describedby={undefined}
-            className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
+            className="fixed left-[50%] top-[50%] z-[10002] w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
           >
             <p className="text-muted-foreground">Loading...</p>
           </Dialog.Content>
@@ -314,11 +322,11 @@ export default function GuestDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[10001]" />
         <Dialog.Content
           ref={scrollContainerRef}
           aria-describedby={undefined}
-          className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
+          className="fixed left-[50%] top-[50%] z-[10002] w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
         >
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-lg font-semibold text-foreground">
@@ -525,16 +533,78 @@ export default function GuestDialog({
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
                   Nationality
                 </label>
-                <input
-                  {...register("nationality")}
-                  placeholder="e.g., ESP, COL"
-                  className="w-full rounded-lg border px-3 py-2 text-sm"
-                  style={{
-                    borderColor: errors.nationality ? "#ef4444" : "hsl(var(--border))",
-                    background: "hsl(var(--bg))",
-                    color: "hsl(var(--text))",
-                  }}
-                />
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCountryDropdown(!showCountryDropdown);
+                      setCountrySearch("");
+                    }}
+                    className="w-full rounded-lg border px-3 py-2 text-sm text-left flex items-center justify-between"
+                    style={{
+                      borderColor: errors.nationality ? "#ef4444" : "hsl(var(--border))",
+                      background: "hsl(var(--bg))",
+                      color: nationalityValue ? "hsl(var(--text))" : "hsl(var(--muted))",
+                    }}
+                  >
+                    <span>{nationalityValue || "Select country..."}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+
+                  {showCountryDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
+                      <input
+                        type="text"
+                        placeholder="Search country..."
+                        value={countrySearch}
+                        onChange={(e) => setCountrySearch(e.target.value)}
+                        className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
+                        style={{
+                          borderColor: "hsl(var(--border))",
+                          background: "hsl(var(--bg))",
+                          color: "hsl(var(--text))",
+                        }}
+                        autoFocus
+                      />
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredCountries.length > 0 ? (
+                          filteredCountries.map((country) => (
+                            <button
+                              key={country}
+                              type="button"
+                              onClick={() => {
+                                setValue("nationality", country);
+                                setShowCountryDropdown(false);
+                                setCountrySearch("");
+                              }}
+                              className="w-full px-3 py-2 text-left text-sm hover:opacity-80 transition-opacity"
+                              style={{
+                                background:
+                                  nationalityValue === country
+                                    ? "hsl(var(--primary))"
+                                    : "transparent",
+                                color:
+                                  nationalityValue === country
+                                    ? "hsl(var(--primary-foreground))"
+                                    : "hsl(var(--text))",
+                                fontWeight:
+                                  nationalityValue === country
+                                    ? "600"
+                                    : "normal",
+                              }}
+                            >
+                              {country}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>
+                            No countries found
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 {errors.nationality && (
                   <p className="text-xs text-red-500 mt-1">{String(errors.nationality?.message ?? "")}</p>
                 )}

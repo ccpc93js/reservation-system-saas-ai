@@ -1,3 +1,161 @@
+## [827af05] - 2026-06-21
+
+feat: Phase 8 - Dashboard metrics and Analytics page
+
+Dashboard improvements:
+- Add 4 metric cards: Occupancy Rate, Arrivals Today, Monthly Revenue, Avg Booking Nights
+- Occupancy trending with ↑↓ indicators comparing to previous day
+- Daily revenue detail line on Monthly Revenue card
+- Check In button with instant status update
+
+Metrics enhancements:
+- Calculate average booking nights from reservations
+- Compare occupancy day-over-day for trend analysis
+- Comprehensive error handling with graceful fallbacks
+- Support empty data scenarios (no beds, no reservations)
+
+Analytics page:
+- New /analytics route with 30-day trends
+- Booking trends line chart (bookings per day)
+- Revenue trends bar chart (revenue per day)
+- Occupancy timeline area chart (occupancy % over time)
+- Top rooms by revenue ranked list
+- Recharts integration for data visualization
+- Error handling for missing data
+
+Navigation:
+- Add Analytics link to sidebar
+- Update header title mapping for /analytics route
+
+## [827af05] - 2026-06-20
+
+feat: Phase 8 - Dashboard metrics and Analytics page
+
+Dashboard improvements:
+- Add 4 metric cards: Occupancy Rate, Arrivals Today, Monthly Revenue, Avg Booking Nights
+- Occupancy trending with ↑↓ indicators comparing to previous day
+- Daily revenue detail line on Monthly Revenue card
+- Check In button with instant status update
+
+Metrics enhancements:
+- Calculate average booking nights from reservations
+- Compare occupancy day-over-day for trend analysis
+- Comprehensive error handling with graceful fallbacks
+- Support empty data scenarios (no beds, no reservations)
+
+Analytics page:
+- New /analytics route with 30-day trends
+- Booking trends line chart (bookings per day)
+- Revenue trends bar chart (revenue per day)
+- Occupancy timeline area chart (occupancy % over time)
+- Top rooms by revenue ranked list
+- Recharts integration for data visualization
+- Error handling for missing data
+
+Navigation:
+- Add Analytics link to sidebar
+- Update header title mapping for /analytics route
+
+## [827af05] - 2026-06-20
+
+feat: Phase 8 - Dashboard metrics and Analytics page
+
+Dashboard improvements:
+- Add 4 metric cards: Occupancy Rate, Arrivals Today, Monthly Revenue, Avg Booking Nights
+- Occupancy trending with ↑↓ indicators comparing to previous day
+- Daily revenue detail line on Monthly Revenue card
+- Check In button with instant status update
+
+Metrics enhancements:
+- Calculate average booking nights from reservations
+- Compare occupancy day-over-day for trend analysis
+- Comprehensive error handling with graceful fallbacks
+- Support empty data scenarios (no beds, no reservations)
+
+Analytics page:
+- New /analytics route with 30-day trends
+- Booking trends line chart (bookings per day)
+- Revenue trends bar chart (revenue per day)
+- Occupancy timeline area chart (occupancy % over time)
+- Top rooms by revenue ranked list
+- Recharts integration for data visualization
+- Error handling for missing data
+
+Navigation:
+- Add Analytics link to sidebar
+- Update header title mapping for /analytics route
+
+## Phase 9 - Guest Self-Service Portal
+
+feat: Guest Self-Service Check-In Portal
+
+Guest portal functionality:
+- Multi-channel access: email link, shareable link, QR code
+- Public token-based check-in form (no auth required)
+- Two-stage verification: guest submit → staff verify
+- Pre-filled form with guest data from reservation
+- ID photo upload (front required, back optional)
+- Image compression and secure storage in Supabase
+
+Staff verification dashboard:
+- Pending Check-Ins page showing all unverified submissions
+- Review guest data and ID photos in modal
+- Approve or reject with reason
+- Automatic guest notifications on verification
+
+Database schema:
+- Add check_in_token (UUID) for guest access
+- Add self_check_in_submitted_at, self_check_in_data, id_photos fields
+- Add check_in_verified_at, check_in_verified_by for audit trail
+- Add indexes for performance
+
+API endpoints:
+- GET /api/guest-portal/[token] - Fetch reservation details
+- POST /api/guest-portal/[token]/submit-check-in - Guest form submission
+- GET /api/staff/check-in-pending - List pending verifications
+- PATCH /api/staff/reservations/[id]/verify-check-in - Staff verification
+
+Frontend:
+- /guest-portal/[token] - Check-in form page
+- /check-in-pending - Staff verification dashboard
+- Add "Pending Check-Ins" to sidebar navigation
+- Support guest data pre-fill and updates
+
+Security:
+- Token expiry (24h past check-in date)
+- File size validation (5MB limit)
+- Image format validation (JPG/PNG/WebP)
+- Organization isolation via RLS policies
+
+## [827af05] - 2026-06-09
+
+feat: Phase 8 - Dashboard metrics and Analytics page
+
+Dashboard improvements:
+- Add 4 metric cards: Occupancy Rate, Arrivals Today, Monthly Revenue, Avg Booking Nights
+- Occupancy trending with ↑↓ indicators comparing to previous day
+- Daily revenue detail line on Monthly Revenue card
+- Check In button with instant status update
+
+Metrics enhancements:
+- Calculate average booking nights from reservations
+- Compare occupancy day-over-day for trend analysis
+- Comprehensive error handling with graceful fallbacks
+- Support empty data scenarios (no beds, no reservations)
+
+Analytics page:
+- New /analytics route with 30-day trends
+- Booking trends line chart (bookings per day)
+- Revenue trends bar chart (revenue per day)
+- Occupancy timeline area chart (occupancy % over time)
+- Top rooms by revenue ranked list
+- Recharts integration for data visualization
+- Error handling for missing data
+
+Navigation:
+- Add Analytics link to sidebar
+- Update header title mapping for /analytics route
+
 ## [b485315] - 2026-06-09
 
 feat: drawer sidebar, table improvements, and sticky first column
