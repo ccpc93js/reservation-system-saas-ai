@@ -1,6 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { createReservationSchema } from "@/lib/validations/reservation";
 import { differenceInDays } from "date-fns";
+import { sendReservationConfirmationEmail } from "@/lib/email";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -96,6 +97,7 @@ export async function POST(request: Request) {
           organization_id: data.org_id,
           first_name: data.first_name,
           last_name: data.last_name,
+          email: data.email || null,
           nationality: null,
           document_type: null,
           document_number: null,
@@ -181,6 +183,32 @@ export async function POST(request: Request) {
 
     if (totalUpdateError) {
       return fail("reservations.updateTotal", "Reservation created but failed to update total", 400, totalUpdateError);
+    }
+
+    // Fetch guest and room info for email
+    const { data: guest } = await supabase
+      .from("guests")
+      .select("email")
+      .eq("id", guestId)
+      .single();
+
+    const { data: room } = await (supabase
+      .from("reservation_items") as any)
+      .select("beds(rooms(name))")
+      .eq("reservation_id", reservation.id)
+      .single();
+
+    // Send confirmation email
+    if (guest?.email) {
+      await sendReservationConfirmationEmail(
+        guest.email,
+        `${data.first_name} ${data.last_name}`,
+        reservation.id.substring(0, 8).toUpperCase(),
+        data.check_in,
+        data.check_out,
+        room?.beds?.rooms?.name,
+        totalPrice
+      ).catch((err) => console.error("Email send failed:", err));
     }
 
     return Response.json(

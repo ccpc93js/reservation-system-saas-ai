@@ -25,6 +25,9 @@ export const createReservationSchema = yup.object().shape({
     .min(2, 'Last name must be at least 2 characters')
     .max(100, 'Last name too long')
     .required('Last name is required'),
+  email: yup.string()
+    .email('Email must be valid')
+    .required('Email is required'),
   check_in: yup.string()
     .required('Check-in date is required')
     .test('valid-date', 'Invalid check-in date', function(value) {

@@ -1,3 +1,133 @@
+## [b0c0f9f] - 2026-06-22
+
+feat: Phase 9 - Guest Self-Service Portal + Bulk Actions complete
+
+HIGH-IMPACT FEATURES:
+- Multi-step check-in form (4 steps with progress indicator)
+- Real-time form validation with error messages
+- Photo preview, change, remove (file upload only)
+- Rejection clarity: custom rejection reasons shown to guest
+- Bulk approve/reject: Staff can process multiple check-ins at once
+
+GUEST PORTAL IMPROVEMENTS:
+- Step 1: Your Details - form fields with live validation
+- Step 2: ID Photos - file upload with preview
+- Step 3: Review - verify all information
+- Step 4: Complete - final submission
+- Rejection flow: Guest sees rejection reason and can resubmit
+- Searchable country dropdown (195 countries)
+- Document type examples (Passport, ID, Driver's License)
+
+STAFF DASHBOARD ENHANCEMENTS:
+- Checkbox selection on pending check-ins
+- Bulk action bar: Select All, Approve All, Reject All buttons
+- Bulk rejection modal with reason selection and custom text
+- Rejected check-ins filtered from pending list
+- Toast notifications for bulk operations
+
+API UPDATES:
+- Guest portal endpoint returns rejection_reason
+- Pending check-ins API filters out rejected items
+- Verify endpoint: rejection doesn't set check_in_verified_at
+
+VALIDATION:
+- First/Last name: 2+ characters
+- Email: Valid format
+- Phone: 10+ digits
+- Document number: 3+ characters
+- Country: Required selection
+- Photos: JPG/PNG/WebP, max 5MB
+
+FIXES:
+- Separate file input refs for front/back photos (no cross-upload)
+- Rejection message shows in red alert box
+- Check-in status submitted preserves after rejection
+- Bulk operations batch API calls
+- Debug logging for API responses
+
+DATABASE:
+- self_check_in_data stores rejection_reason + rejected_at
+- No check_in_verified_at set on rejection (keeps status "submitted")
+- Graceful null handling for legacy data
+
+Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-06-27
+
+### Email Service (Resend)
+- Replace console.log stubs with real Resend email delivery
+- HTML email templates: booking confirmation, cancellation, checkout receipt, check-in submitted, check-in verified
+- `POST /api/email/send` endpoint for direct email dispatch
+- Email triggered on: reservation create, cancel, checkout, guest portal submission
+- `EMAIL_FROM` env var for sender address (defaults to onboarding@resend.dev)
+- Email field added to reservation creation form and validation
+
+### Bug Fixes
+- Guest portal "Link Invalid": fixed missing guest_id in select, wrong storage bucket, removed non-existent emergency_contact column
+- Mobile overlay shows when sidebar CLOSED (inverted condition fix)
+- Guest dialog z-index raised to z-[10002] to appear above reservation drawer
+- Extract Data button added to existing uploaded documents list
+- OCR prompt returns full nationality/country names not ISO codes
+
+### Reservation Drawer
+- "View Guest Profile" opens guest edit dialog inline
+- "Change Guest" inline search: reassign reservation to any existing guest
+- PATCH /api/reservations/:id accepts guest_id updates
+
+## [b0c0f9f] - 2026-06-22
+
+feat: Phase 9 - Guest Self-Service Portal + Bulk Actions complete
+
+HIGH-IMPACT FEATURES:
+- Multi-step check-in form (4 steps with progress indicator)
+- Real-time form validation with error messages
+- Photo preview, change, remove (file upload only)
+- Rejection clarity: custom rejection reasons shown to guest
+- Bulk approve/reject: Staff can process multiple check-ins at once
+
+GUEST PORTAL IMPROVEMENTS:
+- Step 1: Your Details - form fields with live validation
+- Step 2: ID Photos - file upload with preview
+- Step 3: Review - verify all information
+- Step 4: Complete - final submission
+- Rejection flow: Guest sees rejection reason and can resubmit
+- Searchable country dropdown (195 countries)
+- Document type examples (Passport, ID, Driver's License)
+
+STAFF DASHBOARD ENHANCEMENTS:
+- Checkbox selection on pending check-ins
+- Bulk action bar: Select All, Approve All, Reject All buttons
+- Bulk rejection modal with reason selection and custom text
+- Rejected check-ins filtered from pending list
+- Toast notifications for bulk operations
+
+API UPDATES:
+- Guest portal endpoint returns rejection_reason
+- Pending check-ins API filters out rejected items
+- Verify endpoint: rejection doesn't set check_in_verified_at
+
+VALIDATION:
+- First/Last name: 2+ characters
+- Email: Valid format
+- Phone: 10+ digits
+- Document number: 3+ characters
+- Country: Required selection
+- Photos: JPG/PNG/WebP, max 5MB
+
+FIXES:
+- Separate file input refs for front/back photos (no cross-upload)
+- Rejection message shows in red alert box
+- Check-in status submitted preserves after rejection
+- Bulk operations batch API calls
+- Debug logging for API responses
+
+DATABASE:
+- self_check_in_data stores rejection_reason + rejected_at
+- No check_in_verified_at set on rejection (keeps status "submitted")
+- Graceful null handling for legacy data
+
+Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
+
 ## [827af05] - 2026-06-21
 
 feat: Phase 8 - Dashboard metrics and Analytics page

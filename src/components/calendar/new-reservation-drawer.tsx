@@ -65,6 +65,7 @@ export default function NewReservationDrawer({
       guest_id: "new",
       first_name: "",
       last_name: "",
+      email: "",
       check_out: "",
       price_per_night: 12,
       notes: "",
@@ -243,12 +244,24 @@ export default function NewReservationDrawer({
                   <input
                     {...register("last_name")}
                     placeholder="Last name"
-                    className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
+                    className={`w-full rounded-lg border px-3 py-2 text-sm mb-2 bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
                       errors.last_name ? "border-red-500" : "border-border"
                     }`}
                   />
                   {errors.last_name && (
-                    <p className="text-xs text-red-500 mt-1">{errors.last_name.message}</p>
+                    <p className="text-xs text-red-500 mb-2">{errors.last_name.message}</p>
+                  )}
+
+                  <input
+                    {...register("email")}
+                    placeholder="Email address"
+                    type="email"
+                    className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
+                      errors.email ? "border-red-500" : "border-border"
+                    }`}
+                  />
+                  {errors.email && (
+                    <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
                   )}
                 </>
               )}

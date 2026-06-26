@@ -1,9 +1,12 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { sendCheckoutConfirmationEmail } from "@/lib/email";
 
 type ReservationOrg = {
   organization_id: string;
   status: string;
   total_amount: number;
+  check_out: string;
+  guest_id: string;
 };
 
 export async function PATCH(
@@ -27,7 +30,7 @@ export async function PATCH(
     // Get reservation to verify access
     const { data: reservationRaw, error: resError } = await supabase
       .from("reservations")
-      .select("organization_id, status, total_amount")
+      .select("organization_id, status, total_amount, check_out, guest_id")
       .eq("id", id)
       .single();
 
@@ -85,6 +88,22 @@ export async function PATCH(
         { error: "Failed to check out reservation" },
         { status: 400 }
       );
+    }
+
+    // Send checkout confirmation email
+    const { data: guest } = await supabase
+      .from("guests")
+      .select("first_name, last_name, email")
+      .eq("id", (reservation as any).guest_id)
+      .single();
+
+    if (guest?.email) {
+      await sendCheckoutConfirmationEmail(
+        guest.email,
+        `${guest.first_name} ${guest.last_name}`,
+        id.substring(0, 8).toUpperCase(),
+        (reservation as any).check_out
+      ).catch((err) => console.error("Email send failed:", err));
     }
 
     return Response.json({

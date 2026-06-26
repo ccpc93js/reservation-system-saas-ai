@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { sendReservationCancelledEmail } from "@/lib/email";
 
 type ReservationOrg = { organization_id: string };
 
@@ -85,6 +86,29 @@ export async function PATCH(
         { error: "Failed to cancel reservation" },
         { status: 400 }
       );
+    }
+
+    // Send cancellation email
+    const { data: resData } = await supabase
+      .from("reservations")
+      .select("guest_id, id")
+      .eq("id", id)
+      .single();
+
+    if (resData) {
+      const { data: guest } = await supabase
+        .from("guests")
+        .select("first_name, last_name, email")
+        .eq("id", resData.guest_id)
+        .single();
+
+      if (guest?.email) {
+        await sendReservationCancelledEmail(
+          guest.email,
+          `${guest.first_name} ${guest.last_name}`,
+          id.substring(0, 8).toUpperCase()
+        ).catch((err) => console.error("Email send failed:", err));
+      }
     }
 
     return Response.json({ success: true });
