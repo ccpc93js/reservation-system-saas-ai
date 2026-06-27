@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarRange } from "lucide-react";
+import { CalendarRange, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 import TapeChart from "@/components/calendar/tape-chart";
 import NewReservationDrawer from "@/components/calendar/new-reservation-drawer";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
@@ -19,6 +20,26 @@ export default function CalendarClient({
   orgId,
 }: CalendarClientProps) {
   const router = useRouter();
+  const [syncingAll, setSyncingAll] = useState(false);
+
+  const handleSyncAll = async () => {
+    setSyncingAll(true);
+    try {
+      const res = await fetch("/api/channels/sync-all", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      const total = data.results.reduce(
+        (acc: any, r: any) => ({ created: acc.created + (r.created || 0), updated: acc.updated + (r.updated || 0), cancelled: acc.cancelled + (r.cancelled || 0) }),
+        { created: 0, updated: 0, cancelled: 0 }
+      );
+      toast.success(`Sync complete: ${total.created} new, ${total.updated} updated, ${total.cancelled} cancelled`);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Sync failed");
+    } finally {
+      setSyncingAll(false);
+    }
+  };
 
   // Drawer state
   const [newResOpen, setNewResOpen] = useState(false);
@@ -56,16 +77,27 @@ export default function CalendarClient({
             60-Day Horizon · Click an empty cell to create, or a block to edit.
           </p>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-medium text-muted-foreground bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
-          <span className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-emerald-400" /> Confirmed
-          </span>
-          <span className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-amber-400" /> Pending
-          </span>
-          <span className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-indigo-400" /> In House
-          </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSyncAll}
+            disabled={syncingAll}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 transition-colors"
+            title="Sync all OTA channels"
+          >
+            <RefreshCw className={`w-4 h-4 ${syncingAll ? "animate-spin" : ""}`} />
+            {syncingAll ? "Syncing..." : "Sync Channels"}
+          </button>
+          <div className="flex items-center gap-3 text-[11px] font-medium text-muted-foreground bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
+            <span className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-emerald-400" /> Confirmed
+            </span>
+            <span className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-amber-400" /> Pending
+            </span>
+            <span className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-indigo-400" /> In House
+            </span>
+          </div>
         </div>
       </div>
 

@@ -27,6 +27,8 @@ export default function NewReservationDrawer({
 }: NewReservationDrawerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [guestMode, setGuestMode] = useState<"select" | "new">("new");
+  const [conflict, setConflict] = useState<{ reservation_number: string; guest: string; check_in: string; check_out: string } | null>(null);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
 
   const getTodayLocalDateStr = () => {
     const now = new Date();
@@ -90,6 +92,25 @@ export default function NewReservationDrawer({
   const pricePerNight = watch("price_per_night");
   const checkIn = watch("check_in");
 
+  const checkAvailability = async (checkInDate: string, checkOutDate: string) => {
+    if (!bedId || !checkInDate || !checkOutDate) return;
+    setCheckingAvailability(true);
+    setConflict(null);
+    try {
+      const res = await fetch(
+        `/api/reservations/availability?bed_id=${bedId}&check_in=${checkInDate}&check_out=${checkOutDate}`
+      );
+      const data = await res.json();
+      if (!data.available && data.conflicts?.length > 0) {
+        setConflict(data.conflicts[0]);
+      }
+    } catch {
+      // silently fail — server will block on submit anyway
+    } finally {
+      setCheckingAvailability(false);
+    }
+  };
+
   const calculateNights = () => {
     if (!checkIn || !checkOut) return 0;
     const start = new Date(checkIn);
@@ -132,6 +153,7 @@ export default function NewReservationDrawer({
       toast.success("Reservation created!");
       onOpenChange(false);
       reset();
+      setConflict(null);
       onReservationCreated?.();
     } catch (error) {
       console.error("Fetch error:", error);
@@ -195,14 +217,29 @@ export default function NewReservationDrawer({
                 {...register("check_out")}
                 type="date"
                 min={checkIn}
+                onChange={(e) => {
+                  register("check_out").onChange(e);
+                  if (e.target.value && checkIn) checkAvailability(checkIn, e.target.value);
+                }}
                 className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
-                  errors.check_out ? "border-red-500" : "border-border"
+                  errors.check_out || conflict ? "border-red-500" : "border-border"
                 }`}
               />
+              {checkingAvailability && (
+                <p className="text-xs mt-1 text-muted-foreground">Checking availability...</p>
+              )}
+              {conflict && !checkingAvailability && (
+                <div className="mt-1.5 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
+                  <p className="text-xs text-red-700 font-medium">Bed already booked</p>
+                  <p className="text-xs text-red-600 mt-0.5">
+                    {conflict.guest} · {conflict.reservation_number} · {conflict.check_in} → {conflict.check_out}
+                  </p>
+                </div>
+              )}
               {errors.check_out && (
                 <p className="text-xs text-red-500 mt-1">{errors.check_out.message}</p>
               )}
-              {!errors.check_out && checkIn && checkOut && (
+              {!errors.check_out && !conflict && checkIn && checkOut && (
                 <p className="text-xs mt-1 text-muted-foreground">
                   {nights} night{nights !== 1 ? "s" : ""}
                 </p>

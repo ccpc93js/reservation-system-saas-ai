@@ -31,10 +31,10 @@ export default async function CalendarPage() {
     .eq("is_active", true)
     .order("position");
 
-  // Load reservations for the next 60 days
+  // Load reservations for the next 180 days (covers OTA syncs far in advance)
   const today = new Date();
   const end = new Date();
-  end.setDate(today.getDate() + 60);
+  end.setDate(today.getDate() + 180);
 
   const { data: reservations } = await supabase
     .from("reservation_items")
@@ -42,8 +42,9 @@ export default async function CalendarPage() {
       `
       id, bed_id, check_in, check_out, price_per_night,
       reservations(
-        id, reservation_number, status,
-        guests(first_name, last_name)
+        id, reservation_number, status, channel_source,
+        guests(first_name, last_name),
+        channels(color, platform)
       )
     `
     )

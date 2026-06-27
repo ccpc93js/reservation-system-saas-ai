@@ -136,37 +136,43 @@ export async function POST(request: Request) {
       return fail("reservations.insert", "Failed to create reservation", 400, resError);
     }
 
-    // Create reservation items (one per night)
     const checkIn = new Date(data.check_in);
     const checkOut = new Date(data.check_out);
     const nights = differenceInDays(checkOut, checkIn);
 
     if (nights <= 0) {
+      await (supabase.from("reservations") as any).delete().eq("id", reservation.id);
       return fail("nights.compute", "Check-out date must be after check-in date", 400);
+    }
+
+    // Conflict check: reject if bed already booked for these dates
+    const { data: conflicts } = await (supabase
+      .from("reservation_items") as any)
+      .select("id, reservations!inner(status)")
+      .eq("bed_id", data.bed_id)
+      .lt("check_in", data.check_out)
+      .gt("check_out", data.check_in)
+      .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
+
+    if (conflicts && conflicts.length > 0) {
+      await (supabase.from("reservations") as any).delete().eq("id", reservation.id);
+      return fail("conflict.check", "This bed is already booked for the selected dates", 409);
     }
 
     const totalPrice = nights * data.price_per_night;
 
-    const items = [];
-    for (let i = 0; i < nights; i++) {
-      const night = new Date(checkIn);
-      night.setDate(night.getDate() + i);
-      items.push({
+    // One item per reservation (full stay) — not per night
+    const { error: itemsError } = await (supabase
+      .from("reservation_items") as any)
+      .insert({
         organization_id: data.org_id,
         reservation_id: reservation.id,
         bed_id: data.bed_id,
-        check_in: night.toISOString().split("T")[0],
-        check_out: new Date(night.getTime() + 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0],
+        check_in: data.check_in,
+        check_out: data.check_out,
         price_per_night: data.price_per_night,
-        total_price: data.price_per_night,
+        total_price: totalPrice,
       });
-    }
-
-    const { error: itemsError } = await (supabase
-      .from("reservation_items") as any)
-      .insert(items);
 
     if (itemsError) {
       console.error("[reservations/create] reservation_items.insert", itemsError);

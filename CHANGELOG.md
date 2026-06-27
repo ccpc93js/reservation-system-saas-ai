@@ -1,3 +1,30 @@
+## [4688927] - 2026-06-27
+
+feat(email): implement Resend email service + reservation bug fixes
+
+Replace console.log stubs with real Resend HTTP email delivery.
+Emails needed for guest flow to actually reach guests on booking,
+cancellation, checkout, and check-in events.
+
+- HTML templates for all 5 transactional email types
+- POST /api/email/send for direct dispatch
+- Email field required on reservation creation (validation + form)
+- Trigger emails on create/cancel/checkout/guest portal submit
+
+Bug fixes:
+- Guest portal returned 404 due to missing guest_id in select,
+  wrong storage bucket (guest-check-ins -> guest-documents),
+  and non-existent emergency_contact column on guests table
+- Mobile overlay rendered when sidebar CLOSED (inverted condition)
+- Guest dialog z-index below reservation drawer (z-50 -> z-[10002])
+- Extract Data button missing from existing document list items
+- OCR prompt returned ISO codes (SRB) instead of full names (Serbian)
+
+Reservation drawer additions:
+- View Guest Profile button opens GuestDialog inline
+- Change Guest search: reassign reservation to existing guest
+- PATCH /api/reservations/:id now accepts guest_id
+
 ## [b0c0f9f] - 2026-06-22
 
 feat: Phase 9 - Guest Self-Service Portal + Bulk Actions complete

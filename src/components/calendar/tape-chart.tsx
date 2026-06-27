@@ -335,6 +335,8 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                       const status = block.reservations?.status ?? "pending";
                       const colors = STATUS_COLORS[status] ?? STATUS_COLORS.pending;
                       const Icon = colors.icon;
+                      const channelColor = (block.reservations as any)?.channels?.color;
+                      const isOTA = (block.reservations as any)?.channel_source && (block.reservations as any)?.channel_source !== "direct";
                       const guestFirst = block.reservations?.guests?.first_name ?? "Unknown";
                       const guestLast = block.reservations?.guests?.last_name ?? "";
                       const fullName = `${guestFirst} ${guestLast}`.trim();
@@ -351,6 +353,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                           style={{
                             left: offsetDays * DAY_WIDTH + 2,
                             width: Math.max(durationDays * DAY_WIDTH - 4, 30),
+                            ...(isOTA && channelColor ? { borderLeftColor: channelColor, borderLeftWidth: 3 } : {}),
                           }}
                           title={`${fullName} · $${totalPrice.toFixed(2)} total · ${block.check_in} to ${block.check_out}`}
                           onClick={() => {
@@ -372,7 +375,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                             <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
                           </div>
                           <span className={cn("truncate text-[8px] font-medium", colors.text)}>
-                            ${totalPrice.toFixed(2)} total
+                            {isOTA ? (block.reservations as any)?.channel_source?.replace("_", ".") : `$${totalPrice.toFixed(2)} total`}
                           </span>
                         </div>
                       );

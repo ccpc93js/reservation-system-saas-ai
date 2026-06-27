@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   BarChart3,
   ClipboardList,
+  Wifi,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,7 @@ const mainNavItems = [
   { href: "/reservations", label: "Reservations", icon: BookOpen },
   { href: "/check-in-pending", label: "Pending Check-Ins", icon: ClipboardList },
   { href: "/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/channels", label: "Channel Manager", icon: Wifi },
   { href: "/guests", label: "Guest Directory", icon: Users },
   { href: "/rooms", label: "Room Inventory", icon: BedDouble },
 ];
