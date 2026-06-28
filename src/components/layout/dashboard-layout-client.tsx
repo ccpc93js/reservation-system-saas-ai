@@ -46,7 +46,7 @@ export default function DashboardLayoutClient({
           user={user}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         />
-        <main className="flex-1 overflow-y-auto p-6 bg-background">
+        <main className="flex-1 overflow-y-auto p-6 pt-0 bg-background">
           {children}
         </main>
       </div>

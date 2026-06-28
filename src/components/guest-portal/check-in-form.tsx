@@ -812,8 +812,8 @@ export default function CheckInForm({ token }: CheckInFormProps) {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-foreground">Ready to Submit?</h2>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-900">
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+              <p className="text-sm text-foreground">
                 Your information will be reviewed by our staff within 24 hours. You'll
                 receive an email confirmation once your ID has been verified.
               </p>

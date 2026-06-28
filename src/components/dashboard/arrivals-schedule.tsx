@@ -121,7 +121,7 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
                         res.status === "confirmed"
                           ? "bg-emerald-50 text-emerald-800 border-emerald-100"
                           : res.status === "checked_in"
-                          ? "bg-blue-50 text-blue-800 border-blue-100"
+                          ? "bg-primary/10 text-primary border-primary/20"
                           : "bg-amber-50 text-amber-700 border-amber-100"
                       }`}>
                         {res.status.replace("_", " ")}

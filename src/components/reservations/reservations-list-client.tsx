@@ -13,7 +13,7 @@ const STATUS_COLORS: Record<
 > = {
   pending: { bg: "bg-amber-100", text: "text-amber-700" },
   confirmed: { bg: "bg-emerald-100", text: "text-emerald-700" },
-  checked_in: { bg: "bg-indigo-100", text: "text-indigo-700" },
+  checked_in: { bg: "bg-primary/10", text: "text-primary" },
   checked_out: { bg: "bg-slate-100", text: "text-slate-600" },
   cancelled: { bg: "bg-red-100", text: "text-red-700" },
   no_show: { bg: "bg-gray-100", text: "text-gray-600" },
@@ -380,7 +380,7 @@ export default function ReservationsListClient({
                       className="hover:bg-muted/40 cursor-pointer"
                       onClick={() => handleOpenEdit(res.id)}
                     >
-                      <td className="p-3 font-mono font-medium text-indigo-600">
+                      <td className="p-3 font-mono font-medium text-primary">
                         {res.reservation_number}
                       </td>
                       <td className="p-3">

@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── HostelHub Design Tokens ──────────────────────────────────────────────── */
+/* ─── HostMagSmart Design Tokens ──────────────────────────────────────────────── */
 :root {
   /* Backgrounds */
-  --bg: 60 9% 98%;              /* #FAFAF7 — warm off-white page bg */
-  --surface: 0 0% 100%;         /* #FFFFFF — cards, panels */
-  --border: 40 14% 89%;         /* #E7E5DE — dividers */
+  --bg: 250 20% 98%;             /* #F8F7FC — cool off-white */
+  --surface: 0 0% 100%;          /* #FFFFFF — cards, panels */
+  --border: 250 15% 90%;         /* #E4E2F0 — dividers */
 
   /* Tailwind/shadcn-compatible aliases */
   --background: var(--bg);
@@ -30,26 +30,26 @@
   --ring: var(--accent);
 
   /* Text */
-  --text: 0 0% 9%;              /* #171717 — primary text */
-  --text-muted: 40 4% 41%;      /* #6B6B66 — secondary text */
+  --text: 250 15% 10%;           /* #161520 — near-black with purple tint */
+  --text-muted: 250 8% 45%;      /* #6E6B80 — muted purple-gray */
 
-  /* Accent — teal */
-  --accent: 161 74% 24%;        /* #0F6E56 */
-  --accent-fg: 0 0% 100%;       /* white text on accent */
-  --accent-hover: 161 74% 20%;  /* slightly darker on hover */
+  /* Accent — purple */
+  --accent: 262 83% 54%;         /* #7C3AED — indigo-purple */
+  --accent-fg: 0 0% 100%;        /* white text on accent */
+  --accent-hover: 262 83% 46%;   /* darker hover */
 
   /* Status colors */
-  --success: 96 73% 24%;        /* #3B6D11 */
-  --success-fg: 96 73% 95%;
-  --success-bg: 96 73% 96%;
+  --success: 142 72% 29%;        /* #147A45 */
+  --success-fg: 142 72% 97%;
+  --success-bg: 142 72% 96%;
 
-  --warning: 33 83% 28%;        /* #854F0B */
-  --warning-fg: 33 83% 98%;
-  --warning-bg: 33 83% 96%;
+  --warning: 38 92% 40%;         /* #C97D0A */
+  --warning-fg: 38 92% 98%;
+  --warning-bg: 38 92% 96%;
 
-  --danger: 0 57% 41%;          /* #A32D2D */
-  --danger-fg: 0 57% 98%;
-  --danger-bg: 0 57% 97%;
+  --danger: 0 72% 44%;           /* #C02B2B */
+  --danger-fg: 0 72% 98%;
+  --danger-bg: 0 72% 97%;
 
   /* Misc */
   --radius: 0.5rem;
@@ -81,15 +81,15 @@
   --input: var(--border);
   --ring: var(--accent);
 
-  --text: 60 9% 96%;            /* #F5F5F2 */
-  --text-muted: 40 4% 64%;      /* #A3A39D */
+  --text: 250 20% 96%;           /* #F3F2FA */
+  --text-muted: 250 10% 64%;    /* #9E9BB5 */
 
-  --accent: 160 45% 58%;        /* #5DCAA5 */
-  --accent-fg: 161 74% 12%;     /* #04342C */
+  --accent: 262 90% 70%;        /* #A78BFA — lighter purple for dark bg */
+  --accent-fg: 262 83% 15%;     /* dark purple text on light accent */
 
-  --success: 86 44% 56%;        /* #97C459 */
-  --warning: 38 84% 55%;        /* #EF9F27 */
-  --danger: 0 72% 76%;          /* #F09595 */
+  --success: 142 60% 55%;       /* #3DBE7A */
+  --warning: 38 90% 58%;        /* #F4A820 */
+  --danger: 0 80% 72%;          /* #F07A7A */
 }
 
 /* ─── Base Styles ───────────────────────────────────────────────────────────── */
@@ -138,7 +138,7 @@ body {
 /* ─── Status pill utility classes ───────────────────────────────────────────── */
 .status-confirmed  { background: hsl(var(--success-bg)); color: hsl(var(--success)); }
 .status-pending    { background: hsl(var(--warning-bg)); color: hsl(var(--warning)); }
-.status-checked_in { background: hsl(161 74% 90%); color: hsl(var(--accent)); }
+.status-checked_in { background: hsl(262 83% 94%); color: hsl(var(--accent)); }
 .status-cancelled  { background: hsl(var(--danger-bg));  color: hsl(var(--danger));  }
 .status-no_show    { background: hsl(var(--border)); color: hsl(var(--text-muted)); }
 

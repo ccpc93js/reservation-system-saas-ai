@@ -333,7 +333,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
                                   {ch.sync_count > 0 && ` (${ch.sync_count}×)`}
                                 </span>
                                 {ch.ical_url && (
-                                  <a href={ch.ical_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline flex items-center gap-0.5">
+                                  <a href={ch.ical_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5">
                                     <ExternalLink className="w-2.5 h-2.5" /> Feed
                                   </a>
                                 )}

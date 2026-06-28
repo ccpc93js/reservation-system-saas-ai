@@ -4,8 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "HostelHub",
-    template: "%s | HostelHub",
+    default: "HostMagSmart",
+    template: "%s | HostMagSmart",
   },
   description: "Smart reservation management for independent hostels",
 };

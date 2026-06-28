@@ -295,21 +295,21 @@ export default function OCRExtractionDialog({
 
           {/* Back Side Upload Section */}
           {showBackSideUpload && (
-            <div className="mt-4 p-4 rounded-lg border border-blue-200 bg-blue-50">
-              <p className="text-sm font-medium text-blue-900 mb-3">
+            <div className="mt-4 p-4 rounded-lg border border-primary/20 bg-primary/5">
+              <p className="text-sm font-medium text-foreground mb-3">
                 Upload ID Back Side to Extract Missing Fields
               </p>
               {isExtractingBackSide ? (
-                <div className="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center">
+                <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center">
                   <div className="flex flex-col items-center gap-3">
-                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-300 border-t-blue-600"></div>
-                    <p className="text-sm text-blue-700 font-medium">Extracting back side data...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary/30 border-t-primary"></div>
+                    <p className="text-sm text-primary font-medium">Extracting back side data...</p>
                   </div>
                 </div>
               ) : (
                 <label className="block cursor-pointer">
-                  <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 text-center hover:bg-blue-100 transition-colors">
-                    <p className="text-sm text-blue-700">
+                  <div className="border-2 border-dashed border-primary/30 rounded-lg p-4 text-center hover:bg-primary/10 transition-colors">
+                    <p className="text-sm text-primary/80">
                       Click to upload back side image
                     </p>
                   </div>
@@ -330,7 +330,7 @@ export default function OCRExtractionDialog({
             <button
               onClick={() => setShowBackSideUpload(!showBackSideUpload)}
               disabled={isLoading}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {showBackSideUpload ? "Cancel Back Side Upload" : "📄 Upload Back Side (Optional)"}
             </button>

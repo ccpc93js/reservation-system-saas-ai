@@ -390,11 +390,11 @@ export default function GuestDialog({
           >
             {/* OCR Upload Section - Show at TOP for new guests */}
             {!guestId && (
-              <div className="rounded-lg border p-4 bg-blue-50 border-blue-200">
-                <h3 className="text-sm font-medium mb-3 text-blue-900">
+              <div className="rounded-lg border p-4 bg-primary/5 border-primary/20">
+                <h3 className="text-sm font-medium mb-3 text-foreground">
                   📸 Upload ID/Passport to Auto-Fill Form
                 </h3>
-                <p className="text-xs text-blue-800 mb-3">
+                <p className="text-xs text-primary/80 mb-3">
                   Upload a clear photo to automatically extract and fill all guest information
                 </p>
                 <DocumentUpload

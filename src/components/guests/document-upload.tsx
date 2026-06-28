@@ -290,7 +290,7 @@ export default function DocumentUpload({
               type="button"
               onClick={handleExtractOCR}
               disabled={isExtracting}
-              className="w-full mt-2 text-sm px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full mt-2 text-sm px-3 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Sparkles className="h-4 w-4" />
               {isExtracting ? "Extracting..." : "Extract Data from Image"}
@@ -319,7 +319,7 @@ export default function DocumentUpload({
                     type="button"
                     onClick={handleExtractOCR}
                     disabled={isExtracting}
-                    className="mt-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50 flex items-center gap-1"
+                    className="mt-2 text-xs px-2 py-1 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 flex items-center gap-1"
                   >
                     <Sparkles className="h-3 w-3" />
                     {isExtracting ? "Extracting..." : "Extract Data"}
@@ -356,7 +356,7 @@ export default function DocumentUpload({
                       href={doc.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm font-medium truncate text-blue-600 hover:underline block"
+                      className="text-sm font-medium truncate text-primary hover:underline block"
                     >
                       {doc.fileName}
                     </a>
@@ -368,7 +368,7 @@ export default function DocumentUpload({
                         type="button"
                         onClick={() => handleExtractFromDoc(doc.url)}
                         disabled={isExtracting}
-                        className="mt-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50 flex items-center gap-1"
+                        className="mt-2 text-xs px-2 py-1 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 flex items-center gap-1"
                       >
                         <Sparkles className="h-3 w-3" />
                         {isExtracting ? "Extracting..." : "Extract Data"}

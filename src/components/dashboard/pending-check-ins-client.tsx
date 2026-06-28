@@ -313,8 +313,8 @@ export default function PendingCheckInsClient() {
 
         {/* Bulk action bar */}
         {selectedIds.size > 0 && (
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
-            <p className="text-sm font-medium text-blue-900">
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between">
+            <p className="text-sm font-medium text-foreground">
               {selectedIds.size} selected
             </p>
             <div className="flex gap-2">
@@ -340,7 +340,7 @@ export default function PendingCheckInsClient() {
               </button>
               <button
                 onClick={() => setSelectedIds(new Set())}
-                className="px-4 py-2 border border-blue-200 text-blue-900 rounded-lg hover:bg-blue-100 transition-colors"
+                className="px-4 py-2 border border-primary/20 text-foreground rounded-lg hover:bg-primary/10 transition-colors"
               >
                 Clear
               </button>

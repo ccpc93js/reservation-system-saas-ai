@@ -15,36 +15,45 @@ import {
   BarChart3,
   ClipboardList,
   Wifi,
+  UsersRound,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const mainNavItems = [
-  { href: "/dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
-  { href: "/calendar", label: "Tape Calendar", icon: CalendarDays },
-  { href: "/reservations", label: "Reservations", icon: BookOpen },
-  { href: "/check-in-pending", label: "Pending Check-Ins", icon: ClipboardList },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/channels", label: "Channel Manager", icon: Wifi },
-  { href: "/guests", label: "Guest Directory", icon: Users },
-  { href: "/rooms", label: "Room Inventory", icon: BedDouble },
+const mainNavRoutes = [
+  { path: "dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
+  { path: "calendar", label: "Tape Calendar", icon: CalendarDays },
+  { path: "reservations", label: "Reservations", icon: BookOpen },
+  { path: "check-in-pending", label: "Pending Check-Ins", icon: ClipboardList },
+  { path: "analytics", label: "Analytics", icon: BarChart3 },
+  { path: "channels", label: "Channel Manager", icon: Wifi },
+  { path: "guests", label: "Guest Directory", icon: Users },
+  { path: "rooms", label: "Room Inventory", icon: BedDouble },
 ];
 
-const settingsNavItems = [
-  { href: "/settings/property", label: "Property Settings", icon: Settings },
+const settingsNavRoutes = [
+  { path: "settings/property", label: "Property Settings", icon: Settings },
+  { path: "settings/team", label: "Team", icon: UsersRound },
 ];
 
 interface SidebarProps {
-  org: { id: string; name: string; slug: string };
+  org: { id: string; name: string; slug: string; logo_url?: string | null };
   userRole: string;
   user?: { email?: string };
   isOpen?: boolean;
   onClose?: () => void;
 }
 
-export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarProps) {
+const roleLabel: Record<string, string> = {
+  owner: "Owner",
+  manager: "Manager",
+  admin: "Admin",
+  staff: "Staff",
+};
+
+export default function Sidebar({ org, user, userRole, isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createBrowserClient();
@@ -77,11 +86,15 @@ export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarPr
         {/* Logo / org name */}
         <div className="px-6 py-6 border-b border-border/70 lg:pt-6 flex items-center justify-between">
         <div className="flex items-center gap-3 mb-1">
-          <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-            {org.name.charAt(0)}
+          <div className="h-10 w-10 rounded-sm bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm overflow-hidden">
+            {org.logo_url ? (
+              <img src={org.logo_url} alt={org.name} className="w-full h-full object-contain" />
+            ) : (
+              org.name.charAt(0).toUpperCase()
+            )}
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground tracking-tight">
+            <p className="text-sm font-bold text-foreground tracking-tight capitalize">
               {org.name}
             </p>
             <p className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1 mt-1">
@@ -103,12 +116,13 @@ export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarPr
       <nav className="flex-1 overflow-y-auto">
         {/* Main Nav */}
         <div className="px-3 py-4">
-          {mainNavItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {mainNavRoutes.map((item) => {
+            const href = `/${org.slug}/${item.path}`;
+            const isActive = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.path}
+                href={href}
                 className={cn(
                   "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-1",
                   isActive
@@ -128,12 +142,13 @@ export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarPr
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest px-4 mb-3">
             Settings
           </p>
-          {settingsNavItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {settingsNavRoutes.map((item) => {
+            const href = `/${org.slug}/${item.path}`;
+            const isActive = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.path}
+                href={href}
                 className={cn(
                   "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-1",
                   isActive
@@ -159,7 +174,7 @@ export default function Sidebar({ org, user, isOpen = true, onClose }: SidebarPr
             <p className="text-sm font-semibold text-foreground truncate">
               {user?.email?.split("@")[0] || "User"}
             </p>
-            <p className="text-xs text-muted-foreground truncate">Property Manager</p>
+            <p className="text-xs text-muted-foreground truncate capitalize">{roleLabel[userRole] ?? userRole}</p>
           </div>
         </div>
         <button

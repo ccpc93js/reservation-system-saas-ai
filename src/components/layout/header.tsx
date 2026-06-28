@@ -14,7 +14,10 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const pathname = usePathname();
   const initials = user.email?.slice(0, 2).toUpperCase() ?? "??";
 
-  const pageTitle = {
+  // Strip leading /{slug} prefix to get the route segment
+  const routeSegment = pathname.replace(new RegExp(`^/${org.slug}`), "") || "/dashboard";
+
+  const pageTitles: Record<string, string> = {
     "/dashboard": "Dashboard",
     "/calendar": "Tape Calendar",
     "/reservations": "Reservations",
@@ -22,7 +25,12 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
     "/analytics": "Analytics",
     "/guests": "Guest Directory",
     "/rooms": "Room Inventory",
-  }[pathname] || "Dashboard";
+    "/channels": "Channel Manager",
+    "/settings/property": "Property Settings",
+    "/settings/team": "Team",
+  };
+  const title = pageTitles[routeSegment]
+    ?? (routeSegment.startsWith("/settings") ? "Settings" : "Dashboard");
 
   return (
     <header className="h-16 bg-surface border-b border-border px-6 lg:px-8 flex items-center justify-between shrink-0">
@@ -34,7 +42,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         >
           <Menu className="w-5 h-5 text-muted-foreground" />
         </button>
-        <h2 className="text-lg font-semibold text-foreground">{pageTitle}</h2>
+        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       </div>
 
       <div className="flex items-center gap-4">
