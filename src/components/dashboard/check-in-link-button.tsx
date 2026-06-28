@@ -15,7 +15,20 @@ export default function CheckInLinkButton({
   compact = false,
 }: CheckInLinkButtonProps) {
   const [showQR, setShowQR] = useState(false);
+  const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const link = generateGuestPortalLink(checkInToken);
+
+  if (isDemo) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-muted/30 p-4 text-center space-y-1">
+        <p className="text-sm font-medium text-foreground">Guest check-in links disabled in demo</p>
+        <p className="text-xs text-muted-foreground">
+          <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a>
+          {" "}to send check-in links to guests.
+        </p>
+      </div>
+    );
+  }
 
   const handleCopy = () => {
     navigator.clipboard.writeText(link);

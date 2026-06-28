@@ -14,7 +14,8 @@ export default function LoginPage() {
   const redirect = searchParams.get("redirect") ?? "/dashboard";
   const supabase = createBrowserClient();
 
-  const [mode, setMode] = useState<Mode>("signin");
+  const initialMode = (searchParams.get("mode") === "signup" ? "signup" : "signin") as Mode;
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

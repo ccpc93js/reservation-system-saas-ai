@@ -34,13 +34,24 @@ export default async function DashboardPage() {
   const orgId = (membership as any)?.organizations?.id;
   if (!orgId) redirect("/onboarding");
 
-  // Fetch metrics
-  const [occupancy, revenue, arrivals, activeCount, avgNights] = await Promise.all([
+  // Setup progress checks (parallel with metrics)
+  const [occupancy, revenue, arrivals, activeCount, avgNights, setupChecks] = await Promise.all([
     getOccupancyMetrics(orgId),
     getRevenueMetrics(orgId),
     getArrivalsToday(orgId),
     getActiveReservations(orgId),
     getAverageBookingNights(orgId),
+    Promise.all([
+      supabase.from("room_types").select("id", { count: "exact", head: true }).eq("organization_id", orgId),
+      supabase.from("rooms").select("id", { count: "exact", head: true }).eq("organization_id", orgId),
+      supabase.from("beds").select("id", { count: "exact", head: true }).eq("organization_id", orgId),
+      supabase.from("reservations").select("id", { count: "exact", head: true }).eq("organization_id", orgId),
+    ]).then(([rt, r, b, res]) => ({
+      hasRoomTypes: (rt.count ?? 0) > 0,
+      hasRooms: (r.count ?? 0) > 0,
+      hasBeds: (b.count ?? 0) > 0,
+      hasReservations: (res.count ?? 0) > 0,
+    })),
   ]);
 
   const occupancyCount = occupancy.occupiedBeds;
@@ -88,6 +99,47 @@ export default async function DashboardPage() {
 
   return (
     <div className="w-full space-y-10 p-8">
+      {/* ── SETUP PROGRESS CARD — hidden once fully set up ── */}
+      {setupChecks && !setupChecks.hasReservations && (
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="text-base font-bold text-foreground">Get started with your property</h3>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Complete these steps to start managing reservations.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+              {[true, setupChecks.hasRoomTypes, setupChecks.hasRooms, setupChecks.hasBeds, setupChecks.hasReservations].filter(Boolean).length} / 5
+            </span>
+          </div>
+          <div className="space-y-2">
+            {[
+              { done: true, label: "Create your property", href: null },
+              { done: setupChecks.hasRoomTypes, label: "Add a room type", href: "rooms", hint: "e.g. Mixed Dorm, Private Room" },
+              { done: setupChecks.hasRooms, label: "Add a room", href: "rooms", hint: "e.g. Dorm 101, Room A" },
+              { done: setupChecks.hasBeds, label: "Add beds to your room", href: "rooms", hint: "Individual beds guests will book" },
+              { done: setupChecks.hasReservations, label: "Create your first reservation", href: "reservations", hint: "Or connect an OTA channel" },
+            ].map((step) => (
+              <div key={step.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors ${step.done ? "opacity-50" : "bg-white border border-border"}`}>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${step.done ? "bg-emerald-500" : "bg-muted border-2 border-border"}`}>
+                  {step.done && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                </div>
+                <span className={`text-sm flex-1 ${step.done ? "line-through text-muted-foreground" : "font-medium text-foreground"}`}>
+                  {step.label}
+                  {step.hint && !step.done && <span className="text-xs text-muted-foreground ml-2 font-normal">— {step.hint}</span>}
+                </span>
+                {!step.done && step.href && (
+                  <a href={step.href} className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                    Go →
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Section Title */}
       <div className="flex items-end justify-between">
         <div>

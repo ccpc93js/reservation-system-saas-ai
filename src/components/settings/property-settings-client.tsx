@@ -34,6 +34,7 @@ interface Props {
 
 export default function PropertySettingsClient({ org, userRole }: Props) {
   const isAdmin = ["owner", "manager", "admin"].includes(userRole);
+  const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const supabase = createBrowserClient();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -173,15 +174,24 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
               )}
             </div>
             <div className="flex-1 space-y-2">
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} disabled={!isAdmin} />
-              <button
-                onClick={() => fileRef.current?.click()}
-                disabled={!isAdmin || uploading}
-                className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50"
-              >
-                <Upload className="w-3.5 h-3.5" />
-                {uploading ? "Uploading..." : "Upload Logo"}
-              </button>
+              {isDemo ? (
+                <p className="text-xs text-muted-foreground">
+                  Logo upload disabled in demo.{" "}
+                  <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a> to upload.
+                </p>
+              ) : (
+                <>
+                  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} disabled={!isAdmin} />
+                  <button
+                    onClick={() => fileRef.current?.click()}
+                    disabled={!isAdmin || uploading}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    {uploading ? "Uploading..." : "Upload Logo"}
+                  </button>
+                </>
+              )}
               {form.logo_url && isAdmin && (
                 <button
                   onClick={() => setForm((f) => ({ ...f, logo_url: "" }))}

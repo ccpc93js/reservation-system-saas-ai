@@ -36,8 +36,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Public routes — no auth required
-  const publicRoutes = ["/login", "/register", "/scan"];
-  const isPublic = publicRoutes.some((r) => pathname.startsWith(r));
+  const publicRoutes = ["/login", "/register", "/scan", "/guest-portal", "/invite", "/auth", "/reset-password", "/demo", "/signup"];
+  const isPublic =
+    pathname === "/" ||                                          // landing page
+    publicRoutes.some((r) => pathname.startsWith(r));
 
   // Redirect unauthenticated users to login
   if (!user && !isPublic) {
@@ -46,7 +48,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (user && (pathname === "/login" || pathname === "/register")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return supabaseResponse;

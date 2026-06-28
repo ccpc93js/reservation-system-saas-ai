@@ -36,6 +36,7 @@ const roleColor: Record<string, string> = {
 
 export default function TeamSettingsClient({ userRole }: Props) {
   const isAdmin = ["owner", "manager", "admin"].includes(userRole);
+  const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const [members, setMembers] = useState<Member[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,13 +126,19 @@ export default function TeamSettingsClient({ userRole }: Props) {
             {invitations.length > 0 && ` · ${invitations.length} pending invite${invitations.length !== 1 ? "s" : ""}`}
           </p>
         </div>
-        {isAdmin && (
+        {isAdmin && !isDemo && (
           <button
             onClick={() => setShowInvite(true)}
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
           >
             <UserPlus className="w-4 h-4" /> Invite Member
           </button>
+        )}
+        {isDemo && (
+          <span className="text-xs text-muted-foreground">
+            Invites disabled in demo ·{" "}
+            <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a>
+          </span>
         )}
       </div>
 

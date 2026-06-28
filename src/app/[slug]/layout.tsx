@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase/server";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
+import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
 
 function hexToHsl(hex: string): string {
   if (!hex || !hex.startsWith("#")) return "262 83% 54%";
@@ -62,18 +63,37 @@ export default async function TenantLayout({
   }
 
   const accentHsl = hexToHsl((org as any).theme_color ?? "#7c3aed");
+  const isDemo = slug === "demo-hostel";
 
   return (
     <>
-      {/* Inject org theme color as CSS variable override */}
       <style>{`:root { --accent: ${accentHsl}; --ring: ${accentHsl}; --primary: ${accentHsl}; }`}</style>
-      <DashboardLayoutClient
-        org={org}
-        userRole={membership.role}
-        user={user}
-      >
-        {children}
-      </DashboardLayoutClient>
+
+      {/* Demo welcome modal — shown once on first visit */}
+      {isDemo && <DemoWelcomeModal slug={slug} />}
+
+      {/* Demo mode banner */}
+      {isDemo && (
+        <div className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-3 px-4 py-2 text-xs font-semibold text-white"
+          style={{ background: "linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed)", backgroundSize: "200%", animation: "shimmer 3s linear infinite" }}>
+          <style>{`@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}`}</style>
+          <span>🎭 Demo Mode — data resets on each new demo session. All features are live.</span>
+          <a href="/signup"
+            className="underline underline-offset-2 hover:text-purple-100 transition-colors">
+            Create your free account →
+          </a>
+        </div>
+      )}
+
+      <div className={isDemo ? "pt-8" : ""}>
+        <DashboardLayoutClient
+          org={org}
+          userRole={membership.role}
+          user={user}
+        >
+          {children}
+        </DashboardLayoutClient>
+      </div>
     </>
   );
 }

@@ -21,6 +21,7 @@ export default function DocumentUpload({
   onExtractedData,
   onError,
 }: DocumentUploadProps) {
+  const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -234,6 +235,19 @@ export default function DocumentUpload({
       setIsExtracting(false);
     }
   };
+
+  if (isDemo) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center space-y-2">
+        <Upload className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
+        <p className="text-sm font-medium text-foreground">Document upload disabled in demo</p>
+        <p className="text-xs text-muted-foreground">
+          <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a>
+          {" "}to enable ID scanning and document uploads.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-3">
