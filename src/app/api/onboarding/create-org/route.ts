@@ -29,8 +29,9 @@ export async function POST(request: Request) {
       .single();
     if (existing) return Response.json({ error: "Already in an organization" }, { status: 409 });
 
-    const { name, slug: customSlug, city, country, timezone, currency } = await request.json();
+    const { name, slug: customSlug, city, country, timezone, currency, pendingPlan } = await request.json();
     if (!name?.trim()) return Response.json({ error: "Property name required" }, { status: 400 });
+    const validPendingPlan = ["pro", "scale"].includes(pendingPlan) ? pendingPlan : null;
 
     const service = await createServiceClient();
 
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
 
     const { data: org, error: orgError } = await service
       .from("organizations")
-      .insert({ name: name.trim(), slug, city, country, timezone: timezone || "UTC", currency: currency || "EUR", locale: "en" })
+      .insert({ name: name.trim(), slug, city, country, timezone: timezone || "UTC", currency: currency || "EUR", locale: "en", pending_plan: validPendingPlan })
       .select()
       .single();
 
@@ -71,7 +72,10 @@ export async function POST(request: Request) {
 
     if (memberError) return Response.json({ error: memberError.message }, { status: 400 });
 
-    return Response.json({ org, redirectTo: `/${org.slug}/dashboard` }, { status: 201 });
+    const redirectTo = validPendingPlan
+      ? `/${org.slug}/settings/billing?required=true`
+      : `/${org.slug}/dashboard`;
+    return Response.json({ org, redirectTo }, { status: 201 });
   } catch {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }

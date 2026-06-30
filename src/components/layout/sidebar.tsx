@@ -16,6 +16,7 @@ import {
   ClipboardList,
   Wifi,
   UsersRound,
+  CreditCard,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -36,10 +37,11 @@ const mainNavRoutes = [
 const settingsNavRoutes = [
   { path: "settings/property", label: "Property Settings", icon: Settings },
   { path: "settings/team", label: "Team", icon: UsersRound },
+  { path: "settings/billing", label: "Billing & Plan", icon: CreditCard },
 ];
 
 interface SidebarProps {
-  org: { id: string; name: string; slug: string; logo_url?: string | null };
+  org: { id: string; name: string; slug: string; logo_url?: string | null; plan?: string };
   userRole: string;
   user?: { email?: string };
   isOpen?: boolean;
@@ -94,9 +96,17 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
             )}
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground tracking-tight capitalize">
-              {org.name}
-            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm font-bold text-foreground tracking-tight capitalize">
+                {org.name}
+              </p>
+              {org.plan && org.plan !== "free" && (
+                <span className="text-[9px] font-bold px-1 py-0.5 rounded text-white uppercase"
+                  style={{ background: org.plan === "scale" ? "#0f766e" : "#7c3aed" }}>
+                  {org.plan}
+                </span>
+              )}
+            </div>
             <p className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1 mt-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
               Live View

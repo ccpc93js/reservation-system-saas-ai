@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { createBedSchema } from "@/lib/validations/room";
+import { canAddBed, getBedLimit } from "@/lib/plan";
 
 export async function POST(request: Request) {
   try {
@@ -15,10 +16,10 @@ export async function POST(request: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
+    // Get user's organization + plan
     const { data: membership, error: membershipError } = await supabase
       .from("memberships")
-      .select("organization_id")
+      .select("organization_id, organizations(plan)")
       .eq("user_id", user.id)
       .single();
 
@@ -27,6 +28,26 @@ export async function POST(request: Request) {
         { error: "You don't have access to any organization" },
         { status: 403 }
       );
+    }
+
+    const orgId = membership.organization_id;
+    const plan = (membership as any).organizations?.plan ?? "free";
+
+    // Check bed limit
+    const { count: currentBeds } = await supabase
+      .from("beds")
+      .select("*", { count: "exact", head: true })
+      .eq("organization_id", orgId);
+
+    if (!canAddBed(plan, currentBeds ?? 0)) {
+      const limit = getBedLimit(plan);
+      return Response.json({
+        error: `Bed limit reached (${currentBeds}/${limit} on ${plan} plan). Upgrade to add more beds.`,
+        code: "BED_LIMIT_REACHED",
+        current: currentBeds,
+        limit,
+        plan,
+      }, { status: 403 });
     }
 
     // Parse and validate request body

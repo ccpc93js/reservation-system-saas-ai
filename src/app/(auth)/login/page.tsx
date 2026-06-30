@@ -14,6 +14,7 @@ export default function LoginPage() {
   const redirect = searchParams.get("redirect") ?? "/dashboard";
   const supabase = createBrowserClient();
 
+  const pendingPlan = searchParams.get("plan") ?? "";
   const initialMode = (searchParams.get("mode") === "signup" ? "signup" : "signin") as Mode;
   const [mode, setMode] = useState<Mode>(initialMode);
   const [email, setEmail] = useState("");
@@ -56,14 +57,17 @@ export default function LoginPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback${pendingPlan ? `?plan=${pendingPlan}` : ""}`,
+        data: pendingPlan ? { pending_plan: pendingPlan } : {},
+      },
     });
     setLoading(false);
     if (error) { toast.error(error.message); return; }
 
     if (data.session) {
       toast.success("Account created!");
-      router.push("/onboarding");
+      router.push(pendingPlan ? `/onboarding?plan=${pendingPlan}` : "/onboarding");
       router.refresh();
     } else {
       setSignupPendingConfirm(true);

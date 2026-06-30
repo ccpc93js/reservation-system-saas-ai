@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Building2, ArrowRight, Loader2, ArrowLeft, Check, X, Link } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,6 +11,8 @@ function slugify(s: string) {
 
 export default function OnboardingClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pendingPlan = searchParams.get("plan") ?? "";
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [launching, setLaunching] = useState(false);
@@ -76,7 +78,7 @@ export default function OnboardingClient() {
       const res = await fetch("/api/onboarding/create-org", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, pendingPlan }),
       });
       const data = await res.json();
       if (!res.ok) {

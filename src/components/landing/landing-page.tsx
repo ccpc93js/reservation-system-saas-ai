@@ -324,27 +324,30 @@ export default function LandingPage() {
                 price: "Free",
                 period: "forever",
                 desc: "Perfect for small hostels getting started.",
-                features: ["Up to 10 beds", "Reservations & calendar", "Guest management", "1 team member"],
+                features: ["Up to 20 beds", "Reservations & calendar", "Guest management", "1 team member"],
                 cta: "Get started",
                 highlight: false,
+                planKey: "",
               },
               {
                 name: "Pro",
-                price: "€49",
+                price: "€19",
                 period: "/ month",
                 desc: "For growing hostels with OTA connections.",
-                features: ["Unlimited beds", "Channel Manager (iCal)", "Self check-in portal", "5 team members", "Analytics & reports", "Priority support"],
-                cta: "Start free trial",
+                features: ["Up to 60 beds", "Channel Manager (iCal)", "Self check-in portal", "3 team members", "Analytics & reports", "Custom branding"],
+                cta: "Get started",
                 highlight: true,
+                planKey: "pro",
               },
               {
-                name: "Business",
-                price: "€99",
+                name: "Scale",
+                price: "€39",
                 period: "/ month",
                 desc: "For hostel groups and multi-property operators.",
                 features: ["Everything in Pro", "Unlimited properties", "Custom branding per property", "Unlimited team members", "API access", "Dedicated support"],
-                cta: "Contact us",
+                cta: "Get started",
                 highlight: false,
+                planKey: "scale",
               },
             ].map((plan) => (
               <div key={plan.name}
@@ -373,7 +376,8 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/login?mode=signup"
+                <Link
+                  href={plan.planKey ? `/login?mode=signup&plan=${plan.planKey}` : "/login?mode=signup"}
                   className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${plan.highlight
                     ? "text-white"
                     : "text-gray-700 border border-gray-200 hover:border-purple-300 hover:bg-purple-50"}`}

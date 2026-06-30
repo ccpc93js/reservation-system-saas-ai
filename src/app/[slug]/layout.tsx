@@ -38,7 +38,7 @@ export default async function TenantLayout({
 
   const { data: org } = await supabase
     .from("organizations")
-    .select("id, name, slug, logo_url, theme_color")
+    .select("id, name, slug, logo_url, theme_color, plan, pending_plan")
     .eq("slug", slug)
     .single();
 
@@ -90,6 +90,7 @@ export default async function TenantLayout({
           org={org}
           userRole={membership.role}
           user={user}
+          pendingPlan={(org as any).pending_plan ?? null}
         >
           {children}
         </DashboardLayoutClient>

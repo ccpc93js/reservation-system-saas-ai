@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase/server";
 import OnboardingClient from "./onboarding-client";
@@ -20,5 +21,5 @@ export default async function OnboardingPage() {
     redirect(slug ? `/${slug}/dashboard` : "/dashboard");
   }
 
-  return <OnboardingClient />;
+  return <Suspense><OnboardingClient /></Suspense>;
 }

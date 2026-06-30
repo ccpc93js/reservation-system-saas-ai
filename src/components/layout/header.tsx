@@ -28,6 +28,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
     "/channels": "Channel Manager",
     "/settings/property": "Property Settings",
     "/settings/team": "Team",
+    "/settings/billing": "Billing & Plan",
   };
   const title = pageTitles[routeSegment]
     ?? (routeSegment.startsWith("/settings") ? "Settings" : "Dashboard");

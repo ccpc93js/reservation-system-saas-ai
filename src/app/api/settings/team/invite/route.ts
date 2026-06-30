@@ -1,4 +1,5 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
+import { canAddUser, getUserLimit } from "@/lib/plan";
 
 export async function POST(request: Request) {
   try {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
 
     const { data: membership } = await supabase
       .from("memberships")
-      .select("organization_id, role")
+      .select("organization_id, role, organizations(plan)")
       .eq("user_id", user.id)
       .single();
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
@@ -18,6 +19,24 @@ export async function POST(request: Request) {
 
     const { email, role = "staff" } = await request.json();
     if (!email) return Response.json({ error: "Email required" }, { status: 400 });
+
+    // Check user limit
+    const plan = (membership as any).organizations?.plan ?? "free";
+    const { count: currentUsers } = await supabase
+      .from("memberships")
+      .select("*", { count: "exact", head: true })
+      .eq("organization_id", membership.organization_id);
+
+    if (!canAddUser(plan, currentUsers ?? 0)) {
+      const limit = getUserLimit(plan);
+      return Response.json({
+        error: `Team member limit reached (${currentUsers}/${limit} on ${plan} plan). Upgrade to add more members.`,
+        code: "USER_LIMIT_REACHED",
+        current: currentUsers,
+        limit,
+        plan,
+      }, { status: 403 });
+    }
 
     const service = await createServiceClient();
     const orgId = membership.organization_id;

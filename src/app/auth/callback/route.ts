@@ -11,7 +11,6 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check if user already has an org
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: membership } = await supabase
@@ -24,8 +23,11 @@ export async function GET(request: Request) {
         if (slug) {
           return NextResponse.redirect(`${origin}/${slug}/dashboard`);
         }
-        // New user — go to onboarding
-        return NextResponse.redirect(`${origin}/onboarding`);
+        // New user — go to onboarding, preserve plan from metadata or query param
+        const planFromMeta = user.user_metadata?.pending_plan ?? "";
+        const planFromParam = searchParams.get("plan") ?? "";
+        const plan = planFromMeta || planFromParam;
+        return NextResponse.redirect(`${origin}/onboarding${plan ? `?plan=${plan}` : ""}`);
       }
     }
   }

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "./sidebar";
 import Header from "./header";
 
@@ -9,6 +9,7 @@ interface DashboardLayoutClientProps {
   org: { id: string; name: string; slug: string };
   userRole: string;
   user?: { email?: string };
+  pendingPlan?: string | null;
   children: React.ReactNode;
 }
 
@@ -16,9 +17,18 @@ export default function DashboardLayoutClient({
   org,
   userRole,
   user,
+  pendingPlan,
   children,
 }: DashboardLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pendingPlan && !pathname.includes("/settings/billing")) {
+      router.replace(`/${org.slug}/settings/billing?required=true`);
+    }
+  }, [pendingPlan, pathname, org.slug, router]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
