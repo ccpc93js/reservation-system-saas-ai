@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createServerClient } from "@/lib/supabase/server";
 import ReservationsListClient from "@/components/reservations/reservations-list-client";
 
@@ -38,10 +39,12 @@ export default async function ReservationsPage() {
     .eq("organization_id", orgId);
 
   return (
-    <ReservationsListClient
-      initialReservations={reservations ?? []}
-      totalReservations={totalReservations ?? 0}
-      orgId={orgId}
-    />
+    <Suspense fallback={null}>
+      <ReservationsListClient
+        initialReservations={reservations ?? []}
+        totalReservations={totalReservations ?? 0}
+        orgId={orgId}
+      />
+    </Suspense>
   );
 }

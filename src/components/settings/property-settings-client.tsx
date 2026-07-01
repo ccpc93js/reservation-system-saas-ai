@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Building2, Globe, Clock, Save, Palette, Upload, X, ImageIcon } from "lucide-react";
+import { Building2, Globe, Clock, Save, Palette, Upload, X, ImageIcon, ChevronDown } from "lucide-react";
+import { Country, City } from "country-state-city";
 import { createBrowserClient } from "@/lib/supabase/client";
 import LogoCropModal from "./logo-crop-modal";
+
+const ALL_COUNTRIES = Country.getAllCountries();
 
 const CURRENCIES = ["EUR", "USD", "GBP", "RSD", "HRK", "CHF", "CZK", "PLN", "HUF"];
 const TIMEZONES = [
@@ -58,6 +61,31 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
+
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const countryRef = useRef<HTMLDivElement>(null);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
+  const cityRef = useRef<HTMLDivElement>(null);
+
+  const selectedCountry = ALL_COUNTRIES.find((c) => c.name === form.country);
+  const cities = selectedCountry ? City.getCitiesOfCountry(selectedCountry.isoCode) ?? [] : [];
+  const filteredCountries = ALL_COUNTRIES.filter((c) =>
+    c.name.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+  const filteredCities = cities.filter((c) =>
+    c.name.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (countryRef.current && !countryRef.current.contains(e.target as Node)) setShowCountryDropdown(false);
+      if (cityRef.current && !cityRef.current.contains(e.target as Node)) setShowCityDropdown(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -272,13 +300,98 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
             <label className="block text-xs font-medium text-muted-foreground mb-1">Address</label>
             <input value={form.address} onChange={set("address")} disabled={!isAdmin} className={inputClass} />
           </div>
-          <div>
+          <div className="relative" ref={cityRef}>
             <label className="block text-xs font-medium text-muted-foreground mb-1">City</label>
-            <input value={form.city} onChange={set("city")} disabled={!isAdmin} className={inputClass} />
+            <button
+              type="button"
+              onClick={() => isAdmin && selectedCountry && setShowCityDropdown((v) => !v)}
+              disabled={!isAdmin || !selectedCountry}
+              title={!selectedCountry ? "Select a country first" : undefined}
+              className={inputClass + " text-left flex items-center justify-between"}
+            >
+              <span className={form.city ? "" : "text-muted-foreground"}>
+                {form.city || (selectedCountry ? "Select city..." : "Select a country first")}
+              </span>
+              <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+            </button>
+            {showCityDropdown && selectedCountry && (
+              <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface shadow-lg overflow-hidden">
+                <input
+                  type="text"
+                  autoFocus
+                  value={citySearch}
+                  onChange={(e) => setCitySearch(e.target.value)}
+                  placeholder="Search city..."
+                  className="w-full px-3 py-2 text-sm border-b border-border bg-background focus:outline-none"
+                />
+                <div className="max-h-48 overflow-y-auto">
+                  {filteredCities.length > 0 ? (
+                    filteredCities.map((c) => (
+                      <button
+                        key={`${c.name}-${c.latitude}-${c.longitude}`}
+                        type="button"
+                        onClick={() => {
+                          setForm((f) => ({ ...f, city: c.name }));
+                          setShowCityDropdown(false);
+                          setCitySearch("");
+                        }}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors ${form.city === c.name ? "bg-primary/10 text-primary font-medium" : "text-foreground"}`}
+                      >
+                        {c.name}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">No cities found</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-          <div>
+          <div className="relative" ref={countryRef}>
             <label className="block text-xs font-medium text-muted-foreground mb-1">Country</label>
-            <input value={form.country} onChange={set("country")} disabled={!isAdmin} className={inputClass} />
+            <button
+              type="button"
+              onClick={() => isAdmin && setShowCountryDropdown((v) => !v)}
+              disabled={!isAdmin}
+              className={inputClass + " text-left flex items-center justify-between"}
+            >
+              <span className={form.country ? "" : "text-muted-foreground"}>
+                {form.country || "Select country..."}
+              </span>
+              <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+            </button>
+            {showCountryDropdown && (
+              <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface shadow-lg overflow-hidden">
+                <input
+                  type="text"
+                  autoFocus
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  placeholder="Search country..."
+                  className="w-full px-3 py-2 text-sm border-b border-border bg-background focus:outline-none"
+                />
+                <div className="max-h-48 overflow-y-auto">
+                  {filteredCountries.length > 0 ? (
+                    filteredCountries.map((c) => (
+                      <button
+                        key={c.isoCode}
+                        type="button"
+                        onClick={() => {
+                          setForm((f) => ({ ...f, country: c.name, city: f.country === c.name ? f.city : "" }));
+                          setShowCountryDropdown(false);
+                          setCountrySearch("");
+                        }}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors ${form.country === c.name ? "bg-primary/10 text-primary font-medium" : "text-foreground"}`}
+                      >
+                        {c.name}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">No countries found</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div className="col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>

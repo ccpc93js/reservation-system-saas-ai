@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -55,8 +56,17 @@ export default function ReservationsListClient({
   totalReservations,
   orgId,
 }: ReservationsListClientProps) {
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") ?? "";
+  const [search, setSearch] = useState(initialQuery);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialQuery);
+
+  // Re-sync when arriving here with a new ?q= while already mounted on this route
+  // (Next.js reuses the page instance on same-route navigations, so initial useState alone misses this)
+  useEffect(() => {
+    setSearch(initialQuery);
+    setDebouncedSearch(initialQuery);
+  }, [initialQuery]);
   const [page, setPage] = useState(1);
   const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
   const [total, setTotal] = useState(totalReservations);
@@ -317,8 +327,18 @@ export default function ReservationsListClient({
           placeholder="Search by reservation #, guest name, room, bed..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-lg border border-border text-sm bg-surface text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
+          className="w-full pl-10 pr-9 py-2 rounded-lg border border-border text-sm bg-surface text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
         />
+        {search.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
+            title="Clear search"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Filters */}
