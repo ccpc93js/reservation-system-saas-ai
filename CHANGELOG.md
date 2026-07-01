@@ -1,16 +1,19 @@
-## [Unreleased] - 2026-07-01
+## [20b4b9d] - 2026-07-01
 
 feat: Phase 15 - Navbar functionality (search, new booking, account menu)
 
-- Header search: live debounced dropdown across guests + reservations, click-through navigates to filtered Reservations list
-- Reservations list now reads initial `?q=` from the URL (useSearchParams) and re-syncs on same-route navigations from header search
-- New Booking button navigates to Tape Calendar (tooltip explains why, since booking creation needs a bed selected on the calendar)
-- User account menu (Radix DropdownMenu): shows email + org, links to Property Settings, Sign Out (reuses existing supabase.auth.signOut() pattern)
-- Clear (X) button added to both the header search box and the Reservations page filter search box
-- Property Settings: City + Country fields converted to searchable, cascading dropdowns via new `country-state-city` dependency (city list depends on selected country)
-- Data cleanup: removed 110 orphaned `guests` rows (personal Google Calendar import junk with `last_name='other'`, zero reservations attached) that were polluting search results in the `hostel-downtown-inn` org
-- Notifications system deferred to Phase 16
-- Documented Phase 16 (multi-language / i18n) design in `docs/phases/PHASE_16_PLAN.md` — not started
+- Header search: live debounced dropdown across guests + reservations,
+  click-through navigates to filtered Reservations list
+- Reservations list reads initial ?q= from URL and re-syncs on
+  same-route navigations from header search (useSearchParams gotcha)
+- New Booking button navigates to Tape Calendar with explanatory tooltip
+- User account menu (Radix DropdownMenu): email/org, Settings, Sign Out
+- Clear (X) button on both header and reservations-page search boxes
+- Property Settings: City + Country converted to searchable, cascading
+  dropdowns via new country-state-city dependency
+- Document Phase 16 (multi-language/i18n) design, not started
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 
 ## [3e19c00] - 2026-07-01
 
