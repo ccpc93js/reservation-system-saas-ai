@@ -52,5 +52,62 @@
       "staff": "Equipe"
     },
     "defaultUserName": "Usuário"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "Sistema de gestão de propriedades",
+      "taglineShort": "Sistema de gestão de hostels"
+    },
+    "login": {
+      "tabSignIn": "Entrar",
+      "tabSignUp": "Criar conta",
+      "signinTitle": "Bem-vindo de volta",
+      "signinSubtitle": "Entre para gerenciar sua propriedade.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "gerente@hostel.com",
+      "passwordLabel": "Senha",
+      "rememberMe": "Lembrar de mim",
+      "forgotPassword": "Esqueceu a senha?",
+      "signingIn": "Entrando…",
+      "signIn": "Entrar",
+      "haveInvite": "Tem um convite?",
+      "createAnAccount": "Criar uma conta",
+      "signupTitle": "Crie sua conta",
+      "signupSubtitle": "Configure sua propriedade em menos de um minuto.",
+      "passwordMinPlaceholder": "Mín. 8 caracteres",
+      "passwordMinHint": "Mínimo de 8 caracteres",
+      "creatingAccount": "Criando conta…",
+      "createAccountContinue": "Criar conta e continuar →",
+      "nextStepHint": "Próximo: configure o nome, localização e moeda da sua propriedade.",
+      "checkInbox": "Verifique sua caixa de entrada",
+      "confirmationSentTo": "Link de confirmação enviado para",
+      "step1": "1. Abra o e-mail da HostMagSmart",
+      "step2": "2. Clique no link de confirmação",
+      "step3": "3. Volte e faça login",
+      "step4": "4. Configure sua propriedade",
+      "backToSignIn": "Voltar para login",
+      "resetTitle": "Redefinir senha",
+      "resetSubtitle": "Digite seu e-mail e enviaremos um link de redefinição.",
+      "backToSignInLink": "Voltar para login",
+      "resetLinkSent": "Link de redefinição enviado",
+      "checkInboxAt": "Verifique sua caixa de entrada em",
+      "sending": "Enviando…",
+      "sendResetLink": "Enviar link de redefinição",
+      "footer": "© {year} HostMagSmart PMS · Gestão segura de hostels",
+      "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres",
+      "toastEnterEmail": "Digite seu e-mail primeiro",
+      "toastAccountCreated": "Conta criada!"
+    },
+    "resetPassword": {
+      "title": "Definir nova senha",
+      "subtitle": "Escolha uma senha com pelo menos 8 caracteres.",
+      "newPasswordLabel": "Nova senha",
+      "passwordPlaceholder": "Mín. 8 caracteres",
+      "updating": "Atualizando…",
+      "updatePassword": "Atualizar senha",
+      "updatedRedirecting": "Senha atualizada! Redirecionando para o painel...",
+      "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres"
+    }
   }
 }

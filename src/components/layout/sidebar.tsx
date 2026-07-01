@@ -19,8 +19,7 @@ import {
   History,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
-import { Link, usePathname } from "@/i18n/navigation";
-import { useRouter as useNextRouter } from "next/navigation";
+import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -53,7 +52,7 @@ interface SidebarProps {
 export default function Sidebar({ org, user, userRole, isOpen = true, onClose }: SidebarProps) {
   const t = useTranslations("sidebar");
   const pathname = usePathname();
-  const nextRouter = useNextRouter(); // plain (non-locale-prefixed) router, for the not-yet-migrated /login route
+  const router = useRouter();
   const supabase = createBrowserClient();
 
   const roleLabel: Record<string, string> = {
@@ -65,8 +64,8 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    nextRouter.push("/login");
-    nextRouter.refresh();
+    router.push("/login");
+    router.refresh();
   }
 
   const userInitials = user?.email?.slice(0, 2).toUpperCase() ?? "??";

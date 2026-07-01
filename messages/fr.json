@@ -52,5 +52,62 @@
       "staff": "Personnel"
     },
     "defaultUserName": "Utilisateur"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "Système de gestion de propriétés",
+      "taglineShort": "Système de gestion d'auberges"
+    },
+    "login": {
+      "tabSignIn": "Connexion",
+      "tabSignUp": "Créer un compte",
+      "signinTitle": "Content de vous revoir",
+      "signinSubtitle": "Connectez-vous pour gérer votre établissement.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "gerant@auberge.com",
+      "passwordLabel": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signingIn": "Connexion…",
+      "signIn": "Se connecter",
+      "haveInvite": "Vous avez une invitation ?",
+      "createAnAccount": "Créer un compte",
+      "signupTitle": "Créez votre compte",
+      "signupSubtitle": "Configurez votre établissement en moins d'une minute.",
+      "passwordMinPlaceholder": "Min. 8 caractères",
+      "passwordMinHint": "Minimum 8 caractères",
+      "creatingAccount": "Création du compte…",
+      "createAccountContinue": "Créer le compte et continuer →",
+      "nextStepHint": "Ensuite : configurez le nom, l'emplacement et la devise de votre établissement.",
+      "checkInbox": "Vérifiez votre boîte de réception",
+      "confirmationSentTo": "Lien de confirmation envoyé à",
+      "step1": "1. Ouvrez l'e-mail de HostMagSmart",
+      "step2": "2. Cliquez sur le lien de confirmation",
+      "step3": "3. Revenez et connectez-vous",
+      "step4": "4. Configurez votre établissement",
+      "backToSignIn": "Retour à la connexion",
+      "resetTitle": "Réinitialiser le mot de passe",
+      "resetSubtitle": "Entrez votre e-mail et nous vous enverrons un lien de réinitialisation.",
+      "backToSignInLink": "Retour à la connexion",
+      "resetLinkSent": "Lien de réinitialisation envoyé",
+      "checkInboxAt": "Vérifiez votre boîte de réception à",
+      "sending": "Envoi…",
+      "sendResetLink": "Envoyer le lien de réinitialisation",
+      "footer": "© {year} HostMagSmart PMS · Gestion sécurisée d'auberges",
+      "toastPasswordMin": "Le mot de passe doit contenir au moins 8 caractères",
+      "toastEnterEmail": "Entrez d'abord votre e-mail",
+      "toastAccountCreated": "Compte créé !"
+    },
+    "resetPassword": {
+      "title": "Définir un nouveau mot de passe",
+      "subtitle": "Choisissez un mot de passe d'au moins 8 caractères.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "passwordPlaceholder": "Min. 8 caractères",
+      "updating": "Mise à jour…",
+      "updatePassword": "Mettre à jour le mot de passe",
+      "updatedRedirecting": "Mot de passe mis à jour ! Redirection vers le tableau de bord...",
+      "toastPasswordMin": "Le mot de passe doit contenir au moins 8 caractères"
+    }
   }
 }

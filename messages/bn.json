@@ -52,5 +52,62 @@
       "staff": "স্টাফ"
     },
     "defaultUserName": "ব্যবহারকারী"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "প্রপার্টি ম্যানেজমেন্ট সিস্টেম",
+      "taglineShort": "হোস্টেল ম্যানেজমেন্ট সিস্টেম"
+    },
+    "login": {
+      "tabSignIn": "সাইন ইন",
+      "tabSignUp": "অ্যাকাউন্ট তৈরি করুন",
+      "signinTitle": "আবার স্বাগতম",
+      "signinSubtitle": "আপনার প্রপার্টি পরিচালনা করতে সাইন ইন করুন।",
+      "emailLabel": "ইমেইল",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "পাসওয়ার্ড",
+      "rememberMe": "আমাকে মনে রাখুন",
+      "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+      "signingIn": "সাইন ইন হচ্ছে…",
+      "signIn": "সাইন ইন করুন",
+      "haveInvite": "আপনার কাছে আমন্ত্রণ আছে?",
+      "createAnAccount": "একটি অ্যাকাউন্ট তৈরি করুন",
+      "signupTitle": "আপনার অ্যাকাউন্ট তৈরি করুন",
+      "signupSubtitle": "এক মিনিটেরও কম সময়ে আপনার প্রপার্টি সেট আপ করুন।",
+      "passwordMinPlaceholder": "সর্বনিম্ন ৮ অক্ষর",
+      "passwordMinHint": "সর্বনিম্ন ৮ অক্ষর",
+      "creatingAccount": "অ্যাকাউন্ট তৈরি হচ্ছে…",
+      "createAccountContinue": "অ্যাকাউন্ট তৈরি করুন এবং চালিয়ে যান →",
+      "nextStepHint": "পরবর্তী: আপনার প্রপার্টির নাম, অবস্থান এবং মুদ্রা সেট করুন।",
+      "checkInbox": "আপনার ইনবক্স চেক করুন",
+      "confirmationSentTo": "নিশ্চিতকরণ লিঙ্ক পাঠানো হয়েছে",
+      "step1": "১. HostMagSmart থেকে ইমেইল খুলুন",
+      "step2": "২. নিশ্চিতকরণ লিঙ্কে ক্লিক করুন",
+      "step3": "৩. ফিরে এসে সাইন ইন করুন",
+      "step4": "৪. আপনার প্রপার্টি সেট আপ করুন",
+      "backToSignIn": "সাইন ইনে ফিরে যান",
+      "resetTitle": "পাসওয়ার্ড রিসেট করুন",
+      "resetSubtitle": "আপনার ইমেইল দিন, আমরা একটি রিসেট লিঙ্ক পাঠাব।",
+      "backToSignInLink": "সাইন ইনে ফিরে যান",
+      "resetLinkSent": "রিসেট লিঙ্ক পাঠানো হয়েছে",
+      "checkInboxAt": "আপনার ইনবক্স চেক করুন",
+      "sending": "পাঠানো হচ্ছে…",
+      "sendResetLink": "রিসেট লিঙ্ক পাঠান",
+      "footer": "© {year} HostMagSmart PMS · নিরাপদ হোস্টেল ম্যানেজমেন্ট",
+      "toastPasswordMin": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে",
+      "toastEnterEmail": "প্রথমে আপনার ইমেইল দিন",
+      "toastAccountCreated": "অ্যাকাউন্ট তৈরি হয়েছে!"
+    },
+    "resetPassword": {
+      "title": "নতুন পাসওয়ার্ড সেট করুন",
+      "subtitle": "কমপক্ষে ৮ অক্ষরের একটি পাসওয়ার্ড বেছে নিন।",
+      "newPasswordLabel": "নতুন পাসওয়ার্ড",
+      "passwordPlaceholder": "সর্বনিম্ন ৮ অক্ষর",
+      "updating": "আপডেট হচ্ছে…",
+      "updatePassword": "পাসওয়ার্ড আপডেট করুন",
+      "updatedRedirecting": "পাসওয়ার্ড আপডেট হয়েছে! ড্যাশবোর্ডে পুনঃনির্দেশিত হচ্ছে...",
+      "toastPasswordMin": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে"
+    }
   }
 }

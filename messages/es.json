@@ -52,5 +52,62 @@
       "staff": "Personal"
     },
     "defaultUserName": "Usuario"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "Sistema de gestión de propiedades",
+      "taglineShort": "Sistema de gestión de hostales"
+    },
+    "login": {
+      "tabSignIn": "Iniciar sesión",
+      "tabSignUp": "Crear cuenta",
+      "signinTitle": "Bienvenido de nuevo",
+      "signinSubtitle": "Inicia sesión para gestionar tu alojamiento.",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "gerente@hostal.com",
+      "passwordLabel": "Contraseña",
+      "rememberMe": "Recordarme",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "signingIn": "Iniciando sesión…",
+      "signIn": "Iniciar sesión",
+      "haveInvite": "¿Tienes una invitación?",
+      "createAnAccount": "Crear una cuenta",
+      "signupTitle": "Crea tu cuenta",
+      "signupSubtitle": "Configura tu alojamiento en menos de un minuto.",
+      "passwordMinPlaceholder": "Mín. 8 caracteres",
+      "passwordMinHint": "Mínimo 8 caracteres",
+      "creatingAccount": "Creando cuenta…",
+      "createAccountContinue": "Crear cuenta y continuar →",
+      "nextStepHint": "Siguiente: configura el nombre, ubicación y moneda de tu alojamiento.",
+      "checkInbox": "Revisa tu correo",
+      "confirmationSentTo": "Enlace de confirmación enviado a",
+      "step1": "1. Abre el correo de HostMagSmart",
+      "step2": "2. Haz clic en el enlace de confirmación",
+      "step3": "3. Vuelve e inicia sesión",
+      "step4": "4. Configura tu alojamiento",
+      "backToSignIn": "Volver a iniciar sesión",
+      "resetTitle": "Restablecer contraseña",
+      "resetSubtitle": "Ingresa tu correo y te enviaremos un enlace para restablecerla.",
+      "backToSignInLink": "Volver a iniciar sesión",
+      "resetLinkSent": "Enlace de restablecimiento enviado",
+      "checkInboxAt": "Revisa tu correo en",
+      "sending": "Enviando…",
+      "sendResetLink": "Enviar enlace de restablecimiento",
+      "footer": "© {year} HostMagSmart PMS · Gestión segura de hostales",
+      "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres",
+      "toastEnterEmail": "Ingresa tu correo primero",
+      "toastAccountCreated": "¡Cuenta creada!"
+    },
+    "resetPassword": {
+      "title": "Establecer nueva contraseña",
+      "subtitle": "Elige una contraseña de al menos 8 caracteres.",
+      "newPasswordLabel": "Nueva contraseña",
+      "passwordPlaceholder": "Mín. 8 caracteres",
+      "updating": "Actualizando…",
+      "updatePassword": "Actualizar contraseña",
+      "updatedRedirecting": "¡Contraseña actualizada! Redirigiendo al panel...",
+      "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres"
+    }
   }
 }

@@ -52,5 +52,62 @@
       "staff": "الموظفون"
     },
     "defaultUserName": "المستخدم"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "نظام إدارة العقارات",
+      "taglineShort": "نظام إدارة النُزل"
+    },
+    "login": {
+      "tabSignIn": "تسجيل الدخول",
+      "tabSignUp": "إنشاء حساب",
+      "signinTitle": "مرحبًا بعودتك",
+      "signinSubtitle": "سجّل الدخول لإدارة عقارك.",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "كلمة المرور",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "signingIn": "جارٍ تسجيل الدخول…",
+      "signIn": "تسجيل الدخول",
+      "haveInvite": "هل لديك دعوة؟",
+      "createAnAccount": "إنشاء حساب",
+      "signupTitle": "أنشئ حسابك",
+      "signupSubtitle": "أعدّ عقارك في أقل من دقيقة.",
+      "passwordMinPlaceholder": "8 أحرف على الأقل",
+      "passwordMinHint": "8 أحرف على الأقل",
+      "creatingAccount": "جارٍ إنشاء الحساب…",
+      "createAccountContinue": "إنشاء حساب ومتابعة ←",
+      "nextStepHint": "التالي: أعدّ اسم عقارك وموقعه وعملته.",
+      "checkInbox": "تحقق من بريدك الوارد",
+      "confirmationSentTo": "تم إرسال رابط التأكيد إلى",
+      "step1": "١. افتح البريد الإلكتروني من HostMagSmart",
+      "step2": "٢. انقر على رابط التأكيد",
+      "step3": "٣. عد وسجّل الدخول",
+      "step4": "٤. أعدّ عقارك",
+      "backToSignIn": "العودة لتسجيل الدخول",
+      "resetTitle": "إعادة تعيين كلمة المرور",
+      "resetSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+      "backToSignInLink": "العودة لتسجيل الدخول",
+      "resetLinkSent": "تم إرسال رابط إعادة التعيين",
+      "checkInboxAt": "تحقق من بريدك الوارد على",
+      "sending": "جارٍ الإرسال…",
+      "sendResetLink": "إرسال رابط إعادة التعيين",
+      "footer": "© {year} HostMagSmart PMS · إدارة آمنة للنُزل",
+      "toastPasswordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "toastEnterEmail": "أدخل بريدك الإلكتروني أولاً",
+      "toastAccountCreated": "تم إنشاء الحساب!"
+    },
+    "resetPassword": {
+      "title": "تعيين كلمة مرور جديدة",
+      "subtitle": "اختر كلمة مرور مكونة من 8 أحرف على الأقل.",
+      "newPasswordLabel": "كلمة المرور الجديدة",
+      "passwordPlaceholder": "8 أحرف على الأقل",
+      "updating": "جارٍ التحديث…",
+      "updatePassword": "تحديث كلمة المرور",
+      "updatedRedirecting": "تم تحديث كلمة المرور! جارٍ التحويل إلى لوحة التحكم...",
+      "toastPasswordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
+    }
   }
 }

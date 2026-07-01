@@ -1,5 +1,39 @@
 ## [Unreleased] - 2026-07-01
 
+feat: Phase 16 Stage 2b - translate auth pages (login, signup, reset)
+
+- Moved login, signup, reset-password under [locale]; dropped the
+  now-orphaned (auth) route group
+- middleware.ts: these three routes moved from the unlocalized
+  allowlist into the locale-managed branch's public paths
+- Translated all ~30 login-page strings + reset-password across all
+  10 languages (new auth.{brand,login,resetPassword} namespace)
+- Fixed password-reset email link to use the current locale prefix
+  instead of a hardcoded unlocalized path
+- signup (sign-out + redirect shim) now uses locale-aware redirect()
+- Verified via curl: /login redirects correctly, /es/login renders
+  Spanish, /en/reset-password renders English, /es/signup redirects
+  preserving locale, no runtime errors
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [950446a] - 2026-07-01
+
+feat: Phase 16 Stage 2a - translate shared layout (header, sidebar)
+
+- header.tsx + sidebar.tsx fully translated across all 10 locales
+  (page titles, search UI, account menu, nav labels, roles, sign-out)
+- Both switched to locale-aware Link/useRouter/usePathname from
+  src/i18n/navigation.ts for org-scoped paths (fixes the extra
+  redirect hop noted in Stage 1); /login stays on plain next/navigation
+  router since it's not yet migrated under [locale]
+- Verified: JSON validity all 10 files, clean typecheck, live lang/dir
+  switching per locale (ar -> rtl) confirmed via curl
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-01
+
 feat: Phase 16 Stage 2a - translate shared layout (header, sidebar)
 
 - header.tsx + sidebar.tsx fully translated across all 10 locales

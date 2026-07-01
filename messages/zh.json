@@ -52,5 +52,62 @@
       "staff": "员工"
     },
     "defaultUserName": "用户"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "物业管理系统",
+      "taglineShort": "旅舍管理系统"
+    },
+    "login": {
+      "tabSignIn": "登录",
+      "tabSignUp": "创建账户",
+      "signinTitle": "欢迎回来",
+      "signinSubtitle": "登录以管理您的物业。",
+      "emailLabel": "邮箱",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "密码",
+      "rememberMe": "记住我",
+      "forgotPassword": "忘记密码？",
+      "signingIn": "登录中…",
+      "signIn": "登录",
+      "haveInvite": "有邀请码吗？",
+      "createAnAccount": "创建账户",
+      "signupTitle": "创建您的账户",
+      "signupSubtitle": "一分钟内设置好您的物业。",
+      "passwordMinPlaceholder": "至少 8 个字符",
+      "passwordMinHint": "至少 8 个字符",
+      "creatingAccount": "创建账户中…",
+      "createAccountContinue": "创建账户并继续 →",
+      "nextStepHint": "接下来：设置物业名称、位置和货币。",
+      "checkInbox": "请查看您的邮箱",
+      "confirmationSentTo": "确认链接已发送至",
+      "step1": "1. 打开 HostMagSmart 发来的邮件",
+      "step2": "2. 点击确认链接",
+      "step3": "3. 返回并登录",
+      "step4": "4. 设置您的物业",
+      "backToSignIn": "返回登录",
+      "resetTitle": "重置密码",
+      "resetSubtitle": "输入您的邮箱，我们将发送重置链接。",
+      "backToSignInLink": "返回登录",
+      "resetLinkSent": "重置链接已发送",
+      "checkInboxAt": "请查看您的邮箱",
+      "sending": "发送中…",
+      "sendResetLink": "发送重置链接",
+      "footer": "© {year} HostMagSmart PMS · 安全的旅舍管理",
+      "toastPasswordMin": "密码至少需要 8 个字符",
+      "toastEnterEmail": "请先输入邮箱",
+      "toastAccountCreated": "账户创建成功！"
+    },
+    "resetPassword": {
+      "title": "设置新密码",
+      "subtitle": "请选择至少 8 个字符的密码。",
+      "newPasswordLabel": "新密码",
+      "passwordPlaceholder": "至少 8 个字符",
+      "updating": "更新中…",
+      "updatePassword": "更新密码",
+      "updatedRedirecting": "密码已更新！正在跳转到仪表盘...",
+      "toastPasswordMin": "密码至少需要 8 个字符"
+    }
   }
 }

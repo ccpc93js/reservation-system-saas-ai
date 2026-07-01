@@ -52,5 +52,62 @@
       "staff": "Персонал"
     },
     "defaultUserName": "Пользователь"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "Система управления недвижимостью",
+      "taglineShort": "Система управления хостелом"
+    },
+    "login": {
+      "tabSignIn": "Вход",
+      "tabSignUp": "Создать аккаунт",
+      "signinTitle": "С возвращением",
+      "signinSubtitle": "Войдите, чтобы управлять своим объектом.",
+      "emailLabel": "Эл. почта",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "Пароль",
+      "rememberMe": "Запомнить меня",
+      "forgotPassword": "Забыли пароль?",
+      "signingIn": "Вход…",
+      "signIn": "Войти",
+      "haveInvite": "Есть приглашение?",
+      "createAnAccount": "Создать аккаунт",
+      "signupTitle": "Создайте свой аккаунт",
+      "signupSubtitle": "Настройте свой объект менее чем за минуту.",
+      "passwordMinPlaceholder": "Мин. 8 символов",
+      "passwordMinHint": "Минимум 8 символов",
+      "creatingAccount": "Создание аккаунта…",
+      "createAccountContinue": "Создать аккаунт и продолжить →",
+      "nextStepHint": "Далее: укажите название, местоположение и валюту вашего объекта.",
+      "checkInbox": "Проверьте почту",
+      "confirmationSentTo": "Ссылка для подтверждения отправлена на",
+      "step1": "1. Откройте письмо от HostMagSmart",
+      "step2": "2. Перейдите по ссылке подтверждения",
+      "step3": "3. Вернитесь и войдите",
+      "step4": "4. Настройте свой объект",
+      "backToSignIn": "Назад ко входу",
+      "resetTitle": "Сброс пароля",
+      "resetSubtitle": "Введите вашу почту, и мы отправим ссылку для сброса.",
+      "backToSignInLink": "Назад ко входу",
+      "resetLinkSent": "Ссылка для сброса отправлена",
+      "checkInboxAt": "Проверьте почту на",
+      "sending": "Отправка…",
+      "sendResetLink": "Отправить ссылку для сброса",
+      "footer": "© {year} HostMagSmart PMS · Безопасное управление хостелом",
+      "toastPasswordMin": "Пароль должен содержать не менее 8 символов",
+      "toastEnterEmail": "Сначала введите вашу почту",
+      "toastAccountCreated": "Аккаунт создан!"
+    },
+    "resetPassword": {
+      "title": "Установить новый пароль",
+      "subtitle": "Выберите пароль не менее 8 символов.",
+      "newPasswordLabel": "Новый пароль",
+      "passwordPlaceholder": "Мин. 8 символов",
+      "updating": "Обновление…",
+      "updatePassword": "Обновить пароль",
+      "updatedRedirecting": "Пароль обновлён! Перенаправление на панель управления...",
+      "toastPasswordMin": "Пароль должен содержать не менее 8 символов"
+    }
   }
 }

@@ -52,5 +52,62 @@
       "staff": "स्टाफ"
     },
     "defaultUserName": "उपयोगकर्ता"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "प्रॉपर्टी प्रबंधन प्रणाली",
+      "taglineShort": "हॉस्टल प्रबंधन प्रणाली"
+    },
+    "login": {
+      "tabSignIn": "साइन इन",
+      "tabSignUp": "खाता बनाएं",
+      "signinTitle": "वापसी पर स्वागत है",
+      "signinSubtitle": "अपनी प्रॉपर्टी प्रबंधित करने के लिए साइन इन करें।",
+      "emailLabel": "ईमेल",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "पासवर्ड",
+      "rememberMe": "मुझे याद रखें",
+      "forgotPassword": "पासवर्ड भूल गए?",
+      "signingIn": "साइन इन हो रहा है…",
+      "signIn": "साइन इन करें",
+      "haveInvite": "आपके पास आमंत्रण है?",
+      "createAnAccount": "खाता बनाएं",
+      "signupTitle": "अपना खाता बनाएं",
+      "signupSubtitle": "एक मिनट से भी कम समय में अपनी प्रॉपर्टी सेट करें।",
+      "passwordMinPlaceholder": "न्यूनतम 8 अक्षर",
+      "passwordMinHint": "न्यूनतम 8 अक्षर",
+      "creatingAccount": "खाता बनाया जा रहा है…",
+      "createAccountContinue": "खाता बनाएं और जारी रखें →",
+      "nextStepHint": "अगला: अपनी प्रॉपर्टी का नाम, स्थान और मुद्रा सेट करें।",
+      "checkInbox": "अपना इनबॉक्स जांचें",
+      "confirmationSentTo": "पुष्टिकरण लिंक भेजा गया",
+      "step1": "1. HostMagSmart का ईमेल खोलें",
+      "step2": "2. पुष्टिकरण लिंक पर क्लिक करें",
+      "step3": "3. वापस आएं और साइन इन करें",
+      "step4": "4. अपनी प्रॉपर्टी सेट करें",
+      "backToSignIn": "साइन इन पर वापस जाएं",
+      "resetTitle": "पासवर्ड रीसेट करें",
+      "resetSubtitle": "अपना ईमेल दर्ज करें, हम रीसेट लिंक भेजेंगे।",
+      "backToSignInLink": "साइन इन पर वापस जाएं",
+      "resetLinkSent": "रीसेट लिंक भेजा गया",
+      "checkInboxAt": "अपना इनबॉक्स जांचें",
+      "sending": "भेजा जा रहा है…",
+      "sendResetLink": "रीसेट लिंक भेजें",
+      "footer": "© {year} HostMagSmart PMS · सुरक्षित हॉस्टल प्रबंधन",
+      "toastPasswordMin": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए",
+      "toastEnterEmail": "पहले अपना ईमेल दर्ज करें",
+      "toastAccountCreated": "खाता बन गया!"
+    },
+    "resetPassword": {
+      "title": "नया पासवर्ड सेट करें",
+      "subtitle": "कम से कम 8 अक्षरों वाला पासवर्ड चुनें।",
+      "newPasswordLabel": "नया पासवर्ड",
+      "passwordPlaceholder": "न्यूनतम 8 अक्षर",
+      "updating": "अपडेट हो रहा है…",
+      "updatePassword": "पासवर्ड अपडेट करें",
+      "updatedRedirecting": "पासवर्ड अपडेट हो गया! डैशबोर्ड पर रीडायरेक्ट हो रहा है...",
+      "toastPasswordMin": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए"
+    }
   }
 }

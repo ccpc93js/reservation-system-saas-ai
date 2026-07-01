@@ -52,5 +52,62 @@
       "staff": "スタッフ"
     },
     "defaultUserName": "ユーザー"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "施設管理システム",
+      "taglineShort": "ホステル管理システム"
+    },
+    "login": {
+      "tabSignIn": "サインイン",
+      "tabSignUp": "アカウント作成",
+      "signinTitle": "おかえりなさい",
+      "signinSubtitle": "施設を管理するにはサインインしてください。",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "パスワード",
+      "rememberMe": "ログイン状態を保持",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "signingIn": "サインイン中…",
+      "signIn": "サインイン",
+      "haveInvite": "招待をお持ちですか？",
+      "createAnAccount": "アカウントを作成",
+      "signupTitle": "アカウントを作成",
+      "signupSubtitle": "1分もかからずに施設を設定できます。",
+      "passwordMinPlaceholder": "8文字以上",
+      "passwordMinHint": "8文字以上",
+      "creatingAccount": "アカウント作成中…",
+      "createAccountContinue": "アカウントを作成して続ける →",
+      "nextStepHint": "次のステップ：施設名、所在地、通貨を設定します。",
+      "checkInbox": "受信トレイをご確認ください",
+      "confirmationSentTo": "確認リンクを送信しました：",
+      "step1": "1. HostMagSmartからのメールを開く",
+      "step2": "2. 確認リンクをクリック",
+      "step3": "3. 戻ってサインイン",
+      "step4": "4. 施設を設定",
+      "backToSignIn": "サインインに戻る",
+      "resetTitle": "パスワードをリセット",
+      "resetSubtitle": "メールアドレスを入力すると、リセットリンクをお送りします。",
+      "backToSignInLink": "サインインに戻る",
+      "resetLinkSent": "リセットリンクを送信しました",
+      "checkInboxAt": "受信トレイをご確認ください：",
+      "sending": "送信中…",
+      "sendResetLink": "リセットリンクを送信",
+      "footer": "© {year} HostMagSmart PMS · 安全なホステル管理",
+      "toastPasswordMin": "パスワードは8文字以上にしてください",
+      "toastEnterEmail": "先にメールアドレスを入力してください",
+      "toastAccountCreated": "アカウントが作成されました！"
+    },
+    "resetPassword": {
+      "title": "新しいパスワードを設定",
+      "subtitle": "8文字以上のパスワードを選択してください。",
+      "newPasswordLabel": "新しいパスワード",
+      "passwordPlaceholder": "8文字以上",
+      "updating": "更新中…",
+      "updatePassword": "パスワードを更新",
+      "updatedRedirecting": "パスワードを更新しました！ダッシュボードへリダイレクトしています...",
+      "toastPasswordMin": "パスワードは8文字以上にしてください"
+    }
   }
 }

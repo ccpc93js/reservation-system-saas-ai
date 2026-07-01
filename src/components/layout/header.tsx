@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter as useNextRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { User } from "@supabase/supabase-js";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -33,7 +32,6 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const t = useTranslations("header");
   const pathname = usePathname();
   const router = useRouter();
-  const nextRouter = useNextRouter(); // plain (non-locale-prefixed) router, for the not-yet-migrated /login route
   const initials = user.email?.slice(0, 2).toUpperCase() ?? "??";
 
   const [query, setQuery] = useState("");
@@ -130,8 +128,8 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   async function handleSignOut() {
     const supabase = createBrowserClient();
     await supabase.auth.signOut();
-    nextRouter.push("/login");
-    nextRouter.refresh();
+    router.push("/login");
+    router.refresh();
   }
 
   const hasResults = guestResults.length > 0 || reservationResults.length > 0;

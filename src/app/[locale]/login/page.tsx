@@ -1,15 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter as useNextRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Hotel, Loader2, ArrowLeft, Mail, Eye, EyeOff } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
 
 type Mode = "signin" | "signup" | "forgot";
 
 export default function LoginPage() {
-  const router = useRouter();
+  const t = useTranslations("auth.login");
+  const tBrand = useTranslations("auth.brand");
+  const router = useRouter(); // locale-aware, for /{slug}/dashboard
+  const nextRouter = useNextRouter(); // plain, for the arbitrary ?redirect= param and /onboarding (not yet migrated)
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/dashboard";
   const supabase = createBrowserClient();
@@ -34,8 +39,8 @@ export default function LoginPage() {
     if (error) { toast.error(error.message); setLoading(false); return; }
 
     if (redirect !== "/dashboard") {
-      router.push(redirect);
-      router.refresh();
+      nextRouter.push(redirect);
+      nextRouter.refresh();
       return;
     }
 
@@ -46,13 +51,18 @@ export default function LoginPage() {
       .single();
 
     const slug = (membership as any)?.organizations?.slug;
-    router.push(slug ? `/${slug}/dashboard` : "/onboarding");
-    router.refresh();
+    if (slug) {
+      router.push(`/${slug}/dashboard`);
+      router.refresh();
+    } else {
+      nextRouter.push("/onboarding");
+      nextRouter.refresh();
+    }
   }
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) { toast.error("Password must be at least 8 characters"); return; }
+    if (password.length < 8) { toast.error(t("toastPasswordMin")); return; }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -66,9 +76,9 @@ export default function LoginPage() {
     if (error) { toast.error(error.message); return; }
 
     if (data.session) {
-      toast.success("Account created!");
-      router.push(pendingPlan ? `/onboarding?plan=${pendingPlan}` : "/onboarding");
-      router.refresh();
+      toast.success(t("toastAccountCreated"));
+      nextRouter.push(pendingPlan ? `/onboarding?plan=${pendingPlan}` : "/onboarding");
+      nextRouter.refresh();
     } else {
       setSignupPendingConfirm(true);
     }
@@ -76,10 +86,11 @@ export default function LoginPage() {
 
   async function handleForgot(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) { toast.error("Enter your email first"); return; }
+    if (!email) { toast.error(t("toastEnterEmail")); return; }
     setLoading(true);
+    // reset-password lives under the current locale prefix now
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${window.location.origin}${window.location.pathname.split("/").slice(0, 2).join("/")}/reset-password`,
     });
     setLoading(false);
     if (error) { toast.error(error.message); return; }
@@ -104,8 +115,8 @@ export default function LoginPage() {
                 <Hotel className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">HostMagSmart PMS</h1>
-                <p className="text-xs text-slate-400 font-medium">Property Management System</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{tBrand("name")}</h1>
+                <p className="text-xs text-slate-400 font-medium">{tBrand("tagline")}</p>
               </div>
             </div>
 
@@ -120,7 +131,7 @@ export default function LoginPage() {
                       : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
-                  Sign In
+                  {t("tabSignIn")}
                 </button>
                 <button
                   onClick={() => setMode("signup")}
@@ -130,7 +141,7 @@ export default function LoginPage() {
                       : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
-                  Create Account
+                  {t("tabSignUp")}
                 </button>
               </div>
             )}
@@ -138,18 +149,18 @@ export default function LoginPage() {
             {/* ── SIGN IN ── */}
             {mode === "signin" && (
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-1">Welcome back</h2>
-                <p className="text-sm text-slate-500 mb-8">Sign in to manage your property.</p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-1">{t("signinTitle")}</h2>
+                <p className="text-sm text-slate-500 mb-8">{t("signinSubtitle")}</p>
                 <form onSubmit={handleSignIn} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">{t("emailLabel")}</label>
                     <input type="email" required value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="manager@hostel.com"
+                      placeholder={t("emailPlaceholder")}
                       className={inputClass} autoComplete="email" />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Password</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">{t("passwordLabel")}</label>
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}
@@ -168,23 +179,23 @@ export default function LoginPage() {
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 text-sm text-slate-500 cursor-pointer select-none">
                       <input type="checkbox" className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
-                      Remember me
+                      {t("rememberMe")}
                     </label>
                     <button type="button" onClick={() => setMode("forgot")}
                       className="text-sm text-indigo-600 hover:text-indigo-700 font-medium hover:underline">
-                      Forgot password?
+                      {t("forgotPassword")}
                     </button>
                   </div>
                   <button type="submit" disabled={loading}
                     className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 mt-2">
                     {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                    {loading ? "Signing in…" : "Sign In"}
+                    {loading ? t("signingIn") : t("signIn")}
                   </button>
                 </form>
                 <p className="text-sm text-slate-400 text-center mt-6">
-                  Have an invite?{" "}
+                  {t("haveInvite")}{" "}
                   <button onClick={() => setMode("signup")} className="text-indigo-600 font-medium hover:underline">
-                    Create an account
+                    {t("createAnAccount")}
                   </button>
                 </p>
               </div>
@@ -200,17 +211,12 @@ export default function LoginPage() {
                         <Mail className="w-8 h-8 text-indigo-600" />
                       </div>
                       <div>
-                        <p className="text-lg font-bold text-slate-900">Check your inbox</p>
-                        <p className="text-sm text-slate-500 mt-1">Confirmation link sent to</p>
+                        <p className="text-lg font-bold text-slate-900">{t("checkInbox")}</p>
+                        <p className="text-sm text-slate-500 mt-1">{t("confirmationSentTo")}</p>
                         <p className="text-sm font-semibold text-indigo-700 mt-0.5 break-all">{email}</p>
                       </div>
                       <div className="rounded-xl bg-white/80 border border-indigo-100 p-4 text-left space-y-2">
-                        {[
-                          "1. Open the email from HostMagSmart",
-                          "2. Click the confirmation link",
-                          "3. Come back and sign in",
-                          "4. Set up your property",
-                        ].map((step) => (
+                        {[t("step1"), t("step2"), t("step3"), t("step4")].map((step) => (
                           <p key={step} className="text-xs text-slate-600">{step}</p>
                         ))}
                       </div>
@@ -219,29 +225,29 @@ export default function LoginPage() {
                       onClick={() => { setMode("signin"); setSignupPendingConfirm(false); }}
                       className="w-full py-3 border border-slate-200 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
                     >
-                      <ArrowLeft className="w-4 h-4" /> Back to Sign In
+                      <ArrowLeft className="w-4 h-4" /> {t("backToSignIn")}
                     </button>
                   </div>
                 ) : (
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-1">Create your account</h2>
-                    <p className="text-sm text-slate-500 mb-8">Set up your property in under a minute.</p>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-1">{t("signupTitle")}</h2>
+                    <p className="text-sm text-slate-500 mb-8">{t("signupSubtitle")}</p>
                     <form onSubmit={handleSignUp} className="space-y-5">
                       <div>
-                        <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email</label>
+                        <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">{t("emailLabel")}</label>
                         <input type="email" required value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="manager@hostel.com"
+                          placeholder={t("emailPlaceholder")}
                           className={inputClass} autoComplete="email" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Password</label>
+                        <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">{t("passwordLabel")}</label>
                         <div className="relative">
                           <input
                             type={showPassword ? "text" : "password"}
                             required value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Min. 8 characters"
+                            placeholder={t("passwordMinPlaceholder")}
                             className={inputClass + " pr-11"}
                             autoComplete="new-password"
                           />
@@ -250,15 +256,15 @@ export default function LoginPage() {
                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
-                        <p className="text-xs text-slate-400 mt-1.5">Minimum 8 characters</p>
+                        <p className="text-xs text-slate-400 mt-1.5">{t("passwordMinHint")}</p>
                       </div>
                       <button type="submit" disabled={loading}
                         className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200">
                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                        {loading ? "Creating account…" : "Create Account & Continue →"}
+                        {loading ? t("creatingAccount") : t("createAccountContinue")}
                       </button>
                       <p className="text-xs text-slate-400 text-center">
-                        Next: set up your property name, location, and currency.
+                        {t("nextStepHint")}
                       </p>
                     </form>
                   </div>
@@ -271,31 +277,31 @@ export default function LoginPage() {
               <div>
                 <button onClick={() => setMode("signin")}
                   className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-8 transition-colors">
-                  <ArrowLeft className="w-4 h-4" /> Back to sign in
+                  <ArrowLeft className="w-4 h-4" /> {t("backToSignInLink")}
                 </button>
-                <h2 className="text-2xl font-bold text-slate-900 mb-1">Reset password</h2>
-                <p className="text-sm text-slate-500 mb-8">Enter your email and we'll send a reset link.</p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-1">{t("resetTitle")}</h2>
+                <p className="text-sm text-slate-500 mb-8">{t("resetSubtitle")}</p>
                 {forgotSent ? (
                   <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6 text-center space-y-2">
                     <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto">
                       <Mail className="w-6 h-6 text-emerald-600" />
                     </div>
-                    <p className="font-semibold text-emerald-900">Reset link sent</p>
-                    <p className="text-sm text-emerald-700">Check your inbox at <strong>{email}</strong></p>
+                    <p className="font-semibold text-emerald-900">{t("resetLinkSent")}</p>
+                    <p className="text-sm text-emerald-700">{t("checkInboxAt")} <strong>{email}</strong></p>
                   </div>
                 ) : (
                   <form onSubmit={handleForgot} className="space-y-5">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Email</label>
+                      <label className="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">{t("emailLabel")}</label>
                       <input type="email" required value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="manager@hostel.com"
+                        placeholder={t("emailPlaceholder")}
                         className={inputClass} />
                     </div>
                     <button type="submit" disabled={loading}
                       className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200">
                       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                      {loading ? "Sending…" : "Send Reset Link"}
+                      {loading ? t("sending") : t("sendResetLink")}
                     </button>
                   </form>
                 )}
@@ -307,7 +313,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-400 mt-6">
-          © {new Date().getFullYear()} HostMagSmart PMS · Secure hostel management
+          {t("footer", { year: new Date().getFullYear() })}
         </p>
       </div>
     </div>

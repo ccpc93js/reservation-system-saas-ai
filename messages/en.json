@@ -52,5 +52,62 @@
       "staff": "Staff"
     },
     "defaultUserName": "User"
+  },
+  "auth": {
+    "brand": {
+      "name": "HostMagSmart PMS",
+      "tagline": "Property Management System",
+      "taglineShort": "Hostel Management System"
+    },
+    "login": {
+      "tabSignIn": "Sign In",
+      "tabSignUp": "Create Account",
+      "signinTitle": "Welcome back",
+      "signinSubtitle": "Sign in to manage your property.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "manager@hostel.com",
+      "passwordLabel": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signingIn": "Signing in…",
+      "signIn": "Sign In",
+      "haveInvite": "Have an invite?",
+      "createAnAccount": "Create an account",
+      "signupTitle": "Create your account",
+      "signupSubtitle": "Set up your property in under a minute.",
+      "passwordMinPlaceholder": "Min. 8 characters",
+      "passwordMinHint": "Minimum 8 characters",
+      "creatingAccount": "Creating account…",
+      "createAccountContinue": "Create Account & Continue →",
+      "nextStepHint": "Next: set up your property name, location, and currency.",
+      "checkInbox": "Check your inbox",
+      "confirmationSentTo": "Confirmation link sent to",
+      "step1": "1. Open the email from HostMagSmart",
+      "step2": "2. Click the confirmation link",
+      "step3": "3. Come back and sign in",
+      "step4": "4. Set up your property",
+      "backToSignIn": "Back to Sign In",
+      "resetTitle": "Reset password",
+      "resetSubtitle": "Enter your email and we'll send a reset link.",
+      "backToSignInLink": "Back to sign in",
+      "resetLinkSent": "Reset link sent",
+      "checkInboxAt": "Check your inbox at",
+      "sending": "Sending…",
+      "sendResetLink": "Send Reset Link",
+      "footer": "© {year} HostMagSmart PMS · Secure hostel management",
+      "toastPasswordMin": "Password must be at least 8 characters",
+      "toastEnterEmail": "Enter your email first",
+      "toastAccountCreated": "Account created!"
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "subtitle": "Choose a password with at least 8 characters.",
+      "newPasswordLabel": "New Password",
+      "passwordPlaceholder": "Min. 8 characters",
+      "updating": "Updating…",
+      "updatePassword": "Update Password",
+      "updatedRedirecting": "Password updated! Redirecting to dashboard...",
+      "toastPasswordMin": "Password must be at least 8 characters"
+    }
   }
 }

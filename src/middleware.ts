@@ -9,13 +9,17 @@ const handleI18nRouting = createIntlMiddleware(routing);
 // Single-segment names must match exactly (an org slug is always the *only* top-level segment too,
 // so a prefix match would risk colliding with a real org named e.g. "settings").
 const UNLOCALIZED_EXACT = [
-  "/login", "/dashboard", "/calendar", "/reservations", "/channels",
+  "/dashboard", "/calendar", "/reservations", "/channels",
   "/check-in-pending", "/guests", "/rooms", "/analytics",
 ];
-const UNLOCALIZED_PREFIX = ["/demo", "/invite", "/onboarding", "/reset-password", "/signup", "/auth", "/settings"];
+const UNLOCALIZED_PREFIX = ["/demo", "/invite", "/onboarding", "/auth", "/settings"];
 
-// Matches the original (pre-locale) publicRoutes list, minus guest-portal (now locale-managed).
-const PUBLIC_PREFIXES = ["/login", "/register", "/scan", "/invite", "/auth", "/reset-password", "/demo", "/signup"];
+// Matches the original (pre-locale) publicRoutes list, minus routes now locale-managed
+// (login, signup, reset-password, guest-portal).
+const PUBLIC_PREFIXES = ["/register", "/scan", "/invite", "/auth", "/demo"];
+
+// Public within the locale-managed branch — no auth required.
+const LOCALE_PUBLIC_PREFIXES = ["/guest-portal", "/login", "/signup", "/reset-password"];
 
 async function refreshSupabaseSession(request: NextRequest, response: NextResponse) {
   const supabase = createServerClient(
@@ -69,13 +73,11 @@ export async function middleware(request: NextRequest) {
     if (!user && !isPublic) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
-    if (user && pathname === "/login") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
     return response;
   }
 
-  // Locale-managed routes: [locale]/[slug]/* (org dashboard) and [locale]/guest-portal/*
+  // Locale-managed routes: [locale]/[slug]/* (org dashboard), [locale]/guest-portal/*,
+  // and [locale]/{login,signup,reset-password}
   const intlResponse = handleI18nRouting(request);
   const user = await refreshSupabaseSession(request, intlResponse);
 
@@ -84,11 +86,19 @@ export async function middleware(request: NextRequest) {
   const hasLocalePrefix = (routing.locales as readonly string[]).includes(maybeLocale);
   const pathWithoutLocale = hasLocalePrefix ? "/" + segments.slice(1).join("/") : pathname;
 
-  const isPublic = pathWithoutLocale.startsWith("/guest-portal");
+  const isPublic = LOCALE_PUBLIC_PREFIXES.some(
+    (p) => pathWithoutLocale === p || pathWithoutLocale.startsWith(p + "/")
+  );
 
-  // The login page isn't locale-prefixed yet, so bounce straight there (no /{locale}/login route exists).
+  // "/login" itself isn't locale-prefixed here — the redirect target gets picked up by the
+  // locale-managed branch on the next request and gains its /{locale} prefix there.
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect authenticated users away from login; root page.tsx sends them to their org dashboard.
+  if (user && pathWithoutLocale === "/login") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return intlResponse;
