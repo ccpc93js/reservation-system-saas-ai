@@ -3,6 +3,7 @@ export type Plan = "free" | "pro" | "scale";
 export const PLAN_LIMITS: Record<Plan, {
   beds: number;        // -1 = unlimited
   users: number;       // -1 = unlimited
+  guestBook: number;   // -1 = unlimited
   channels: boolean;
   portal: boolean;
   analytics: boolean;
@@ -11,6 +12,7 @@ export const PLAN_LIMITS: Record<Plan, {
   free: {
     beds: 20,
     users: 1,
+    guestBook: 500,
     channels: false,
     portal: false,
     analytics: false,
@@ -19,6 +21,7 @@ export const PLAN_LIMITS: Record<Plan, {
   pro: {
     beds: 60,
     users: 3,
+    guestBook: 5000,
     channels: true,
     portal: true,
     analytics: true,
@@ -27,6 +30,7 @@ export const PLAN_LIMITS: Record<Plan, {
   scale: {
     beds: -1,
     users: -1,
+    guestBook: -1,
     channels: true,
     portal: true,
     analytics: true,
@@ -53,6 +57,15 @@ export function getPlanLimits(plan: string) {
 export function hasFeature(plan: string, feature: keyof typeof PLAN_LIMITS.free): boolean {
   const limits = getPlanLimits(plan);
   return limits[feature] as boolean;
+}
+
+export function canAddGuestBookEntry(plan: string, currentCount: number): boolean {
+  const { guestBook } = getPlanLimits(plan);
+  return guestBook === -1 || currentCount < guestBook;
+}
+
+export function getGuestBookLimit(plan: string): number {
+  return getPlanLimits(plan).guestBook;
 }
 
 export function canAddBed(plan: string, currentBeds: number): boolean {

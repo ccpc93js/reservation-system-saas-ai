@@ -18,16 +18,23 @@ export const createReservationSchema = yup.object().shape({
       return uuidRegex.test(value);
     }),
   first_name: yup.string()
-    .min(2, 'First name must be at least 2 characters')
-    .max(100, 'First name too long')
-    .required('First name is required'),
+    .when('guest_id', {
+      is: (val: string | undefined) => !val || val === 'new',
+      then: (s) => s.min(2, 'First name must be at least 2 characters').max(100, 'First name too long').required('First name is required'),
+      otherwise: (s) => s.optional(),
+    }),
   last_name: yup.string()
-    .min(2, 'Last name must be at least 2 characters')
-    .max(100, 'Last name too long')
-    .required('Last name is required'),
+    .when('guest_id', {
+      is: (val: string | undefined) => !val || val === 'new',
+      then: (s) => s.min(2, 'Last name must be at least 2 characters').max(100, 'Last name too long').required('Last name is required'),
+      otherwise: (s) => s.optional(),
+    }),
   email: yup.string()
-    .email('Email must be valid')
-    .required('Email is required'),
+    .when('guest_id', {
+      is: (val: string | undefined) => !val || val === 'new',
+      then: (s) => s.email('Email must be valid').required('Email is required'),
+      otherwise: (s) => s.email('Email must be valid').optional(),
+    }),
   check_in: yup.string()
     .required('Check-in date is required')
     .test('valid-date', 'Invalid check-in date', function(value) {

@@ -61,8 +61,7 @@ export default function CalendarClient({
   };
 
   const handleRefetch = () => {
-    // Force reload the page to clear all caches
-    window.location.reload();
+    router.refresh();
   };
 
   return (

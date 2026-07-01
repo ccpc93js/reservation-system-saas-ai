@@ -42,7 +42,7 @@ export default async function CalendarPage() {
       `
       id, bed_id, check_in, check_out, price_per_night,
       reservations(
-        id, reservation_number, status, channel_source,
+        id, reservation_number, status, channel_source, total_amount,
         guests(first_name, last_name),
         channels(color, platform)
       )

@@ -51,6 +51,10 @@ export default function GuestDialog({
   const [forceCreateDuplicate, setForceCreateDuplicate] = useState(false);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
+  const [showCountryOfBirthDropdown, setShowCountryOfBirthDropdown] = useState(false);
+  const [countryOfBirthSearch, setCountryOfBirthSearch] = useState("");
+  const [showCountryOfResidenceDropdown, setShowCountryOfResidenceDropdown] = useState(false);
+  const [countryOfResidenceSearch, setCountryOfResidenceSearch] = useState("");
   const [existingDocuments, setExistingDocuments] = useState<any[]>([]);
   const [newlyCreatedGuestId, setNewlyCreatedGuestId] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -110,6 +114,14 @@ export default function GuestDialog({
   const nationalityValue = watch("nationality") || "";
   const filteredCountries = COUNTRIES.filter((country) =>
     country.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+  const countryOfBirthValue = watch("country_of_birth") || "";
+  const filteredCountriesOfBirth = COUNTRIES.filter((c) =>
+    c.toLowerCase().includes(countryOfBirthSearch.toLowerCase())
+  );
+  const countryOfResidenceValue = watch("country_of_residence") || "";
+  const filteredCountriesOfResidence = COUNTRIES.filter((c) =>
+    c.toLowerCase().includes(countryOfResidenceSearch.toLowerCase())
   );
 
   // Fetch guest data if editing
@@ -655,16 +667,55 @@ export default function GuestDialog({
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
                   Country of Birth
                 </label>
-                <input
-                  {...register("country_of_birth")}
-                  placeholder="e.g., Spain"
-                  className="w-full rounded-lg border px-3 py-2 text-sm"
-                  style={{
-                    borderColor: errors.country_of_birth ? "#ef4444" : "hsl(var(--border))",
-                    background: "hsl(var(--bg))",
-                    color: "hsl(var(--text))",
-                  }}
-                />
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => { setShowCountryOfBirthDropdown(!showCountryOfBirthDropdown); setCountryOfBirthSearch(""); }}
+                    className="w-full rounded-lg border px-3 py-2 text-sm text-left flex items-center justify-between"
+                    style={{
+                      borderColor: errors.country_of_birth ? "#ef4444" : "hsl(var(--border))",
+                      background: "hsl(var(--bg))",
+                      color: countryOfBirthValue ? "hsl(var(--text))" : "hsl(var(--muted))",
+                    }}
+                  >
+                    <span>{countryOfBirthValue || "Select country..."}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {showCountryOfBirthDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
+                      <input
+                        type="text"
+                        placeholder="Search country..."
+                        value={countryOfBirthSearch}
+                        onChange={(e) => setCountryOfBirthSearch(e.target.value)}
+                        className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
+                        style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))", color: "hsl(var(--text))" }}
+                        autoFocus
+                      />
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredCountriesOfBirth.length > 0 ? (
+                          filteredCountriesOfBirth.map((country) => (
+                            <button
+                              key={country}
+                              type="button"
+                              onClick={() => { setValue("country_of_birth", country); setShowCountryOfBirthDropdown(false); setCountryOfBirthSearch(""); }}
+                              className="w-full px-3 py-2 text-left text-sm hover:opacity-80 transition-opacity"
+                              style={{
+                                background: countryOfBirthValue === country ? "hsl(var(--primary))" : "transparent",
+                                color: countryOfBirthValue === country ? "hsl(var(--primary-foreground))" : "hsl(var(--text))",
+                                fontWeight: countryOfBirthValue === country ? "600" : "normal",
+                              }}
+                            >
+                              {country}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>No countries found</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 {errors.country_of_birth && (
                   <p className="text-xs text-red-500 mt-1">{String(errors.country_of_birth?.message ?? "")}</p>
                 )}
@@ -807,16 +858,55 @@ export default function GuestDialog({
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
                       Country of Residence
                     </label>
-                    <input
-                      {...register("country_of_residence")}
-                      placeholder="Country of residence"
-                      className="w-full rounded-lg border px-3 py-2 text-sm"
-                      style={{
-                        borderColor: errors.country_of_residence ? "#ef4444" : "hsl(var(--border))",
-                        background: "hsl(var(--bg))",
-                        color: "hsl(var(--text))",
-                      }}
-                    />
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => { setShowCountryOfResidenceDropdown(!showCountryOfResidenceDropdown); setCountryOfResidenceSearch(""); }}
+                        className="w-full rounded-lg border px-3 py-2 text-sm text-left flex items-center justify-between"
+                        style={{
+                          borderColor: errors.country_of_residence ? "#ef4444" : "hsl(var(--border))",
+                          background: "hsl(var(--bg))",
+                          color: countryOfResidenceValue ? "hsl(var(--text))" : "hsl(var(--muted))",
+                        }}
+                      >
+                        <span>{countryOfResidenceValue || "Select country..."}</span>
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                      {showCountryOfResidenceDropdown && (
+                        <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
+                          <input
+                            type="text"
+                            placeholder="Search country..."
+                            value={countryOfResidenceSearch}
+                            onChange={(e) => setCountryOfResidenceSearch(e.target.value)}
+                            className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
+                            style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))", color: "hsl(var(--text))" }}
+                            autoFocus
+                          />
+                          <div className="max-h-48 overflow-y-auto">
+                            {filteredCountriesOfResidence.length > 0 ? (
+                              filteredCountriesOfResidence.map((country) => (
+                                <button
+                                  key={country}
+                                  type="button"
+                                  onClick={() => { setValue("country_of_residence", country); setShowCountryOfResidenceDropdown(false); setCountryOfResidenceSearch(""); }}
+                                  className="w-full px-3 py-2 text-left text-sm hover:opacity-80 transition-opacity"
+                                  style={{
+                                    background: countryOfResidenceValue === country ? "hsl(var(--primary))" : "transparent",
+                                    color: countryOfResidenceValue === country ? "hsl(var(--primary-foreground))" : "hsl(var(--text))",
+                                    fontWeight: countryOfResidenceValue === country ? "600" : "normal",
+                                  }}
+                                >
+                                  {country}
+                                </button>
+                              ))
+                            ) : (
+                              <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>No countries found</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     {errors.country_of_residence && (
                       <p className="text-xs text-red-500 mt-1">{String(errors.country_of_residence?.message ?? "")}</p>
                     )}

@@ -148,47 +148,6 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
     [reservations]
   );
 
-  // Merge overlapping blocks for each bed into continuous blocks
-  const mergedBlocksByBed = useMemo(() => {
-    const merged: Record<string, ReservationBlock[]> = {};
-
-    Object.entries(blocksByBed).forEach(([bedId, blocks]) => {
-      if (blocks.length === 0) {
-        merged[bedId] = [];
-        return;
-      }
-
-      const sorted = [...blocks].sort((a, b) =>
-        new Date(a.check_in).getTime() - new Date(b.check_in).getTime()
-      );
-
-      const result: ReservationBlock[] = [];
-      let current = sorted[0];
-
-      for (let i = 1; i < sorted.length; i++) {
-        const next = sorted[i];
-        const currentEnd = new Date(current.check_out);
-        const nextStart = new Date(next.check_in);
-
-        if (nextStart <= currentEnd) {
-          if (new Date(next.check_out) > currentEnd) {
-            current = {
-              ...current,
-              check_out: next.check_out,
-            };
-          }
-        } else {
-          result.push(current);
-          current = next;
-        }
-      }
-
-      result.push(current);
-      merged[bedId] = result;
-    });
-
-    return merged;
-  }, [blocksByBed]);
 
   if (beds.length === 0) {
     return (
@@ -275,7 +234,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                 return aPos - bPos || a.name.localeCompare(b.name);
               })
               .map((bed, bedIndex) => {
-              const blocks = mergedBlocksByBed[bed.id] ?? [];
+              const blocks = blocksByBed[bed.id] ?? [];
               return (
                 <div
                   key={bed.id}
@@ -324,62 +283,75 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                       );
                     })}
 
-                    {/* Reservation Blocks */}
-                    {blocks.map((block) => {
-                      const start = parseISO(block.check_in);
-                      const end = parseISO(block.check_out);
-                      const offsetDays = differenceInDays(start, days[0]);
-                      const durationDays = differenceInDays(end, start);
-                      if (offsetDays + durationDays <= 0 || offsetDays >= days.length) return null;
+                    {/* Reservation Blocks — grouped by reservation so multi-segment stays render as one block */}
+                    {(() => {
+                      const resMap = new Map<string, { res: any; minCheckIn: string; maxCheckOut: string }>();
+                      for (const block of blocks) {
+                        const resId = block.reservations?.id;
+                        if (!resId) continue;
+                        const existing = resMap.get(resId);
+                        if (!existing) {
+                          resMap.set(resId, { res: block.reservations, minCheckIn: block.check_in, maxCheckOut: block.check_out });
+                        } else {
+                          if (block.check_in < existing.minCheckIn) existing.minCheckIn = block.check_in;
+                          if (block.check_out > existing.maxCheckOut) existing.maxCheckOut = block.check_out;
+                        }
+                      }
 
-                      const status = block.reservations?.status ?? "pending";
-                      const colors = STATUS_COLORS[status] ?? STATUS_COLORS.pending;
-                      const Icon = colors.icon;
-                      const channelColor = (block.reservations as any)?.channels?.color;
-                      const isOTA = (block.reservations as any)?.channel_source && (block.reservations as any)?.channel_source !== "direct";
-                      const guestFirst = block.reservations?.guests?.first_name ?? "Unknown";
-                      const guestLast = block.reservations?.guests?.last_name ?? "";
-                      const fullName = `${guestFirst} ${guestLast}`.trim();
-                      const totalPrice = block.price_per_night * durationDays;
+                      return Array.from(resMap.values()).map(({ res, minCheckIn, maxCheckOut }) => {
+                        const start = parseISO(minCheckIn);
+                        const end = parseISO(maxCheckOut);
+                        const offsetDays = differenceInDays(start, days[0]);
+                        const durationDays = differenceInDays(end, start);
+                        if (offsetDays + durationDays <= 0 || offsetDays >= days.length) return null;
 
-                      return (
-                        <div
-                          key={block.id}
-                          className={cn(
-                            "absolute top-1.5 bottom-1.5 rounded-md border shadow-sm flex flex-col px-2 py-1 cursor-pointer transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 z-10",
-                            colors.bg,
-                            colors.border
-                          )}
-                          style={{
-                            left: offsetDays * DAY_WIDTH + 2,
-                            width: Math.max(durationDays * DAY_WIDTH - 4, 30),
-                            ...(isOTA && channelColor ? { borderLeftColor: channelColor, borderLeftWidth: 3 } : {}),
-                          }}
-                          title={`${fullName} · $${totalPrice.toFixed(2)} total · ${block.check_in} to ${block.check_out}`}
-                          onClick={() => {
-                            if (block.reservations?.id) onExistingBlock?.(block.reservations.id);
-                          }}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(event) => {
-                            if ((event.key === "Enter" || event.key === " ") && block.reservations?.id) {
-                              event.preventDefault();
-                              onExistingBlock?.(block.reservations.id);
-                            }
-                          }}
-                        >
-                          <div className="flex items-center gap-1 overflow-hidden w-full">
-                            <div className={cn("w-4 h-4 rounded-sm flex items-center justify-center shrink-0 bg-white/60", colors.text)}>
-                              <Icon className="w-2.5 h-2.5" />
+                        const status = res?.status ?? "pending";
+                        const colors = STATUS_COLORS[status] ?? STATUS_COLORS.pending;
+                        const Icon = colors.icon;
+                        const channelColor = res?.channels?.color;
+                        const isOTA = res?.channel_source && res?.channel_source !== "direct";
+                        const guestFirst = res?.guests?.first_name ?? "Unknown";
+                        const guestLast = res?.guests?.last_name ?? "";
+                        const fullName = `${guestFirst} ${guestLast}`.trim();
+                        const totalAmount = Number(res?.total_amount ?? 0);
+
+                        return (
+                          <div
+                            key={res?.id}
+                            className={cn(
+                              "absolute top-1.5 bottom-1.5 rounded-md border shadow-sm flex flex-col px-2 py-1 cursor-pointer transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 z-10",
+                              colors.bg,
+                              colors.border
+                            )}
+                            style={{
+                              left: offsetDays * DAY_WIDTH + 2,
+                              width: Math.max(durationDays * DAY_WIDTH - 4, 30),
+                              ...(isOTA && channelColor ? { borderLeftColor: channelColor, borderLeftWidth: 3 } : {}),
+                            }}
+                            title={`${fullName} · $${totalAmount.toFixed(2)} total · ${minCheckIn} to ${maxCheckOut}`}
+                            onClick={() => { if (res?.id) onExistingBlock?.(res.id); }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(event) => {
+                              if ((event.key === "Enter" || event.key === " ") && res?.id) {
+                                event.preventDefault();
+                                onExistingBlock?.(res.id);
+                              }
+                            }}
+                          >
+                            <div className="flex items-center gap-1 overflow-hidden w-full">
+                              <div className={cn("w-4 h-4 rounded-sm flex items-center justify-center shrink-0 bg-white/60", colors.text)}>
+                                <Icon className="w-2.5 h-2.5" />
+                              </div>
+                              <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
                             </div>
-                            <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
+                            <span className={cn("truncate text-[8px] font-medium", colors.text)}>
+                              {isOTA ? res?.channel_source?.replace("_", ".") : `$${totalAmount.toFixed(2)} total`}
+                            </span>
                           </div>
-                          <span className={cn("truncate text-[8px] font-medium", colors.text)}>
-                            {isOTA ? (block.reservations as any)?.channel_source?.replace("_", ".") : `$${totalPrice.toFixed(2)} total`}
-                          </span>
-                        </div>
-                      );
-                    })}
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               );

@@ -1,3 +1,41 @@
+## [Unreleased] - 2026-07-01
+
+feat: Phase 14 - Check-In Registry (Guest Book)
+
+- New Guest Book page (`/[slug]/checkin-history`) with full table, search, CSV export
+- Add to Guest Book from reservation drawer; duplicate detection (409 guard)
+- Edit dialog per row: Personal Info, Identity Document, Stay Details sections
+- Searchable country dropdowns (Citizenship + Country of Birth) via portal to escape overflow clipping
+- Delete record with confirmation; stale `inBook` state fixed (reset on close, re-fetch on open + after save)
+- Reservation # column in Guest Book table
+- Plan-based Guest Book limits: Free 500 / Pro 5,000 / Scale unlimited
+- Limit enforced server-side in POST `/api/reservations/[id]/registry`; usage shown in UI with amber/red indicators + banner at limit
+- Existing guest search in New Reservation drawer (debounced, click-outside, tab switcher)
+- Yup conditional validation: name/email only required when creating new guest (not selecting existing)
+- `router.refresh()` replaces `window.location.reload()` — drawer stays open after Save Payment
+- Tape chart: removed `mergedBlocksByBed` that incorrectly merged adjacent reservations from different bookings
+- RLS policies: DELETE + UPDATE on `checkin_registry` for org members
+- `COUNTRIES` array unified to `@/lib/countries` (removed inline duplicates in guest-dialog + checkin-history-client)
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+## [8f2bd48] - 2026-06-30
+
+feat: Phase 13 - Subscription plans + Stripe billing
+
+- Add plan system: free/pro/scale with limits (beds, users, features)
+- Stripe Checkout for new subscriptions, subscriptions.update for upgrades/downgrades
+- Stripe Customer Portal for cancellation and payment method management
+- Webhook handler: checkout.completed, invoice.paid, subscription.updated/deleted
+- pending_plan enforcement: post-onboarding app blocked until payment confirmed
+- Auto-trigger Stripe Checkout when user selects paid plan from landing page
+- Paywall component for feature-gating analytics, channels, etc.
+- Plan limits enforced in beds/create and team/invite APIs
+- Billing page with usage bars, plan cards, upgrade/downgrade/portal buttons
+- Migration: plan, stripe_customer_id, stripe_subscription_id, plan_expires_at, pending_plan on organizations
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
 ## [4688927] - 2026-06-27
 
 feat(email): implement Resend email service + reservation bug fixes

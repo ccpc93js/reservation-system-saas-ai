@@ -17,6 +17,7 @@ import {
   Wifi,
   UsersRound,
   CreditCard,
+  History,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,7 @@ const mainNavRoutes = [
   { path: "calendar", label: "Tape Calendar", icon: CalendarDays },
   { path: "reservations", label: "Reservations", icon: BookOpen },
   { path: "check-in-pending", label: "Pending Check-Ins", icon: ClipboardList },
+  { path: "checkin-history", label: "Guest Book", icon: History },
   { path: "analytics", label: "Analytics", icon: BarChart3 },
   { path: "channels", label: "Channel Manager", icon: Wifi },
   { path: "guests", label: "Guest Directory", icon: Users },

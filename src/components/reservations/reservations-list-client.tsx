@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
 import { TableSkeleton } from "@/components/loading-skeleton";
 import { EmptyState } from "@/components/empty-state";
+import { createBrowserClient } from "@/lib/supabase/client";
 
 const STATUS_COLORS: Record<
   string,
@@ -62,6 +63,7 @@ export default function ReservationsListClient({
   const [isLoading, setIsLoading] = useState(false);
   const [editResId, setEditResId] = useState<string | null>(null);
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
+  const [checkoutWarnings, setCheckoutWarnings] = useState<string[]>([]);
 
   const [filters, setFilters] = useState({
     status: "",
@@ -166,7 +168,8 @@ export default function ReservationsListClient({
     handleFetch(debouncedSearch, page, filters);
   }, [page]);
 
-  const handleOpenEdit = (resId: string) => {
+  const handleOpenEdit = (resId: string, warnings: string[] = []) => {
+    setCheckoutWarnings(warnings);
     setEditResId(resId);
     setEditDrawerOpen(true);
   };
@@ -185,6 +188,47 @@ export default function ReservationsListClient({
   };
 
   const handleStatusChange = async (resId: string, newStatus: string) => {
+    if (newStatus === "checked_in" || newStatus === "checked_out") {
+      const supabase = createBrowserClient();
+      const { data: resData } = await (supabase as any)
+        .from("reservations")
+        .select("guest_id, payment_confirmed, paid_amount, total_amount, actual_check_in_at")
+        .eq("id", resId)
+        .single();
+
+      const totalAmount = Number(resData?.total_amount ?? 0);
+      const paidAmount = Number(resData?.paid_amount ?? 0);
+      const balanceDue = totalAmount - paidAmount;
+
+      if (newStatus === "checked_in") {
+        const missing: string[] = [];
+        if (!resData?.guest_id) missing.push("No guest assigned");
+        if (totalAmount > 0 && paidAmount < totalAmount)
+          missing.push(`Balance due ${balanceDue.toFixed(2)} — guest must pay before check-in`);
+
+        if (missing.length > 0) {
+          toast.error("Cannot check in — fix required fields first", { duration: 5000 });
+          handleOpenEdit(resId, missing);
+          return;
+        }
+      }
+
+      if (newStatus === "checked_out") {
+        const missing: string[] = [];
+        if (!resData?.guest_id) missing.push("No guest assigned");
+        if (balanceDue > 0)
+          missing.push(`Balance due ${balanceDue.toFixed(2)} — collect full payment before checkout`);
+        if (!resData?.payment_confirmed) missing.push("Payment not confirmed — mark as confirmed in folio");
+        if (!resData?.actual_check_in_at) missing.push("Actual check-in time not recorded");
+
+        if (missing.length > 0) {
+          toast.error("Cannot check out — fix required fields first", { duration: 5000 });
+          handleOpenEdit(resId, missing);
+          return;
+        }
+      }
+    }
+
     setUpdatingStatusId(resId);
     try {
       const response = await fetch(`/api/reservations/${resId}`, {
@@ -203,6 +247,9 @@ export default function ReservationsListClient({
         prev.map(res => (res.id === resId ? { ...res, status: newStatus } : res))
       );
       toast.success("Status updated");
+      if (newStatus === "checked_in") {
+        handleOpenEdit(resId);
+      }
     } catch (error) {
       console.error("Status update error:", error);
       toast.error("Failed to update status");
@@ -414,7 +461,9 @@ export default function ReservationsListClient({
                         </select>
                       </td>
                       <td className="p-3 font-medium">${res.total_amount.toFixed(2)}</td>
-                      <td className="p-3 text-right">${res.paid_amount.toFixed(2)}</td>
+                      <td className={`p-3 text-right font-semibold ${res.total_amount <= 0 || res.paid_amount >= res.total_amount ? "text-emerald-600" : res.paid_amount > 0 ? "text-amber-600" : "text-red-600"}`}>
+                        ${res.paid_amount.toFixed(2)}
+                      </td>
                     </tr>
                   );
                 })
@@ -452,9 +501,10 @@ export default function ReservationsListClient({
       {/* Edit Reservation Drawer */}
       <EditReservationDrawer
         open={editDrawerOpen}
-        onOpenChange={setEditDrawerOpen}
+        onOpenChange={(v) => { setEditDrawerOpen(v); if (!v) setCheckoutWarnings([]); }}
         reservationId={editResId || undefined}
         onReservationUpdated={handleRefetch}
+        checkoutWarnings={checkoutWarnings}
       />
     </div>
   );

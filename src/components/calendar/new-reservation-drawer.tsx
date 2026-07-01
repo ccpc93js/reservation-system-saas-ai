@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X, Search, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { createBrowserClient } from "@/lib/supabase/client";
 import { createReservationSchema, type CreateReservationInput } from "@/lib/validations/reservation";
 
 interface NewReservationDrawerProps {
@@ -29,6 +30,13 @@ export default function NewReservationDrawer({
   const [guestMode, setGuestMode] = useState<"select" | "new">("new");
   const [conflict, setConflict] = useState<{ reservation_number: string; guest: string; check_in: string; check_out: string } | null>(null);
   const [checkingAvailability, setCheckingAvailability] = useState(false);
+  // Existing guest search
+  const [guestSearch, setGuestSearch] = useState("");
+  const [guestResults, setGuestResults] = useState<any[]>([]);
+  const [searchingGuests, setSearchingGuests] = useState(false);
+  const [selectedGuest, setSelectedGuest] = useState<any>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const getTodayLocalDateStr = () => {
     const now = new Date();
@@ -87,6 +95,69 @@ export default function NewReservationDrawer({
       setValue("org_id", orgId || "");
     }
   }, [checkInDate, bedId, orgId, setValue]);
+
+  // Debounced guest search
+  useEffect(() => {
+    if (guestMode !== "select" || guestSearch.trim().length < 2) {
+      setGuestResults([]);
+      setShowDropdown(false);
+      return;
+    }
+    const t = setTimeout(async () => {
+      setSearchingGuests(true);
+      try {
+        const supabase = createBrowserClient();
+        const q = guestSearch.trim();
+        const { data } = await (supabase as any)
+          .from("guests")
+          .select("id, first_name, last_name, email, document_number, nationality")
+          .eq("organization_id", orgId)
+          .or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%,email.ilike.%${q}%,document_number.ilike.%${q}%`)
+          .limit(8);
+        setGuestResults(data ?? []);
+        setShowDropdown(true);
+      } finally {
+        setSearchingGuests(false);
+      }
+    }, 280);
+    return () => clearTimeout(t);
+  }, [guestSearch, guestMode, orgId]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const selectGuest = (g: any) => {
+    setSelectedGuest(g);
+    setValue("guest_id", g.id);
+    setValue("first_name", g.first_name ?? "");
+    setValue("last_name", g.last_name ?? "");
+    setValue("email", g.email ?? "");
+    setGuestSearch(`${g.first_name} ${g.last_name}`);
+    setShowDropdown(false);
+  };
+
+  const clearGuestSelection = () => {
+    setSelectedGuest(null);
+    setValue("guest_id", "new");
+    setGuestSearch("");
+    setGuestResults([]);
+  };
+
+  const switchGuestMode = (mode: "new" | "select") => {
+    setGuestMode(mode);
+    setSelectedGuest(null);
+    setGuestSearch("");
+    setGuestResults([]);
+    setValue("guest_id", "new");
+  };
 
   const checkOut = watch("check_out");
   const pricePerNight = watch("price_per_night");
@@ -251,10 +322,10 @@ export default function NewReservationDrawer({
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                 Guest
               </label>
-              <div className="flex gap-2 mb-2">
+              <div className="flex gap-2 mb-3">
                 <button
                   type="button"
-                  onClick={() => setGuestMode("new")}
+                  onClick={() => switchGuestMode("new")}
                   className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
                     guestMode === "new"
                       ? "bg-primary text-primary-foreground"
@@ -263,7 +334,82 @@ export default function NewReservationDrawer({
                 >
                   New Guest
                 </button>
+                <button
+                  type="button"
+                  onClick={() => switchGuestMode("select")}
+                  className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                    guestMode === "select"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground/85 hover:bg-muted/80"
+                  }`}
+                >
+                  Existing Guest
+                </button>
               </div>
+
+              {guestMode === "select" && (
+                <div ref={searchRef} className="relative">
+                  {selectedGuest ? (
+                    <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-emerald-300 bg-emerald-50">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-foreground truncate">
+                          {selectedGuest.first_name} {selectedGuest.last_name}
+                        </p>
+                        {selectedGuest.email && (
+                          <p className="text-xs text-muted-foreground truncate">{selectedGuest.email}</p>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={clearGuestSelection}
+                        className="text-xs text-muted-foreground hover:text-red-500 transition-colors shrink-0"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                        <input
+                          type="text"
+                          value={guestSearch}
+                          onChange={(e) => setGuestSearch(e.target.value)}
+                          onFocus={() => guestResults.length > 0 && setShowDropdown(true)}
+                          placeholder="Search by name, email or ID number..."
+                          className="w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
+                        />
+                        {searchingGuests && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">…</span>
+                        )}
+                      </div>
+                      {showDropdown && guestResults.length > 0 && (
+                        <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface shadow-lg overflow-hidden">
+                          {guestResults.map((g) => (
+                            <button
+                              key={g.id}
+                              type="button"
+                              onClick={() => selectGuest(g)}
+                              className="w-full text-left px-3 py-2.5 hover:bg-muted transition-colors border-b border-border/50 last:border-0"
+                            >
+                              <p className="text-sm font-medium text-foreground">
+                                {g.first_name} {g.last_name}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {[g.email, g.document_number, g.nationality].filter(Boolean).join(" · ")}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      {showDropdown && !searchingGuests && guestResults.length === 0 && guestSearch.trim().length >= 2 && (
+                        <p className="text-xs text-muted-foreground mt-1.5 px-1">No guests found</p>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
 
               {guestMode === "new" && (
                 <>
