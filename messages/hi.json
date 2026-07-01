@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "मेनू टॉगल करें",
+    "pageTitles": {
+      "dashboard": "डैशबोर्ड",
+      "calendar": "टेप कैलेंडर",
+      "reservations": "आरक्षण",
+      "checkInPending": "लंबित चेक-इन",
+      "analytics": "विश्लेषण",
+      "guests": "अतिथि निर्देशिका",
+      "rooms": "कमरा सूची",
+      "channels": "चैनल प्रबंधक",
+      "settingsProperty": "प्रॉपर्टी सेटिंग्स",
+      "settingsTeam": "टीम",
+      "settingsBilling": "बिलिंग और प्लान",
+      "settings": "सेटिंग्स"
+    },
+    "searchPlaceholder": "अतिथि, आरक्षण खोजें...",
+    "clearSearch": "खोज साफ़ करें",
+    "searching": "खोज रहे हैं…",
+    "noResults": "कोई परिणाम नहीं",
+    "guestsLabel": "अतिथि",
+    "reservationsLabel": "आरक्षण",
+    "newBooking": "नई बुकिंग",
+    "newBookingTooltip": "नई बुकिंग बनाने के लिए टेप कैलेंडर पर जाएं",
+    "settingsMenuItem": "सेटिंग्स",
+    "signOut": "साइन आउट करें"
+  },
+  "sidebar": {
+    "liveView": "लाइव व्यू",
+    "collapseSidebar": "साइडबार संक्षिप्त करें",
+    "logout": "लॉगआउट",
+    "settingsSection": "सेटिंग्स",
+    "nav": {
+      "dashboard": "डैशबोर्ड अवलोकन",
+      "calendar": "टेप कैलेंडर",
+      "reservations": "आरक्षण",
+      "checkInPending": "लंबित चेक-इन",
+      "checkinHistory": "अतिथि पंजी",
+      "analytics": "विश्लेषण",
+      "channels": "चैनल प्रबंधक",
+      "guests": "अतिथि निर्देशिका",
+      "rooms": "कमरा सूची",
+      "settingsProperty": "प्रॉपर्टी सेटिंग्स",
+      "settingsTeam": "टीम",
+      "settingsBilling": "बिलिंग और प्लान"
+    },
+    "role": {
+      "owner": "मालिक",
+      "manager": "प्रबंधक",
+      "admin": "एडमिन",
+      "staff": "स्टाफ"
+    },
+    "defaultUserName": "उपयोगकर्ता"
+  }
 }

@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "Alternar menú",
+    "pageTitles": {
+      "dashboard": "Panel",
+      "calendar": "Calendario de reservas",
+      "reservations": "Reservas",
+      "checkInPending": "Check-ins pendientes",
+      "analytics": "Analítica",
+      "guests": "Directorio de huéspedes",
+      "rooms": "Inventario de habitaciones",
+      "channels": "Gestor de canales",
+      "settingsProperty": "Configuración del alojamiento",
+      "settingsTeam": "Equipo",
+      "settingsBilling": "Facturación y plan",
+      "settings": "Configuración"
+    },
+    "searchPlaceholder": "Buscar huéspedes, reservas...",
+    "clearSearch": "Borrar búsqueda",
+    "searching": "Buscando…",
+    "noResults": "Sin resultados",
+    "guestsLabel": "Huéspedes",
+    "reservationsLabel": "Reservas",
+    "newBooking": "Nueva reserva",
+    "newBookingTooltip": "Ir al calendario de reservas para crear una nueva",
+    "settingsMenuItem": "Configuración",
+    "signOut": "Cerrar sesión"
+  },
+  "sidebar": {
+    "liveView": "En vivo",
+    "collapseSidebar": "Contraer barra lateral",
+    "logout": "Cerrar sesión",
+    "settingsSection": "Configuración",
+    "nav": {
+      "dashboard": "Resumen del panel",
+      "calendar": "Calendario de reservas",
+      "reservations": "Reservas",
+      "checkInPending": "Check-ins pendientes",
+      "checkinHistory": "Registro de huéspedes",
+      "analytics": "Analítica",
+      "channels": "Gestor de canales",
+      "guests": "Directorio de huéspedes",
+      "rooms": "Inventario de habitaciones",
+      "settingsProperty": "Configuración del alojamiento",
+      "settingsTeam": "Equipo",
+      "settingsBilling": "Facturación y plan"
+    },
+    "role": {
+      "owner": "Propietario",
+      "manager": "Gerente",
+      "admin": "Administrador",
+      "staff": "Personal"
+    },
+    "defaultUserName": "Usuario"
+  }
 }

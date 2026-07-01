@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "মেনু টগল করুন",
+    "pageTitles": {
+      "dashboard": "ড্যাশবোর্ড",
+      "calendar": "টেপ ক্যালেন্ডার",
+      "reservations": "রিজার্ভেশন",
+      "checkInPending": "মুলতুবি চেক-ইন",
+      "analytics": "বিশ্লেষণ",
+      "guests": "অতিথি ডিরেক্টরি",
+      "rooms": "রুম ইনভেন্টরি",
+      "channels": "চ্যানেল ম্যানেজার",
+      "settingsProperty": "প্রপার্টি সেটিংস",
+      "settingsTeam": "টিম",
+      "settingsBilling": "বিলিং ও প্ল্যান",
+      "settings": "সেটিংস"
+    },
+    "searchPlaceholder": "অতিথি, রিজার্ভেশন খুঁজুন...",
+    "clearSearch": "খোঁজ মুছুন",
+    "searching": "খোঁজা হচ্ছে…",
+    "noResults": "কোনো ফলাফল নেই",
+    "guestsLabel": "অতিথি",
+    "reservationsLabel": "রিজার্ভেশন",
+    "newBooking": "নতুন বুকিং",
+    "newBookingTooltip": "নতুন বুকিং তৈরি করতে টেপ ক্যালেন্ডারে যান",
+    "settingsMenuItem": "সেটিংস",
+    "signOut": "সাইন আউট"
+  },
+  "sidebar": {
+    "liveView": "লাইভ ভিউ",
+    "collapseSidebar": "সাইডবার সংকুচিত করুন",
+    "logout": "লগআউট",
+    "settingsSection": "সেটিংস",
+    "nav": {
+      "dashboard": "ড্যাশবোর্ড ওভারভিউ",
+      "calendar": "টেপ ক্যালেন্ডার",
+      "reservations": "রিজার্ভেশন",
+      "checkInPending": "মুলতুবি চেক-ইন",
+      "checkinHistory": "অতিথি রেজিস্ট্রি",
+      "analytics": "বিশ্লেষণ",
+      "channels": "চ্যানেল ম্যানেজার",
+      "guests": "অতিথি ডিরেক্টরি",
+      "rooms": "রুম ইনভেন্টরি",
+      "settingsProperty": "প্রপার্টি সেটিংস",
+      "settingsTeam": "টিম",
+      "settingsBilling": "বিলিং ও প্ল্যান"
+    },
+    "role": {
+      "owner": "মালিক",
+      "manager": "ম্যানেজার",
+      "admin": "অ্যাডমিন",
+      "staff": "স্টাফ"
+    },
+    "defaultUserName": "ব্যবহারকারী"
+  }
 }

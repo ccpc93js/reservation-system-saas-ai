@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "Переключить меню",
+    "pageTitles": {
+      "dashboard": "Панель управления",
+      "calendar": "Шахматка бронирований",
+      "reservations": "Бронирования",
+      "checkInPending": "Ожидают заселения",
+      "analytics": "Аналитика",
+      "guests": "Справочник гостей",
+      "rooms": "Номерной фонд",
+      "channels": "Менеджер каналов",
+      "settingsProperty": "Настройки объекта",
+      "settingsTeam": "Команда",
+      "settingsBilling": "Оплата и тариф",
+      "settings": "Настройки"
+    },
+    "searchPlaceholder": "Поиск гостей, бронирований...",
+    "clearSearch": "Очистить поиск",
+    "searching": "Поиск…",
+    "noResults": "Нет результатов",
+    "guestsLabel": "Гости",
+    "reservationsLabel": "Бронирования",
+    "newBooking": "Новое бронирование",
+    "newBookingTooltip": "Перейти к шахматке, чтобы создать новое бронирование",
+    "settingsMenuItem": "Настройки",
+    "signOut": "Выйти"
+  },
+  "sidebar": {
+    "liveView": "В реальном времени",
+    "collapseSidebar": "Свернуть боковую панель",
+    "logout": "Выйти",
+    "settingsSection": "Настройки",
+    "nav": {
+      "dashboard": "Обзор панели",
+      "calendar": "Шахматка бронирований",
+      "reservations": "Бронирования",
+      "checkInPending": "Ожидают заселения",
+      "checkinHistory": "Журнал гостей",
+      "analytics": "Аналитика",
+      "channels": "Менеджер каналов",
+      "guests": "Справочник гостей",
+      "rooms": "Номерной фонд",
+      "settingsProperty": "Настройки объекта",
+      "settingsTeam": "Команда",
+      "settingsBilling": "Оплата и тариф"
+    },
+    "role": {
+      "owner": "Владелец",
+      "manager": "Менеджер",
+      "admin": "Администратор",
+      "staff": "Персонал"
+    },
+    "defaultUserName": "Пользователь"
+  }
 }

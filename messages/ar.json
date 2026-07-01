@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "تبديل القائمة",
+    "pageTitles": {
+      "dashboard": "لوحة التحكم",
+      "calendar": "تقويم الحجوزات",
+      "reservations": "الحجوزات",
+      "checkInPending": "تسجيلات الوصول المعلّقة",
+      "analytics": "التحليلات",
+      "guests": "دليل النزلاء",
+      "rooms": "مخزون الغرف",
+      "channels": "مدير القنوات",
+      "settingsProperty": "إعدادات العقار",
+      "settingsTeam": "الفريق",
+      "settingsBilling": "الفوترة والخطة",
+      "settings": "الإعدادات"
+    },
+    "searchPlaceholder": "ابحث عن النزلاء أو الحجوزات...",
+    "clearSearch": "مسح البحث",
+    "searching": "جارٍ البحث…",
+    "noResults": "لا توجد نتائج",
+    "guestsLabel": "النزلاء",
+    "reservationsLabel": "الحجوزات",
+    "newBooking": "حجز جديد",
+    "newBookingTooltip": "اذهب إلى تقويم الحجوزات لإنشاء حجز جديد",
+    "settingsMenuItem": "الإعدادات",
+    "signOut": "تسجيل الخروج"
+  },
+  "sidebar": {
+    "liveView": "عرض مباشر",
+    "collapseSidebar": "طي الشريط الجانبي",
+    "logout": "تسجيل الخروج",
+    "settingsSection": "الإعدادات",
+    "nav": {
+      "dashboard": "نظرة عامة على لوحة التحكم",
+      "calendar": "تقويم الحجوزات",
+      "reservations": "الحجوزات",
+      "checkInPending": "تسجيلات الوصول المعلّقة",
+      "checkinHistory": "سجل النزلاء",
+      "analytics": "التحليلات",
+      "channels": "مدير القنوات",
+      "guests": "دليل النزلاء",
+      "rooms": "مخزون الغرف",
+      "settingsProperty": "إعدادات العقار",
+      "settingsTeam": "الفريق",
+      "settingsBilling": "الفوترة والخطة"
+    },
+    "role": {
+      "owner": "المالك",
+      "manager": "المدير",
+      "admin": "مسؤول",
+      "staff": "الموظفون"
+    },
+    "defaultUserName": "المستخدم"
+  }
 }

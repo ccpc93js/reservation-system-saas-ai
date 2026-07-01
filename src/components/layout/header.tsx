@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter as useNextRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { User } from "@supabase/supabase-js";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Plus, Bell, Menu, Search as SearchIcon, Settings, LogOut, X } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { useRouter, usePathname } from "@/i18n/navigation";
 
 interface HeaderProps {
   org: { id: string; name: string; slug: string };
@@ -28,8 +30,10 @@ interface ReservationResult {
 }
 
 export default function Header({ org, user, onMenuClick }: HeaderProps) {
+  const t = useTranslations("header");
   const pathname = usePathname();
   const router = useRouter();
+  const nextRouter = useNextRouter(); // plain (non-locale-prefixed) router, for the not-yet-migrated /login route
   const initials = user.email?.slice(0, 2).toUpperCase() ?? "??";
 
   const [query, setQuery] = useState("");
@@ -43,20 +47,20 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const routeSegment = pathname.replace(new RegExp(`^/${org.slug}`), "") || "/dashboard";
 
   const pageTitles: Record<string, string> = {
-    "/dashboard": "Dashboard",
-    "/calendar": "Tape Calendar",
-    "/reservations": "Reservations",
-    "/check-in-pending": "Pending Check-Ins",
-    "/analytics": "Analytics",
-    "/guests": "Guest Directory",
-    "/rooms": "Room Inventory",
-    "/channels": "Channel Manager",
-    "/settings/property": "Property Settings",
-    "/settings/team": "Team",
-    "/settings/billing": "Billing & Plan",
+    "/dashboard": t("pageTitles.dashboard"),
+    "/calendar": t("pageTitles.calendar"),
+    "/reservations": t("pageTitles.reservations"),
+    "/check-in-pending": t("pageTitles.checkInPending"),
+    "/analytics": t("pageTitles.analytics"),
+    "/guests": t("pageTitles.guests"),
+    "/rooms": t("pageTitles.rooms"),
+    "/channels": t("pageTitles.channels"),
+    "/settings/property": t("pageTitles.settingsProperty"),
+    "/settings/team": t("pageTitles.settingsTeam"),
+    "/settings/billing": t("pageTitles.settingsBilling"),
   };
   const title = pageTitles[routeSegment]
-    ?? (routeSegment.startsWith("/settings") ? "Settings" : "Dashboard");
+    ?? (routeSegment.startsWith("/settings") ? t("pageTitles.settings") : t("pageTitles.dashboard"));
 
   // Debounced live search across guests + reservations
   useEffect(() => {
@@ -126,8 +130,8 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   async function handleSignOut() {
     const supabase = createBrowserClient();
     await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+    nextRouter.push("/login");
+    nextRouter.refresh();
   }
 
   const hasResults = guestResults.length > 0 || reservationResults.length > 0;
@@ -138,7 +142,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         <button
           onClick={onMenuClick}
           className="p-2 hover:bg-muted rounded-lg transition-colors"
-          title="Toggle menu"
+          title={t("toggleMenu")}
         >
           <Menu className="w-5 h-5 text-muted-foreground" />
         </button>
@@ -155,7 +159,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => hasResults && setShowDropdown(true)}
-              placeholder="Search guests, reservations..."
+              placeholder={t("searchPlaceholder")}
               className="pl-10 pr-9 py-2.5 bg-background border border-border rounded-lg text-sm w-64 focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
             />
             {query.length > 0 && (
@@ -163,7 +167,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
                 type="button"
                 onClick={clearSearch}
                 className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
-                title="Clear search"
+                title={t("clearSearch")}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -173,14 +177,14 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
           {showDropdown && (
             <div className="absolute z-50 mt-1 w-80 rounded-lg border border-border bg-surface shadow-lg overflow-hidden right-0">
               {searching && (
-                <p className="px-4 py-3 text-xs text-muted-foreground">Searching…</p>
+                <p className="px-4 py-3 text-xs text-muted-foreground">{t("searching")}</p>
               )}
               {!searching && !hasResults && (
-                <p className="px-4 py-3 text-xs text-muted-foreground">No results</p>
+                <p className="px-4 py-3 text-xs text-muted-foreground">{t("noResults")}</p>
               )}
               {!searching && guestResults.length > 0 && (
                 <div className="py-1">
-                  <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Guests</p>
+                  <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("guestsLabel")}</p>
                   {guestResults.map((g) => (
                     <button
                       key={g.id}
@@ -196,7 +200,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
               )}
               {!searching && reservationResults.length > 0 && (
                 <div className="py-1 border-t border-border">
-                  <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Reservations</p>
+                  <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("reservationsLabel")}</p>
                   {reservationResults.map((r) => (
                     <button
                       key={r.id}
@@ -223,11 +227,11 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         {/* New Booking Button */}
         <button
           onClick={() => router.push(`/${org.slug}/calendar`)}
-          title="Go to Tape Calendar to create a new booking"
+          title={t("newBookingTooltip")}
           className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-semibold transition-colors"
         >
           <Plus className="w-4 h-4" />
-          New Booking
+          {t("newBooking")}
         </button>
 
         {/* User account menu */}
@@ -252,14 +256,14 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors cursor-pointer outline-none"
               >
                 <Settings className="w-4 h-4 text-muted-foreground" />
-                Settings
+                {t("settingsMenuItem")}
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 onSelect={handleSignOut}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors cursor-pointer outline-none"
               >
                 <LogOut className="w-4 h-4 text-muted-foreground" />
-                Sign Out
+                {t("signOut")}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>

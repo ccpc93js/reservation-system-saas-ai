@@ -1,5 +1,20 @@
 ## [Unreleased] - 2026-07-01
 
+feat: Phase 16 Stage 2a - translate shared layout (header, sidebar)
+
+- header.tsx + sidebar.tsx fully translated across all 10 locales
+  (page titles, search UI, account menu, nav labels, roles, sign-out)
+- Both switched to locale-aware Link/useRouter/usePathname from
+  src/i18n/navigation.ts for org-scoped paths (fixes the extra
+  redirect hop noted in Stage 1); /login stays on plain next/navigation
+  router since it's not yet migrated under [locale]
+- Verified: JSON validity all 10 files, clean typecheck, live lang/dir
+  switching per locale (ar -> rtl) confirmed via curl
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [5da6448] - 2026-07-01
+
 feat: Phase 16 Stage 1 - i18n scaffolding (next-intl, locale routing)
 
 - Add next-intl, src/i18n/{routing,navigation,request}.ts
@@ -13,15 +28,8 @@ feat: Phase 16 Stage 1 - i18n scaffolding (next-intl, locale routing)
 - Empty messages/{en,zh,hi,es,fr,ar,bn,pt,ru,ja}.json skeletons created
 - Fixed /login self-redirect loop and legacy-route misrouting bugs
   found during smoke testing
-- Design doc: docs/phases/PHASE_16_PLAN.md (resolved the (dashboard)
-  vs [slug] "duplicate" ambiguity flagged in Phase 15 — confirmed
-  legacy redirect shim, not real duplicate code)
-- Known pre-existing issue (not introduced here): guest-portal/[token]
-  page still destructures params synchronously, Next 15 wants it
-  awaited — flagged, not fixed (separate cleanup)
-- Internal <Link>/router.push() calls across the app still build
-  unprefixed URLs (extra redirect hop until Stage 2 swaps them for
-  the locale-aware navigation helpers)
+- Resolved the (dashboard) vs [slug] "duplicate" ambiguity flagged in
+  Phase 15 (confirmed legacy redirect shim, not real duplicate code)
 
 Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 

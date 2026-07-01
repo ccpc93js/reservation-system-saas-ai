@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -20,27 +19,28 @@ import {
   History,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
+import { useRouter as useNextRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 const mainNavRoutes = [
-  { path: "dashboard", label: "Dashboard Overview", icon: LayoutDashboard },
-  { path: "calendar", label: "Tape Calendar", icon: CalendarDays },
-  { path: "reservations", label: "Reservations", icon: BookOpen },
-  { path: "check-in-pending", label: "Pending Check-Ins", icon: ClipboardList },
-  { path: "checkin-history", label: "Guest Book", icon: History },
-  { path: "analytics", label: "Analytics", icon: BarChart3 },
-  { path: "channels", label: "Channel Manager", icon: Wifi },
-  { path: "guests", label: "Guest Directory", icon: Users },
-  { path: "rooms", label: "Room Inventory", icon: BedDouble },
-];
+  { path: "dashboard", labelKey: "dashboard", icon: LayoutDashboard },
+  { path: "calendar", labelKey: "calendar", icon: CalendarDays },
+  { path: "reservations", labelKey: "reservations", icon: BookOpen },
+  { path: "check-in-pending", labelKey: "checkInPending", icon: ClipboardList },
+  { path: "checkin-history", labelKey: "checkinHistory", icon: History },
+  { path: "analytics", labelKey: "analytics", icon: BarChart3 },
+  { path: "channels", labelKey: "channels", icon: Wifi },
+  { path: "guests", labelKey: "guests", icon: Users },
+  { path: "rooms", labelKey: "rooms", icon: BedDouble },
+] as const;
 
 const settingsNavRoutes = [
-  { path: "settings/property", label: "Property Settings", icon: Settings },
-  { path: "settings/team", label: "Team", icon: UsersRound },
-  { path: "settings/billing", label: "Billing & Plan", icon: CreditCard },
-];
+  { path: "settings/property", labelKey: "settingsProperty", icon: Settings },
+  { path: "settings/team", labelKey: "settingsTeam", icon: UsersRound },
+  { path: "settings/billing", labelKey: "settingsBilling", icon: CreditCard },
+] as const;
 
 interface SidebarProps {
   org: { id: string; name: string; slug: string; logo_url?: string | null; plan?: string };
@@ -50,22 +50,23 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-const roleLabel: Record<string, string> = {
-  owner: "Owner",
-  manager: "Manager",
-  admin: "Admin",
-  staff: "Staff",
-};
-
 export default function Sidebar({ org, user, userRole, isOpen = true, onClose }: SidebarProps) {
+  const t = useTranslations("sidebar");
   const pathname = usePathname();
-  const router = useRouter();
+  const nextRouter = useNextRouter(); // plain (non-locale-prefixed) router, for the not-yet-migrated /login route
   const supabase = createBrowserClient();
+
+  const roleLabel: Record<string, string> = {
+    owner: t("role.owner"),
+    manager: t("role.manager"),
+    admin: t("role.admin"),
+    staff: t("role.staff"),
+  };
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+    nextRouter.push("/login");
+    nextRouter.refresh();
   }
 
   const userInitials = user?.email?.slice(0, 2).toUpperCase() ?? "??";
@@ -111,14 +112,14 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
             </div>
             <p className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1 mt-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-              Live View
+              {t("liveView")}
             </p>
           </div>
         </div>
         <button
           onClick={onClose}
           className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
-          title="Collapse sidebar"
+          title={t("collapseSidebar")}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -143,7 +144,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
                 )}
               >
                 <item.icon className="w-5 h-5 shrink-0" />
-                <span>{item.label}</span>
+                <span>{t(`nav.${item.labelKey}`)}</span>
               </Link>
             );
           })}
@@ -152,7 +153,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
         {/* Settings Section */}
         <div className="border-t border-border/70 px-3 py-4">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest px-4 mb-3">
-            Settings
+            {t("settingsSection")}
           </p>
           {settingsNavRoutes.map((item) => {
             const href = `/${org.slug}/${item.path}`;
@@ -169,7 +170,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
                 )}
               >
                 <item.icon className="w-5 h-5 shrink-0" />
-                <span>{item.label}</span>
+                <span>{t(`nav.${item.labelKey}`)}</span>
               </Link>
             );
           })}
@@ -184,7 +185,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground truncate">
-              {user?.email?.split("@")[0] || "User"}
+              {user?.email?.split("@")[0] || t("defaultUserName")}
             </p>
             <p className="text-xs text-muted-foreground truncate capitalize">{roleLabel[userRole] ?? userRole}</p>
           </div>
@@ -194,7 +195,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted transition-colors"
         >
           <LogOut className="w-4 h-4" />
-          Logout
+          {t("logout")}
         </button>
       </div>
       </aside>

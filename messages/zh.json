@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "切换菜单",
+    "pageTitles": {
+      "dashboard": "仪表盘",
+      "calendar": "排房日历",
+      "reservations": "预订",
+      "checkInPending": "待办理入住",
+      "analytics": "数据分析",
+      "guests": "客人目录",
+      "rooms": "房间库存",
+      "channels": "渠道管理",
+      "settingsProperty": "物业设置",
+      "settingsTeam": "团队",
+      "settingsBilling": "账单与套餐",
+      "settings": "设置"
+    },
+    "searchPlaceholder": "搜索客人、预订...",
+    "clearSearch": "清除搜索",
+    "searching": "搜索中…",
+    "noResults": "无结果",
+    "guestsLabel": "客人",
+    "reservationsLabel": "预订",
+    "newBooking": "新建预订",
+    "newBookingTooltip": "前往排房日历创建新预订",
+    "settingsMenuItem": "设置",
+    "signOut": "退出登录"
+  },
+  "sidebar": {
+    "liveView": "实时视图",
+    "collapseSidebar": "收起侧边栏",
+    "logout": "退出登录",
+    "settingsSection": "设置",
+    "nav": {
+      "dashboard": "仪表盘概览",
+      "calendar": "排房日历",
+      "reservations": "预订",
+      "checkInPending": "待办理入住",
+      "checkinHistory": "客人登记簿",
+      "analytics": "数据分析",
+      "channels": "渠道管理",
+      "guests": "客人目录",
+      "rooms": "房间库存",
+      "settingsProperty": "物业设置",
+      "settingsTeam": "团队",
+      "settingsBilling": "账单与套餐"
+    },
+    "role": {
+      "owner": "所有者",
+      "manager": "经理",
+      "admin": "管理员",
+      "staff": "员工"
+    },
+    "defaultUserName": "用户"
+  }
 }

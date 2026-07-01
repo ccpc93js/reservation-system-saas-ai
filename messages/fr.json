@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "Basculer le menu",
+    "pageTitles": {
+      "dashboard": "Tableau de bord",
+      "calendar": "Calendrier des réservations",
+      "reservations": "Réservations",
+      "checkInPending": "Arrivées en attente",
+      "analytics": "Analytique",
+      "guests": "Répertoire des clients",
+      "rooms": "Inventaire des chambres",
+      "channels": "Gestionnaire de canaux",
+      "settingsProperty": "Paramètres de l'établissement",
+      "settingsTeam": "Équipe",
+      "settingsBilling": "Facturation et forfait",
+      "settings": "Paramètres"
+    },
+    "searchPlaceholder": "Rechercher des clients, réservations...",
+    "clearSearch": "Effacer la recherche",
+    "searching": "Recherche…",
+    "noResults": "Aucun résultat",
+    "guestsLabel": "Clients",
+    "reservationsLabel": "Réservations",
+    "newBooking": "Nouvelle réservation",
+    "newBookingTooltip": "Aller au calendrier pour créer une nouvelle réservation",
+    "settingsMenuItem": "Paramètres",
+    "signOut": "Se déconnecter"
+  },
+  "sidebar": {
+    "liveView": "En direct",
+    "collapseSidebar": "Réduire la barre latérale",
+    "logout": "Déconnexion",
+    "settingsSection": "Paramètres",
+    "nav": {
+      "dashboard": "Aperçu du tableau de bord",
+      "calendar": "Calendrier des réservations",
+      "reservations": "Réservations",
+      "checkInPending": "Arrivées en attente",
+      "checkinHistory": "Registre des clients",
+      "analytics": "Analytique",
+      "channels": "Gestionnaire de canaux",
+      "guests": "Répertoire des clients",
+      "rooms": "Inventaire des chambres",
+      "settingsProperty": "Paramètres de l'établissement",
+      "settingsTeam": "Équipe",
+      "settingsBilling": "Facturation et forfait"
+    },
+    "role": {
+      "owner": "Propriétaire",
+      "manager": "Gérant",
+      "admin": "Administrateur",
+      "staff": "Personnel"
+    },
+    "defaultUserName": "Utilisateur"
+  }
 }

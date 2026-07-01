@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "メニューを切り替え",
+    "pageTitles": {
+      "dashboard": "ダッシュボード",
+      "calendar": "予約カレンダー",
+      "reservations": "予約",
+      "checkInPending": "チェックイン待ち",
+      "analytics": "分析",
+      "guests": "ゲストディレクトリ",
+      "rooms": "客室一覧",
+      "channels": "チャネルマネージャー",
+      "settingsProperty": "施設設定",
+      "settingsTeam": "チーム",
+      "settingsBilling": "請求とプラン",
+      "settings": "設定"
+    },
+    "searchPlaceholder": "ゲスト、予約を検索...",
+    "clearSearch": "検索をクリア",
+    "searching": "検索中…",
+    "noResults": "結果がありません",
+    "guestsLabel": "ゲスト",
+    "reservationsLabel": "予約",
+    "newBooking": "新規予約",
+    "newBookingTooltip": "新規予約を作成するには予約カレンダーへ",
+    "settingsMenuItem": "設定",
+    "signOut": "サインアウト"
+  },
+  "sidebar": {
+    "liveView": "ライブビュー",
+    "collapseSidebar": "サイドバーを折りたたむ",
+    "logout": "ログアウト",
+    "settingsSection": "設定",
+    "nav": {
+      "dashboard": "ダッシュボード概要",
+      "calendar": "予約カレンダー",
+      "reservations": "予約",
+      "checkInPending": "チェックイン待ち",
+      "checkinHistory": "ゲスト台帳",
+      "analytics": "分析",
+      "channels": "チャネルマネージャー",
+      "guests": "ゲストディレクトリ",
+      "rooms": "客室一覧",
+      "settingsProperty": "施設設定",
+      "settingsTeam": "チーム",
+      "settingsBilling": "請求とプラン"
+    },
+    "role": {
+      "owner": "オーナー",
+      "manager": "マネージャー",
+      "admin": "管理者",
+      "staff": "スタッフ"
+    },
+    "defaultUserName": "ユーザー"
+  }
 }

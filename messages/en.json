@@ -1,2 +1,56 @@
 {
+  "header": {
+    "toggleMenu": "Toggle menu",
+    "pageTitles": {
+      "dashboard": "Dashboard",
+      "calendar": "Tape Calendar",
+      "reservations": "Reservations",
+      "checkInPending": "Pending Check-Ins",
+      "analytics": "Analytics",
+      "guests": "Guest Directory",
+      "rooms": "Room Inventory",
+      "channels": "Channel Manager",
+      "settingsProperty": "Property Settings",
+      "settingsTeam": "Team",
+      "settingsBilling": "Billing & Plan",
+      "settings": "Settings"
+    },
+    "searchPlaceholder": "Search guests, reservations...",
+    "clearSearch": "Clear search",
+    "searching": "Searching…",
+    "noResults": "No results",
+    "guestsLabel": "Guests",
+    "reservationsLabel": "Reservations",
+    "newBooking": "New Booking",
+    "newBookingTooltip": "Go to Tape Calendar to create a new booking",
+    "settingsMenuItem": "Settings",
+    "signOut": "Sign Out"
+  },
+  "sidebar": {
+    "liveView": "Live View",
+    "collapseSidebar": "Collapse sidebar",
+    "logout": "Logout",
+    "settingsSection": "Settings",
+    "nav": {
+      "dashboard": "Dashboard Overview",
+      "calendar": "Tape Calendar",
+      "reservations": "Reservations",
+      "checkInPending": "Pending Check-Ins",
+      "checkinHistory": "Guest Book",
+      "analytics": "Analytics",
+      "channels": "Channel Manager",
+      "guests": "Guest Directory",
+      "rooms": "Room Inventory",
+      "settingsProperty": "Property Settings",
+      "settingsTeam": "Team",
+      "settingsBilling": "Billing & Plan"
+    },
+    "role": {
+      "owner": "Owner",
+      "manager": "Manager",
+      "admin": "Admin",
+      "staff": "Staff"
+    },
+    "defaultUserName": "User"
+  }
 }
