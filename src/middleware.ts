@@ -1,9 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+const handleI18nRouting = createIntlMiddleware(routing);
 
+// Routes not yet moved under [locale] (Phase 16 is incremental — see docs/phases/PHASE_16_PLAN.md).
+// Single-segment names must match exactly (an org slug is always the *only* top-level segment too,
+// so a prefix match would risk colliding with a real org named e.g. "settings").
+const UNLOCALIZED_EXACT = [
+  "/login", "/dashboard", "/calendar", "/reservations", "/channels",
+  "/check-in-pending", "/guests", "/rooms", "/analytics",
+];
+const UNLOCALIZED_PREFIX = ["/demo", "/invite", "/onboarding", "/reset-password", "/signup", "/auth", "/settings"];
+
+// Matches the original (pre-locale) publicRoutes list, minus guest-portal (now locale-managed).
+const PUBLIC_PREFIXES = ["/login", "/register", "/scan", "/invite", "/auth", "/reset-password", "/demo", "/signup"];
+
+async function refreshSupabaseSession(request: NextRequest, response: NextResponse) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -16,9 +30,8 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           );
         },
       },
@@ -27,31 +40,58 @@ export async function middleware(request: NextRequest) {
 
   // Refresh session — do NOT remove this
   const { data: { user } } = await supabase.auth.getUser();
+  return user;
+}
 
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // API routes handle auth/authorization themselves and must return JSON, not redirects.
+  // API routes handle auth/authorization themselves, must return JSON, and are never locale-prefixed.
   if (pathname.startsWith("/api/")) {
-    return supabaseResponse;
+    const apiResponse = NextResponse.next({ request });
+    await refreshSupabaseSession(request, apiResponse);
+    return apiResponse;
   }
 
-  // Public routes — no auth required
-  const publicRoutes = ["/login", "/register", "/scan", "/guest-portal", "/invite", "/auth", "/reset-password", "/demo", "/signup"];
-  const isPublic =
-    pathname === "/" ||                                          // landing page
-    publicRoutes.some((r) => pathname.startsWith(r));
+  const isUnlocalized =
+    pathname === "/" ||
+    UNLOCALIZED_EXACT.includes(pathname) ||
+    UNLOCALIZED_PREFIX.some((p) => pathname === p || pathname.startsWith(p + "/"));
 
-  // Redirect unauthenticated users to login
+  if (isUnlocalized) {
+    const response = NextResponse.next({ request });
+    const user = await refreshSupabaseSession(request, response);
+
+    const isPublic =
+      pathname === "/" ||
+      PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
+    if (!user && !isPublic) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    if (user && pathname === "/login") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    return response;
+  }
+
+  // Locale-managed routes: [locale]/[slug]/* (org dashboard) and [locale]/guest-portal/*
+  const intlResponse = handleI18nRouting(request);
+  const user = await refreshSupabaseSession(request, intlResponse);
+
+  const segments = pathname.split("/").filter(Boolean);
+  const maybeLocale = segments[0];
+  const hasLocalePrefix = (routing.locales as readonly string[]).includes(maybeLocale);
+  const pathWithoutLocale = hasLocalePrefix ? "/" + segments.slice(1).join("/") : pathname;
+
+  const isPublic = pathWithoutLocale.startsWith("/guest-portal");
+
+  // The login page isn't locale-prefixed yet, so bounce straight there (no /{locale}/login route exists).
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Redirect authenticated users away from auth pages
-  if (user && (pathname === "/login" || pathname === "/register")) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  return supabaseResponse;
+  return intlResponse;
 }
 
 export const config = {

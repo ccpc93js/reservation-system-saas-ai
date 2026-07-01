@@ -15,8 +15,8 @@
 - Staff and guests can pick independent languages (a guest checking in in Spanish doesn't change what language staff see).
 - Fallback locale: English, for any missing translation key.
 
-## Open Risk
-- `src/app/(dashboard)/reservations/page.tsx` appears to be a legacy duplicate of `src/app/[slug]/reservations/page.tsx` (found during Phase 15). Resolve/remove this ambiguity *before* wrapping routes in `[locale]`, or we'll end up i18n-wrapping dead code.
+## Resolved Risk (confirmed at Phase 16 start, 2026-07-01)
+- `src/app/(dashboard)/*` is a legacy route group whose `layout.tsx` unconditionally redirects to `/{slug}/...` before any child `page.tsx` renders (comment: "Legacy route group — redirect all old /(dashboard)/* routes to /{slug}/*"). Its page.tsx files are dead code by design, not a real duplicate. **Decision: leave `(dashboard)/*` outside `[locale]` entirely** — it doesn't need translation since it never renders content, only needs its redirect target updated to go through the locale-aware default (next-intl's middleware will add the default locale prefix on the redirect target automatically).
 - Translations are AI-generated, unreviewed. Known and accepted risk — flagged here for future reference, not hidden.
 
 ## Decision Log

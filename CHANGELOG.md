@@ -1,3 +1,36 @@
+## [Unreleased] - 2026-07-01
+
+feat: Phase 16 Stage 1 - i18n scaffolding (next-intl, locale routing)
+
+- Add next-intl, src/i18n/{routing,navigation,request}.ts
+- Move src/app/[slug] -> src/app/[locale]/[slug], guest-portal likewise
+- Middleware composes locale routing with existing Supabase auth
+  refresh; legacy (dashboard) group and not-yet-migrated static routes
+  (login, demo, signup, invite, onboarding, reset-password, auth) stay
+  unprefixed until Stage 2 migrates them
+- Root layout wraps children in NextIntlClientProvider, sets lang/dir
+  (RTL-ready for Arabic)
+- Empty messages/{en,zh,hi,es,fr,ar,bn,pt,ru,ja}.json skeletons created
+- Fixed /login self-redirect loop and legacy-route misrouting bugs
+  found during smoke testing
+- Design doc: docs/phases/PHASE_16_PLAN.md (resolved the (dashboard)
+  vs [slug] "duplicate" ambiguity flagged in Phase 15 — confirmed
+  legacy redirect shim, not real duplicate code)
+- Known pre-existing issue (not introduced here): guest-portal/[token]
+  page still destructures params synchronously, Next 15 wants it
+  awaited — flagged, not fixed (separate cleanup)
+- Internal <Link>/router.push() calls across the app still build
+  unprefixed URLs (extra redirect hop until Stage 2 swaps them for
+  the locale-aware navigation helpers)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [979065b] - 2026-07-01
+
+chore: clean up duplicate CHANGELOG entry
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [20b4b9d] - 2026-07-01
 
 feat: Phase 15 - Navbar functionality (search, new booking, account menu)
