@@ -1,5 +1,40 @@
 ## [Unreleased] - 2026-07-02
 
+feat: Phase 16 - add Serbian locale
+
+- Added "sr" to src/i18n/routing.ts locales list (11 languages now)
+- messages/sr.json: full 349-key translation (Latin script), matching
+  the app's existing Serbia-specific conventions (RSD currency,
+  Europe/Belgrade timezone, Serbia compliance fields from Phase 3)
+- Serbian plural rules (one/few/other) applied to all ICU plural
+  strings (nights, guest counts, check-in counts)
+- Verified: 0 missing/extra keys vs en.json, /sr/login renders
+  Serbian correctly, <html lang="sr" dir="ltr">, hreflang="sr"
+  alternate present on public routes, no runtime errors
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [fd741e7] - 2026-07-02
+
+feat: Phase 16 Stage 2f - translate pending-check-ins-client
+
+- pending-check-ins-client.tsx (766 lines, last calendar-adjacent
+  component): list view, bulk approve/reject bar, verification modal
+  (guest info, ID photos, guest portal link + QR toggle), single and
+  bulk rejection-reason dropdowns with translated labels while keeping
+  underlying values in English (backend-compatible, unchanged data
+  contract), all toasts
+- 53 new message keys across all 10 languages (new pendingCheckIns
+  namespace, 349 keys total in the whole message tree) - verified
+  identical structure across all 10 locale files + every t() call
+  cross-checked against en.json via script
+- This closes out all calendar-adjacent components; next up is
+  reservations/guests/rooms pages per the plan's sequencing
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-02
+
 feat: Phase 16 Stage 2f - translate pending-check-ins-client
 
 - pending-check-ins-client.tsx (766 lines, last calendar-adjacent
