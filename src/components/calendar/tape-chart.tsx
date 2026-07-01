@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ElementType } from "react";
+import { useTranslations } from "next-intl";
 import { format, addDays, startOfDay, differenceInDays, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
@@ -92,18 +93,21 @@ const STATUS_COLORS: Record<
   },
 };
 
-const ROOM_TYPE_STYLES: Record<string, { chip: string; label: string }> = {
+const ROOM_TYPE_STYLES: Record<string, { chip: string }> = {
   dorm: {
     chip: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    label: "Dorm",
   },
   private: {
     chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    label: "Private",
   },
 };
 
 export default function TapeChart({ beds, reservations, onEmptyCell, onExistingBlock }: TapeChartProps) {
+  const t = useTranslations("calendar.tapeChart");
+  const roomTypeLabels: Record<string, string> = {
+    dorm: t("roomTypeDorm"),
+    private: t("roomTypePrivate"),
+  };
   const today = useMemo(() => startOfDay(new Date()), []);
   const todayStr = useMemo(() => format(today, "yyyy-MM-dd"), [today]);
   const [animateIn, setAnimateIn] = useState(false);
@@ -122,7 +126,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
         const roomId = bed.rooms?.id ?? "unknown";
         if (!acc[roomId]) {
           acc[roomId] = {
-            roomName: bed.rooms?.name ?? "Unknown",
+            roomName: bed.rooms?.name ?? t("unknownRoom"),
             type: bed.rooms?.room_types?.type ?? "dorm",
             beds: [],
           };
@@ -153,8 +157,8 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
     return (
       <div className="rounded-xl border border-border flex items-center justify-center bg-surface shadow-sm" style={{ height: 320 }}>
         <div className="text-center">
-          <p className="text-sm font-medium text-foreground">No beds configured</p>
-          <p className="text-xs mt-1 text-muted-foreground">Add rooms and beds to get started</p>
+          <p className="text-sm font-medium text-foreground">{t("noBeds")}</p>
+          <p className="text-xs mt-1 text-muted-foreground">{t("noBedsHint")}</p>
         </div>
       </div>
     );
@@ -163,10 +167,10 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
   return (
     <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden flex flex-col relative transition-shadow duration-300 hover:shadow-md">
       <div className="px-4 py-2.5 border-b border-border bg-muted/30 flex items-center justify-between gap-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Availability Timeline</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("availabilityTimeline")}</p>
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-200 border border-slate-300" aria-hidden="true" />
-          <span>Past dates locked</span>
+          <span>{t("pastDatesLocked")}</span>
         </div>
       </div>
       {/* Scrollable Container - Content and Header inside */}
@@ -178,7 +182,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
               className="shrink-0 bg-muted border-r border-border flex items-center px-4 sticky left-0 z-50"
               style={{ width: LABEL_WIDTH, height: 48 }}
             >
-              <span className="text-[11px] font-bold uppercase tracking-wider text-foreground">Property / Unit</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-foreground">{t("propertyUnit")}</span>
             </div>
             <div className="flex bg-muted/40 backdrop-blur-sm">
               {days.map((day) => {
@@ -221,7 +225,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                     (ROOM_TYPE_STYLES[type]?.chip ?? ROOM_TYPE_STYLES.dorm.chip)
                   )}
                 >
-                  {ROOM_TYPE_STYLES[type]?.label ?? "Dorm"}
+                  {roomTypeLabels[type] ?? roomTypeLabels.dorm}
                 </span>
               </div>
             </div>
@@ -277,7 +281,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                                 : "cursor-pointer hover:bg-indigo-50/40"
                           )}
                           style={{ width: DAY_WIDTH }}
-                          title={isPastDate ? "Past dates cannot be booked" : undefined}
+                          title={isPastDate ? t("pastDatesTooltip") : undefined}
                           onClick={() => !hasReservation && !isPastDate && onEmptyCell?.(bed.id, dateStr)}
                         />
                       );
@@ -328,7 +332,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                               width: Math.max(durationDays * DAY_WIDTH - 4, 30),
                               ...(isOTA && channelColor ? { borderLeftColor: channelColor, borderLeftWidth: 3 } : {}),
                             }}
-                            title={`${fullName} · $${totalAmount.toFixed(2)} total · ${minCheckIn} to ${maxCheckOut}`}
+                            title={t("blockTooltip", { name: fullName, amount: totalAmount.toFixed(2), checkIn: minCheckIn, checkOut: maxCheckOut })}
                             onClick={() => { if (res?.id) onExistingBlock?.(res.id); }}
                             role="button"
                             tabIndex={0}
@@ -346,7 +350,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                               <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>
                             </div>
                             <span className={cn("truncate text-[8px] font-medium", colors.text)}>
-                              {isOTA ? res?.channel_source?.replace("_", ".") : `$${totalAmount.toFixed(2)} total`}
+                              {isOTA ? res?.channel_source?.replace("_", ".") : t("totalSuffix", { amount: totalAmount.toFixed(2) })}
                             </span>
                           </div>
                         );

@@ -1,5 +1,27 @@
 ## [Unreleased] - 2026-07-02
 
+feat: Phase 16 Stage 2d - translate tape-chart + new-reservation-drawer
+
+- tape-chart.tsx: empty state, availability legend, room type labels,
+  block tooltip and total-price suffix (ICU-interpolated)
+- new-reservation-drawer.tsx: full form (guest search/new-guest tabs,
+  check-in/out, pricing, notes), conflict warning, toasts, ICU plural
+  for night counts (proper plural rules per language: ru 4-way,
+  ar 6-way, zh/ja invariant, etc.)
+- All new keys translated across all 10 languages (calendar.tapeChart,
+  calendar.newReservation namespaces, 189 keys total, verified
+  identical structure across all 10 locale files + every t() call
+  cross-checked against en.json via script)
+- Known exclusion: react-hook-form/yup validation error messages
+  (src/lib/validations/reservation.ts) stay English — translating
+  those needs yup's locale-message API, separate architectural change
+- Still not included (own future increment): edit-reservation-drawer
+  (1153 lines) and pending-check-ins-client (766 lines)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [8c1925a] - 2026-07-02
+
 feat: Phase 16 Stage 2c - translate dashboard + calendar
 
 - dashboard/page.tsx (server component, getTranslations): setup

@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, Search, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { createReservationSchema, type CreateReservationInput } from "@/lib/validations/reservation";
 
@@ -26,6 +27,7 @@ export default function NewReservationDrawer({
   orgId,
   onReservationCreated,
 }: NewReservationDrawerProps) {
+  const t = useTranslations("calendar.newReservation");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [guestMode, setGuestMode] = useState<"select" | "new">("new");
   const [conflict, setConflict] = useState<{ reservation_number: string; guest: string; check_in: string; check_out: string } | null>(null);
@@ -194,7 +196,7 @@ export default function NewReservationDrawer({
 
   const onSubmit = async (data: CreateReservationInput) => {
     if (!bedId) {
-      toast.error("Bed ID is missing");
+      toast.error(t("toastBedIdMissing"));
       return;
     }
 
@@ -217,18 +219,18 @@ export default function NewReservationDrawer({
 
       if (!response.ok) {
         console.error("API Error:", result);
-        toast.error(result.error || "Failed to create reservation");
+        toast.error(result.error || t("toastCreateFailed"));
         return;
       }
 
-      toast.success("Reservation created!");
+      toast.success(t("toastCreateSuccess"));
       onOpenChange(false);
       reset();
       setConflict(null);
       onReservationCreated?.();
     } catch (error) {
       console.error("Fetch error:", error);
-      toast.error("Error creating reservation");
+      toast.error(t("toastCreateError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -244,8 +246,8 @@ export default function NewReservationDrawer({
         >
           <div className="flex items-center justify-between p-6 border-b border-border bg-surface sticky top-0 z-10">
             <div>
-              <Dialog.Title className="text-lg font-bold text-foreground">New Reservation</Dialog.Title>
-              <p className="text-xs text-muted-foreground mt-0.5">Create booking for selected bed</p>
+              <Dialog.Title className="text-lg font-bold text-foreground">{t("title")}</Dialog.Title>
+              <p className="text-xs text-muted-foreground mt-0.5">{t("subtitle")}</p>
             </div>
             <Dialog.Close className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
               <X className="h-5 w-5" />
@@ -258,15 +260,15 @@ export default function NewReservationDrawer({
             <input {...register("org_id")} type="hidden" />
 
             <div className="rounded-xl border border-border bg-muted/30 p-3 transition-colors duration-200 hover:bg-muted/40">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Booking Context</p>
-              <p className="text-sm font-semibold text-foreground mt-1">Create booking for selected unit</p>
-              {checkIn && <p className="text-xs text-muted-foreground mt-1">Start date: {checkIn}</p>}
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("bookingContext")}</p>
+              <p className="text-sm font-semibold text-foreground mt-1">{t("bookingContextDesc")}</p>
+              {checkIn && <p className="text-xs text-muted-foreground mt-1">{t("startDate", { date: checkIn })}</p>}
             </div>
 
             {/* Check-in date (readonly) */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                Check-in
+                {t("checkIn")}
               </label>
               <input
                 {...register("check_in")}
@@ -282,7 +284,7 @@ export default function NewReservationDrawer({
             {/* Check-out date */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                Check-out {errors.check_out && <span className="text-red-500">*</span>}
+                {t("checkOut")} {errors.check_out && <span className="text-red-500">*</span>}
               </label>
               <input
                 {...register("check_out")}
@@ -297,13 +299,13 @@ export default function NewReservationDrawer({
                 }`}
               />
               {checkingAvailability && (
-                <p className="text-xs mt-1 text-muted-foreground">Checking availability...</p>
+                <p className="text-xs mt-1 text-muted-foreground">{t("checkingAvailability")}</p>
               )}
               {conflict && !checkingAvailability && (
                 <div className="mt-1.5 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
-                  <p className="text-xs text-red-700 font-medium">Bed already booked</p>
+                  <p className="text-xs text-red-700 font-medium">{t("bedAlreadyBooked")}</p>
                   <p className="text-xs text-red-600 mt-0.5">
-                    {conflict.guest} · {conflict.reservation_number} · {conflict.check_in} → {conflict.check_out}
+                    {t("conflictDetail", { guest: conflict.guest, resNumber: conflict.reservation_number, checkIn: conflict.check_in, checkOut: conflict.check_out })}
                   </p>
                 </div>
               )}
@@ -312,7 +314,7 @@ export default function NewReservationDrawer({
               )}
               {!errors.check_out && !conflict && checkIn && checkOut && (
                 <p className="text-xs mt-1 text-muted-foreground">
-                  {nights} night{nights !== 1 ? "s" : ""}
+                  {t("nights", { count: nights })}
                 </p>
               )}
             </div>
@@ -320,7 +322,7 @@ export default function NewReservationDrawer({
             {/* Guest selection */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                Guest
+                {t("guest")}
               </label>
               <div className="flex gap-2 mb-3">
                 <button
@@ -332,7 +334,7 @@ export default function NewReservationDrawer({
                       : "bg-muted text-foreground/85 hover:bg-muted/80"
                   }`}
                 >
-                  New Guest
+                  {t("newGuestTab")}
                 </button>
                 <button
                   type="button"
@@ -343,7 +345,7 @@ export default function NewReservationDrawer({
                       : "bg-muted text-foreground/85 hover:bg-muted/80"
                   }`}
                 >
-                  Existing Guest
+                  {t("existingGuestTab")}
                 </button>
               </div>
 
@@ -377,7 +379,7 @@ export default function NewReservationDrawer({
                           value={guestSearch}
                           onChange={(e) => setGuestSearch(e.target.value)}
                           onFocus={() => guestResults.length > 0 && setShowDropdown(true)}
-                          placeholder="Search by name, email or ID number..."
+                          placeholder={t("searchGuestPlaceholder")}
                           className="w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
                         />
                         {searchingGuests && (
@@ -404,7 +406,7 @@ export default function NewReservationDrawer({
                         </div>
                       )}
                       {showDropdown && !searchingGuests && guestResults.length === 0 && guestSearch.trim().length >= 2 && (
-                        <p className="text-xs text-muted-foreground mt-1.5 px-1">No guests found</p>
+                        <p className="text-xs text-muted-foreground mt-1.5 px-1">{t("noGuestsFound")}</p>
                       )}
                     </>
                   )}
@@ -415,7 +417,7 @@ export default function NewReservationDrawer({
                 <>
                   <input
                     {...register("first_name")}
-                    placeholder="First name"
+                    placeholder={t("firstNamePlaceholder")}
                     className={`w-full rounded-lg border px-3 py-2 text-sm mb-2 bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
                       errors.first_name ? "border-red-500" : "border-border"
                     }`}
@@ -426,7 +428,7 @@ export default function NewReservationDrawer({
 
                   <input
                     {...register("last_name")}
-                    placeholder="Last name"
+                    placeholder={t("lastNamePlaceholder")}
                     className={`w-full rounded-lg border px-3 py-2 text-sm mb-2 bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
                       errors.last_name ? "border-red-500" : "border-border"
                     }`}
@@ -437,7 +439,7 @@ export default function NewReservationDrawer({
 
                   <input
                     {...register("email")}
-                    placeholder="Email address"
+                    placeholder={t("emailPlaceholder")}
                     type="email"
                     className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
                       errors.email ? "border-red-500" : "border-border"
@@ -453,7 +455,7 @@ export default function NewReservationDrawer({
             {/* Price per night */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                Price per night (€) {errors.price_per_night && <span className="text-red-500">*</span>}
+                {t("pricePerNight")} {errors.price_per_night && <span className="text-red-500">*</span>}
               </label>
               <input
                 {...register("price_per_night", { valueAsNumber: true })}
@@ -471,9 +473,9 @@ export default function NewReservationDrawer({
             {/* Price summary */}
             {nights > 0 && (
               <div className="p-3 rounded-lg border border-primary/25 bg-primary/5 transition-colors duration-200 hover:bg-primary/10">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1.5">Estimated Total</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1.5">{t("estimatedTotal")}</p>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>{nights} night{nights !== 1 ? "s" : ""}</span>
+                  <span>{t("nights", { count: nights })}</span>
                   <span className="font-semibold text-foreground">€{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
@@ -482,11 +484,11 @@ export default function NewReservationDrawer({
             {/* Notes */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
-                Notes (optional)
+                {t("notesLabel")}
               </label>
               <textarea
                 {...register("notes")}
-                placeholder="Any special requests..."
+                placeholder={t("notesPlaceholder")}
                 className="w-full rounded-lg border border-border px-3 py-2 text-sm h-20 resize-none bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
               />
             </div>
@@ -498,14 +500,14 @@ export default function NewReservationDrawer({
                 onClick={() => onOpenChange(false)}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-background text-foreground border border-border hover:bg-muted hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
               >
-                {isSubmitting ? "Saving..." : "Save Reservation"}
+                {isSubmitting ? t("saving") : t("saveReservation")}
               </button>
             </div>
           </form>
