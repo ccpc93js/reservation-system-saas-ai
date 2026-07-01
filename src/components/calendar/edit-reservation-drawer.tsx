@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, LogOut, AlertTriangle, User } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
 import { createBrowserClient } from "@/lib/supabase/client";
 import CheckoutDialog from "@/components/reservations/checkout-dialog";
@@ -46,6 +47,15 @@ export default function EditReservationDrawer({
   onReservationUpdated,
   checkoutWarnings,
 }: EditReservationDrawerProps) {
+  const t = useTranslations("calendar.editReservation");
+  const statusLabels: Record<string, string> = {
+    pending: t("statusOptions.pending"),
+    confirmed: t("statusOptions.confirmed"),
+    checked_in: t("statusOptions.checked_in"),
+    checked_out: t("statusOptions.checked_out"),
+    cancelled: t("statusOptions.cancelled"),
+    no_show: t("statusOptions.no_show"),
+  };
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingDates, setIsUpdatingDates] = useState(false);
@@ -181,7 +191,7 @@ export default function EditReservationDrawer({
           check_out: (data as any).check_out || "",
         });
       } catch (error) {
-        toast.error("Failed to load reservation");
+        toast.error(t("toasts.loadFailed"));
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -193,12 +203,12 @@ export default function EditReservationDrawer({
 
   const handleUpdateDates = async () => {
     if (!newCheckIn || !newCheckOut) {
-      toast.error("Both check-in and check-out dates are required");
+      toast.error(t("toasts.bothDatesRequired"));
       return;
     }
 
     if (new Date(newCheckOut) <= new Date(newCheckIn)) {
-      toast.error("Check-out date must be after check-in date");
+      toast.error(t("toasts.checkOutAfterCheckIn"));
       return;
     }
 
@@ -215,15 +225,15 @@ export default function EditReservationDrawer({
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.error || "Failed to update dates");
+        toast.error(error.error || t("toasts.datesUpdateFailed"));
         return;
       }
 
-      toast.success("Reservation dates updated!");
+      toast.success(t("toasts.datesUpdated"));
       setEditingDates(false);
       onReservationUpdated?.();
     } catch (error) {
-      toast.error("Error updating dates");
+      toast.error(t("toasts.datesUpdateError"));
       console.error(error);
     } finally {
       setIsUpdatingDates(false);
@@ -236,17 +246,17 @@ export default function EditReservationDrawer({
     try {
       const res = await fetch(`/api/reservations/${reservationId}/registry`, { method: "POST" });
       const json = await res.json();
-      if (res.status === 409) { setInBook(true); toast.success("Already registered in Guest Book"); return; }
-      if (!res.ok) { toast.error(json.error || "Failed to add to guest book"); return; }
+      if (res.status === 409) { setInBook(true); toast.success(t("toasts.alreadyInBook")); return; }
+      if (!res.ok) { toast.error(json.error || t("toasts.addToBookFailed")); return; }
       setInBook(true);
-      toast.success("Guest added to Guest Book");
-    } catch { toast.error("Error adding to guest book"); }
+      toast.success(t("toasts.addedToBook"));
+    } catch { toast.error(t("toasts.addToBookError")); }
     finally { setAddingToBook(false); }
   };
 
   const onSubmit = async (data: UpdateReservationInput) => {
     if (!reservationId) {
-      toast.error("Reservation ID is missing");
+      toast.error(t("toasts.reservationIdMissing"));
       return;
     }
 
@@ -258,9 +268,9 @@ export default function EditReservationDrawer({
 
     if (data.status === "checked_in") {
       const missing: string[] = [];
-      if (!res?.guest_id) missing.push("No guest assigned");
+      if (!res?.guest_id) missing.push(t("toasts.noGuestAssigned"));
       if (totalAmt > 0 && paidAmt < totalAmt)
-        missing.push(`Balance due ${balanceDue.toFixed(2)} — guest must pay before check-in`);
+        missing.push(t("toasts.balanceDueCheckIn", { amount: balanceDue.toFixed(2) }));
       if (missing.length > 0) {
         toast.error(missing.join(" · "), { duration: 6000 });
         return;
@@ -269,11 +279,11 @@ export default function EditReservationDrawer({
 
     if (data.status === "checked_out") {
       const missing: string[] = [];
-      if (!res?.guest_id) missing.push("No guest assigned");
+      if (!res?.guest_id) missing.push(t("toasts.noGuestAssigned"));
       if (balanceDue > 0)
-        missing.push(`Balance due ${balanceDue.toFixed(2)} — collect full payment before checkout`);
-      if (!paymentConfirmed) missing.push("Payment not confirmed — mark as confirmed in folio");
-      if (!actualCheckIn && !res?.actual_check_in_at) missing.push("Actual check-in time not recorded");
+        missing.push(t("toasts.balanceDueCheckOut", { amount: balanceDue.toFixed(2) }));
+      if (!paymentConfirmed) missing.push(t("toasts.paymentNotConfirmed"));
+      if (!actualCheckIn && !res?.actual_check_in_at) missing.push(t("toasts.actualCheckInMissing"));
       if (missing.length > 0) {
         toast.error(missing.join(" · "), { duration: 6000 });
         return;
@@ -291,15 +301,15 @@ export default function EditReservationDrawer({
       const result = await parseApiResponse(response);
 
       if (!response.ok) {
-        toast.error(result.error || "Failed to update reservation");
+        toast.error(result.error || t("toasts.updateFailed"));
         return;
       }
 
-      toast.success("Reservation updated!");
+      toast.success(t("toasts.updated"));
       onOpenChange(false);
       onReservationUpdated?.();
     } catch (error) {
-      toast.error("Error updating reservation");
+      toast.error(t("toasts.updateError"));
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -307,7 +317,7 @@ export default function EditReservationDrawer({
   };
 
   const handleDelete = async () => {
-    if (!reservationId || !confirm("Are you sure you want to delete this reservation?")) {
+    if (!reservationId || !confirm(t("toasts.confirmDelete"))) {
       return;
     }
 
@@ -320,15 +330,15 @@ export default function EditReservationDrawer({
       const result = await parseApiResponse(response);
 
       if (!response.ok) {
-        toast.error(result.error || "Failed to delete reservation");
+        toast.error(result.error || t("toasts.deleteFailed"));
         return;
       }
 
-      toast.success("Reservation deleted!");
+      toast.success(t("toasts.deleted"));
       onOpenChange(false);
       onReservationUpdated?.();
     } catch (error) {
-      toast.error("Error deleting reservation");
+      toast.error(t("toasts.deleteError"));
       console.error(error);
     } finally {
       setIsDeleting(false);
@@ -366,15 +376,15 @@ export default function EditReservationDrawer({
       setChangingGuest(false);
       setGuestSearch("");
       setGuestResults([]);
-      toast.success(`Guest changed to ${guest.first_name} ${guest.last_name}`);
+      toast.success(t("toasts.guestChanged", { name: `${guest.first_name} ${guest.last_name}` }));
       onReservationUpdated?.();
     } catch {
-      toast.error("Failed to change guest");
+      toast.error(t("toasts.guestChangeFailed"));
     }
   };
 
   const handleExtend = async () => {
-    if (!extendDate || !extendRate) { toast.error("Enter new check-out date and rate"); return; }
+    if (!extendDate || !extendRate) { toast.error(t("toasts.extendMissingFields")); return; }
     setIsExtending(true);
     try {
       const res = await fetch(`/api/reservations/${reservationId}/extend`, {
@@ -383,8 +393,8 @@ export default function EditReservationDrawer({
         body: JSON.stringify({ new_check_out: extendDate, price_per_night: Number(extendRate) }),
       });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error || "Failed to extend"); return; }
-      toast.success(`Extended! New total: ${paymentCurrency} ${data.new_total.toFixed(2)}`);
+      if (!res.ok) { toast.error(data.error || t("toasts.extendFailed")); return; }
+      toast.success(t("toasts.extended", { currency: paymentCurrency, total: data.new_total.toFixed(2) }));
       setShowExtend(false);
       setExtendDate("");
       setExtendRate("");
@@ -397,7 +407,7 @@ export default function EditReservationDrawer({
         .single();
       if (updated) { setReservation(updated); setSegmentRates({}); }
       onReservationUpdated?.();
-    } catch { toast.error("Error extending reservation"); }
+    } catch { toast.error(t("toasts.extendError")); }
     finally { setIsExtending(false); }
   };
 
@@ -418,7 +428,7 @@ export default function EditReservationDrawer({
         body: JSON.stringify({ item_ids: itemIds, price_per_night: rate }),
       });
       const json = await res.json();
-      if (!res.ok) { toast.error(json.error || "Failed to update rate"); return; }
+      if (!res.ok) { toast.error(json.error || t("toasts.rateUpdateFailed")); return; }
 
       // Update local reservation state
       setReservation((prev: any) => {
@@ -431,9 +441,9 @@ export default function EditReservationDrawer({
         );
         return { ...prev, reservation_items: updatedItems, total_amount: json.new_total };
       });
-      toast.success("Rate updated");
+      toast.success(t("toasts.rateUpdated"));
       onReservationUpdated?.();
-    } catch { toast.error("Error updating rate"); }
+    } catch { toast.error(t("toasts.rateUpdateError")); }
     finally { setSavingSegment(null); }
   };
 
@@ -456,14 +466,14 @@ export default function EditReservationDrawer({
       });
       if (!res.ok) {
         const e = await res.json();
-        toast.error(e.error || "Failed to save payment");
+        toast.error(e.error || t("toasts.paymentSaveFailed"));
         return;
       }
-      toast.success("Payment info saved");
+      toast.success(t("toasts.paymentSaved"));
       await refreshInBook();
       onReservationUpdated?.();
     } catch {
-      toast.error("Error saving payment");
+      toast.error(t("toasts.paymentSaveError"));
     } finally {
       setIsSavingPayment(false);
     }
@@ -478,7 +488,7 @@ export default function EditReservationDrawer({
             aria-describedby={undefined}
             className="fixed right-0 top-0 z-[10000] w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-6"
           >
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{t("loading")}</p>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
@@ -500,7 +510,7 @@ export default function EditReservationDrawer({
               <Dialog.Title className="text-lg font-bold text-foreground">
               {reservation.guests?.first_name} {reservation.guests?.last_name}
               </Dialog.Title>
-              <p className="text-xs text-muted-foreground mt-0.5 font-mono">Ref: {reservation.reservation_number}</p>
+              <p className="text-xs text-muted-foreground mt-0.5 font-mono">{t("ref", { number: reservation.reservation_number })}</p>
             </div>
             <Dialog.Close className="rounded p-1 hover:bg-muted transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
@@ -511,7 +521,7 @@ export default function EditReservationDrawer({
           {checkoutWarnings && checkoutWarnings.length > 0 && (
             <div className="mx-6 mt-4 rounded-xl border border-amber-300 bg-amber-50 p-3">
               <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-1.5 flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5" /> Complete before checking out
+                <AlertTriangle className="w-3.5 h-3.5" /> {t("checkoutWarningsTitle")}
               </p>
               <ul className="space-y-0.5">
                 {checkoutWarnings.map((w, i) => (
@@ -521,7 +531,7 @@ export default function EditReservationDrawer({
                   </li>
                 ))}
               </ul>
-              <p className="text-[10px] text-amber-600 mt-2">Fix these, then set status to Checked Out and save.</p>
+              <p className="text-[10px] text-amber-600 mt-2">{t("checkoutWarningsHint")}</p>
             </div>
           )}
 
@@ -529,26 +539,26 @@ export default function EditReservationDrawer({
             {/* Reservation Details */}
             <div className="rounded-xl border border-border bg-muted/30 p-3 transition-colors duration-200 hover:bg-muted/40">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
-                Reservation #{reservation.reservation_number}
+                {t("reservationNumber", { number: reservation.reservation_number })}
               </p>
               <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                 <span>
-                  Check-in: {new Date(reservation.check_in).toLocaleDateString()}
+                  {t("checkInLabel", { date: new Date(reservation.check_in).toLocaleDateString() })}
                 </span>
                 <span>
-                  Check-out: {new Date(reservation.check_out).toLocaleDateString()}
+                  {t("checkOutLabel", { date: new Date(reservation.check_out).toLocaleDateString() })}
                 </span>
               </div>
               {nights > 0 && (
                 <div className="mt-2 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">{nights} night{nights !== 1 ? "s" : ""}</span>
+                  <span className="text-muted-foreground">{t("nights", { count: nights })}</span>
                   <span className="font-semibold text-foreground">€{estimatedTotal.toFixed(2)}</span>
                 </div>
               )}
               <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide">
-                <span className="text-muted-foreground">Status: </span>
+                <span className="text-muted-foreground">{t("statusLabel")}</span>
                 <span className={STATUS_TONE[status] ?? "text-slate-700"}>
-                  {status.replace("_", " ")}
+                  {statusLabels[status] ?? status}
                 </span>
               </p>
             </div>
@@ -560,13 +570,13 @@ export default function EditReservationDrawer({
                 onClick={() => setEditingDates(true)}
                 className="w-full px-3 py-2 text-sm rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
               >
-                Edit Dates
+                {t("editDates")}
               </button>
             ) : (
               <div className="space-y-3 p-3 rounded-lg border border-indigo-200 bg-indigo-50">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
-                    Check-in
+                    {t("checkIn")}
                   </label>
                   <input
                     type="date"
@@ -577,7 +587,7 @@ export default function EditReservationDrawer({
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
-                    Check-out
+                    {t("checkOut")}
                   </label>
                   <input
                     type="date"
@@ -592,7 +602,7 @@ export default function EditReservationDrawer({
                     onClick={() => setEditingDates(false)}
                     className="flex-1 px-3 py-2 text-sm rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-100"
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                   <button
                     type="button"
@@ -600,7 +610,7 @@ export default function EditReservationDrawer({
                     disabled={isUpdatingDates}
                     className="flex-1 px-3 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
                   >
-                    {isUpdatingDates ? "Updating..." : "Update"}
+                    {isUpdatingDates ? t("updating") : t("update")}
                   </button>
                 </div>
               </div>
@@ -609,7 +619,7 @@ export default function EditReservationDrawer({
             {/* Status dropdown */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-muted-foreground">
-                Status
+                {t("status")}
               </label>
               <select
                 {...register("status")}
@@ -617,7 +627,7 @@ export default function EditReservationDrawer({
               >
                 {STATUS_OPTIONS.map((s) => (
                   <option key={s} value={s}>
-                    {s.charAt(0).toUpperCase() + s.slice(1).replace("_", " ")}
+                    {statusLabels[s]}
                   </option>
                 ))}
               </select>
@@ -626,11 +636,11 @@ export default function EditReservationDrawer({
             {/* Notes */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-muted-foreground">
-                Notes
+                {t("notes")}
               </label>
               <textarea
                 {...register("notes")}
-                placeholder="Any notes..."
+                placeholder={t("notesPlaceholder")}
                 className="w-full rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm h-20 resize-none focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all"
               />
             </div>
@@ -638,7 +648,7 @@ export default function EditReservationDrawer({
             {/* Guest section */}
             <div className="space-y-2">
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Guest
+                {t("guest")}
               </label>
 
               {!changingGuest ? (
@@ -658,7 +668,7 @@ export default function EditReservationDrawer({
                     onClick={() => setChangingGuest(true)}
                     className="px-3 py-2 text-sm rounded-lg border border-border bg-background text-muted-foreground hover:bg-muted transition-colors shrink-0"
                   >
-                    Change
+                    {t("change")}
                   </button>
                 </div>
               ) : (
@@ -668,7 +678,7 @@ export default function EditReservationDrawer({
                       type="text"
                       value={guestSearch}
                       onChange={(e) => handleGuestSearch(e.target.value)}
-                      placeholder="Search by name or email..."
+                      placeholder={t("searchGuestPlaceholder")}
                       autoFocus
                       className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
                     />
@@ -680,7 +690,7 @@ export default function EditReservationDrawer({
                       <X className="w-4 h-4" />
                     </button>
                   </div>
-                  {isSearching && <p className="text-xs text-muted-foreground px-1">Searching...</p>}
+                  {isSearching && <p className="text-xs text-muted-foreground px-1">{t("searching")}</p>}
                   {guestResults.length > 0 && (
                     <div className="rounded-lg border border-border bg-background shadow-md overflow-hidden">
                       {guestResults.map((g) => (
@@ -697,7 +707,7 @@ export default function EditReservationDrawer({
                     </div>
                   )}
                   {guestSearch.length >= 2 && !isSearching && guestResults.length === 0 && (
-                    <p className="text-xs text-muted-foreground px-1">No guests found</p>
+                    <p className="text-xs text-muted-foreground px-1">{t("noGuestsFound")}</p>
                   )}
                 </div>
               )}
@@ -707,7 +717,7 @@ export default function EditReservationDrawer({
             {reservation?.check_in_token && (
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-wider mb-2 text-muted-foreground">
-                  Guest Check-In Link
+                  {t("guestCheckInLink")}
                 </label>
                 <CheckInLinkButton checkInToken={reservation.check_in_token} />
               </div>
@@ -721,7 +731,7 @@ export default function EditReservationDrawer({
                 className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                Check Out Guest
+                {t("checkOutGuest")}
               </button>
             )}
 
@@ -737,13 +747,13 @@ export default function EditReservationDrawer({
                     : "bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50"
                 }`}
               >
-                {inBook ? "✓ Registered in Guest Book" : addingToBook ? "Adding…" : "📖 Add to Guest Book"}
+                {inBook ? t("registeredInBook") : addingToBook ? t("addingToBook") : t("addToBook")}
               </button>
             )}
 
             {/* Payment Section */}
             <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-4 space-y-3">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-1">Payment & Folio</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-1">{t("paymentFolio")}</p>
 
               {/* Folio ledger — segments by creation batch */}
               {(() => {
@@ -778,7 +788,7 @@ export default function EditReservationDrawer({
                     const nights = item.check_in && item.check_out
                       ? Math.round((new Date(item.check_out).getTime() - new Date(item.check_in).getTime()) / 86400000) : 1;
                     groups.push({
-                      label: groups.length === 0 ? "Original Stay" : `Extension ${extCount}`,
+                      label: groups.length === 0 ? t("originalStay") : t("extensionN", { n: extCount }),
                       items: [item],
                       nights,
                       rate: Number(item.price_per_night),
@@ -811,7 +821,7 @@ export default function EditReservationDrawer({
                             <span className={`text-[10px] font-bold uppercase tracking-widest ${isExtension ? "text-violet-600" : "text-emerald-700"}`}>
                               {isExtension ? `⤷ ${group.label}` : group.label}
                             </span>
-                            {isSaving && <span className="text-[10px] text-muted-foreground italic">saving…</span>}
+                            {isSaving && <span className="text-[10px] text-muted-foreground italic">{t("savingSegment")}</span>}
                           </div>
                           {/* Segment detail row */}
                           <div className="flex items-center gap-2 px-3 pb-2">
@@ -847,21 +857,21 @@ export default function EditReservationDrawer({
                     {/* Totals */}
                     <div className="bg-emerald-50 px-3 pt-2 pb-2 space-y-1.5 border-t border-emerald-200">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total charged</span>
+                        <span className="text-muted-foreground">{t("totalCharged")}</span>
                         <span className="font-semibold text-foreground">{paymentCurrency} {totalCharged.toFixed(2)}</span>
                       </div>
                       {deposit > 0 && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Deposit held</span>
+                          <span className="text-muted-foreground">{t("depositHeld")}</span>
                           <span className="font-medium text-blue-600">{depositCurrency} {deposit.toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Amount paid</span>
+                        <span className="text-muted-foreground">{t("amountPaid")}</span>
                         <span className="font-medium text-emerald-700">{paymentCurrency} {paid.toFixed(2)}</span>
                       </div>
                       <div className={`flex justify-between pt-1 border-t border-emerald-200 font-bold text-sm ${balance > 0 ? "text-red-600" : "text-emerald-700"}`}>
-                        <span>{balance > 0 ? "Balance due" : "Settled"}</span>
+                        <span>{balance > 0 ? t("balanceDue") : t("settled")}</span>
                         <span>{paymentCurrency} {Math.abs(balance).toFixed(2)}</span>
                       </div>
                     </div>
@@ -871,7 +881,7 @@ export default function EditReservationDrawer({
 
               {/* Currency row */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Currency</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("currency")}</label>
                 <select
                   value={paymentCurrency}
                   onChange={(e) => setPaymentCurrency(e.target.value)}
@@ -885,7 +895,7 @@ export default function EditReservationDrawer({
 
               {/* Confirmed toggle */}
               <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-sm font-medium text-foreground">Payment Confirmed</span>
+                <span className="text-sm font-medium text-foreground">{t("paymentConfirmed")}</span>
                 <button
                   type="button"
                   onClick={() => setPaymentConfirmed((v) => !v)}
@@ -897,7 +907,7 @@ export default function EditReservationDrawer({
 
               {/* Amount paid */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Amount Paid</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("amountPaidLabel")}</label>
                 <input
                   type="number"
                   min="0"
@@ -912,7 +922,7 @@ export default function EditReservationDrawer({
               {/* Deposit */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Deposit</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("deposit")}</label>
                   <input
                     type="number"
                     min="0"
@@ -924,7 +934,7 @@ export default function EditReservationDrawer({
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Deposit Currency</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("depositCurrency")}</label>
                   <select
                     value={depositCurrency}
                     onChange={(e) => setDepositCurrency(e.target.value)}
@@ -940,7 +950,7 @@ export default function EditReservationDrawer({
               {/* Actual arrival / departure */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Actual Arrival</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("actualArrival")}</label>
                   <input
                     type="datetime-local"
                     value={actualCheckIn}
@@ -949,7 +959,7 @@ export default function EditReservationDrawer({
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Actual Departure</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("actualDeparture")}</label>
                   <input
                     type="datetime-local"
                     value={actualCheckOut}
@@ -965,7 +975,7 @@ export default function EditReservationDrawer({
                 disabled={isSavingPayment}
                 className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
-                {isSavingPayment ? "Saving..." : "Save Payment Info"}
+                {isSavingPayment ? t("savingPayment") : t("savePaymentInfo")}
               </button>
 
               {/* Extend Stay */}
@@ -982,7 +992,7 @@ export default function EditReservationDrawer({
                   }}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-emerald-400 text-emerald-700 hover:bg-emerald-100 transition-colors font-medium"
                 >
-                  {showExtend ? "▲ Cancel Extension" : "➕ Extend Stay"}
+                  {showExtend ? t("cancelExtension") : t("extendStay")}
                 </button>
 
                 {showExtend && (() => {
@@ -998,12 +1008,12 @@ export default function EditReservationDrawer({
                   return (
                     <div className="mt-2 rounded-lg border border-emerald-300 bg-white p-3 space-y-3">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
-                        Current check-out: {currentCheckOut ? new Date(currentCheckOut + "T00:00:00").toLocaleDateString() : "—"}
+                        {t("currentCheckOut", { date: currentCheckOut ? new Date(currentCheckOut + "T00:00:00").toLocaleDateString() : "—" })}
                       </p>
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">New Check-Out</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("newCheckOut")}</label>
                           <input
                             type="date"
                             value={extendDate}
@@ -1013,7 +1023,7 @@ export default function EditReservationDrawer({
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">Rate / Night</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("ratePerNight")}</label>
                           <input
                             type="number"
                             min="0"
@@ -1029,19 +1039,19 @@ export default function EditReservationDrawer({
                       {extNights > 0 && (
                         <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-2.5 space-y-1 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Extension</span>
-                            <span className="font-medium">{extNights} nights × {paymentCurrency} {Number(extendRate).toFixed(2)} = <span className="text-foreground font-bold">{paymentCurrency} {extTotal.toFixed(2)}</span></span>
+                            <span className="text-muted-foreground">{t("extension")}</span>
+                            <span className="font-medium">{t("extensionCalc", { nights: extNights, currency: paymentCurrency, rate: Number(extendRate).toFixed(2), total: `${paymentCurrency} ${extTotal.toFixed(2)}` })}</span>
                           </div>
                           <div className="flex justify-between pt-1 border-t border-emerald-200">
-                            <span className="text-muted-foreground">New total</span>
+                            <span className="text-muted-foreground">{t("newTotal")}</span>
                             <span className="font-bold text-foreground">{paymentCurrency} {newTotal.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Paid so far</span>
+                            <span className="text-muted-foreground">{t("paidSoFar")}</span>
                             <span className="text-emerald-700 font-medium">{paymentCurrency} {paid.toFixed(2)}</span>
                           </div>
                           <div className={`flex justify-between font-bold ${newBalance > 0 ? "text-red-600" : "text-emerald-700"}`}>
-                            <span>{newBalance > 0 ? "New balance due" : "Settled"}</span>
+                            <span>{newBalance > 0 ? t("newBalanceDue") : t("settled")}</span>
                             <span>{paymentCurrency} {Math.abs(newBalance).toFixed(2)}</span>
                           </div>
                         </div>
@@ -1053,7 +1063,7 @@ export default function EditReservationDrawer({
                         disabled={isExtending || !extendDate || !extendRate || extNights === 0}
                         className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-40 transition-colors font-medium"
                       >
-                        {isExtending ? "Extending..." : `Confirm Extension${extNights > 0 ? ` (+${extNights} nights)` : ""}`}
+                        {isExtending ? t("extending") : extNights > 0 ? t("confirmExtensionWithNights", { nights: extNights }) : t("confirmExtension")}
                       </button>
                     </div>
                   );
@@ -1063,14 +1073,14 @@ export default function EditReservationDrawer({
 
             {/* Delete button — danger zone */}
             <div className="p-3 rounded-lg border border-red-200 bg-red-50/40 space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-1">Danger Zone</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-1">{t("dangerZone")}</p>
               <button
                 type="button"
                 onClick={() => setShowCancelDialog(true)}
                 className="w-full text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-150 px-3 py-2 rounded border border-red-200 hover:bg-red-100 flex items-center justify-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
-                Cancel Reservation
+                {t("cancelReservation")}
               </button>
               <button
                 type="button"
@@ -1078,7 +1088,7 @@ export default function EditReservationDrawer({
                 disabled={isDeleting}
                 className="w-full text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-150 disabled:opacity-50"
               >
-                {isDeleting ? "Deleting..." : "Delete this reservation"}
+                {isDeleting ? t("deleting") : t("deleteReservation")}
               </button>
             </div>
 
@@ -1089,14 +1099,14 @@ export default function EditReservationDrawer({
                 onClick={() => onOpenChange(false)}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-background text-foreground border border-border hover:bg-muted hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 disabled:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
               >
-                {isSubmitting ? "Saving..." : "Save Changes"}
+                {isSubmitting ? t("saving") : t("saveChanges")}
               </button>
             </div>
           </form>
@@ -1109,8 +1119,8 @@ export default function EditReservationDrawer({
               reservationNumber={reservation.reservation_number}
               checkIn={reservation.check_in}
               checkOut={reservation.check_out}
-              roomName={reservation.reservation_items?.[0]?.beds?.rooms?.name || "Unknown"}
-              bedName={reservation.reservation_items?.[0]?.beds?.name || "Unknown"}
+              roomName={reservation.reservation_items?.[0]?.beds?.rooms?.name || t("unknownRoom")}
+              bedName={reservation.reservation_items?.[0]?.beds?.name || t("unknownRoom")}
               totalAmount={reservation.total_amount || 0}
               paidAmount={reservation.paid_amount || 0}
               onComplete={() => {
