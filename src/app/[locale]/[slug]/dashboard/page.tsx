@@ -1,6 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import {
   PieChart,
@@ -19,6 +20,7 @@ const colorMap: Record<string, { bg: string; text: string }> = {
 };
 
 export default async function DashboardPage() {
+  const t = await getTranslations("dashboard");
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -64,34 +66,34 @@ export default async function DashboardPage() {
 
   const stats = [
     {
-      label: "Occupancy Rate",
+      label: t("stats.occupancyRate"),
       value: `${occupancyRate}%`,
-      detailLine1: `${occupancyCount}/${totalBeds} beds occupied`,
+      detailLine1: t("stats.bedsOccupied", { count: occupancyCount, total: totalBeds }),
       detailLine2: occupancy.trend !== "flat"
-        ? `${occupancy.trend === "up" ? "↑" : "↓"} ${occupancy.trendPercent}% from yesterday`
-        : "No change from yesterday",
+        ? t(occupancy.trend === "up" ? "stats.trendUp" : "stats.trendDown", { percent: occupancy.trendPercent })
+        : t("stats.noChange"),
       icon: PieChart,
       color: "indigo" as const,
     },
     {
-      label: "Arrivals Today",
+      label: t("stats.arrivalsToday"),
       value: arrivalsCount,
-      detailLine1: `${confirmedArrivals} Confirmed · ${pendingArrivals} Pending`,
+      detailLine1: t("stats.confirmedPending", { confirmed: confirmedArrivals, pending: pendingArrivals }),
       icon: LogIn,
       color: "amber" as const,
     },
     {
-      label: "Monthly Revenue",
+      label: t("stats.monthlyRevenue"),
       value: `$${revenue.monthlyRevenue.toLocaleString()}`,
-      detailLine1: `Active: ${activeCount} reservations`,
-      detailLine2: `Today: $${revenue.dailyRevenue.toLocaleString()}`,
+      detailLine1: t("stats.activeReservations", { count: activeCount }),
+      detailLine2: t("stats.todayRevenue", { amount: revenue.dailyRevenue.toLocaleString() }),
       icon: CircleDollarSign,
       color: "emerald" as const,
     },
     {
-      label: "Avg Booking Nights",
+      label: t("stats.avgBookingNights"),
       value: `${avgNights}`,
-      detailLine1: `Average stay length`,
+      detailLine1: t("stats.avgStayLength"),
       icon: LogIn,
       color: "amber" as const,
     },
@@ -104,22 +106,22 @@ export default async function DashboardPage() {
         <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-foreground">Get started with your property</h3>
+              <h3 className="text-base font-bold text-foreground">{t("setup.title")}</h3>
               <p className="text-sm text-muted-foreground mt-0.5">
-                Complete these steps to start managing reservations.
+                {t("setup.subtitle")}
               </p>
             </div>
             <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-              {[true, setupChecks.hasRoomTypes, setupChecks.hasRooms, setupChecks.hasBeds, setupChecks.hasReservations].filter(Boolean).length} / 5
+              {t("setup.progress", { done: [true, setupChecks.hasRoomTypes, setupChecks.hasRooms, setupChecks.hasBeds, setupChecks.hasReservations].filter(Boolean).length })}
             </span>
           </div>
           <div className="space-y-2">
             {[
-              { done: true, label: "Create your property", href: null },
-              { done: setupChecks.hasRoomTypes, label: "Add a room type", href: "rooms", hint: "e.g. Mixed Dorm, Private Room" },
-              { done: setupChecks.hasRooms, label: "Add a room", href: "rooms", hint: "e.g. Dorm 101, Room A" },
-              { done: setupChecks.hasBeds, label: "Add beds to your room", href: "rooms", hint: "Individual beds guests will book" },
-              { done: setupChecks.hasReservations, label: "Create your first reservation", href: "reservations", hint: "Or connect an OTA channel" },
+              { done: true, label: t("setup.steps.createProperty"), href: null },
+              { done: setupChecks.hasRoomTypes, label: t("setup.steps.addRoomType"), href: "rooms", hint: t("setup.steps.addRoomTypeHint") },
+              { done: setupChecks.hasRooms, label: t("setup.steps.addRoom"), href: "rooms", hint: t("setup.steps.addRoomHint") },
+              { done: setupChecks.hasBeds, label: t("setup.steps.addBeds"), href: "rooms", hint: t("setup.steps.addBedsHint") },
+              { done: setupChecks.hasReservations, label: t("setup.steps.firstReservation"), href: "reservations", hint: t("setup.steps.firstReservationHint") },
             ].map((step) => (
               <div key={step.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors ${step.done ? "opacity-50" : "bg-white border border-border"}`}>
                 <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${step.done ? "bg-emerald-500" : "bg-muted border-2 border-border"}`}>
@@ -131,7 +133,7 @@ export default async function DashboardPage() {
                 </span>
                 {!step.done && step.href && (
                   <a href={step.href} className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
-                    Go →
+                    {t("setup.go")}
                   </a>
                 )}
               </div>
@@ -143,7 +145,7 @@ export default async function DashboardPage() {
       {/* Section Title */}
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Today's Overview</h2>
+          <h2 className="text-2xl font-bold text-slate-900">{t("todaysOverview")}</h2>
           <p className="text-sm text-slate-500 mt-2">
             {format(new Date(), "EEEE, MMMM d, yyyy")}
           </p>

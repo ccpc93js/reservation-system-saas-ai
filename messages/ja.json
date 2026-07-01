@@ -109,5 +109,72 @@
       "updatedRedirecting": "パスワードを更新しました！ダッシュボードへリダイレクトしています...",
       "toastPasswordMin": "パスワードは8文字以上にしてください"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "施設のセットアップを始めましょう",
+      "subtitle": "予約管理を始めるには、以下の手順を完了してください。",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "施設を作成",
+        "addRoomType": "部屋タイプを追加",
+        "addRoomTypeHint": "例：混合ドミトリー、個室",
+        "addRoom": "部屋を追加",
+        "addRoomHint": "例：ドミトリー101、A室",
+        "addBeds": "部屋にベッドを追加",
+        "addBedsHint": "ゲストが予約する個々のベッド",
+        "firstReservation": "最初の予約を作成",
+        "firstReservationHint": "またはOTAチャネルを接続"
+      },
+      "go": "移動 →"
+    },
+    "todaysOverview": "本日の概要",
+    "stats": {
+      "occupancyRate": "稼働率",
+      "bedsOccupied": "{count}/{total} ベッド使用中",
+      "trendUp": "↑ 昨日より{percent}%増",
+      "trendDown": "↓ 昨日より{percent}%減",
+      "noChange": "昨日から変化なし",
+      "arrivalsToday": "本日の到着",
+      "confirmedPending": "確定 {confirmed} 件 · 保留 {pending} 件",
+      "monthlyRevenue": "月間売上",
+      "activeReservations": "有効：{count} 件の予約",
+      "todayRevenue": "本日：${amount}",
+      "avgBookingNights": "平均予約泊数",
+      "avgStayLength": "平均滞在期間"
+    },
+    "arrivals": {
+      "title": "動的到着スケジュール",
+      "subtitle": "本日到着するゲストを管理",
+      "count": "{count} 件の到着",
+      "filter": "フィルター",
+      "colGuestProfile": "ゲストプロフィール",
+      "colCheckIn": "チェックイン",
+      "colNationality": "国籍",
+      "colCheckOut": "チェックアウト",
+      "colStatus": "ステータス",
+      "colAction": "操作",
+      "idPrefix": "ID：#{id}",
+      "checkingIn": "チェックイン中…",
+      "checkIn": "チェックイン",
+      "checkedIn": "チェックイン済み",
+      "noArrivals": "本日の到着はありません",
+      "noArrivalsHint": "到着予定リストは空です。",
+      "toastCheckInSuccess": "ゲストのチェックインが完了しました",
+      "toastCheckInFailed": "ゲストのチェックインに失敗しました"
+    }
+  },
+  "calendar": {
+    "errorLoading": "カレンダーの読み込みエラー",
+    "title": "予約カレンダー",
+    "subtitle": "60日間表示 · 空のセルをクリックして作成、ブロックをクリックして編集できます。",
+    "syncTooltip": "すべてのOTAチャネルを同期",
+    "syncing": "同期中...",
+    "syncChannels": "チャネルを同期",
+    "legendConfirmed": "確定",
+    "legendPending": "保留",
+    "legendInHouse": "滞在中",
+    "toastSyncComplete": "同期完了：新規 {created} 件、更新 {updated} 件、キャンセル {cancelled} 件",
+    "toastSyncFailed": "同期に失敗しました"
   }
 }

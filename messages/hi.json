@@ -109,5 +109,72 @@
       "updatedRedirecting": "पासवर्ड अपडेट हो गया! डैशबोर्ड पर रीडायरेक्ट हो रहा है...",
       "toastPasswordMin": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "अपनी प्रॉपर्टी के साथ शुरुआत करें",
+      "subtitle": "आरक्षण प्रबंधन शुरू करने के लिए ये चरण पूरे करें।",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "अपनी प्रॉपर्टी बनाएं",
+        "addRoomType": "एक कमरे का प्रकार जोड़ें",
+        "addRoomTypeHint": "जैसे: मिश्रित डॉर्म, प्राइवेट रूम",
+        "addRoom": "एक कमरा जोड़ें",
+        "addRoomHint": "जैसे: डॉर्म 101, रूम A",
+        "addBeds": "अपने कमरे में बेड जोड़ें",
+        "addBedsHint": "व्यक्तिगत बेड जिन्हें अतिथि बुक करेंगे",
+        "firstReservation": "अपना पहला आरक्षण बनाएं",
+        "firstReservationHint": "या एक OTA चैनल कनेक्ट करें"
+      },
+      "go": "जाएं →"
+    },
+    "todaysOverview": "आज का अवलोकन",
+    "stats": {
+      "occupancyRate": "अधिभोग दर",
+      "bedsOccupied": "{count}/{total} बेड भरे हुए",
+      "trendUp": "↑ कल से {percent}% अधिक",
+      "trendDown": "↓ कल से {percent}% कम",
+      "noChange": "कल से कोई बदलाव नहीं",
+      "arrivalsToday": "आज के आगमन",
+      "confirmedPending": "{confirmed} पुष्टि · {pending} लंबित",
+      "monthlyRevenue": "मासिक राजस्व",
+      "activeReservations": "सक्रिय: {count} आरक्षण",
+      "todayRevenue": "आज: ${amount}",
+      "avgBookingNights": "औसत बुकिंग रातें",
+      "avgStayLength": "औसत ठहराव अवधि"
+    },
+    "arrivals": {
+      "title": "डायनामिक आगमन शेड्यूल",
+      "subtitle": "आज आने वाले अतिथियों का प्रबंधन करें",
+      "count": "{count} आगमन",
+      "filter": "फ़िल्टर",
+      "colGuestProfile": "अतिथि प्रोफ़ाइल",
+      "colCheckIn": "चेक-इन",
+      "colNationality": "राष्ट्रीयता",
+      "colCheckOut": "चेक-आउट",
+      "colStatus": "स्थिति",
+      "colAction": "कार्रवाई",
+      "idPrefix": "आईडी: #{id}",
+      "checkingIn": "चेक-इन हो रहा है...",
+      "checkIn": "चेक इन करें",
+      "checkedIn": "चेक-इन हो गया",
+      "noArrivals": "आज कोई आगमन नहीं",
+      "noArrivalsHint": "आपकी आगमन सूची खाली है।",
+      "toastCheckInSuccess": "अतिथि चेक-इन हो गया",
+      "toastCheckInFailed": "अतिथि चेक-इन विफल"
+    }
+  },
+  "calendar": {
+    "errorLoading": "कैलेंडर लोड करने में त्रुटि",
+    "title": "टेप कैलेंडर",
+    "subtitle": "60-दिन का दृश्य · बनाने के लिए खाली सेल पर, या संपादित करने के लिए ब्लॉक पर क्लिक करें।",
+    "syncTooltip": "सभी OTA चैनल सिंक करें",
+    "syncing": "सिंक हो रहा है...",
+    "syncChannels": "चैनल सिंक करें",
+    "legendConfirmed": "पुष्टि की गई",
+    "legendPending": "लंबित",
+    "legendInHouse": "इन-हाउस",
+    "toastSyncComplete": "सिंक पूरा: {created} नए, {updated} अपडेट किए गए, {cancelled} रद्द किए गए",
+    "toastSyncFailed": "सिंक विफल"
   }
 }

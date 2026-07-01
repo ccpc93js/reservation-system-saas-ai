@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Users, Filter } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ interface ArrivalsScheduleProps {
 }
 
 export default function ArrivalsSchedule({ initialArrivals }: ArrivalsScheduleProps) {
+  const t = useTranslations("dashboard.arrivals");
   const [arrivals, setArrivals] = useState<Arrival[]>(initialArrivals);
   const [checking, setChecking] = useState<string | null>(null);
 
@@ -38,17 +40,17 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.error || "Failed to check in");
+        toast.error(error.error || t("toastCheckInFailed"));
         return;
       }
 
       setArrivals(prev =>
         prev.map(arr => (arr.id === resId ? { ...arr, status: "checked_in" } : arr))
       );
-      toast.success("Guest checked in");
+      toast.success(t("toastCheckInSuccess"));
     } catch (error) {
       console.error("Check-in error:", error);
-      toast.error("Failed to check in guest");
+      toast.error(t("toastCheckInFailed"));
     } finally {
       setChecking(null);
     }
@@ -58,15 +60,15 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
       <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">Dynamic Arrivals Schedule</h3>
-          <p className="text-xs text-slate-500 mt-0.5">Manage guests arriving today</p>
+          <h3 className="text-sm font-semibold text-slate-900">{t("title")}</h3>
+          <p className="text-xs text-slate-500 mt-0.5">{t("subtitle")}</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[11px] font-semibold rounded-full uppercase tracking-wider">
-            {arrivals?.length || 0} Arrivals
+            {t("count", { count: arrivals?.length || 0 })}
           </span>
           <button className="px-3 py-1.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
-            <Filter className="w-3.5 h-3.5" /> Filter
+            <Filter className="w-3.5 h-3.5" /> {t("filter")}
           </button>
         </div>
       </div>
@@ -76,12 +78,12 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead>
               <tr className="bg-slate-50/70 border-b border-slate-200 text-xs text-slate-500 font-medium">
-                <th className="py-3 px-5 w-1/4">Guest Profile</th>
-                <th className="py-3 px-5">Check-in</th>
-                <th className="py-3 px-5">Nationality</th>
-                <th className="py-3 px-5">Check-out</th>
-                <th className="py-3 px-5">Status</th>
-                <th className="py-3 px-5 text-right">Action</th>
+                <th className="py-3 px-5 w-1/4">{t("colGuestProfile")}</th>
+                <th className="py-3 px-5">{t("colCheckIn")}</th>
+                <th className="py-3 px-5">{t("colNationality")}</th>
+                <th className="py-3 px-5">{t("colCheckOut")}</th>
+                <th className="py-3 px-5">{t("colStatus")}</th>
+                <th className="py-3 px-5 text-right">{t("colAction")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
@@ -102,7 +104,7 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
                             {firstName} {lastName}
                           </p>
                           <p className="text-[11px] text-slate-500">
-                            ID: #{res.reservation_number || res.id.slice(0, 6)}
+                            {t("idPrefix", { id: res.reservation_number || res.id.slice(0, 6) })}
                           </p>
                         </div>
                       </div>
@@ -134,10 +136,10 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
                           disabled={checking === res.id}
                           className="px-3 py-1.5 bg-white border border-slate-200 shadow-sm hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                         >
-                          {checking === res.id ? "Checking in..." : "Check In"}
+                          {checking === res.id ? t("checkingIn") : t("checkIn")}
                         </button>
                       ) : (
-                        <span className="text-xs text-slate-500">Checked in</span>
+                        <span className="text-xs text-slate-500">{t("checkedIn")}</span>
                       )}
                     </td>
                   </tr>
@@ -149,8 +151,8 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
       ) : (
         <div className="px-6 py-12 text-center">
           <Users className="w-8 h-8 mx-auto mb-3 text-slate-300" />
-          <p className="text-sm font-medium text-slate-900">No arrivals today</p>
-          <p className="text-xs text-slate-500 mt-1">Your arrivals queue is clear.</p>
+          <p className="text-sm font-medium text-slate-900">{t("noArrivals")}</p>
+          <p className="text-xs text-slate-500 mt-1">{t("noArrivalsHint")}</p>
         </div>
       )}
     </div>

@@ -109,5 +109,72 @@
       "updatedRedirecting": "Password updated! Redirecting to dashboard...",
       "toastPasswordMin": "Password must be at least 8 characters"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "Get started with your property",
+      "subtitle": "Complete these steps to start managing reservations.",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "Create your property",
+        "addRoomType": "Add a room type",
+        "addRoomTypeHint": "e.g. Mixed Dorm, Private Room",
+        "addRoom": "Add a room",
+        "addRoomHint": "e.g. Dorm 101, Room A",
+        "addBeds": "Add beds to your room",
+        "addBedsHint": "Individual beds guests will book",
+        "firstReservation": "Create your first reservation",
+        "firstReservationHint": "Or connect an OTA channel"
+      },
+      "go": "Go →"
+    },
+    "todaysOverview": "Today's Overview",
+    "stats": {
+      "occupancyRate": "Occupancy Rate",
+      "bedsOccupied": "{count}/{total} beds occupied",
+      "trendUp": "↑ {percent}% from yesterday",
+      "trendDown": "↓ {percent}% from yesterday",
+      "noChange": "No change from yesterday",
+      "arrivalsToday": "Arrivals Today",
+      "confirmedPending": "{confirmed} Confirmed · {pending} Pending",
+      "monthlyRevenue": "Monthly Revenue",
+      "activeReservations": "Active: {count} reservations",
+      "todayRevenue": "Today: ${amount}",
+      "avgBookingNights": "Avg Booking Nights",
+      "avgStayLength": "Average stay length"
+    },
+    "arrivals": {
+      "title": "Dynamic Arrivals Schedule",
+      "subtitle": "Manage guests arriving today",
+      "count": "{count} Arrivals",
+      "filter": "Filter",
+      "colGuestProfile": "Guest Profile",
+      "colCheckIn": "Check-in",
+      "colNationality": "Nationality",
+      "colCheckOut": "Check-out",
+      "colStatus": "Status",
+      "colAction": "Action",
+      "idPrefix": "ID: #{id}",
+      "checkingIn": "Checking in...",
+      "checkIn": "Check In",
+      "checkedIn": "Checked in",
+      "noArrivals": "No arrivals today",
+      "noArrivalsHint": "Your arrivals queue is clear.",
+      "toastCheckInSuccess": "Guest checked in",
+      "toastCheckInFailed": "Failed to check in guest"
+    }
+  },
+  "calendar": {
+    "errorLoading": "Error loading calendar",
+    "title": "Tape Calendar",
+    "subtitle": "60-Day Horizon · Click an empty cell to create, or a block to edit.",
+    "syncTooltip": "Sync all OTA channels",
+    "syncing": "Syncing...",
+    "syncChannels": "Sync Channels",
+    "legendConfirmed": "Confirmed",
+    "legendPending": "Pending",
+    "legendInHouse": "In House",
+    "toastSyncComplete": "Sync complete: {created} new, {updated} updated, {cancelled} cancelled",
+    "toastSyncFailed": "Sync failed"
   }
 }

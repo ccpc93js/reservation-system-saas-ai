@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { CalendarRange, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import TapeChart from "@/components/calendar/tape-chart";
@@ -19,6 +20,7 @@ export default function CalendarClient({
   reservations,
   orgId,
 }: CalendarClientProps) {
+  const t = useTranslations("calendar");
   const router = useRouter();
   const [syncingAll, setSyncingAll] = useState(false);
 
@@ -32,10 +34,10 @@ export default function CalendarClient({
         (acc: any, r: any) => ({ created: acc.created + (r.created || 0), updated: acc.updated + (r.updated || 0), cancelled: acc.cancelled + (r.cancelled || 0) }),
         { created: 0, updated: 0, cancelled: 0 }
       );
-      toast.success(`Sync complete: ${total.created} new, ${total.updated} updated, ${total.cancelled} cancelled`);
+      toast.success(t("toastSyncComplete", { created: total.created, updated: total.updated, cancelled: total.cancelled }));
       router.refresh();
     } catch (err: any) {
-      toast.error(err.message || "Sync failed");
+      toast.error(err.message || t("toastSyncFailed"));
     } finally {
       setSyncingAll(false);
     }
@@ -70,10 +72,10 @@ export default function CalendarClient({
         <div>
           <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
             <CalendarRange className="w-5 h-5 text-primary" />
-            Tape Calendar
+            {t("title")}
           </h1>
           <p className="text-sm mt-1 text-muted-foreground">
-            60-Day Horizon · Click an empty cell to create, or a block to edit.
+            {t("subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -81,20 +83,20 @@ export default function CalendarClient({
             onClick={handleSyncAll}
             disabled={syncingAll}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 transition-colors"
-            title="Sync all OTA channels"
+            title={t("syncTooltip")}
           >
             <RefreshCw className={`w-4 h-4 ${syncingAll ? "animate-spin" : ""}`} />
-            {syncingAll ? "Syncing..." : "Sync Channels"}
+            {syncingAll ? t("syncing") : t("syncChannels")}
           </button>
           <div className="flex items-center gap-3 text-[11px] font-medium text-muted-foreground bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-400" /> Confirmed
+              <div className="w-2 h-2 rounded-full bg-emerald-400" /> {t("legendConfirmed")}
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-amber-400" /> Pending
+              <div className="w-2 h-2 rounded-full bg-amber-400" /> {t("legendPending")}
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-indigo-400" /> In House
+              <div className="w-2 h-2 rounded-full bg-indigo-400" /> {t("legendInHouse")}
             </span>
           </div>
         </div>

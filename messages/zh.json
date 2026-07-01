@@ -109,5 +109,72 @@
       "updatedRedirecting": "密码已更新！正在跳转到仪表盘...",
       "toastPasswordMin": "密码至少需要 8 个字符"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "开始设置您的物业",
+      "subtitle": "完成以下步骤即可开始管理预订。",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "创建您的物业",
+        "addRoomType": "添加房型",
+        "addRoomTypeHint": "例如：混合宿舍、独立房间",
+        "addRoom": "添加房间",
+        "addRoomHint": "例如：101 宿舍、A 房间",
+        "addBeds": "为房间添加床位",
+        "addBedsHint": "客人将预订的独立床位",
+        "firstReservation": "创建您的第一笔预订",
+        "firstReservationHint": "或连接一个 OTA 渠道"
+      },
+      "go": "前往 →"
+    },
+    "todaysOverview": "今日概览",
+    "stats": {
+      "occupancyRate": "入住率",
+      "bedsOccupied": "已占用 {count}/{total} 张床位",
+      "trendUp": "↑ 较昨日增长 {percent}%",
+      "trendDown": "↓ 较昨日下降 {percent}%",
+      "noChange": "与昨日相比无变化",
+      "arrivalsToday": "今日抵达",
+      "confirmedPending": "{confirmed} 已确认 · {pending} 待处理",
+      "monthlyRevenue": "月收入",
+      "activeReservations": "活跃预订：{count} 笔",
+      "todayRevenue": "今日收入：${amount}",
+      "avgBookingNights": "平均预订晚数",
+      "avgStayLength": "平均入住时长"
+    },
+    "arrivals": {
+      "title": "动态抵达日程",
+      "subtitle": "管理今日抵达的客人",
+      "count": "{count} 位抵达",
+      "filter": "筛选",
+      "colGuestProfile": "客人信息",
+      "colCheckIn": "入住",
+      "colNationality": "国籍",
+      "colCheckOut": "退房",
+      "colStatus": "状态",
+      "colAction": "操作",
+      "idPrefix": "编号：#{id}",
+      "checkingIn": "正在办理入住…",
+      "checkIn": "办理入住",
+      "checkedIn": "已入住",
+      "noArrivals": "今日暂无抵达",
+      "noArrivalsHint": "您的抵达队列为空。",
+      "toastCheckInSuccess": "客人入住成功",
+      "toastCheckInFailed": "客人入住办理失败"
+    }
+  },
+  "calendar": {
+    "errorLoading": "日历加载出错",
+    "title": "排房日历",
+    "subtitle": "60 天视图 · 点击空白单元格创建预订，点击已有预订块进行编辑。",
+    "syncTooltip": "同步所有 OTA 渠道",
+    "syncing": "同步中…",
+    "syncChannels": "同步渠道",
+    "legendConfirmed": "已确认",
+    "legendPending": "待处理",
+    "legendInHouse": "在住",
+    "toastSyncComplete": "同步完成：新增 {created} 条，更新 {updated} 条，取消 {cancelled} 条",
+    "toastSyncFailed": "同步失败"
   }
 }

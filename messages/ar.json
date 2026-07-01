@@ -109,5 +109,72 @@
       "updatedRedirecting": "تم تحديث كلمة المرور! جارٍ التحويل إلى لوحة التحكم...",
       "toastPasswordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "ابدأ إعداد عقارك",
+      "subtitle": "أكمل هذه الخطوات لبدء إدارة الحجوزات.",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "أنشئ عقارك",
+        "addRoomType": "أضف نوع غرفة",
+        "addRoomTypeHint": "مثال: غرفة نوم مشتركة، غرفة خاصة",
+        "addRoom": "أضف غرفة",
+        "addRoomHint": "مثال: غرفة نوم 101، الغرفة A",
+        "addBeds": "أضف أسرّة إلى غرفتك",
+        "addBedsHint": "أسرّة فردية سيحجزها النزلاء",
+        "firstReservation": "أنشئ أول حجز لك",
+        "firstReservationHint": "أو اربط قناة حجز خارجية (OTA)"
+      },
+      "go": "اذهب ←"
+    },
+    "todaysOverview": "نظرة عامة على اليوم",
+    "stats": {
+      "occupancyRate": "معدل الإشغال",
+      "bedsOccupied": "{count}/{total} سرير مشغول",
+      "trendUp": "↑ {percent}% مقارنة بالأمس",
+      "trendDown": "↓ {percent}% مقارنة بالأمس",
+      "noChange": "لا تغيير مقارنة بالأمس",
+      "arrivalsToday": "الوافدون اليوم",
+      "confirmedPending": "{confirmed} مؤكد · {pending} معلّق",
+      "monthlyRevenue": "الإيرادات الشهرية",
+      "activeReservations": "نشطة: {count} حجز",
+      "todayRevenue": "اليوم: ${amount}",
+      "avgBookingNights": "متوسط ليالي الحجز",
+      "avgStayLength": "متوسط مدة الإقامة"
+    },
+    "arrivals": {
+      "title": "جدول الوافدين الديناميكي",
+      "subtitle": "إدارة النزلاء الوافدين اليوم",
+      "count": "{count} وافد",
+      "filter": "تصفية",
+      "colGuestProfile": "ملف النزيل",
+      "colCheckIn": "تسجيل الوصول",
+      "colNationality": "الجنسية",
+      "colCheckOut": "تسجيل المغادرة",
+      "colStatus": "الحالة",
+      "colAction": "إجراء",
+      "idPrefix": "المعرف: #{id}",
+      "checkingIn": "جارٍ تسجيل الوصول...",
+      "checkIn": "تسجيل الوصول",
+      "checkedIn": "تم تسجيل الوصول",
+      "noArrivals": "لا يوجد وافدون اليوم",
+      "noArrivalsHint": "قائمة الوافدين لديك فارغة.",
+      "toastCheckInSuccess": "تم تسجيل وصول النزيل",
+      "toastCheckInFailed": "فشل تسجيل وصول النزيل"
+    }
+  },
+  "calendar": {
+    "errorLoading": "خطأ في تحميل التقويم",
+    "title": "تقويم الحجوزات",
+    "subtitle": "أفق 60 يومًا · انقر على خلية فارغة للإنشاء، أو على كتلة للتعديل.",
+    "syncTooltip": "مزامنة جميع قنوات الحجز الخارجية",
+    "syncing": "جارٍ المزامنة...",
+    "syncChannels": "مزامنة القنوات",
+    "legendConfirmed": "مؤكد",
+    "legendPending": "معلّق",
+    "legendInHouse": "مقيم حاليًا",
+    "toastSyncComplete": "اكتملت المزامنة: {created} جديد، {updated} محدّث، {cancelled} ملغى",
+    "toastSyncFailed": "فشلت المزامنة"
   }
 }

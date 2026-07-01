@@ -109,5 +109,72 @@
       "updatedRedirecting": "Senha atualizada! Redirecionando para o painel...",
       "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "Comece com sua propriedade",
+      "subtitle": "Complete estas etapas para começar a gerenciar reservas.",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "Crie sua propriedade",
+        "addRoomType": "Adicione um tipo de quarto",
+        "addRoomTypeHint": "ex.: Dormitório misto, Quarto privativo",
+        "addRoom": "Adicione um quarto",
+        "addRoomHint": "ex.: Dormitório 101, Quarto A",
+        "addBeds": "Adicione camas ao seu quarto",
+        "addBedsHint": "Camas individuais que os hóspedes reservarão",
+        "firstReservation": "Crie sua primeira reserva",
+        "firstReservationHint": "Ou conecte um canal OTA"
+      },
+      "go": "Ir →"
+    },
+    "todaysOverview": "Resumo de hoje",
+    "stats": {
+      "occupancyRate": "Taxa de ocupação",
+      "bedsOccupied": "{count}/{total} camas ocupadas",
+      "trendUp": "↑ {percent}% em relação a ontem",
+      "trendDown": "↓ {percent}% em relação a ontem",
+      "noChange": "Sem alteração em relação a ontem",
+      "arrivalsToday": "Chegadas de hoje",
+      "confirmedPending": "{confirmed} Confirmadas · {pending} Pendentes",
+      "monthlyRevenue": "Receita mensal",
+      "activeReservations": "Ativas: {count} reservas",
+      "todayRevenue": "Hoje: ${amount}",
+      "avgBookingNights": "Média de noites por reserva",
+      "avgStayLength": "Duração média da estadia"
+    },
+    "arrivals": {
+      "title": "Programação dinâmica de chegadas",
+      "subtitle": "Gerencie os hóspedes chegando hoje",
+      "count": "{count} chegadas",
+      "filter": "Filtrar",
+      "colGuestProfile": "Perfil do hóspede",
+      "colCheckIn": "Entrada",
+      "colNationality": "Nacionalidade",
+      "colCheckOut": "Saída",
+      "colStatus": "Status",
+      "colAction": "Ação",
+      "idPrefix": "ID: #{id}",
+      "checkingIn": "Registrando entrada...",
+      "checkIn": "Registrar entrada",
+      "checkedIn": "Entrada registrada",
+      "noArrivals": "Nenhuma chegada hoje",
+      "noArrivalsHint": "Sua fila de chegadas está vazia.",
+      "toastCheckInSuccess": "Entrada do hóspede registrada",
+      "toastCheckInFailed": "Falha ao registrar entrada do hóspede"
+    }
+  },
+  "calendar": {
+    "errorLoading": "Erro ao carregar o calendário",
+    "title": "Calendário de reservas",
+    "subtitle": "Horizonte de 60 dias · Clique em uma célula vazia para criar, ou em um bloco para editar.",
+    "syncTooltip": "Sincronizar todos os canais OTA",
+    "syncing": "Sincronizando...",
+    "syncChannels": "Sincronizar canais",
+    "legendConfirmed": "Confirmada",
+    "legendPending": "Pendente",
+    "legendInHouse": "Hospedado",
+    "toastSyncComplete": "Sincronização concluída: {created} novas, {updated} atualizadas, {cancelled} canceladas",
+    "toastSyncFailed": "Falha na sincronização"
   }
 }

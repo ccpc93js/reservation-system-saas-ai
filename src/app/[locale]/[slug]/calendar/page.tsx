@@ -1,7 +1,9 @@
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import CalendarClient from "@/components/calendar/calendar-client";
 
 export default async function CalendarPage() {
+  const t = await getTranslations("calendar");
   const supabase = await createServerClient();
 
   // Get org context
@@ -11,7 +13,7 @@ export default async function CalendarPage() {
     .single();
 
   if (error || !membership) {
-    return <div>Error loading calendar</div>;
+    return <div>{t("errorLoading")}</div>;
   }
 
   const orgId = (membership as any).organization_id as string;

@@ -109,5 +109,72 @@
       "updatedRedirecting": "পাসওয়ার্ড আপডেট হয়েছে! ড্যাশবোর্ডে পুনঃনির্দেশিত হচ্ছে...",
       "toastPasswordMin": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "আপনার প্রপার্টি দিয়ে শুরু করুন",
+      "subtitle": "রিজার্ভেশন পরিচালনা শুরু করতে এই ধাপগুলো সম্পূর্ণ করুন।",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "আপনার প্রপার্টি তৈরি করুন",
+        "addRoomType": "একটি রুম টাইপ যোগ করুন",
+        "addRoomTypeHint": "যেমন: মিক্সড ডর্ম, প্রাইভেট রুম",
+        "addRoom": "একটি রুম যোগ করুন",
+        "addRoomHint": "যেমন: ডর্ম ১০১, রুম A",
+        "addBeds": "আপনার রুমে বেড যোগ করুন",
+        "addBedsHint": "পৃথক বেড যা অতিথিরা বুক করবেন",
+        "firstReservation": "আপনার প্রথম রিজার্ভেশন তৈরি করুন",
+        "firstReservationHint": "অথবা একটি OTA চ্যানেল সংযুক্ত করুন"
+      },
+      "go": "যান →"
+    },
+    "todaysOverview": "আজকের সারসংক্ষেপ",
+    "stats": {
+      "occupancyRate": "অকুপেন্সি হার",
+      "bedsOccupied": "{count}/{total} বেড ব্যবহৃত",
+      "trendUp": "↑ গতকালের তুলনায় {percent}% বেশি",
+      "trendDown": "↓ গতকালের তুলনায় {percent}% কম",
+      "noChange": "গতকালের তুলনায় কোনো পরিবর্তন নেই",
+      "arrivalsToday": "আজকের আগমন",
+      "confirmedPending": "{confirmed} নিশ্চিত · {pending} মুলতুবি",
+      "monthlyRevenue": "মাসিক রাজস্ব",
+      "activeReservations": "সক্রিয়: {count} রিজার্ভেশন",
+      "todayRevenue": "আজ: ${amount}",
+      "avgBookingNights": "গড় বুকিং রাত",
+      "avgStayLength": "গড় অবস্থানকাল"
+    },
+    "arrivals": {
+      "title": "ডাইনামিক আগমন সময়সূচি",
+      "subtitle": "আজ আসা অতিথিদের পরিচালনা করুন",
+      "count": "{count} আগমন",
+      "filter": "ফিল্টার",
+      "colGuestProfile": "অতিথি প্রোফাইল",
+      "colCheckIn": "চেক-ইন",
+      "colNationality": "জাতীয়তা",
+      "colCheckOut": "চেক-আউট",
+      "colStatus": "অবস্থা",
+      "colAction": "কার্যক্রম",
+      "idPrefix": "আইডি: #{id}",
+      "checkingIn": "চেক-ইন হচ্ছে...",
+      "checkIn": "চেক ইন করুন",
+      "checkedIn": "চেক-ইন সম্পন্ন",
+      "noArrivals": "আজ কোনো আগমন নেই",
+      "noArrivalsHint": "আপনার আগমন তালিকা খালি।",
+      "toastCheckInSuccess": "অতিথি চেক-ইন সম্পন্ন",
+      "toastCheckInFailed": "অতিথি চেক-ইন ব্যর্থ হয়েছে"
+    }
+  },
+  "calendar": {
+    "errorLoading": "ক্যালেন্ডার লোড করতে ত্রুটি",
+    "title": "টেপ ক্যালেন্ডার",
+    "subtitle": "৬০-দিনের দৃশ্য · তৈরি করতে খালি সেলে ক্লিক করুন, অথবা সম্পাদনা করতে একটি ব্লকে ক্লিক করুন।",
+    "syncTooltip": "সব OTA চ্যানেল সিঙ্ক করুন",
+    "syncing": "সিঙ্ক হচ্ছে...",
+    "syncChannels": "চ্যানেল সিঙ্ক করুন",
+    "legendConfirmed": "নিশ্চিত",
+    "legendPending": "মুলতুবি",
+    "legendInHouse": "উপস্থিত",
+    "toastSyncComplete": "সিঙ্ক সম্পন্ন: {created} নতুন, {updated} আপডেট হয়েছে, {cancelled} বাতিল হয়েছে",
+    "toastSyncFailed": "সিঙ্ক ব্যর্থ হয়েছে"
   }
 }

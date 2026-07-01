@@ -109,5 +109,72 @@
       "updatedRedirecting": "Mot de passe mis à jour ! Redirection vers le tableau de bord...",
       "toastPasswordMin": "Le mot de passe doit contenir au moins 8 caractères"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "Démarrez avec votre établissement",
+      "subtitle": "Terminez ces étapes pour commencer à gérer les réservations.",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "Créez votre établissement",
+        "addRoomType": "Ajoutez un type de chambre",
+        "addRoomTypeHint": "ex. Dortoir mixte, Chambre privée",
+        "addRoom": "Ajoutez une chambre",
+        "addRoomHint": "ex. Dortoir 101, Chambre A",
+        "addBeds": "Ajoutez des lits à votre chambre",
+        "addBedsHint": "Lits individuels que les clients réserveront",
+        "firstReservation": "Créez votre première réservation",
+        "firstReservationHint": "Ou connectez un canal OTA"
+      },
+      "go": "Aller →"
+    },
+    "todaysOverview": "Aperçu du jour",
+    "stats": {
+      "occupancyRate": "Taux d'occupation",
+      "bedsOccupied": "{count}/{total} lits occupés",
+      "trendUp": "↑ {percent}% par rapport à hier",
+      "trendDown": "↓ {percent}% par rapport à hier",
+      "noChange": "Aucun changement par rapport à hier",
+      "arrivalsToday": "Arrivées du jour",
+      "confirmedPending": "{confirmed} Confirmées · {pending} En attente",
+      "monthlyRevenue": "Revenu mensuel",
+      "activeReservations": "Actives : {count} réservations",
+      "todayRevenue": "Aujourd'hui : ${amount}",
+      "avgBookingNights": "Nuitées moyennes par réservation",
+      "avgStayLength": "Durée de séjour moyenne"
+    },
+    "arrivals": {
+      "title": "Programme d'arrivées dynamique",
+      "subtitle": "Gérez les clients arrivant aujourd'hui",
+      "count": "{count} arrivées",
+      "filter": "Filtrer",
+      "colGuestProfile": "Profil du client",
+      "colCheckIn": "Arrivée",
+      "colNationality": "Nationalité",
+      "colCheckOut": "Départ",
+      "colStatus": "Statut",
+      "colAction": "Action",
+      "idPrefix": "ID : n°{id}",
+      "checkingIn": "Enregistrement en cours...",
+      "checkIn": "Enregistrer l'arrivée",
+      "checkedIn": "Arrivée enregistrée",
+      "noArrivals": "Aucune arrivée aujourd'hui",
+      "noArrivalsHint": "Votre liste d'arrivées est vide.",
+      "toastCheckInSuccess": "Arrivée du client enregistrée",
+      "toastCheckInFailed": "Échec de l'enregistrement de l'arrivée"
+    }
+  },
+  "calendar": {
+    "errorLoading": "Erreur lors du chargement du calendrier",
+    "title": "Calendrier des réservations",
+    "subtitle": "Horizon de 60 jours · Cliquez sur une cellule vide pour créer, ou sur un bloc pour modifier.",
+    "syncTooltip": "Synchroniser tous les canaux OTA",
+    "syncing": "Synchronisation...",
+    "syncChannels": "Synchroniser les canaux",
+    "legendConfirmed": "Confirmée",
+    "legendPending": "En attente",
+    "legendInHouse": "Sur place",
+    "toastSyncComplete": "Synchronisation terminée : {created} nouvelles, {updated} mises à jour, {cancelled} annulées",
+    "toastSyncFailed": "Échec de la synchronisation"
   }
 }

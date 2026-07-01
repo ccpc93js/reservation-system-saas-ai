@@ -109,5 +109,72 @@
       "updatedRedirecting": "Пароль обновлён! Перенаправление на панель управления...",
       "toastPasswordMin": "Пароль должен содержать не менее 8 символов"
     }
+  },
+  "dashboard": {
+    "setup": {
+      "title": "Начните работу с объектом",
+      "subtitle": "Выполните эти шаги, чтобы начать управлять бронированиями.",
+      "progress": "{done} / 5",
+      "steps": {
+        "createProperty": "Создайте свой объект",
+        "addRoomType": "Добавьте тип номера",
+        "addRoomTypeHint": "например, Смешанный дорм, Отдельный номер",
+        "addRoom": "Добавьте номер",
+        "addRoomHint": "например, Дорм 101, Номер A",
+        "addBeds": "Добавьте кровати в номер",
+        "addBedsHint": "Отдельные кровати, которые будут бронировать гости",
+        "firstReservation": "Создайте первое бронирование",
+        "firstReservationHint": "Или подключите канал OTA"
+      },
+      "go": "Перейти →"
+    },
+    "todaysOverview": "Обзор за сегодня",
+    "stats": {
+      "occupancyRate": "Заполняемость",
+      "bedsOccupied": "{count}/{total} мест занято",
+      "trendUp": "↑ на {percent}% больше, чем вчера",
+      "trendDown": "↓ на {percent}% меньше, чем вчера",
+      "noChange": "Без изменений по сравнению со вчерашним днём",
+      "arrivalsToday": "Заезды сегодня",
+      "confirmedPending": "{confirmed} подтверждено · {pending} в ожидании",
+      "monthlyRevenue": "Доход за месяц",
+      "activeReservations": "Активные: {count} бронирований",
+      "todayRevenue": "Сегодня: ${amount}",
+      "avgBookingNights": "Среднее число ночей в брони",
+      "avgStayLength": "Средняя продолжительность проживания"
+    },
+    "arrivals": {
+      "title": "Динамическое расписание заездов",
+      "subtitle": "Управляйте гостями, заезжающими сегодня",
+      "count": "{count} заездов",
+      "filter": "Фильтр",
+      "colGuestProfile": "Профиль гостя",
+      "colCheckIn": "Заезд",
+      "colNationality": "Гражданство",
+      "colCheckOut": "Выезд",
+      "colStatus": "Статус",
+      "colAction": "Действие",
+      "idPrefix": "ID: #{id}",
+      "checkingIn": "Заселение…",
+      "checkIn": "Заселить",
+      "checkedIn": "Заселён",
+      "noArrivals": "Сегодня заездов нет",
+      "noArrivalsHint": "Ваш список заездов пуст.",
+      "toastCheckInSuccess": "Гость заселён",
+      "toastCheckInFailed": "Не удалось заселить гостя"
+    }
+  },
+  "calendar": {
+    "errorLoading": "Ошибка загрузки календаря",
+    "title": "Шахматка бронирований",
+    "subtitle": "Горизонт 60 дней · Нажмите на пустую ячейку, чтобы создать, или на блок, чтобы изменить.",
+    "syncTooltip": "Синхронизировать все каналы OTA",
+    "syncing": "Синхронизация...",
+    "syncChannels": "Синхронизировать каналы",
+    "legendConfirmed": "Подтверждено",
+    "legendPending": "В ожидании",
+    "legendInHouse": "Проживает",
+    "toastSyncComplete": "Синхронизация завершена: {created} новых, {updated} обновлено, {cancelled} отменено",
+    "toastSyncFailed": "Ошибка синхронизации"
   }
 }

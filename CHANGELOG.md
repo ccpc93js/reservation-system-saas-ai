@@ -1,4 +1,26 @@
-## [Unreleased] - 2026-07-01
+## [Unreleased] - 2026-07-02
+
+feat: Phase 16 Stage 2c - translate dashboard + calendar
+
+- dashboard/page.tsx (server component, getTranslations): setup
+  progress card, stat cards with ICU-interpolated counts/percentages
+- arrivals-schedule.tsx: table headers, check-in actions, empty state
+- calendar/page.tsx + calendar-client.tsx: title, sync UI, status
+  legend, sync-result toast with interpolated counts
+- All new keys translated across all 10 languages (dashboard.*,
+  calendar.* namespaces, 148 keys total, verified identical structure
+  across all 10 locale files via script)
+- Statically verified every t() call resolves to a real message key
+  (dashboard/calendar are behind auth, couldn't screenshot directly —
+  flagged for manual check)
+- Not included this pass (deliberately, own future increment): the
+  large calendar drawer components (edit-reservation-drawer 1153
+  lines, new-reservation-drawer 516, tape-chart 366,
+  pending-check-ins-client 766) — too large to safely bundle here
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [770e625] - 2026-07-01
 
 feat: Phase 16 Stage 2b - translate auth pages (login, signup, reset)
 
@@ -18,21 +40,6 @@ feat: Phase 16 Stage 2b - translate auth pages (login, signup, reset)
 Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 
 ## [950446a] - 2026-07-01
-
-feat: Phase 16 Stage 2a - translate shared layout (header, sidebar)
-
-- header.tsx + sidebar.tsx fully translated across all 10 locales
-  (page titles, search UI, account menu, nav labels, roles, sign-out)
-- Both switched to locale-aware Link/useRouter/usePathname from
-  src/i18n/navigation.ts for org-scoped paths (fixes the extra
-  redirect hop noted in Stage 1); /login stays on plain next/navigation
-  router since it's not yet migrated under [locale]
-- Verified: JSON validity all 10 files, clean typecheck, live lang/dir
-  switching per locale (ar -> rtl) confirmed via curl
-
-Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
-
-## [Unreleased] - 2026-07-01
 
 feat: Phase 16 Stage 2a - translate shared layout (header, sidebar)
 
