@@ -24,7 +24,8 @@
     "newBooking": "حجز جديد",
     "newBookingTooltip": "اذهب إلى تقويم الحجوزات لإنشاء حجز جديد",
     "settingsMenuItem": "الإعدادات",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "language": "اللغة"
   },
   "sidebar": {
     "liveView": "عرض مباشر",

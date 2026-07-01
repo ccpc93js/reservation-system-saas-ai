@@ -24,7 +24,8 @@
     "newBooking": "New Booking",
     "newBookingTooltip": "Go to Tape Calendar to create a new booking",
     "settingsMenuItem": "Settings",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "language": "Language"
   },
   "sidebar": {
     "liveView": "Live View",

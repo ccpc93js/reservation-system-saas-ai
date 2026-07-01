@@ -1,12 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { User } from "@supabase/supabase-js";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Plus, Bell, Menu, Search as SearchIcon, Settings, LogOut, X } from "lucide-react";
+import { Plus, Bell, Menu, Search as SearchIcon, Settings, LogOut, X, Globe, Check } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "@/i18n/navigation";
+import { locales, type Locale } from "@/i18n/routing";
+
+const LOCALE_NAMES: Record<Locale, string> = {
+  en: "English",
+  zh: "中文",
+  hi: "हिन्दी",
+  es: "Español",
+  fr: "Français",
+  ar: "العربية",
+  bn: "বাংলা",
+  pt: "Português",
+  ru: "Русский",
+  ja: "日本語",
+  sr: "Srpski",
+};
 
 interface HeaderProps {
   org: { id: string; name: string; slug: string };
@@ -32,7 +47,12 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const t = useTranslations("header");
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const initials = user.email?.slice(0, 2).toUpperCase() ?? "??";
+
+  const switchLocale = (next: Locale) => {
+    router.replace(pathname, { locale: next });
+  };
 
   const [query, setQuery] = useState("");
   const [guestResults, setGuestResults] = useState<GuestResult[]>([]);
@@ -215,6 +235,36 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
             </div>
           )}
         </div>
+
+        {/* Language switcher */}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>
+            <button
+              className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+              title={t("language")}
+            >
+              <Globe className="w-5 h-5" />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              align="end"
+              sideOffset={8}
+              className="z-50 w-52 max-h-80 overflow-y-auto rounded-lg border border-border bg-surface shadow-lg py-1"
+            >
+              {locales.map((l) => (
+                <DropdownMenu.Item
+                  key={l}
+                  onSelect={() => switchLocale(l)}
+                  className="flex items-center justify-between gap-2 px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors cursor-pointer outline-none"
+                >
+                  {LOCALE_NAMES[l]}
+                  {l === locale && <Check className="w-4 h-4 text-primary shrink-0" />}
+                </DropdownMenu.Item>
+              ))}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
 
         {/* Notifications */}
         <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors relative">

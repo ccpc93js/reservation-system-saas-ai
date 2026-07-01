@@ -1,5 +1,22 @@
 ## [Unreleased] - 2026-07-02
 
+feat: Phase 16 - add manual language switcher to header
+
+- Root cause of user-reported "wrong language selected" bug: browser
+  Accept-Language header (not IP geolocation) drives auto-detection —
+  working as designed, but there was no way to override it manually
+- Added globe-icon dropdown in header.tsx listing all 11 languages
+  (native names), checkmark on current locale, switches via
+  router.replace(pathname, { locale }) from next-intl navigation
+  (updates URL prefix + sets NEXT_LOCALE cookie, stays on same page)
+- New header.language message key across all 11 locales (350 keys
+  total now) — verified identical structure + every t() call
+  cross-checked against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [f487f7f] - 2026-07-02
+
 feat: Phase 16 - add Serbian locale
 
 - Added "sr" to src/i18n/routing.ts locales list (11 languages now)

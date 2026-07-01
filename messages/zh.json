@@ -24,7 +24,8 @@
     "newBooking": "新建预订",
     "newBookingTooltip": "前往排房日历创建新预订",
     "settingsMenuItem": "设置",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "language": "语言"
   },
   "sidebar": {
     "liveView": "实时视图",

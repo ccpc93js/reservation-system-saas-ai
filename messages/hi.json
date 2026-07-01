@@ -24,7 +24,8 @@
     "newBooking": "नई बुकिंग",
     "newBookingTooltip": "नई बुकिंग बनाने के लिए टेप कैलेंडर पर जाएं",
     "settingsMenuItem": "सेटिंग्स",
-    "signOut": "साइन आउट करें"
+    "signOut": "साइन आउट करें",
+    "language": "भाषा"
   },
   "sidebar": {
     "liveView": "लाइव व्यू",

@@ -24,7 +24,8 @@
     "newBooking": "নতুন বুকিং",
     "newBookingTooltip": "নতুন বুকিং তৈরি করতে টেপ ক্যালেন্ডারে যান",
     "settingsMenuItem": "সেটিংস",
-    "signOut": "সাইন আউট"
+    "signOut": "সাইন আউট",
+    "language": "ভাষা"
   },
   "sidebar": {
     "liveView": "লাইভ ভিউ",

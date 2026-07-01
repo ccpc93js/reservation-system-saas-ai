@@ -24,7 +24,8 @@
     "newBooking": "Nova rezervacija",
     "newBookingTooltip": "Idi na kalendar rezervacija da kreiraš novu rezervaciju",
     "settingsMenuItem": "Podešavanja",
-    "signOut": "Odjava"
+    "signOut": "Odjava",
+    "language": "Jezik"
   },
   "sidebar": {
     "liveView": "Uživo",

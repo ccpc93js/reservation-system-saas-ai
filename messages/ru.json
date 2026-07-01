@@ -24,7 +24,8 @@
     "newBooking": "Новое бронирование",
     "newBookingTooltip": "Перейти к шахматке, чтобы создать новое бронирование",
     "settingsMenuItem": "Настройки",
-    "signOut": "Выйти"
+    "signOut": "Выйти",
+    "language": "Язык"
   },
   "sidebar": {
     "liveView": "В реальном времени",

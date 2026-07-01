@@ -24,7 +24,8 @@
     "newBooking": "新規予約",
     "newBookingTooltip": "新規予約を作成するには予約カレンダーへ",
     "settingsMenuItem": "設定",
-    "signOut": "サインアウト"
+    "signOut": "サインアウト",
+    "language": "言語"
   },
   "sidebar": {
     "liveView": "ライブビュー",

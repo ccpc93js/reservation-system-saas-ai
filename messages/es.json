@@ -24,7 +24,8 @@
     "newBooking": "Nueva reserva",
     "newBookingTooltip": "Ir al calendario de reservas para crear una nueva",
     "settingsMenuItem": "Configuración",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "language": "Idioma"
   },
   "sidebar": {
     "liveView": "En vivo",

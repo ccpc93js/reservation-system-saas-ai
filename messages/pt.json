@@ -24,7 +24,8 @@
     "newBooking": "Nova reserva",
     "newBookingTooltip": "Ir ao calendário para criar uma nova reserva",
     "settingsMenuItem": "Configurações",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "language": "Idioma"
   },
   "sidebar": {
     "liveView": "Ao vivo",
