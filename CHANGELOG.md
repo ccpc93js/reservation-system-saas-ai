@@ -1,21 +1,22 @@
-## [Unreleased] - 2026-07-01
+## [873dc4d] - 2026-07-01
 
 feat: Phase 14 - Check-In Registry (Guest Book)
 
-- New Guest Book page (`/[slug]/checkin-history`) with full table, search, CSV export
-- Add to Guest Book from reservation drawer; duplicate detection (409 guard)
+- New Guest Book page (/[slug]/checkin-history) with table, search, CSV export
+- Add to Guest Book from reservation drawer; 409 duplicate guard
 - Edit dialog per row: Personal Info, Identity Document, Stay Details sections
-- Searchable country dropdowns (Citizenship + Country of Birth) via portal to escape overflow clipping
-- Delete record with confirmation; stale `inBook` state fixed (reset on close, re-fetch on open + after save)
+- Searchable country dropdowns (Citizenship + Country of Birth) via portal
+- Delete record with confirmation; stale inBook state fixed
 - Reservation # column in Guest Book table
-- Plan-based Guest Book limits: Free 500 / Pro 5,000 / Scale unlimited
-- Limit enforced server-side in POST `/api/reservations/[id]/registry`; usage shown in UI with amber/red indicators + banner at limit
-- Existing guest search in New Reservation drawer (debounced, click-outside, tab switcher)
-- Yup conditional validation: name/email only required when creating new guest (not selecting existing)
-- `router.refresh()` replaces `window.location.reload()` — drawer stays open after Save Payment
-- Tape chart: removed `mergedBlocksByBed` that incorrectly merged adjacent reservations from different bookings
-- RLS policies: DELETE + UPDATE on `checkin_registry` for org members
-- `COUNTRIES` array unified to `@/lib/countries` (removed inline duplicates in guest-dialog + checkin-history-client)
+- Plan-based limits: Free 500 / Pro 5,000 / Scale unlimited
+- Limit enforced server-side in POST /api/reservations/[id]/registry
+- Usage shown in UI with amber/red indicators + at-limit banner
+- Existing guest search in New Reservation drawer (debounced, tab switcher)
+- Yup conditional validation: fields only required when creating new guest
+- router.refresh() replaces window.location.reload() (drawer stays open)
+- Tape chart: removed mergedBlocksByBed (was merging different reservations)
+- RLS: DELETE + UPDATE policies on checkin_registry
+- COUNTRIES unified to @/lib/countries (removed inline duplicates)
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 
