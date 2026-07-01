@@ -1,5 +1,24 @@
 ## [Unreleased] - 2026-07-02
 
+feat: Phase 16 Stage 2f - translate pending-check-ins-client
+
+- pending-check-ins-client.tsx (766 lines, last calendar-adjacent
+  component): list view, bulk approve/reject bar, verification modal
+  (guest info, ID photos, guest portal link + QR toggle), single and
+  bulk rejection-reason dropdowns with translated labels while keeping
+  underlying values in English (backend-compatible, unchanged data
+  contract), all toasts
+- 53 new message keys across all 10 languages (new pendingCheckIns
+  namespace, 349 keys total in the whole message tree) — verified
+  identical structure across all 10 locale files + every t() call
+  cross-checked against en.json via script
+- This closes out all calendar-adjacent components; next up is
+  reservations/guests/rooms pages per the plan's sequencing
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [4c109e3] - 2026-07-02
+
 feat: Phase 16 Stage 2e - translate edit-reservation-drawer
 
 - edit-reservation-drawer.tsx (1153 lines, biggest single component
@@ -9,12 +28,12 @@ feat: Phase 16 Stage 2e - translate edit-reservation-drawer
   editable per-segment rates), payment fields, extend-stay flow with
   live balance preview, danger zone (cancel/delete), all toasts
 - ~90 new message keys across all 10 languages (calendar.editReservation
-  namespace, 296 keys total in the whole message tree now) — verified
+  namespace, 296 keys total in the whole message tree now) - verified
   identical structure across all 10 locale files + every t() call
   cross-checked against en.json via script
 - Known exclusion (same as Stage 2d): yup validation messages in
   src/lib/validations/reservation.ts stay English
-- Still not included: pending-check-ins-client.tsx (766 lines) — last
+- Still not included: pending-check-ins-client.tsx (766 lines) - last
   remaining calendar-adjacent component before moving to
   reservations/guests/rooms pages
 

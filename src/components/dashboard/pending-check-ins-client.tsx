@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   AlertCircle,
   CheckCircle,
@@ -50,6 +51,14 @@ const REJECTION_REASONS = [
 ];
 
 export default function PendingCheckInsClient() {
+  const t = useTranslations("pendingCheckIns");
+  const reasonLabels: Record<string, string> = {
+    "ID illegible": t("reasons.idIllegible"),
+    "Expired document": t("reasons.expiredDocument"),
+    "Doesn't match guest": t("reasons.guestMismatch"),
+    "Name mismatch": t("reasons.nameMismatch"),
+    "Other": t("reasons.other"),
+  };
   const [pending, setPending] = useState<PendingCheckIn[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCheckIn, setSelectedCheckIn] = useState<PendingCheckIn | null>(
@@ -79,12 +88,12 @@ export default function PendingCheckInsClient() {
     try {
       setLoading(true);
       const res = await fetch("/api/staff/check-in-pending");
-      if (!res.ok) throw new Error("Failed to fetch pending check-ins");
+      if (!res.ok) throw new Error(t("toasts.fetchFailed"));
       const result = await res.json();
       setPending(result.pending || []);
       setSelectedIds(new Set());
     } catch (error: any) {
-      toast.error(error.message || "Failed to load pending check-ins");
+      toast.error(error.message || t("toasts.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -119,11 +128,11 @@ export default function PendingCheckInsClient() {
           body: JSON.stringify({ verified: true }),
         });
       }
-      toast.success(`Approved ${selectedIds.size} check-in${selectedIds.size !== 1 ? "s" : ""}`);
+      toast.success(t("toasts.approvedCount", { count: selectedIds.size }));
       setSelectedIds(new Set());
       fetchPending();
     } catch (error: any) {
-      toast.error(error.message || "Failed to approve check-ins");
+      toast.error(error.message || t("toasts.approveFailed"));
     } finally {
       setBulkSubmitting(false);
     }
@@ -132,11 +141,11 @@ export default function PendingCheckInsClient() {
   const handleBulkReject = async () => {
     if (selectedIds.size === 0) return;
     if (!bulkRejectionReason) {
-      toast.error("Please select a rejection reason");
+      toast.error(t("toasts.selectReasonFirst"));
       return;
     }
     if (bulkRejectionReason === "Other" && !bulkCustomText) {
-      toast.error("Please provide details for custom rejection reason");
+      toast.error(t("toasts.customReasonRequired"));
       return;
     }
 
@@ -154,14 +163,14 @@ export default function PendingCheckInsClient() {
           body: JSON.stringify({ verified: false, rejection_reason: finalReason }),
         });
       }
-      toast.success(`Rejected ${selectedIds.size} check-in${selectedIds.size !== 1 ? "s" : ""}`);
+      toast.success(t("toasts.rejectedCount", { count: selectedIds.size }));
       setSelectedIds(new Set());
       setBulkAction(null);
       setBulkRejectionReason("");
       setBulkCustomText("");
       fetchPending();
     } catch (error: any) {
-      toast.error(error.message || "Failed to reject check-ins");
+      toast.error(error.message || t("toasts.rejectFailed"));
     } finally {
       setBulkSubmitting(false);
     }
@@ -184,15 +193,15 @@ export default function PendingCheckInsClient() {
         }
       );
 
-      if (!res.ok) throw new Error("Failed to approve check-in");
+      if (!res.ok) throw new Error(t("toasts.approveOneFailed"));
 
-      toast.success("Check-in approved! Guest will be notified.");
+      toast.success(t("toasts.approvedNotified"));
       setPending((prev) =>
         prev.filter((p) => p.id !== reservationId)
       );
       setSelectedCheckIn(null);
     } catch (error: any) {
-      toast.error(error.message || "Failed to approve check-in");
+      toast.error(error.message || t("toasts.approveOneFailed"));
     } finally {
       setVerification((prev) => ({
         ...prev,
@@ -204,12 +213,12 @@ export default function PendingCheckInsClient() {
 
   const handleReject = async (reservationId: string) => {
     if (!verification.rejectionReason) {
-      toast.error("Please select a rejection reason");
+      toast.error(t("toasts.selectReasonFirst"));
       return;
     }
 
     if (verification.rejectionReason === "Other" && !verification.customRejectionText) {
-      toast.error("Please provide details for custom rejection reason");
+      toast.error(t("toasts.customReasonRequired"));
       return;
     }
 
@@ -236,15 +245,15 @@ export default function PendingCheckInsClient() {
         }
       );
 
-      if (!res.ok) throw new Error("Failed to reject check-in");
+      if (!res.ok) throw new Error(t("toasts.rejectOneFailed"));
 
-      toast.success("Check-in rejected. Guest will be asked to resubmit.");
+      toast.success(t("toasts.rejectedResubmit"));
       setPending((prev) =>
         prev.filter((p) => p.id !== reservationId)
       );
       setSelectedCheckIn(null);
     } catch (error: any) {
-      toast.error(error.message || "Failed to reject check-in");
+      toast.error(error.message || t("toasts.rejectOneFailed"));
     } finally {
       setVerification((prev) => ({
         ...prev,
@@ -268,19 +277,19 @@ export default function PendingCheckInsClient() {
       <div className="p-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Pending Check-Ins
+            {t("title")}
           </h1>
           <p className="text-muted-foreground mb-8">
-            Review and verify guest self-check-ins
+            {t("subtitle")}
           </p>
 
           <div className="bg-slate-50 border border-border rounded-lg p-12 text-center">
             <CheckCircle className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-foreground">
-              All caught up!
+              {t("allCaughtUp")}
             </h2>
             <p className="text-muted-foreground mt-2">
-              No pending check-ins to review
+              {t("noneToReview")}
             </p>
           </div>
         </div>
@@ -295,11 +304,10 @@ export default function PendingCheckInsClient() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Pending Check-Ins
+              {t("title")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              {pending.length} guest{pending.length !== 1 ? "s" : ""} waiting for
-              verification
+              {t("waitingCount", { count: pending.length })}
             </p>
           </div>
           <button
@@ -307,7 +315,7 @@ export default function PendingCheckInsClient() {
             className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
-            Refresh
+            {t("refresh")}
           </button>
         </div>
 
@@ -315,7 +323,7 @@ export default function PendingCheckInsClient() {
         {selectedIds.size > 0 && (
           <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between">
             <p className="text-sm font-medium text-foreground">
-              {selectedIds.size} selected
+              {t("selectedCount", { count: selectedIds.size })}
             </p>
             <div className="flex gap-2">
               <button
@@ -328,7 +336,7 @@ export default function PendingCheckInsClient() {
                 ) : (
                   <CheckCircle className="w-4 h-4" />
                 )}
-                Approve All
+                {t("approveAll")}
               </button>
               <button
                 onClick={() => setBulkAction("reject")}
@@ -336,13 +344,13 @@ export default function PendingCheckInsClient() {
                 className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <XCircle className="w-4 h-4" />
-                Reject All
+                {t("rejectAll")}
               </button>
               <button
                 onClick={() => setSelectedIds(new Set())}
                 className="px-4 py-2 border border-primary/20 text-foreground rounded-lg hover:bg-primary/10 transition-colors"
               >
-                Clear
+                {t("clear")}
               </button>
             </div>
           </div>
@@ -373,25 +381,25 @@ export default function PendingCheckInsClient() {
                   </div>
                   <div className="grid grid-cols-4 gap-4 text-sm">
                     <div>
-                      <p className="text-xs text-muted-foreground">Check-in</p>
+                      <p className="text-xs text-muted-foreground">{t("colCheckIn")}</p>
                       <p className="font-medium text-foreground">
                         {new Date(checkIn.check_in).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Room</p>
+                      <p className="text-xs text-muted-foreground">{t("colRoom")}</p>
                       <p className="font-medium text-foreground">
                         {checkIn.room}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="text-xs text-muted-foreground">{t("colEmail")}</p>
                       <p className="font-medium text-foreground">
-                        {checkIn.guest?.email || "N/A"}
+                        {checkIn.guest?.email || t("notAvailable")}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Submitted</p>
+                      <p className="text-xs text-muted-foreground">{t("colSubmitted")}</p>
                       <p className="font-medium text-foreground">
                         {new Date(checkIn.submitted_at).toLocaleTimeString([], {
                           hour: "2-digit",
@@ -408,7 +416,7 @@ export default function PendingCheckInsClient() {
                   className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
                 >
                   <Eye className="w-4 h-4" />
-                  Review
+                  {t("review")}
                 </button>
               </div>
             </div>
@@ -423,7 +431,7 @@ export default function PendingCheckInsClient() {
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-border p-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
-                Verify Check-In
+                {t("verifyCheckIn")}
               </h2>
               <button
                 onClick={() => setSelectedCheckIn(null)}
@@ -438,7 +446,7 @@ export default function PendingCheckInsClient() {
               {/* Guest Info */}
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Guest Information
+                  {t("guestInformation")}
                 </h3>
                 <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg">
                   {Object.entries(selectedCheckIn.self_check_in_data).map(
@@ -459,13 +467,13 @@ export default function PendingCheckInsClient() {
               {/* ID Photos */}
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4">
-                  ID Photos
+                  {t("idPhotos")}
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {selectedCheckIn.id_photos.map((photo) => (
                     <div key={photo.type}>
                       <p className="text-sm font-medium text-foreground mb-2 capitalize">
-                        {photo.type} of ID
+                        {t("idPhotoOf", { type: photo.type })}
                       </p>
                       <a
                         href={photo.url}
@@ -487,10 +495,10 @@ export default function PendingCheckInsClient() {
               {/* Guest Portal Link */}
               <div className="border-t border-border pt-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Guest Portal Link
+                  {t("guestPortalLink")}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Share this link with the guest to complete check-in
+                  {t("guestPortalLinkHint")}
                 </p>
                 <div className="space-y-3">
                   <div className="flex gap-2">
@@ -505,7 +513,7 @@ export default function PendingCheckInsClient() {
                         navigator.clipboard.writeText(
                           generateGuestPortalLink(selectedCheckIn.check_in_token)
                         );
-                        toast.success("Link copied!");
+                        toast.success(t("toasts.linkCopied"));
                       }}
                       className="flex items-center gap-2 px-3 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors"
                     >
@@ -523,7 +531,7 @@ export default function PendingCheckInsClient() {
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-slate-50 transition-colors"
                   >
                     <QrCode className="w-4 h-4" />
-                    {verification.showQR ? "Hide" : "Show"} QR Code
+                    {verification.showQR ? t("hideQR") : t("showQR")}
                   </button>
 
                   {verification.showQR && (
@@ -542,7 +550,7 @@ export default function PendingCheckInsClient() {
               <div className="border-t border-border pt-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Verification Status
+                    {t("verificationStatus")}
                   </label>
                   <div className="space-y-2">
                     <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
@@ -561,7 +569,7 @@ export default function PendingCheckInsClient() {
                         className="w-4 h-4"
                       />
                       <span className="text-sm font-medium text-foreground">
-                        ✓ Approve Check-In
+                        {t("approveCheckIn")}
                       </span>
                     </label>
 
@@ -580,7 +588,7 @@ export default function PendingCheckInsClient() {
                         className="w-4 h-4"
                       />
                       <span className="text-sm font-medium text-foreground">
-                        ✗ Reject Check-In
+                        {t("rejectCheckIn")}
                       </span>
                     </label>
                   </div>
@@ -590,7 +598,7 @@ export default function PendingCheckInsClient() {
                   <div className="space-y-3">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Rejection Reason <span className="text-red-500">*</span>
+                        {t("rejectionReason")} <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={verification.rejectionReason}
@@ -602,10 +610,10 @@ export default function PendingCheckInsClient() {
                         }
                         className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
                       >
-                        <option value="">Select a reason...</option>
+                        <option value="">{t("selectReason")}</option>
                         {REJECTION_REASONS.map((reason) => (
                           <option key={reason} value={reason}>
-                            {reason}
+                            {reasonLabels[reason]}
                           </option>
                         ))}
                       </select>
@@ -614,7 +622,7 @@ export default function PendingCheckInsClient() {
                     {verification.rejectionReason === "Other" && (
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          Details <span className="text-red-500">*</span>
+                          {t("details")} <span className="text-red-500">*</span>
                         </label>
                         <textarea
                           value={verification.customRejectionText}
@@ -624,7 +632,7 @@ export default function PendingCheckInsClient() {
                               customRejectionText: e.target.value,
                             });
                           }}
-                          placeholder="Describe what needs to be corrected..."
+                          placeholder={t("detailsPlaceholder")}
                           className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
                           rows={3}
                         />
@@ -640,7 +648,7 @@ export default function PendingCheckInsClient() {
                   onClick={() => setSelectedCheckIn(null)}
                   className="flex-1 px-4 py-2 bg-muted hover:bg-muted/70 text-foreground rounded-lg transition-colors font-medium"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 {verification.action === "approve" ? (
                   <button
@@ -653,7 +661,7 @@ export default function PendingCheckInsClient() {
                     ) : (
                       <CheckCircle className="w-4 h-4" />
                     )}
-                    Approve
+                    {t("approve")}
                   </button>
                 ) : verification.action === "reject" ? (
                   <button
@@ -671,7 +679,7 @@ export default function PendingCheckInsClient() {
                     ) : (
                       <XCircle className="w-4 h-4" />
                     )}
-                    Reject
+                    {t("reject")}
                   </button>
                 ) : null}
               </div>
@@ -686,7 +694,7 @@ export default function PendingCheckInsClient() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="p-6 border-b border-border flex items-center justify-between">
               <h2 className="text-xl font-bold text-foreground">
-                Reject {selectedIds.size} Check-In{selectedIds.size !== 1 ? "s" : ""}?
+                {t("rejectNCheckIns", { count: selectedIds.size })}
               </h2>
               <button
                 onClick={() => setBulkAction(null)}
@@ -699,7 +707,7 @@ export default function PendingCheckInsClient() {
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Rejection Reason <span className="text-red-500">*</span>
+                  {t("rejectionReason")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={bulkRejectionReason}
@@ -709,10 +717,10 @@ export default function PendingCheckInsClient() {
                   }}
                   className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
-                  <option value="">Select a reason...</option>
+                  <option value="">{t("selectReason")}</option>
                   {REJECTION_REASONS.map((reason) => (
                     <option key={reason} value={reason}>
-                      {reason}
+                      {reasonLabels[reason]}
                     </option>
                   ))}
                 </select>
@@ -721,12 +729,12 @@ export default function PendingCheckInsClient() {
               {bulkRejectionReason === "Other" && (
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Details <span className="text-red-500">*</span>
+                    {t("details")} <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={bulkCustomText}
                     onChange={(e) => setBulkCustomText(e.target.value)}
-                    placeholder="Describe what needs to be corrected..."
+                    placeholder={t("detailsPlaceholder")}
                     className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
                     rows={3}
                   />
@@ -738,7 +746,7 @@ export default function PendingCheckInsClient() {
                   onClick={() => setBulkAction(null)}
                   className="flex-1 px-4 py-2 bg-muted hover:bg-muted/70 text-foreground rounded-lg transition-colors font-medium"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={handleBulkReject}
@@ -754,7 +762,7 @@ export default function PendingCheckInsClient() {
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
-                  Reject All
+                  {t("rejectAll")}
                 </button>
               </div>
             </div>
