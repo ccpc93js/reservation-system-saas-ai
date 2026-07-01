@@ -52,6 +52,10 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
 
   const switchLocale = (next: Locale) => {
     router.replace(pathname, { locale: next });
+    // root layout.tsx sits above the [locale] segment, so it isn't re-run by
+    // the client-side transition above — refresh() forces it to, keeping
+    // <html lang> in sync too.
+    router.refresh();
   };
 
   const [query, setQuery] = useState("");

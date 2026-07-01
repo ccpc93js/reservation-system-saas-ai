@@ -1,5 +1,51 @@
 ## [Unreleased] - 2026-07-02
 
+fix: Phase 16 - client components not re-translating on locale switch
+
+- Root cause: NextIntlClientProvider lived in root layout.tsx, which
+  sits *above* the [locale] URL segment. Next.js doesn't re-run layouts
+  above the segment that changed on client-side navigation, so
+  switching locales via the new header switcher left the provider
+  serving stale messages to every client component (header, sidebar,
+  arrivals-schedule, etc.) — only server-rendered content picked up
+  the new locale. User caught this live: URL changed to /zh/... but
+  header/search/arrivals text stayed English while server-rendered
+  stat cards correctly showed Chinese.
+- Fix: moved NextIntlClientProvider into a new src/app/[locale]/layout.tsx
+  (inside the segment that actually changes, so it re-runs on locale
+  switch). Root layout.tsx keeps only html/body/Toaster + best-effort
+  getLocale() for the initial <html lang> on full page loads.
+- Belt-and-suspenders: header.tsx's switchLocale() now also calls
+  router.refresh() after router.replace(), so <html lang>/dir stay in
+  sync even on pure client-side locale-only transitions.
+- Verified no component outside [locale] uses useTranslations/
+  getTranslations (so removing the provider from root layout is safe),
+  and that Header/Sidebar only ever render inside [locale]/[slug]/layout.tsx.
+- This was a real regression affecting the entire app's client-side
+  i18n, not a missing-translation gap — worth fixing before any more
+  translation work, since it would've undermined all of it.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [29789c1] - 2026-07-02
+
+feat: Phase 16 - add manual language switcher to header
+
+- Root cause of user-reported "wrong language selected" bug: browser
+  Accept-Language header (not IP geolocation) drives auto-detection -
+  working as designed, but there was no way to override it manually
+- Added globe-icon dropdown in header.tsx listing all 11 languages
+  (native names), checkmark on current locale, switches via
+  router.replace(pathname, { locale }) from next-intl navigation
+  (updates URL prefix + sets NEXT_LOCALE cookie, stays on same page)
+- New header.language message key across all 11 locales (350 keys
+  total now) - verified identical structure + every t() call
+  cross-checked against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-02
+
 feat: Phase 16 - add manual language switcher to header
 
 - Root cause of user-reported "wrong language selected" bug: browser
