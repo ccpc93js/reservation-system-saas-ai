@@ -439,5 +439,31 @@
       "statusUpdateFailed": "स्थिति अपडेट करने में विफल",
       "statusUpdated": "स्थिति अपडेट हो गई"
     }
+  },
+  "guests": {
+    "errorLoading": "अतिथि लोड करने में त्रुटि",
+    "title": "अतिथि निर्देशिका",
+    "subtitle": "अपने अतिथियों को प्रबंधित करें और उनका आरक्षण इतिहास देखें",
+    "newGuest": "नया अतिथि",
+    "searchPlaceholder": "नाम, ईमेल या फ़ोन से खोजें...",
+    "colName": "अतिथि का नाम",
+    "colEmail": "ईमेल",
+    "colPhone": "फ़ोन",
+    "colNationality": "राष्ट्रीयता",
+    "colCreated": "बनाया गया",
+    "colActions": "क्रियाएँ",
+    "noGuestsFound": "कोई अतिथि नहीं मिला",
+    "noGuestsYet": "अभी तक कोई अतिथि नहीं",
+    "noGuestsFoundHint": "जिस अतिथि की तलाश कर रहे हैं उसे खोजने के लिए अपनी खोज समायोजित करें।",
+    "noGuestsYetHint": "पहला आरक्षण बनाने के बाद अतिथि यहाँ दिखाई देंगे।",
+    "createGuestCta": "अतिथि बनाएं →",
+    "editGuestTitle": "अतिथि संपादित करें",
+    "deleteGuestTitle": "अतिथि हटाएं",
+    "pageOf": "पृष्ठ {page} / {totalPages} ({total} अतिथि)",
+    "confirmDelete": "क्या आप वाकई इस अतिथि को हटाना चाहते हैं?",
+    "toastLoadFailed": "अतिथि लोड करने में विफल",
+    "toastDeleteFailed": "अतिथि हटाने में विफल",
+    "toastDeleted": "अतिथि हटा दिया गया!",
+    "toastDeleteError": "अतिथि हटाने में त्रुटि"
   }
 }

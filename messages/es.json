@@ -439,5 +439,31 @@
       "statusUpdateFailed": "No se pudo actualizar el estado",
       "statusUpdated": "Estado actualizado"
     }
+  },
+  "guests": {
+    "errorLoading": "Error al cargar los huéspedes",
+    "title": "Directorio de huéspedes",
+    "subtitle": "Gestiona tus huéspedes y consulta su historial de reservas",
+    "newGuest": "Nuevo huésped",
+    "searchPlaceholder": "Buscar por nombre, correo o teléfono...",
+    "colName": "Nombre del huésped",
+    "colEmail": "Correo",
+    "colPhone": "Teléfono",
+    "colNationality": "Nacionalidad",
+    "colCreated": "Creado",
+    "colActions": "Acciones",
+    "noGuestsFound": "No se encontraron huéspedes",
+    "noGuestsYet": "Aún no hay huéspedes",
+    "noGuestsFoundHint": "Prueba a ajustar tu búsqueda para encontrar al huésped que buscas.",
+    "noGuestsYetHint": "Los huéspedes aparecerán aquí una vez que crees tu primera reserva.",
+    "createGuestCta": "Crear un huésped →",
+    "editGuestTitle": "Editar huésped",
+    "deleteGuestTitle": "Eliminar huésped",
+    "pageOf": "Página {page} de {totalPages} ({total} huéspedes)",
+    "confirmDelete": "¿Seguro que quieres eliminar este huésped?",
+    "toastLoadFailed": "Error al cargar los huéspedes",
+    "toastDeleteFailed": "Error al eliminar el huésped",
+    "toastDeleted": "¡Huésped eliminado!",
+    "toastDeleteError": "Error al eliminar el huésped"
   }
 }

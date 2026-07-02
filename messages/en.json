@@ -439,5 +439,31 @@
       "statusUpdateFailed": "Failed to update status",
       "statusUpdated": "Status updated"
     }
+  },
+  "guests": {
+    "errorLoading": "Error loading guests",
+    "title": "Guest Directory",
+    "subtitle": "Manage your guests and view their reservation history",
+    "newGuest": "New Guest",
+    "searchPlaceholder": "Search by name, email, or phone...",
+    "colName": "Guest Name",
+    "colEmail": "Email",
+    "colPhone": "Phone",
+    "colNationality": "Nationality",
+    "colCreated": "Created",
+    "colActions": "Actions",
+    "noGuestsFound": "No guests found",
+    "noGuestsYet": "No guests yet",
+    "noGuestsFoundHint": "Try adjusting your search to find the guest you're looking for.",
+    "noGuestsYetHint": "Guests will appear here once you create your first reservation.",
+    "createGuestCta": "Create a guest →",
+    "editGuestTitle": "Edit guest",
+    "deleteGuestTitle": "Delete guest",
+    "pageOf": "Page {page} of {totalPages} ({total} guests)",
+    "confirmDelete": "Are you sure you want to delete this guest?",
+    "toastLoadFailed": "Failed to load guests",
+    "toastDeleteFailed": "Failed to delete guest",
+    "toastDeleted": "Guest deleted!",
+    "toastDeleteError": "Error deleting guest"
   }
 }

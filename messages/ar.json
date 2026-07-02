@@ -439,5 +439,31 @@
       "statusUpdateFailed": "فشل تحديث الحالة",
       "statusUpdated": "تم تحديث الحالة"
     }
+  },
+  "guests": {
+    "errorLoading": "خطأ في تحميل النزلاء",
+    "title": "دليل النزلاء",
+    "subtitle": "أدر نزلاءك واطّلع على سجل حجوزاتهم",
+    "newGuest": "نزيل جديد",
+    "searchPlaceholder": "ابحث بالاسم أو البريد الإلكتروني أو الهاتف...",
+    "colName": "اسم النزيل",
+    "colEmail": "البريد الإلكتروني",
+    "colPhone": "الهاتف",
+    "colNationality": "الجنسية",
+    "colCreated": "تاريخ الإنشاء",
+    "colActions": "الإجراءات",
+    "noGuestsFound": "لم يتم العثور على نزلاء",
+    "noGuestsYet": "لا يوجد نزلاء بعد",
+    "noGuestsFoundHint": "حاول تعديل بحثك للعثور على النزيل الذي تبحث عنه.",
+    "noGuestsYetHint": "سيظهر النزلاء هنا بمجرد إنشاء أول حجز.",
+    "createGuestCta": "إنشاء نزيل ←",
+    "editGuestTitle": "تعديل النزيل",
+    "deleteGuestTitle": "حذف النزيل",
+    "pageOf": "صفحة {page} من {totalPages} ({total} نزيل)",
+    "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا النزيل؟",
+    "toastLoadFailed": "فشل تحميل النزلاء",
+    "toastDeleteFailed": "فشل حذف النزيل",
+    "toastDeleted": "تم حذف النزيل!",
+    "toastDeleteError": "خطأ أثناء حذف النزيل"
   }
 }

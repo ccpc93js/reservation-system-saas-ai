@@ -439,5 +439,31 @@
       "statusUpdateFailed": "Échec de la mise à jour du statut",
       "statusUpdated": "Statut mis à jour"
     }
+  },
+  "guests": {
+    "errorLoading": "Erreur lors du chargement des clients",
+    "title": "Répertoire des clients",
+    "subtitle": "Gérez vos clients et consultez leur historique de réservations",
+    "newGuest": "Nouveau client",
+    "searchPlaceholder": "Rechercher par nom, e-mail ou téléphone...",
+    "colName": "Nom du client",
+    "colEmail": "E-mail",
+    "colPhone": "Téléphone",
+    "colNationality": "Nationalité",
+    "colCreated": "Créé le",
+    "colActions": "Actions",
+    "noGuestsFound": "Aucun client trouvé",
+    "noGuestsYet": "Aucun client pour l'instant",
+    "noGuestsFoundHint": "Essayez d'ajuster votre recherche pour trouver le client que vous cherchez.",
+    "noGuestsYetHint": "Les clients apparaîtront ici dès que vous créerez votre première réservation.",
+    "createGuestCta": "Créer un client →",
+    "editGuestTitle": "Modifier le client",
+    "deleteGuestTitle": "Supprimer le client",
+    "pageOf": "Page {page} sur {totalPages} ({total} clients)",
+    "confirmDelete": "Voulez-vous vraiment supprimer ce client ?",
+    "toastLoadFailed": "Échec du chargement des clients",
+    "toastDeleteFailed": "Échec de la suppression du client",
+    "toastDeleted": "Client supprimé !",
+    "toastDeleteError": "Erreur lors de la suppression du client"
   }
 }

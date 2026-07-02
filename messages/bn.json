@@ -439,5 +439,31 @@
       "statusUpdateFailed": "অবস্থা আপডেট করতে ব্যর্থ",
       "statusUpdated": "অবস্থা আপডেট হয়েছে"
     }
+  },
+  "guests": {
+    "errorLoading": "অতিথি লোড করতে ত্রুটি",
+    "title": "অতিথি ডিরেক্টরি",
+    "subtitle": "আপনার অতিথিদের পরিচালনা করুন এবং তাদের সংরক্ষণের ইতিহাস দেখুন",
+    "newGuest": "নতুন অতিথি",
+    "searchPlaceholder": "নাম, ইমেল বা ফোন দিয়ে অনুসন্ধান করুন...",
+    "colName": "অতিথির নাম",
+    "colEmail": "ইমেল",
+    "colPhone": "ফোন",
+    "colNationality": "জাতীয়তা",
+    "colCreated": "তৈরি হয়েছে",
+    "colActions": "পদক্ষেপ",
+    "noGuestsFound": "কোনো অতিথি পাওয়া যায়নি",
+    "noGuestsYet": "এখনও কোনো অতিথি নেই",
+    "noGuestsFoundHint": "আপনি যে অতিথি খুঁজছেন তা খুঁজে পেতে আপনার অনুসন্ধান সামঞ্জস্য করার চেষ্টা করুন।",
+    "noGuestsYetHint": "আপনার প্রথম রিজার্ভেশন তৈরি করার পর অতিথিরা এখানে প্রদর্শিত হবে।",
+    "createGuestCta": "একজন অতিথি তৈরি করুন →",
+    "editGuestTitle": "অতিথি সম্পাদনা করুন",
+    "deleteGuestTitle": "অতিথি মুছুন",
+    "pageOf": "পৃষ্ঠা {page} / {totalPages} ({total} জন অতিথি)",
+    "confirmDelete": "আপনি কি নিশ্চিত যে আপনি এই অতিথিকে মুছতে চান?",
+    "toastLoadFailed": "অতিথি লোড করতে ব্যর্থ",
+    "toastDeleteFailed": "অতিথি মুছতে ব্যর্থ",
+    "toastDeleted": "অতিথি মুছে ফেলা হয়েছে!",
+    "toastDeleteError": "অতিথি মুছতে ত্রুটি"
   }
 }

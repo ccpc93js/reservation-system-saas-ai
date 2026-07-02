@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import GuestDialog from "@/components/guests/guest-dialog";
@@ -28,6 +29,7 @@ export default function GuestListClient({
   totalGuests,
   orgId,
 }: GuestListClientProps) {
+  const t = useTranslations("guests");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
@@ -55,7 +57,7 @@ export default function GuestListClient({
       setTotal(data.total || 0);
     } catch (error) {
       console.error("Failed to fetch guests:", error);
-      toast.error("Failed to load guests");
+      toast.error(t("toastLoadFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +83,7 @@ export default function GuestListClient({
   };
 
   const handleDelete = async (guestId: string) => {
-    if (!confirm("Are you sure you want to delete this guest?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     try {
       const res = await fetch(`/api/guests/${guestId}`, {
@@ -90,15 +92,15 @@ export default function GuestListClient({
       const result = await res.json();
 
       if (!res.ok) {
-        toast.error(result.error || "Failed to delete guest");
+        toast.error(result.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Guest deleted!");
+      toast.success(t("toastDeleted"));
       handleFetch(search, page);
     } catch (error) {
       console.error("Delete error:", error);
-      toast.error("Error deleting guest");
+      toast.error(t("toastDeleteError"));
     }
   };
 
@@ -149,9 +151,9 @@ export default function GuestListClient({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Guest Directory</h1>
+          <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-sm mt-0.5 text-muted-foreground">
-            Manage your guests and view their reservation history
+            {t("subtitle")}
           </p>
         </div>
         <button
@@ -159,7 +161,7 @@ export default function GuestListClient({
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
         >
           <Plus className="w-4 h-4" />
-          New Guest
+          {t("newGuest")}
         </button>
       </div>
 
@@ -168,7 +170,7 @@ export default function GuestListClient({
         <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Search by name, email, or phone..."
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 rounded-lg border border-border text-sm bg-surface text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
@@ -182,21 +184,21 @@ export default function GuestListClient({
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("full_name")}>
-                  Guest Name <SortIndicator column="full_name" />
+                  {t("colName")} <SortIndicator column="full_name" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("email")}>
-                  Email <SortIndicator column="email" />
+                  {t("colEmail")} <SortIndicator column="email" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("phone")}>
-                  Phone <SortIndicator column="phone" />
+                  {t("colPhone")} <SortIndicator column="phone" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("nationality")}>
-                  Nationality <SortIndicator column="nationality" />
+                  {t("colNationality")} <SortIndicator column="nationality" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("created_at")}>
-                  Created <SortIndicator column="created_at" />
+                  {t("colCreated")} <SortIndicator column="created_at" />
                 </th>
-                <th className="p-3 text-right">Actions</th>
+                <th className="p-3 text-right">{t("colActions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/70 text-foreground/85">
@@ -207,11 +209,11 @@ export default function GuestListClient({
                   <td colSpan={6} className="px-3 py-0">
                     <EmptyState
                       icon={<Users className="w-8 h-8" />}
-                      title={search ? "No guests found" : "No guests yet"}
+                      title={search ? t("noGuestsFound") : t("noGuestsYet")}
                       description={
                         search
-                          ? "Try adjusting your search to find the guest you're looking for."
-                          : "Guests will appear here once you create your first reservation."
+                          ? t("noGuestsFoundHint")
+                          : t("noGuestsYetHint")
                       }
                       action={
                         !search && (
@@ -222,7 +224,7 @@ export default function GuestListClient({
                             }}
                             className="text-sm font-medium text-primary hover:text-primary/80"
                           >
-                            Create a guest →
+                            {t("createGuestCta")}
                           </button>
                         )
                       }
@@ -246,14 +248,14 @@ export default function GuestListClient({
                         <button
                           onClick={() => handleOpenEdit(guest.id)}
                           className="p-1.5 rounded hover:bg-muted transition-colors text-muted-foreground hover:text-primary"
-                          title="Edit guest"
+                          title={t("editGuestTitle")}
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(guest.id)}
                           className="p-1.5 rounded hover:bg-red-100 transition-colors text-slate-400 hover:text-red-600"
-                          title="Delete guest"
+                          title={t("deleteGuestTitle")}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -271,7 +273,7 @@ export default function GuestListClient({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages} ({total} guests)
+            {t("pageOf", { page, totalPages, total })}
           </p>
           <div className="flex gap-2">
             <button

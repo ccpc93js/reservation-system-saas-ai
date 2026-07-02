@@ -439,5 +439,31 @@
       "statusUpdateFailed": "Neuspešno ažuriranje statusa",
       "statusUpdated": "Status ažuriran"
     }
+  },
+  "guests": {
+    "errorLoading": "Greška pri učitavanju gostiju",
+    "title": "Imenik gostiju",
+    "subtitle": "Upravljajte gostima i pregledajte istoriju njihovih rezervacija",
+    "newGuest": "Novi gost",
+    "searchPlaceholder": "Pretraga po imenu, e-pošti ili telefonu...",
+    "colName": "Ime gosta",
+    "colEmail": "E-pošta",
+    "colPhone": "Telefon",
+    "colNationality": "Nacionalnost",
+    "colCreated": "Kreirano",
+    "colActions": "Radnje",
+    "noGuestsFound": "Nema pronađenih gostiju",
+    "noGuestsYet": "Još nema gostiju",
+    "noGuestsFoundHint": "Pokušajte da prilagodite pretragu kako biste pronašli gosta kojeg tražite.",
+    "noGuestsYetHint": "Gosti će se pojaviti ovde nakon što napravite prvu rezervaciju.",
+    "createGuestCta": "Kreiraj gosta →",
+    "editGuestTitle": "Izmeni gosta",
+    "deleteGuestTitle": "Obriši gosta",
+    "pageOf": "Strana {page} od {totalPages} ({total} gostiju)",
+    "confirmDelete": "Da li ste sigurni da želite da obrišete ovog gosta?",
+    "toastLoadFailed": "Učitavanje gostiju nije uspelo",
+    "toastDeleteFailed": "Brisanje gosta nije uspelo",
+    "toastDeleted": "Gost je obrisan!",
+    "toastDeleteError": "Greška prilikom brisanja gosta"
   }
 }

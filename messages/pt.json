@@ -439,5 +439,31 @@
       "statusUpdateFailed": "Falha ao atualizar o status",
       "statusUpdated": "Status atualizado"
     }
+  },
+  "guests": {
+    "errorLoading": "Erro ao carregar hóspedes",
+    "title": "Diretório de hóspedes",
+    "subtitle": "Gerencie seus hóspedes e veja o histórico de reservas",
+    "newGuest": "Novo hóspede",
+    "searchPlaceholder": "Buscar por nome, e-mail ou telefone...",
+    "colName": "Nome do hóspede",
+    "colEmail": "E-mail",
+    "colPhone": "Telefone",
+    "colNationality": "Nacionalidade",
+    "colCreated": "Criado em",
+    "colActions": "Ações",
+    "noGuestsFound": "Nenhum hóspede encontrado",
+    "noGuestsYet": "Ainda não há hóspedes",
+    "noGuestsFoundHint": "Tente ajustar sua busca para encontrar o hóspede que procura.",
+    "noGuestsYetHint": "Os hóspedes aparecerão aqui assim que você criar sua primeira reserva.",
+    "createGuestCta": "Criar um hóspede →",
+    "editGuestTitle": "Editar hóspede",
+    "deleteGuestTitle": "Excluir hóspede",
+    "pageOf": "Página {page} de {totalPages} ({total} hóspedes)",
+    "confirmDelete": "Tem certeza de que deseja excluir este hóspede?",
+    "toastLoadFailed": "Falha ao carregar hóspedes",
+    "toastDeleteFailed": "Falha ao excluir hóspede",
+    "toastDeleted": "Hóspede excluído!",
+    "toastDeleteError": "Erro ao excluir hóspede"
   }
 }

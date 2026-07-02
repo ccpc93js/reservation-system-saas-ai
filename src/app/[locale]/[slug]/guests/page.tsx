@@ -1,8 +1,10 @@
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import GuestListClient from "@/components/guests/guest-list-client";
 
 export default async function GuestsPage() {
   const supabase = await createServerClient();
+  const t = await getTranslations("guests");
 
   // Get org context
   const { data: membership, error } = await supabase
@@ -11,7 +13,7 @@ export default async function GuestsPage() {
     .single();
 
   if (error || !membership) {
-    return <div>Error loading guests</div>;
+    return <div>{t("errorLoading")}</div>;
   }
 
   const orgId = (membership as any).organization_id as string;

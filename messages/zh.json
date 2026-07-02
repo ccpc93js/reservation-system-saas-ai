@@ -439,5 +439,31 @@
       "statusUpdateFailed": "状态更新失败",
       "statusUpdated": "状态已更新"
     }
+  },
+  "guests": {
+    "errorLoading": "加载客人时出错",
+    "title": "客人目录",
+    "subtitle": "管理客人并查看其预订历史",
+    "newGuest": "新增客人",
+    "searchPlaceholder": "按姓名、邮箱或电话搜索…",
+    "colName": "客人姓名",
+    "colEmail": "邮箱",
+    "colPhone": "电话",
+    "colNationality": "国籍",
+    "colCreated": "创建时间",
+    "colActions": "操作",
+    "noGuestsFound": "未找到客人",
+    "noGuestsYet": "暂无客人",
+    "noGuestsFoundHint": "请尝试调整搜索条件以找到您要查找的客人。",
+    "noGuestsYetHint": "创建第一笔预订后，客人将显示在此处。",
+    "createGuestCta": "创建客人 →",
+    "editGuestTitle": "编辑客人",
+    "deleteGuestTitle": "删除客人",
+    "pageOf": "第 {page} 页，共 {totalPages} 页（{total} 位客人）",
+    "confirmDelete": "确定要删除此客人吗？",
+    "toastLoadFailed": "加载客人失败",
+    "toastDeleteFailed": "删除客人失败",
+    "toastDeleted": "客人已删除！",
+    "toastDeleteError": "删除客人时出错"
   }
 }

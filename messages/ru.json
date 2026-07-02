@@ -439,5 +439,31 @@
       "statusUpdateFailed": "Не удалось обновить статус",
       "statusUpdated": "Статус обновлён"
     }
+  },
+  "guests": {
+    "errorLoading": "Ошибка загрузки гостей",
+    "title": "Справочник гостей",
+    "subtitle": "Управляйте гостями и просматривайте историю их бронирований",
+    "newGuest": "Новый гость",
+    "searchPlaceholder": "Поиск по имени, email или телефону...",
+    "colName": "Имя гостя",
+    "colEmail": "Email",
+    "colPhone": "Телефон",
+    "colNationality": "Национальность",
+    "colCreated": "Создано",
+    "colActions": "Действия",
+    "noGuestsFound": "Гости не найдены",
+    "noGuestsYet": "Пока нет гостей",
+    "noGuestsFoundHint": "Попробуйте изменить поиск, чтобы найти нужного гостя.",
+    "noGuestsYetHint": "Гости появятся здесь после создания первого бронирования.",
+    "createGuestCta": "Создать гостя →",
+    "editGuestTitle": "Редактировать гостя",
+    "deleteGuestTitle": "Удалить гостя",
+    "pageOf": "Страница {page} из {totalPages} ({total} гостей)",
+    "confirmDelete": "Вы уверены, что хотите удалить этого гостя?",
+    "toastLoadFailed": "Не удалось загрузить гостей",
+    "toastDeleteFailed": "Не удалось удалить гостя",
+    "toastDeleted": "Гость удалён!",
+    "toastDeleteError": "Ошибка при удалении гостя"
   }
 }

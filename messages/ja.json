@@ -439,5 +439,31 @@
       "statusUpdateFailed": "ステータスの更新に失敗しました",
       "statusUpdated": "ステータスを更新しました"
     }
+  },
+  "guests": {
+    "errorLoading": "ゲストの読み込みエラー",
+    "title": "ゲストディレクトリ",
+    "subtitle": "ゲストを管理し、予約履歴を確認できます",
+    "newGuest": "新規ゲスト",
+    "searchPlaceholder": "名前、メール、電話番号で検索...",
+    "colName": "ゲスト名",
+    "colEmail": "メール",
+    "colPhone": "電話番号",
+    "colNationality": "国籍",
+    "colCreated": "作成日",
+    "colActions": "操作",
+    "noGuestsFound": "ゲストが見つかりません",
+    "noGuestsYet": "まだゲストがいません",
+    "noGuestsFoundHint": "検索条件を調整して、お探しのゲストを見つけてください。",
+    "noGuestsYetHint": "最初の予約を作成すると、ここにゲストが表示されます。",
+    "createGuestCta": "ゲストを作成 →",
+    "editGuestTitle": "ゲストを編集",
+    "deleteGuestTitle": "ゲストを削除",
+    "pageOf": "{page} / {totalPages} ページ（{total} 名のゲスト）",
+    "confirmDelete": "このゲストを削除してもよろしいですか？",
+    "toastLoadFailed": "ゲストの読み込みに失敗しました",
+    "toastDeleteFailed": "ゲストの削除に失敗しました",
+    "toastDeleted": "ゲストを削除しました！",
+    "toastDeleteError": "ゲストの削除中にエラーが発生しました"
   }
 }
