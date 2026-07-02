@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 import Sidebar from "./sidebar";
 import Header from "./header";
 
 interface DashboardLayoutClientProps {
   org: { id: string; name: string; slug: string };
   userRole: string;
-  user?: { email?: string };
+  user: User;
   pendingPlan?: string | null;
   children: React.ReactNode;
 }

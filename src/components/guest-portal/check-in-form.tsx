@@ -560,7 +560,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
             <div className="flex justify-end gap-3 pt-4 border-t border-border">
               <button
                 onClick={() =>
-                  setCurrentStep(canProceedToPhotos ? "photos" : "form")
+                  setCurrentStep(canProceedToPhotos() ? "photos" : "form")
                 }
                 disabled={!canProceedToPhotos()}
                 className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"

@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import type { TablesUpdate } from "@/lib/types/database";
 
 async function getOrgAndVerify(supabase: any, userId: string, channelId: string) {
   const { data: membership } = await supabase
@@ -32,8 +33,8 @@ export async function PATCH(
     if (!access) return Response.json({ error: "Not found" }, { status: 404 });
 
     const body = await request.json();
-    const allowed = ["name", "platform", "ical_url", "bed_id", "color", "is_active"];
-    const update: Record<string, any> = { updated_at: new Date().toISOString() };
+    const allowed = ["name", "platform", "ical_url", "bed_id", "color", "is_active"] as const;
+    const update: TablesUpdate<"channels"> = { updated_at: new Date().toISOString() };
     for (const key of allowed) {
       if (key in body) update[key] = body[key];
     }

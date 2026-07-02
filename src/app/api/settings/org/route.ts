@@ -1,4 +1,5 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
+import type { TablesUpdate } from "@/lib/types/database";
 
 async function getOrgId(supabase: any, userId: string): Promise<string | null> {
   const { data } = await supabase
@@ -49,8 +50,8 @@ export async function PATCH(request: Request) {
 
     const body = await request.json();
     const allowed = ["name", "email", "phone", "address", "city", "country", "timezone",
-      "locale", "description", "website", "logo_url", "check_in_time", "check_out_time", "currency", "theme_color"];
-    const update: Record<string, any> = { updated_at: new Date().toISOString() };
+      "locale", "description", "website", "logo_url", "check_in_time", "check_out_time", "currency", "theme_color"] as const;
+    const update: TablesUpdate<"organizations"> = { updated_at: new Date().toISOString() };
     for (const key of allowed) {
       if (key in body) update[key] = body[key];
     }

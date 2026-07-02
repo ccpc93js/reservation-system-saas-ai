@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import type { TablesUpdate } from "@/lib/types/database";
 
 export async function PATCH(
   request: Request,
@@ -26,9 +27,9 @@ export async function PATCH(
       "payment_confirmed", "payment_currency", "paid_amount",
       "deposit_amount", "deposit_currency",
       "actual_check_in_at", "actual_check_out_at",
-    ];
+    ] as const;
 
-    const update: Record<string, any> = { updated_at: new Date().toISOString() };
+    const update: TablesUpdate<"reservations"> = { updated_at: new Date().toISOString() };
     for (const key of allowed) {
       if (key in body) update[key] = body[key];
     }

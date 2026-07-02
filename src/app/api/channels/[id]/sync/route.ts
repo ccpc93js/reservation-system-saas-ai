@@ -156,6 +156,9 @@ export async function POST(
           .update({ check_in: checkIn, check_out: checkOut })
           .eq("reservation_id", existing.id);
         results.updated++;
+      } else if (!guestId) {
+        console.error("Skipping OTA reservation: failed to create guest for", externalId);
+        results.errors++;
       } else {
         // Atomic: create reservation + reservation_item in one transaction via RPC
         const { error: rpcError } = await serviceClient.rpc("create_ota_reservation", {

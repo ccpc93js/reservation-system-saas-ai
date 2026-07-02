@@ -47,9 +47,12 @@ async function sendEmail(
   html: string
 ): Promise<boolean> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_APP_URL
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/email/send`
-      : "http://localhost:3000/api/email/send";
+    // Derive origin: prefer explicit env var, then Vercel system env, then localhost
+    const origin =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+      "http://localhost:3000";
+    const apiUrl = `${origin}/api/email/send`;
 
     const response = await fetch(apiUrl, {
       method: "POST",

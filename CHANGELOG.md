@@ -1,5 +1,44 @@
 ## [Unreleased] - 2026-07-02
 
+chore: prepare codebase for Vercel deployment
+
+- Replaced the stale hand-written src/lib/types/database.ts (a Phase 1
+  starter that was never regenerated) with real Supabase-generated
+  types covering every table/column added since (payment_confirmed,
+  deposit_amount, plan/stripe fields, checkin_registry, audit_log,
+  channels, invitations, etc). This alone had been silently masking
+  ~250 type errors across 32 files as `never`, blocking `next build`.
+- Found and upgraded @supabase/ssr from 0.6.1 to 0.12.0: the old
+  version's bundled types didn't match @supabase/supabase-js 2.106.1's
+  newer schema shape, which silently collapsed EVERY chained
+  `.from().select().eq()...` query result to `never[]` when 2+ filter
+  methods were chained without an `any` escape hatch — a much bigger
+  latent bug than the stale database.ts alone. Confirmed via isolated
+  repro before touching the rest of the codebase.
+- Fixed several real runtime bugs the new strict types surfaced:
+  scan_sessions insert used a nonexistent `user_id` column (should be
+  `created_by`) and never set the required unique `token` column, so
+  the OCR audit-trail insert had been failing silently on every call;
+  reservation_items has no `status` column, so the demo/analytics
+  occupancy + daily-revenue queries were filtering on a column that
+  doesn't exist there (fixed via `reservations!inner(status)` joins);
+  document-upload.tsx read `doc.filePath` off a type that never
+  defined it.
+- Fixed Next.js 15 async `params`/`searchParams` (must be
+  `Promise<{...}>` and awaited) in 4 route handlers that predated the
+  Next 15 upgrade: guest-portal page + 3 API routes.
+- Consolidated .env.example (all real vars: Supabase, Stripe, Resend,
+  Anthropic, CRON_SECRET, NEXT_PUBLIC_SITE_URL) and removed the stale,
+  drifted .env.local.example.
+- Made next.config.ts's serverActions.allowedOrigins and email.ts's
+  origin derivation both read NEXT_PUBLIC_SITE_URL/VERCEL_URL instead
+  of being hardcoded to localhost.
+- `npm run build` now completes with zero type errors (was ~250+).
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-02
+
 feat: Phase 16 - translate reservations list page
 
 - reservations-list-client.tsx + reservations/page.tsx: title, search,

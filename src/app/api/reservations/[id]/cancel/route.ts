@@ -95,7 +95,7 @@ export async function PATCH(
       .eq("id", id)
       .single();
 
-    if (resData) {
+    if (resData?.guest_id) {
       const { data: guest } = await supabase
         .from("guests")
         .select("first_name, last_name, email")

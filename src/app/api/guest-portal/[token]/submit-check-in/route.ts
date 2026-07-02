@@ -21,10 +21,10 @@ async function compressImage(file: File): Promise<Buffer> {
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
   try {
-    const token = params.token;
+    const { token } = await params;
     const supabase = await createServiceClient();
 
     // Validate token & get reservation

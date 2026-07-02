@@ -37,11 +37,11 @@ export async function POST() {
 
     // Re-seed rooms
     const { data: rooms } = await service.from("rooms").insert([
-      { organization_id: orgId, room_type_id: mixedDorm.id, name: "Dorm 101", floor: "1" },
-      { organization_id: orgId, room_type_id: mixedDorm.id, name: "Dorm 102", floor: "1" },
-      { organization_id: orgId, room_type_id: femaleDorm.id, name: "Dorm 201", floor: "2" },
-      { organization_id: orgId, room_type_id: privateRoom.id, name: "Private 301", floor: "3" },
-      { organization_id: orgId, room_type_id: privateRoom.id, name: "Private 302", floor: "3" },
+      { organization_id: orgId, room_type_id: mixedDorm.id, name: "Dorm 101", floor: 1 },
+      { organization_id: orgId, room_type_id: mixedDorm.id, name: "Dorm 102", floor: 1 },
+      { organization_id: orgId, room_type_id: femaleDorm.id, name: "Dorm 201", floor: 2 },
+      { organization_id: orgId, room_type_id: privateRoom.id, name: "Private 301", floor: 3 },
+      { organization_id: orgId, room_type_id: privateRoom.id, name: "Private 302", floor: 3 },
     ]).select();
 
     if (!rooms) return Response.json({ error: "Failed to seed rooms" }, { status: 500 });
@@ -108,6 +108,7 @@ export async function POST() {
           organization_id: orgId, guest_id: r.guest_id, check_in: r.check_in, check_out: r.check_out,
           status: r.status, channel_source: "direct", total_amount: total,
           paid_amount: r.status === "checked_out" ? total : 0,
+          reservation_number: "",
         }).select("id").single();
         if (res) {
           await service.from("reservation_items").insert({

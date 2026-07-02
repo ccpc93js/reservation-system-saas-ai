@@ -220,7 +220,7 @@ export default function OnboardingClient() {
 
                 <button
                   onClick={() => canProceed && setStep(2)}
-                  disabled={!canProceed || slugStatus === "checking"}
+                  disabled={!canProceed}
                   className="w-full py-3.5 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all mt-2 disabled:opacity-30"
                   style={{ background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}
                 >

@@ -2,15 +2,15 @@ import { redirect } from "next/navigation";
 import CheckInForm from "@/components/guest-portal/check-in-form";
 
 interface GuestPortalPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 export default async function GuestPortalPage({
   params,
 }: GuestPortalPageProps) {
-  const { token } = params;
+  const { token } = await params;
 
   if (!token) {
     redirect("/");

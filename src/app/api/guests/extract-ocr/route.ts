@@ -211,7 +211,8 @@ Response MUST be valid JSON in exactly this format:
     // Save to ScanSession table for audit trail
     const { error: scanError } = await supabase.from("scan_sessions").insert({
       organization_id: orgId,
-      user_id: user.id,
+      created_by: user.id,
+      token: crypto.randomUUID(),
       extracted_fields: extractedFields,
       photo_path: imageUrl.startsWith("data:") ? null : imageUrl,
       status: "completed",

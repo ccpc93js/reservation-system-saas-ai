@@ -152,11 +152,11 @@ export async function getOccupancyTimeline(orgId: string, days: number = 30) {
 
       const { data: booked, error: bookedError } = await supabase
         .from("reservation_items")
-        .select("id")
+        .select("id, reservations!inner(status)")
         .eq("organization_id", orgId)
         .lte("check_in", dateStr)
         .gt("check_out", dateStr)
-        .neq("status", "cancelled");
+        .neq("reservations.status", "cancelled");
 
       if (bookedError) continue;
 

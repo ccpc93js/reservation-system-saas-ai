@@ -107,10 +107,10 @@ export async function getRevenueMetrics(orgId: string) {
     // Revenue today
     const { data: todayRes, error: todayError } = await supabase
       .from("reservation_items")
-      .select("reservations(paid_amount)")
+      .select("reservations!inner(paid_amount, status)")
       .eq("organization_id", orgId)
       .eq("check_in", todayStr)
-      .neq("status", "cancelled");
+      .neq("reservations.status", "cancelled");
 
     if (todayError) {
       console.error("Error fetching daily revenue:", todayError);

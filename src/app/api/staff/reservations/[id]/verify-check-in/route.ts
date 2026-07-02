@@ -7,9 +7,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createServerClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -41,7 +42,7 @@ export async function PATCH(
     const { data: reservation, error: resError } = await supabase
       .from("reservations")
       .select("id, organization_id, guest_id, self_check_in_data, reservation_number, check_in")
-      .eq("id", params.id)
+      .eq("id", id)
       .single() as any;
 
     if (resError || !reservation) {
