@@ -642,6 +642,50 @@
         "saving": "保存中...",
         "save": "保存"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "ベッドの取得に失敗しました",
+      "confirmDelete": "このベッドを削除してもよろしいですか？",
+      "toastDeleteFailed": "ベッドの削除に失敗しました",
+      "toastDeleted": "ベッドを削除しました",
+      "searchPlaceholder": "ベッドを検索...",
+      "new": "新規",
+      "colName": "ベッド名",
+      "colRoom": "客室",
+      "colType": "タイプ",
+      "colStatus": "状態",
+      "colActions": "操作",
+      "active": "有効",
+      "inactive": "無効",
+      "noneFound": "ベッドが見つかりません",
+      "noneYet": "ベッドがまだありません",
+      "noneFoundHint": "検索条件を調整して、お探しのベッドを見つけてください。",
+      "noneYetHint": "先に客室を作成してから、ベッドを追加してください。",
+      "createCta": "ベッドを作成 →",
+      "showingRange": "{total} 件中 {from}〜{to} 件を表示",
+      "dialog": {
+        "toastLoadFailed": "ベッドの読み込みに失敗しました",
+        "toastSaveFailed": "ベッドの保存に失敗しました",
+        "toastUpdated": "ベッドを更新しました",
+        "toastCreated": "ベッドを作成しました",
+        "confirmDelete": "このベッドを削除してもよろしいですか？",
+        "toastDeleteFailed": "ベッドの削除に失敗しました",
+        "toastDeleted": "ベッドを削除しました",
+        "editTitle": "ベッドを編集",
+        "createTitle": "ベッドを作成",
+        "roomLabel": "客室 *",
+        "selectRoom": "客室を選択",
+        "nameLabel": "ベッド名 *",
+        "namePlaceholder": "例：ベッドA、二段ベッド1",
+        "positionLabel": "位置（任意）",
+        "positionPlaceholder": "例：1",
+        "isActiveLabel": "ベッドは有効です",
+        "deleting": "削除中...",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "saving": "保存中...",
+        "save": "保存"
+      }
     }
   }
 }

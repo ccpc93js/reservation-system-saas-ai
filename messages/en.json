@@ -642,6 +642,50 @@
         "saving": "Saving...",
         "save": "Save"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Failed to fetch beds",
+      "confirmDelete": "Are you sure you want to delete this bed?",
+      "toastDeleteFailed": "Failed to delete bed",
+      "toastDeleted": "Bed deleted successfully",
+      "searchPlaceholder": "Search beds...",
+      "new": "New",
+      "colName": "Bed Name",
+      "colRoom": "Room",
+      "colType": "Type",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "active": "Active",
+      "inactive": "Inactive",
+      "noneFound": "No beds found",
+      "noneYet": "No beds yet",
+      "noneFoundHint": "Try adjusting your search to find the bed you're looking for.",
+      "noneYetHint": "Create a room first, then add beds to it.",
+      "createCta": "Create a bed →",
+      "showingRange": "Showing {from} to {to} of {total}",
+      "dialog": {
+        "toastLoadFailed": "Failed to load bed",
+        "toastSaveFailed": "Failed to save bed",
+        "toastUpdated": "Bed updated successfully",
+        "toastCreated": "Bed created successfully",
+        "confirmDelete": "Are you sure you want to delete this bed?",
+        "toastDeleteFailed": "Failed to delete bed",
+        "toastDeleted": "Bed deleted successfully",
+        "editTitle": "Edit Bed",
+        "createTitle": "Create Bed",
+        "roomLabel": "Room *",
+        "selectRoom": "Select room",
+        "nameLabel": "Bed Name *",
+        "namePlaceholder": "e.g., Bed A, Bunk 1",
+        "positionLabel": "Position (optional)",
+        "positionPlaceholder": "e.g., 1",
+        "isActiveLabel": "Bed is active",
+        "deleting": "Deleting...",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "save": "Save"
+      }
     }
   }
 }

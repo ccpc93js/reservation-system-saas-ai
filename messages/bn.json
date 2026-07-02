@@ -642,6 +642,50 @@
         "saving": "সংরক্ষণ করা হচ্ছে...",
         "save": "সংরক্ষণ করুন"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "বিছানা আনতে ব্যর্থ",
+      "confirmDelete": "আপনি কি নিশ্চিত যে আপনি এই বিছানাটি মুছতে চান?",
+      "toastDeleteFailed": "বিছানা মুছতে ব্যর্থ",
+      "toastDeleted": "বিছানা সফলভাবে মুছে ফেলা হয়েছে",
+      "searchPlaceholder": "বিছানা খুঁজুন...",
+      "new": "নতুন",
+      "colName": "বিছানার নাম",
+      "colRoom": "রুম",
+      "colType": "ধরন",
+      "colStatus": "অবস্থা",
+      "colActions": "পদক্ষেপ",
+      "active": "সক্রিয়",
+      "inactive": "নিষ্ক্রিয়",
+      "noneFound": "কোনো বিছানা পাওয়া যায়নি",
+      "noneYet": "এখনও কোনো বিছানা নেই",
+      "noneFoundHint": "আপনি যে বিছানা খুঁজছেন তা খুঁজে পেতে আপনার অনুসন্ধান সামঞ্জস্য করার চেষ্টা করুন।",
+      "noneYetHint": "প্রথমে একটি রুম তৈরি করুন, তারপর তাতে বিছানা যোগ করুন।",
+      "createCta": "একটি বিছানা তৈরি করুন →",
+      "showingRange": "{total} এর মধ্যে {from} থেকে {to} দেখানো হচ্ছে",
+      "dialog": {
+        "toastLoadFailed": "বিছানা লোড করতে ব্যর্থ",
+        "toastSaveFailed": "বিছানা সংরক্ষণ করতে ব্যর্থ",
+        "toastUpdated": "বিছানা সফলভাবে আপডেট হয়েছে",
+        "toastCreated": "বিছানা সফলভাবে তৈরি হয়েছে",
+        "confirmDelete": "আপনি কি নিশ্চিত যে আপনি এই বিছানাটি মুছতে চান?",
+        "toastDeleteFailed": "বিছানা মুছতে ব্যর্থ",
+        "toastDeleted": "বিছানা সফলভাবে মুছে ফেলা হয়েছে",
+        "editTitle": "বিছানা সম্পাদনা করুন",
+        "createTitle": "বিছানা তৈরি করুন",
+        "roomLabel": "রুম *",
+        "selectRoom": "রুম নির্বাচন করুন",
+        "nameLabel": "বিছানার নাম *",
+        "namePlaceholder": "যেমন, বিছানা A, বাঙ্ক ১",
+        "positionLabel": "অবস্থান (ঐচ্ছিক)",
+        "positionPlaceholder": "যেমন, ১",
+        "isActiveLabel": "বিছানা সক্রিয় আছে",
+        "deleting": "মুছে ফেলা হচ্ছে...",
+        "delete": "মুছুন",
+        "cancel": "বাতিল",
+        "saving": "সংরক্ষণ করা হচ্ছে...",
+        "save": "সংরক্ষণ করুন"
+      }
     }
   }
 }

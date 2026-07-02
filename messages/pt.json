@@ -642,6 +642,50 @@
         "saving": "Salvando...",
         "save": "Salvar"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Falha ao buscar camas",
+      "confirmDelete": "Tem certeza de que deseja excluir esta cama?",
+      "toastDeleteFailed": "Falha ao excluir a cama",
+      "toastDeleted": "Cama excluída com sucesso",
+      "searchPlaceholder": "Buscar camas...",
+      "new": "Nova",
+      "colName": "Nome da cama",
+      "colRoom": "Quarto",
+      "colType": "Tipo",
+      "colStatus": "Status",
+      "colActions": "Ações",
+      "active": "Ativa",
+      "inactive": "Inativa",
+      "noneFound": "Nenhuma cama encontrada",
+      "noneYet": "Ainda não há camas",
+      "noneFoundHint": "Tente ajustar sua busca para encontrar a cama que procura.",
+      "noneYetHint": "Crie primeiro um quarto e depois adicione camas a ele.",
+      "createCta": "Criar uma cama →",
+      "showingRange": "Mostrando {from} a {to} de {total}",
+      "dialog": {
+        "toastLoadFailed": "Falha ao carregar a cama",
+        "toastSaveFailed": "Falha ao salvar a cama",
+        "toastUpdated": "Cama atualizada com sucesso",
+        "toastCreated": "Cama criada com sucesso",
+        "confirmDelete": "Tem certeza de que deseja excluir esta cama?",
+        "toastDeleteFailed": "Falha ao excluir a cama",
+        "toastDeleted": "Cama excluída com sucesso",
+        "editTitle": "Editar cama",
+        "createTitle": "Criar cama",
+        "roomLabel": "Quarto *",
+        "selectRoom": "Selecione o quarto",
+        "nameLabel": "Nome da cama *",
+        "namePlaceholder": "ex.: Cama A, Beliche 1",
+        "positionLabel": "Posição (opcional)",
+        "positionPlaceholder": "ex.: 1",
+        "isActiveLabel": "A cama está ativa",
+        "deleting": "Excluindo...",
+        "delete": "Excluir",
+        "cancel": "Cancelar",
+        "saving": "Salvando...",
+        "save": "Salvar"
+      }
     }
   }
 }

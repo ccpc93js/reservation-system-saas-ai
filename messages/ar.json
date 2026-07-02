@@ -642,6 +642,50 @@
         "saving": "جارٍ الحفظ...",
         "save": "حفظ"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "فشل جلب الأسرّة",
+      "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا السرير؟",
+      "toastDeleteFailed": "فشل حذف السرير",
+      "toastDeleted": "تم حذف السرير بنجاح",
+      "searchPlaceholder": "ابحث في الأسرّة...",
+      "new": "جديد",
+      "colName": "اسم السرير",
+      "colRoom": "الغرفة",
+      "colType": "النوع",
+      "colStatus": "الحالة",
+      "colActions": "الإجراءات",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "noneFound": "لم يتم العثور على أسرّة",
+      "noneYet": "لا توجد أسرّة بعد",
+      "noneFoundHint": "حاول تعديل بحثك للعثور على السرير الذي تبحث عنه.",
+      "noneYetHint": "أنشئ غرفة أولاً، ثم أضف إليها الأسرّة.",
+      "createCta": "إنشاء سرير ←",
+      "showingRange": "عرض {from} إلى {to} من {total}",
+      "dialog": {
+        "toastLoadFailed": "فشل تحميل السرير",
+        "toastSaveFailed": "فشل حفظ السرير",
+        "toastUpdated": "تم تحديث السرير بنجاح",
+        "toastCreated": "تم إنشاء السرير بنجاح",
+        "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا السرير؟",
+        "toastDeleteFailed": "فشل حذف السرير",
+        "toastDeleted": "تم حذف السرير بنجاح",
+        "editTitle": "تعديل السرير",
+        "createTitle": "إنشاء سرير",
+        "roomLabel": "الغرفة *",
+        "selectRoom": "اختر الغرفة",
+        "nameLabel": "اسم السرير *",
+        "namePlaceholder": "مثال: سرير A، سرير علوي 1",
+        "positionLabel": "الموضع (اختياري)",
+        "positionPlaceholder": "مثال: 1",
+        "isActiveLabel": "السرير نشط",
+        "deleting": "جارٍ الحذف...",
+        "delete": "حذف",
+        "cancel": "إلغاء",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ"
+      }
     }
   }
 }

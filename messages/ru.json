@@ -642,6 +642,50 @@
         "saving": "Сохранение...",
         "save": "Сохранить"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Не удалось получить кровати",
+      "confirmDelete": "Вы уверены, что хотите удалить эту кровать?",
+      "toastDeleteFailed": "Не удалось удалить кровать",
+      "toastDeleted": "Кровать успешно удалена",
+      "searchPlaceholder": "Поиск кроватей...",
+      "new": "Новая",
+      "colName": "Название кровати",
+      "colRoom": "Номер",
+      "colType": "Тип",
+      "colStatus": "Статус",
+      "colActions": "Действия",
+      "active": "Активна",
+      "inactive": "Неактивна",
+      "noneFound": "Кровати не найдены",
+      "noneYet": "Пока нет кроватей",
+      "noneFoundHint": "Попробуйте изменить поиск, чтобы найти нужную кровать.",
+      "noneYetHint": "Сначала создайте номер, затем добавьте в него кровати.",
+      "createCta": "Создать кровать →",
+      "showingRange": "Показано {from}–{to} из {total}",
+      "dialog": {
+        "toastLoadFailed": "Не удалось загрузить кровать",
+        "toastSaveFailed": "Не удалось сохранить кровать",
+        "toastUpdated": "Кровать успешно обновлена",
+        "toastCreated": "Кровать успешно создана",
+        "confirmDelete": "Вы уверены, что хотите удалить эту кровать?",
+        "toastDeleteFailed": "Не удалось удалить кровать",
+        "toastDeleted": "Кровать успешно удалена",
+        "editTitle": "Редактировать кровать",
+        "createTitle": "Создать кровать",
+        "roomLabel": "Номер *",
+        "selectRoom": "Выберите номер",
+        "nameLabel": "Название кровати *",
+        "namePlaceholder": "например, Кровать A, Койка 1",
+        "positionLabel": "Позиция (необязательно)",
+        "positionPlaceholder": "например, 1",
+        "isActiveLabel": "Кровать активна",
+        "deleting": "Удаление...",
+        "delete": "Удалить",
+        "cancel": "Отмена",
+        "saving": "Сохранение...",
+        "save": "Сохранить"
+      }
     }
   }
 }

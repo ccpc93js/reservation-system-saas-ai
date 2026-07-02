@@ -642,6 +642,50 @@
         "saving": "सहेजा जा रहा है...",
         "save": "सहेजें"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "बिस्तर लाने में विफल",
+      "confirmDelete": "क्या आप वाकई इस बिस्तर को हटाना चाहते हैं?",
+      "toastDeleteFailed": "बिस्तर हटाने में विफल",
+      "toastDeleted": "बिस्तर सफलतापूर्वक हटाया गया",
+      "searchPlaceholder": "बिस्तर खोजें...",
+      "new": "नया",
+      "colName": "बिस्तर का नाम",
+      "colRoom": "कमरा",
+      "colType": "प्रकार",
+      "colStatus": "स्थिति",
+      "colActions": "क्रियाएँ",
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय",
+      "noneFound": "कोई बिस्तर नहीं मिला",
+      "noneYet": "अभी तक कोई बिस्तर नहीं",
+      "noneFoundHint": "जिस बिस्तर की तलाश कर रहे हैं उसे खोजने के लिए अपनी खोज समायोजित करें।",
+      "noneYetHint": "पहले एक कमरा बनाएं, फिर उसमें बिस्तर जोड़ें।",
+      "createCta": "एक बिस्तर बनाएं →",
+      "showingRange": "{total} में से {from} से {to} दिखा रहे हैं",
+      "dialog": {
+        "toastLoadFailed": "बिस्तर लोड करने में विफल",
+        "toastSaveFailed": "बिस्तर सहेजने में विफल",
+        "toastUpdated": "बिस्तर सफलतापूर्वक अपडेट किया गया",
+        "toastCreated": "बिस्तर सफलतापूर्वक बनाया गया",
+        "confirmDelete": "क्या आप वाकई इस बिस्तर को हटाना चाहते हैं?",
+        "toastDeleteFailed": "बिस्तर हटाने में विफल",
+        "toastDeleted": "बिस्तर सफलतापूर्वक हटाया गया",
+        "editTitle": "बिस्तर संपादित करें",
+        "createTitle": "बिस्तर बनाएं",
+        "roomLabel": "कमरा *",
+        "selectRoom": "कमरा चुनें",
+        "nameLabel": "बिस्तर का नाम *",
+        "namePlaceholder": "जैसे, बिस्तर A, बंक 1",
+        "positionLabel": "स्थिति (वैकल्पिक)",
+        "positionPlaceholder": "जैसे, 1",
+        "isActiveLabel": "बिस्तर सक्रिय है",
+        "deleting": "हटाया जा रहा है...",
+        "delete": "हटाएं",
+        "cancel": "रद्द करें",
+        "saving": "सहेजा जा रहा है...",
+        "save": "सहेजें"
+      }
     }
   }
 }

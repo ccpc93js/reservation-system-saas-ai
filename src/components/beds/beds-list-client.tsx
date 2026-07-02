@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Bed as BedIcon, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import BedsDialog from "./beds-dialog";
@@ -17,6 +18,7 @@ export default function BedsListClient({
   initialBeds,
   initialTotal,
 }: BedsListClientProps) {
+  const t = useTranslations("rooms.beds");
   const [beds, setBeds] = useState<Bed[]>(initialBeds);
   const [total, setTotal] = useState(initialTotal);
   const [page, setPage] = useState(1);
@@ -46,7 +48,7 @@ export default function BedsListClient({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to fetch beds");
+        toast.error(data.error || t("toastFetchFailed"));
         return;
       }
 
@@ -54,7 +56,7 @@ export default function BedsListClient({
       setTotal(data.total);
       setPage(pageNum);
     } catch (error) {
-      toast.error("Failed to fetch beds");
+      toast.error(t("toastFetchFailed"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -67,7 +69,7 @@ export default function BedsListClient({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this bed?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     try {
       const res = await fetch(`/api/beds/${id}`, {
@@ -76,14 +78,14 @@ export default function BedsListClient({
 
       if (!res.ok) {
         const data = await res.json();
-        toast.error(data.error || "Failed to delete bed");
+        toast.error(data.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Bed deleted successfully");
+      toast.success(t("toastDeleted"));
       handleFetch(search, page);
     } catch (error) {
-      toast.error("Failed to delete bed");
+      toast.error(t("toastDeleteFailed"));
       console.error(error);
     }
   };
@@ -132,7 +134,7 @@ export default function BedsListClient({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search beds..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isLoading}
@@ -148,7 +150,7 @@ export default function BedsListClient({
           disabled={isLoading}
         >
           <Plus className="h-4 w-4" />
-          New
+          {t("new")}
         </button>
       </div>
 
@@ -157,16 +159,16 @@ export default function BedsListClient({
           <thead className="bg-gray-50 border-b">
             <tr>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
-                Bed Name <SortIndicator column="name" />
+                {t("colName")} <SortIndicator column="name" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("room_id")}>
-                Room <SortIndicator column="room_id" />
+                {t("colRoom")} <SortIndicator column="room_id" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Type</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colType")}</th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("is_active")}>
-                Status <SortIndicator column="is_active" />
+                {t("colStatus")} <SortIndicator column="is_active" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -193,7 +195,7 @@ export default function BedsListClient({
                           : "bg-gray-100 text-gray-800"
                       }`}
                     >
-                      {bed.is_active ? "Active" : "Inactive"}
+                      {bed.is_active ? t("active") : t("inactive")}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm flex gap-2">
@@ -226,11 +228,11 @@ export default function BedsListClient({
       {beds.length === 0 && (
         <EmptyState
           icon={<BedIcon className="w-8 h-8" />}
-          title={search ? "No beds found" : "No beds yet"}
+          title={search ? t("noneFound") : t("noneYet")}
           description={
             search
-              ? "Try adjusting your search to find the bed you're looking for."
-              : "Create a room first, then add beds to it."
+              ? t("noneFoundHint")
+              : t("noneYetHint")
           }
           action={
             !search && (
@@ -241,7 +243,7 @@ export default function BedsListClient({
                 }}
                 className="text-sm font-medium text-primary hover:text-primary/80"
               >
-                Create a bed →
+                {t("createCta")}
               </button>
             )
           }
@@ -250,7 +252,7 @@ export default function BedsListClient({
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-500">
-          Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total}
+          {t("showingRange", { from: ((page - 1) * pageSize) + 1, to: Math.min(page * pageSize, total), total })}
         </div>
         <div className="flex gap-2">
           <button

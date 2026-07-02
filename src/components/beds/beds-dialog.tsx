@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { createBedSchema, updateBedSchema } from "@/lib/validations/room";
 import { Room, Bed } from "@/lib/types/database";
 
@@ -24,6 +25,7 @@ export default function BedsDialog({
   onBedCreated,
   onBedUpdated,
 }: BedsDialogProps) {
+  const t = useTranslations("rooms.beds.dialog");
   const isEditing = !!bedId;
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -80,7 +82,7 @@ export default function BedsDialog({
       const bed = await res.json();
 
       if (!res.ok) {
-        toast.error("Failed to load bed");
+        toast.error(t("toastLoadFailed"));
         return;
       }
 
@@ -91,7 +93,7 @@ export default function BedsDialog({
         is_active: bed.is_active,
       });
     } catch (error) {
-      toast.error("Failed to load bed");
+      toast.error(t("toastLoadFailed"));
       console.error(error);
     }
   };
@@ -119,12 +121,12 @@ export default function BedsDialog({
       const responseData = await res.json();
 
       if (!res.ok) {
-        toast.error(responseData.error || "Failed to save bed");
+        toast.error(responseData.error || t("toastSaveFailed"));
         return;
       }
 
       toast.success(
-        isEditing ? "Bed updated successfully" : "Bed created successfully"
+        isEditing ? t("toastUpdated") : t("toastCreated")
       );
       onOpenChange(false);
       reset();
@@ -135,7 +137,7 @@ export default function BedsDialog({
         onBedCreated();
       }
     } catch (error) {
-      toast.error("Failed to save bed");
+      toast.error(t("toastSaveFailed"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -143,7 +145,7 @@ export default function BedsDialog({
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this bed?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     setIsDeleting(true);
     try {
@@ -154,11 +156,11 @@ export default function BedsDialog({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to delete bed");
+        toast.error(data.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Bed deleted successfully");
+      toast.success(t("toastDeleted"));
       onOpenChange(false);
       reset();
 
@@ -166,7 +168,7 @@ export default function BedsDialog({
         onBedUpdated();
       }
     } catch (error) {
-      toast.error("Failed to delete bed");
+      toast.error(t("toastDeleteFailed"));
       console.error(error);
     } finally {
       setIsDeleting(false);
@@ -180,7 +182,7 @@ export default function BedsDialog({
         <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto z-50">
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-xl font-bold">
-              {isEditing ? "Edit Bed" : "Create Bed"}
+              {isEditing ? t("editTitle") : t("createTitle")}
             </Dialog.Title>
             <Dialog.Close asChild>
               <button className="p-2 hover:bg-muted rounded transition-colors">
@@ -192,7 +194,7 @@ export default function BedsDialog({
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Room */}
             <div>
-              <label className="block text-sm font-medium mb-1">Room *</label>
+              <label className="block text-sm font-medium mb-1">{t("roomLabel")}</label>
               <select
                 {...register("room_id")}
                 className={`w-full px-3 py-2 border rounded-lg ${
@@ -200,7 +202,7 @@ export default function BedsDialog({
                 } disabled:opacity-50`}
                 disabled={isLoading || isDeleting}
               >
-                <option value="">Select room</option>
+                <option value="">{t("selectRoom")}</option>
                 {rooms.map((room) => {
                   const roomType = (room as any).room_types;
                   return (
@@ -217,10 +219,10 @@ export default function BedsDialog({
 
             {/* Bed Name */}
             <div>
-              <label className="block text-sm font-medium mb-1">Bed Name *</label>
+              <label className="block text-sm font-medium mb-1">{t("nameLabel")}</label>
               <input
                 type="text"
-                placeholder="e.g., Bed A, Bunk 1"
+                placeholder={t("namePlaceholder")}
                 {...register("name")}
                 className={`w-full px-3 py-2 border rounded-lg ${
                   errors.name ? "border-red-500" : "border-border"
@@ -234,10 +236,10 @@ export default function BedsDialog({
 
             {/* Position */}
             <div>
-              <label className="block text-sm font-medium mb-1">Position (optional)</label>
+              <label className="block text-sm font-medium mb-1">{t("positionLabel")}</label>
               <input
                 type="number"
-                placeholder="e.g., 1"
+                placeholder={t("positionPlaceholder")}
                 {...register("position", { valueAsNumber: true })}
                 className="w-full px-3 py-2 border border-border rounded-lg bg-background disabled:opacity-50"
                 disabled={isLoading || isDeleting}
@@ -258,7 +260,7 @@ export default function BedsDialog({
                 className="rounded"
               />
               <label htmlFor="is_active" className="text-sm font-medium cursor-pointer">
-                Bed is active
+                {t("isActiveLabel")}
               </label>
             </div>
 
@@ -271,7 +273,7 @@ export default function BedsDialog({
                   disabled={isLoading || isDeleting}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                 >
-                  {isDeleting ? "Deleting..." : "Delete"}
+                  {isDeleting ? t("deleting") : t("delete")}
                 </button>
               )}
               <div className="ml-auto flex gap-2">
@@ -281,7 +283,7 @@ export default function BedsDialog({
                     disabled={isLoading || isDeleting}
                     className="px-4 py-2 border border-border rounded-lg hover:bg-muted disabled:opacity-50 transition-colors"
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </Dialog.Close>
                 <button
@@ -289,7 +291,7 @@ export default function BedsDialog({
                   disabled={isLoading || isDeleting}
                   className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
                 >
-                  {isLoading ? "Saving..." : "Save"}
+                  {isLoading ? t("saving") : t("save")}
                 </button>
               </div>
             </div>

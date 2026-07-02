@@ -642,6 +642,50 @@
         "saving": "Guardando...",
         "save": "Guardar"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Error al obtener las camas",
+      "confirmDelete": "¿Seguro que quieres eliminar esta cama?",
+      "toastDeleteFailed": "Error al eliminar la cama",
+      "toastDeleted": "Cama eliminada correctamente",
+      "searchPlaceholder": "Buscar camas...",
+      "new": "Nueva",
+      "colName": "Nombre de la cama",
+      "colRoom": "Habitación",
+      "colType": "Tipo",
+      "colStatus": "Estado",
+      "colActions": "Acciones",
+      "active": "Activa",
+      "inactive": "Inactiva",
+      "noneFound": "No se encontraron camas",
+      "noneYet": "Aún no hay camas",
+      "noneFoundHint": "Prueba a ajustar tu búsqueda para encontrar la cama que buscas.",
+      "noneYetHint": "Crea primero una habitación y luego añádele camas.",
+      "createCta": "Crear una cama →",
+      "showingRange": "Mostrando {from} a {to} de {total}",
+      "dialog": {
+        "toastLoadFailed": "Error al cargar la cama",
+        "toastSaveFailed": "Error al guardar la cama",
+        "toastUpdated": "Cama actualizada correctamente",
+        "toastCreated": "Cama creada correctamente",
+        "confirmDelete": "¿Seguro que quieres eliminar esta cama?",
+        "toastDeleteFailed": "Error al eliminar la cama",
+        "toastDeleted": "Cama eliminada correctamente",
+        "editTitle": "Editar cama",
+        "createTitle": "Crear cama",
+        "roomLabel": "Habitación *",
+        "selectRoom": "Selecciona la habitación",
+        "nameLabel": "Nombre de la cama *",
+        "namePlaceholder": "p. ej., Cama A, Litera 1",
+        "positionLabel": "Posición (opcional)",
+        "positionPlaceholder": "p. ej., 1",
+        "isActiveLabel": "La cama está activa",
+        "deleting": "Eliminando...",
+        "delete": "Eliminar",
+        "cancel": "Cancelar",
+        "saving": "Guardando...",
+        "save": "Guardar"
+      }
     }
   }
 }

@@ -642,6 +642,50 @@
         "saving": "Enregistrement...",
         "save": "Enregistrer"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Échec de la récupération des lits",
+      "confirmDelete": "Voulez-vous vraiment supprimer ce lit ?",
+      "toastDeleteFailed": "Échec de la suppression du lit",
+      "toastDeleted": "Lit supprimé avec succès",
+      "searchPlaceholder": "Rechercher des lits...",
+      "new": "Nouveau",
+      "colName": "Nom du lit",
+      "colRoom": "Chambre",
+      "colType": "Type",
+      "colStatus": "Statut",
+      "colActions": "Actions",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "noneFound": "Aucun lit trouvé",
+      "noneYet": "Aucun lit pour l'instant",
+      "noneFoundHint": "Essayez d'ajuster votre recherche pour trouver le lit que vous cherchez.",
+      "noneYetHint": "Créez d'abord une chambre, puis ajoutez-y des lits.",
+      "createCta": "Créer un lit →",
+      "showingRange": "Affichage de {from} à {to} sur {total}",
+      "dialog": {
+        "toastLoadFailed": "Échec du chargement du lit",
+        "toastSaveFailed": "Échec de l'enregistrement du lit",
+        "toastUpdated": "Lit mis à jour avec succès",
+        "toastCreated": "Lit créé avec succès",
+        "confirmDelete": "Voulez-vous vraiment supprimer ce lit ?",
+        "toastDeleteFailed": "Échec de la suppression du lit",
+        "toastDeleted": "Lit supprimé avec succès",
+        "editTitle": "Modifier le lit",
+        "createTitle": "Créer un lit",
+        "roomLabel": "Chambre *",
+        "selectRoom": "Sélectionner la chambre",
+        "nameLabel": "Nom du lit *",
+        "namePlaceholder": "p. ex. Lit A, Couchette 1",
+        "positionLabel": "Position (facultatif)",
+        "positionPlaceholder": "p. ex. 1",
+        "isActiveLabel": "Le lit est actif",
+        "deleting": "Suppression...",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "saving": "Enregistrement...",
+        "save": "Enregistrer"
+      }
     }
   }
 }

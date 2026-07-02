@@ -642,6 +642,50 @@
         "saving": "Čuvanje...",
         "save": "Sačuvaj"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "Preuzimanje kreveta nije uspelo",
+      "confirmDelete": "Da li ste sigurni da želite da obrišete ovaj krevet?",
+      "toastDeleteFailed": "Brisanje kreveta nije uspelo",
+      "toastDeleted": "Krevet je uspešno obrisan",
+      "searchPlaceholder": "Pretraga kreveta...",
+      "new": "Novi",
+      "colName": "Naziv kreveta",
+      "colRoom": "Soba",
+      "colType": "Tip",
+      "colStatus": "Status",
+      "colActions": "Radnje",
+      "active": "Aktivan",
+      "inactive": "Neaktivan",
+      "noneFound": "Nema pronađenih kreveta",
+      "noneYet": "Još nema kreveta",
+      "noneFoundHint": "Pokušajte da prilagodite pretragu kako biste pronašli krevet koji tražite.",
+      "noneYetHint": "Prvo kreirajte sobu, a zatim joj dodajte krevete.",
+      "createCta": "Kreiraj krevet →",
+      "showingRange": "Prikazano {from}–{to} od {total}",
+      "dialog": {
+        "toastLoadFailed": "Učitavanje kreveta nije uspelo",
+        "toastSaveFailed": "Čuvanje kreveta nije uspelo",
+        "toastUpdated": "Krevet je uspešno ažuriran",
+        "toastCreated": "Krevet je uspešno kreiran",
+        "confirmDelete": "Da li ste sigurni da želite da obrišete ovaj krevet?",
+        "toastDeleteFailed": "Brisanje kreveta nije uspelo",
+        "toastDeleted": "Krevet je uspešno obrisan",
+        "editTitle": "Izmeni krevet",
+        "createTitle": "Kreiraj krevet",
+        "roomLabel": "Soba *",
+        "selectRoom": "Izaberite sobu",
+        "nameLabel": "Naziv kreveta *",
+        "namePlaceholder": "npr. Krevet A, Sprat krevet 1",
+        "positionLabel": "Pozicija (opciono)",
+        "positionPlaceholder": "npr. 1",
+        "isActiveLabel": "Krevet je aktivan",
+        "deleting": "Brisanje...",
+        "delete": "Obriši",
+        "cancel": "Otkaži",
+        "saving": "Čuvanje...",
+        "save": "Sačuvaj"
+      }
     }
   }
 }

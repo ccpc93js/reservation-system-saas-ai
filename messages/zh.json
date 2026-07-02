@@ -642,6 +642,50 @@
         "saving": "保存中…",
         "save": "保存"
       }
+    },
+    "beds": {
+      "toastFetchFailed": "获取床位失败",
+      "confirmDelete": "确定要删除此床位吗？",
+      "toastDeleteFailed": "删除床位失败",
+      "toastDeleted": "床位删除成功",
+      "searchPlaceholder": "搜索床位…",
+      "new": "新增",
+      "colName": "床位名称",
+      "colRoom": "房间",
+      "colType": "类型",
+      "colStatus": "状态",
+      "colActions": "操作",
+      "active": "启用",
+      "inactive": "停用",
+      "noneFound": "未找到床位",
+      "noneYet": "暂无床位",
+      "noneFoundHint": "请尝试调整搜索条件以找到您要查找的床位。",
+      "noneYetHint": "请先创建一个房间，然后向其中添加床位。",
+      "createCta": "创建床位 →",
+      "showingRange": "显示第 {from} 至 {to} 项，共 {total} 项",
+      "dialog": {
+        "toastLoadFailed": "加载床位失败",
+        "toastSaveFailed": "保存床位失败",
+        "toastUpdated": "床位更新成功",
+        "toastCreated": "床位创建成功",
+        "confirmDelete": "确定要删除此床位吗？",
+        "toastDeleteFailed": "删除床位失败",
+        "toastDeleted": "床位删除成功",
+        "editTitle": "编辑床位",
+        "createTitle": "创建床位",
+        "roomLabel": "房间 *",
+        "selectRoom": "选择房间",
+        "nameLabel": "床位名称 *",
+        "namePlaceholder": "例如：A 床、上铺 1",
+        "positionLabel": "位置（可选）",
+        "positionPlaceholder": "例如：1",
+        "isActiveLabel": "床位启用中",
+        "deleting": "删除中…",
+        "delete": "删除",
+        "cancel": "取消",
+        "saving": "保存中…",
+        "save": "保存"
+      }
     }
   }
 }
