@@ -721,6 +721,52 @@
       "confirmRemove": "确定要将 {email} 从该组织中移除吗？",
       "toastRemoved": "成员已移除",
       "toastRemoveFailed": "移除成员失败"
+    },
+    "billing": {
+      "toastAdminOnly": "只有管理员可以管理账单",
+      "toastPlanUpdated": "套餐已更新！",
+      "toastCheckoutFailed": "启动结账失败",
+      "toastPortalFailed": "打开账单门户失败",
+      "paymentRequiredTitle": "需要付款才能访问您的控制台",
+      "paymentRequiredDesc": "您选择了 <strong>{plan}</strong> 套餐（{price}/月）。请在下方完成付款以激活您的账户。",
+      "heading": "账单与套餐",
+      "subtitle": "管理您的订阅和使用情况",
+      "planLabel": "{name} 套餐",
+      "freeForever": "永久免费",
+      "cancelsOn": "于 {date} 取消",
+      "manageBilling": "管理账单",
+      "opening": "打开中…",
+      "bedsLabel": "床位",
+      "teamMembersLabel": "团队成员",
+      "availablePlans": "可用套餐",
+      "current": "当前",
+      "loadingEllipsis": "加载中…",
+      "upgrade": "升级",
+      "downgrade": "降级",
+      "adminOnlyNotice": "只有管理员可以管理账单。",
+      "features": {
+        "free": [
+          "20 个床位",
+          "1 名团队成员",
+          "预订与日历",
+          "客人管理"
+        ],
+        "pro": [
+          "60 个床位",
+          "3 名团队成员",
+          "渠道管理器（iCal 同步）",
+          "客人自助入住门户",
+          "分析与报告",
+          "自定义品牌"
+        ],
+        "scale": [
+          "无限床位",
+          "无限团队成员",
+          "多物业管理",
+          "优先支持",
+          "API 访问"
+        ]
+      }
     }
   }
 }

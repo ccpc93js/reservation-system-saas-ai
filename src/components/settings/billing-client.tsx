@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { CheckCircle, Zap, Building2, ExternalLink, CreditCard } from "lucide-react";
 import { PLAN_LIMITS, PLAN_NAMES, PLAN_PRICES, type Plan } from "@/lib/plan";
 
@@ -13,14 +14,13 @@ interface Props {
   required?: boolean;
 }
 
-const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId: string | null; features: string[] }[] = [
+const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId: string | null }[] = [
   {
     key: "free",
     icon: Building2,
     color: "#6b7280",
     highlight: false,
     priceId: null,
-    features: ["20 beds", "1 team member", "Reservations & calendar", "Guest management"],
   },
   {
     key: "pro",
@@ -28,7 +28,6 @@ const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId:
     color: "#7c3aed",
     highlight: true,
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_MONTHLY ?? "",
-    features: ["60 beds", "3 team members", "Channel Manager (iCal sync)", "Guest self check-in portal", "Analytics & reports", "Custom branding"],
   },
   {
     key: "scale",
@@ -36,7 +35,6 @@ const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId:
     color: "#0f766e",
     highlight: false,
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_MONTHLY ?? "",
-    features: ["Unlimited beds", "Unlimited team members", "Multi-property", "Priority support", "API access"],
   },
 ];
 
@@ -64,6 +62,7 @@ function UsageBar({ current, max, label }: { current: number; max: number; label
 }
 
 export default function BillingClient({ org, userRole, usage, required }: Props) {
+  const t = useTranslations("settings.billing");
   const router = useRouter();
   const plan = (org.plan ?? "free") as Plan;
   const pendingPlan = (org.pending_plan ?? null) as Plan | null;
@@ -81,7 +80,7 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
   }, []);
 
   const handleUpgrade = async (targetPlan: Plan, priceId: string) => {
-    if (!isAdmin) { toast.error("Only admins can manage billing"); return; }
+    if (!isAdmin) { toast.error(t("toastAdminOnly")); return; }
     setLoading(targetPlan);
     try {
       const res = await fetch("/api/billing/checkout", {
@@ -92,13 +91,13 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       if (data.upgraded) {
-        toast.success("Plan updated!");
+        toast.success(t("toastPlanUpdated"));
         router.refresh();
       } else {
         window.location.href = data.url;
       }
     } catch (err: any) {
-      toast.error(err.message || "Failed to start checkout");
+      toast.error(err.message || t("toastCheckoutFailed"));
     } finally {
       setLoading(null);
     }
@@ -112,7 +111,7 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
       if (!res.ok) throw new Error(data.error);
       window.open(data.url, "_blank");
     } catch (err: any) {
-      toast.error(err.message || "Failed to open billing portal");
+      toast.error(err.message || t("toastPortalFailed"));
     } finally {
       setLoading(null);
     }
@@ -127,10 +126,13 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
             <CreditCard className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-amber-900 text-sm">Payment required to access your dashboard</p>
+            <p className="font-bold text-amber-900 text-sm">{t("paymentRequiredTitle")}</p>
             <p className="text-xs text-amber-700 mt-1">
-              You selected the <strong>{PLAN_NAMES[pendingPlan]}</strong> plan ({PLAN_PRICES[pendingPlan]}/mo).
-              Complete payment below to activate your account.
+              {t.rich("paymentRequiredDesc", {
+                strong: (chunks) => <strong>{chunks}</strong>,
+                plan: PLAN_NAMES[pendingPlan],
+                price: PLAN_PRICES[pendingPlan],
+              })}
             </p>
           </div>
         </div>
@@ -138,8 +140,8 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>Billing & Plan</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Manage your subscription and usage</p>
+        <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">{t("subtitle")}</p>
       </div>
 
       {/* Current plan card */}
@@ -147,36 +149,36 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-foreground">{PLAN_NAMES[plan]} Plan</span>
+              <span className="text-sm font-bold text-foreground">{t("planLabel", { name: PLAN_NAMES[plan] })}</span>
               <span className="text-xs px-2 py-0.5 rounded-full font-semibold text-white"
                 style={{ backgroundColor: PLANS.find(p => p.key === plan)?.color }}>
                 {plan.toUpperCase()}
               </span>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {plan === "free" ? "Free forever" : PLAN_PRICES[plan]}
-              {org.plan_expires_at && ` · Cancels ${new Date(org.plan_expires_at).toLocaleDateString()}`}
+              {plan === "free" ? t("freeForever") : PLAN_PRICES[plan]}
+              {org.plan_expires_at && ` · ${t("cancelsOn", { date: new Date(org.plan_expires_at).toLocaleDateString() })}`}
             </p>
           </div>
           {plan !== "free" && org.stripe_customer_id && isAdmin && (
             <button onClick={handleManageBilling} disabled={loading === "portal"}
               className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground border border-border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors disabled:opacity-50">
               <CreditCard className="w-3.5 h-3.5" />
-              {loading === "portal" ? "Opening..." : "Manage billing"}
+              {loading === "portal" ? t("opening") : t("manageBilling")}
             </button>
           )}
         </div>
 
         {/* Usage bars */}
         <div className="space-y-3 pt-2 border-t border-border">
-          <UsageBar current={usage.beds} max={limits.beds} label="Beds" />
-          <UsageBar current={usage.users} max={limits.users} label="Team members" />
+          <UsageBar current={usage.beds} max={limits.beds} label={t("bedsLabel")} />
+          <UsageBar current={usage.users} max={limits.users} label={t("teamMembersLabel")} />
         </div>
       </div>
 
       {/* Plans */}
       <div className="space-y-3">
-        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Available plans</p>
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("availablePlans")}</p>
         {PLANS.map((p) => {
           const isCurrent = p.key === plan;
           const PLAN_ORDER = ["free", "pro", "scale"];
@@ -193,11 +195,11 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-bold text-foreground">{PLAN_NAMES[p.key]}</span>
-                    {isCurrent && <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">Current</span>}
+                    {isCurrent && <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t("current")}</span>}
                   </div>
                   <p className="text-lg font-extrabold text-foreground mb-3">{PLAN_PRICES[p.key]}</p>
                   <div className="grid grid-cols-2 gap-1">
-                    {p.features.map((f) => (
+                    {(t.raw(`features.${p.key}`) as string[]).map((f) => (
                       <div key={f} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <CheckCircle className="w-3 h-3 text-emerald-500 shrink-0" />
                         {f}
@@ -213,7 +215,7 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
                     className="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
                     style={{ background: `linear-gradient(135deg, ${p.color}, ${p.color}cc)`, boxShadow: `0 4px 14px ${p.color}40` }}
                   >
-                    {loading === p.key ? "Loading..." : isUpgrade ? "Upgrade" : "Downgrade"}
+                    {loading === p.key ? t("loadingEllipsis") : isUpgrade ? t("upgrade") : t("downgrade")}
                   </button>
                 )}
               </div>
@@ -223,7 +225,7 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
       </div>
 
       {!isAdmin && (
-        <p className="text-xs text-muted-foreground text-center">Only admins can manage billing.</p>
+        <p className="text-xs text-muted-foreground text-center">{t("adminOnlyNotice")}</p>
       )}
     </div>
   );

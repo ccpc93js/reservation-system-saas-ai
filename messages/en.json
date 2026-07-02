@@ -721,6 +721,34 @@
       "confirmRemove": "Remove {email} from this organization?",
       "toastRemoved": "Member removed",
       "toastRemoveFailed": "Failed to remove member"
+    },
+    "billing": {
+      "toastAdminOnly": "Only admins can manage billing",
+      "toastPlanUpdated": "Plan updated!",
+      "toastCheckoutFailed": "Failed to start checkout",
+      "toastPortalFailed": "Failed to open billing portal",
+      "paymentRequiredTitle": "Payment required to access your dashboard",
+      "paymentRequiredDesc": "You selected the <strong>{plan}</strong> plan ({price}/mo). Complete payment below to activate your account.",
+      "heading": "Billing & Plan",
+      "subtitle": "Manage your subscription and usage",
+      "planLabel": "{name} Plan",
+      "freeForever": "Free forever",
+      "cancelsOn": "Cancels {date}",
+      "manageBilling": "Manage billing",
+      "opening": "Opening...",
+      "bedsLabel": "Beds",
+      "teamMembersLabel": "Team members",
+      "availablePlans": "Available plans",
+      "current": "Current",
+      "loadingEllipsis": "Loading...",
+      "upgrade": "Upgrade",
+      "downgrade": "Downgrade",
+      "adminOnlyNotice": "Only admins can manage billing.",
+      "features": {
+        "free": ["20 beds", "1 team member", "Reservations & calendar", "Guest management"],
+        "pro": ["60 beds", "3 team members", "Channel Manager (iCal sync)", "Guest self check-in portal", "Analytics & reports", "Custom branding"],
+        "scale": ["Unlimited beds", "Unlimited team members", "Multi-property", "Priority support", "API access"]
+      }
     }
   }
 }

@@ -721,6 +721,52 @@
       "confirmRemove": "Remover {email} desta organização?",
       "toastRemoved": "Membro removido",
       "toastRemoveFailed": "Falha ao remover o membro"
+    },
+    "billing": {
+      "toastAdminOnly": "Somente administradores podem gerenciar a cobrança",
+      "toastPlanUpdated": "Plano atualizado!",
+      "toastCheckoutFailed": "Falha ao iniciar o checkout",
+      "toastPortalFailed": "Falha ao abrir o portal de cobrança",
+      "paymentRequiredTitle": "Pagamento necessário para acessar seu painel",
+      "paymentRequiredDesc": "Você selecionou o plano <strong>{plan}</strong> ({price}/mês). Conclua o pagamento abaixo para ativar sua conta.",
+      "heading": "Cobrança e plano",
+      "subtitle": "Gerencie sua assinatura e uso",
+      "planLabel": "Plano {name}",
+      "freeForever": "Grátis para sempre",
+      "cancelsOn": "Cancela em {date}",
+      "manageBilling": "Gerenciar cobrança",
+      "opening": "Abrindo...",
+      "bedsLabel": "Camas",
+      "teamMembersLabel": "Membros da equipe",
+      "availablePlans": "Planos disponíveis",
+      "current": "Atual",
+      "loadingEllipsis": "Carregando...",
+      "upgrade": "Fazer upgrade",
+      "downgrade": "Fazer downgrade",
+      "adminOnlyNotice": "Somente administradores podem gerenciar a cobrança.",
+      "features": {
+        "free": [
+          "20 camas",
+          "1 membro da equipe",
+          "Reservas e calendário",
+          "Gestão de hóspedes"
+        ],
+        "pro": [
+          "60 camas",
+          "3 membros da equipe",
+          "Gerenciador de canais (sincronização iCal)",
+          "Portal de autoatendimento para hóspedes",
+          "Análises e relatórios",
+          "Marca personalizada"
+        ],
+        "scale": [
+          "Camas ilimitadas",
+          "Membros da equipe ilimitados",
+          "Múltiplas propriedades",
+          "Suporte prioritário",
+          "Acesso à API"
+        ]
+      }
     }
   }
 }

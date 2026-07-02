@@ -721,6 +721,52 @@
       "confirmRemove": "إزالة {email} من هذه المؤسسة؟",
       "toastRemoved": "تمت إزالة العضو",
       "toastRemoveFailed": "فشل إزالة العضو"
+    },
+    "billing": {
+      "toastAdminOnly": "يمكن للمشرفين فقط إدارة الفوترة",
+      "toastPlanUpdated": "تم تحديث الخطة!",
+      "toastCheckoutFailed": "فشل بدء الدفع",
+      "toastPortalFailed": "فشل فتح بوابة الفوترة",
+      "paymentRequiredTitle": "الدفع مطلوب للوصول إلى لوحة التحكم الخاصة بك",
+      "paymentRequiredDesc": "لقد اخترت خطة <strong>{plan}</strong> ({price}/شهريًا). أكمل الدفع أدناه لتفعيل حسابك.",
+      "heading": "الفوترة والخطة",
+      "subtitle": "أدر اشتراكك واستخدامك",
+      "planLabel": "خطة {name}",
+      "freeForever": "مجاني للأبد",
+      "cancelsOn": "يُلغى في {date}",
+      "manageBilling": "إدارة الفوترة",
+      "opening": "جارٍ الفتح...",
+      "bedsLabel": "الأسرّة",
+      "teamMembersLabel": "أعضاء الفريق",
+      "availablePlans": "الخطط المتاحة",
+      "current": "الحالية",
+      "loadingEllipsis": "جارٍ التحميل...",
+      "upgrade": "ترقية",
+      "downgrade": "تخفيض",
+      "adminOnlyNotice": "يمكن للمشرفين فقط إدارة الفوترة.",
+      "features": {
+        "free": [
+          "20 سريرًا",
+          "عضو فريق واحد",
+          "الحجوزات والتقويم",
+          "إدارة النزلاء"
+        ],
+        "pro": [
+          "60 سريرًا",
+          "3 أعضاء فريق",
+          "مدير القنوات (مزامنة iCal)",
+          "بوابة تسجيل وصول ذاتي للنزلاء",
+          "التحليلات والتقارير",
+          "علامة تجارية مخصصة"
+        ],
+        "scale": [
+          "أسرّة غير محدودة",
+          "أعضاء فريق غير محدودين",
+          "عقارات متعددة",
+          "دعم ذو أولوية",
+          "الوصول إلى API"
+        ]
+      }
     }
   }
 }

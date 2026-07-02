@@ -721,6 +721,52 @@
       "confirmRemove": "Retirer {email} de cette organisation ?",
       "toastRemoved": "Membre retiré",
       "toastRemoveFailed": "Échec du retrait du membre"
+    },
+    "billing": {
+      "toastAdminOnly": "Seuls les administrateurs peuvent gérer la facturation",
+      "toastPlanUpdated": "Forfait mis à jour !",
+      "toastCheckoutFailed": "Échec du démarrage du paiement",
+      "toastPortalFailed": "Échec de l'ouverture du portail de facturation",
+      "paymentRequiredTitle": "Paiement requis pour accéder à votre tableau de bord",
+      "paymentRequiredDesc": "Vous avez sélectionné le forfait <strong>{plan}</strong> ({price}/mois). Terminez le paiement ci-dessous pour activer votre compte.",
+      "heading": "Facturation et forfait",
+      "subtitle": "Gérez votre abonnement et votre utilisation",
+      "planLabel": "Forfait {name}",
+      "freeForever": "Gratuit pour toujours",
+      "cancelsOn": "Annulation le {date}",
+      "manageBilling": "Gérer la facturation",
+      "opening": "Ouverture...",
+      "bedsLabel": "Lits",
+      "teamMembersLabel": "Membres de l'équipe",
+      "availablePlans": "Forfaits disponibles",
+      "current": "Actuel",
+      "loadingEllipsis": "Chargement...",
+      "upgrade": "Passer au niveau supérieur",
+      "downgrade": "Rétrograder",
+      "adminOnlyNotice": "Seuls les administrateurs peuvent gérer la facturation.",
+      "features": {
+        "free": [
+          "20 lits",
+          "1 membre de l'équipe",
+          "Réservations et calendrier",
+          "Gestion des clients"
+        ],
+        "pro": [
+          "60 lits",
+          "3 membres de l'équipe",
+          "Gestionnaire de canaux (synchro iCal)",
+          "Portail d'auto-enregistrement client",
+          "Analyses et rapports",
+          "Image de marque personnalisée"
+        ],
+        "scale": [
+          "Lits illimités",
+          "Membres de l'équipe illimités",
+          "Multi-établissements",
+          "Support prioritaire",
+          "Accès API"
+        ]
+      }
     }
   }
 }

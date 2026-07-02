@@ -721,6 +721,52 @@
       "confirmRemove": "Ukloniti {email} iz ove organizacije?",
       "toastRemoved": "Član uklonjen",
       "toastRemoveFailed": "Uklanjanje člana nije uspelo"
+    },
+    "billing": {
+      "toastAdminOnly": "Samo administratori mogu upravljati naplatom",
+      "toastPlanUpdated": "Plan je ažuriran!",
+      "toastCheckoutFailed": "Pokretanje plaćanja nije uspelo",
+      "toastPortalFailed": "Otvaranje portala za naplatu nije uspelo",
+      "paymentRequiredTitle": "Potrebno je plaćanje za pristup vašoj kontrolnoj tabli",
+      "paymentRequiredDesc": "Izabrali ste plan <strong>{plan}</strong> ({price}/mesečno). Završite plaćanje ispod da biste aktivirali nalog.",
+      "heading": "Naplata i plan",
+      "subtitle": "Upravljajte pretplatom i korišćenjem",
+      "planLabel": "Plan {name}",
+      "freeForever": "Zauvek besplatno",
+      "cancelsOn": "Ističe {date}",
+      "manageBilling": "Upravljaj naplatom",
+      "opening": "Otvaranje...",
+      "bedsLabel": "Kreveti",
+      "teamMembersLabel": "Članovi tima",
+      "availablePlans": "Dostupni planovi",
+      "current": "Trenutni",
+      "loadingEllipsis": "Učitavanje...",
+      "upgrade": "Nadogradi",
+      "downgrade": "Snizi",
+      "adminOnlyNotice": "Samo administratori mogu upravljati naplatom.",
+      "features": {
+        "free": [
+          "20 kreveta",
+          "1 član tima",
+          "Rezervacije i kalendar",
+          "Upravljanje gostima"
+        ],
+        "pro": [
+          "60 kreveta",
+          "3 člana tima",
+          "Upravljač kanalima (iCal sinhronizacija)",
+          "Portal za samostalnu prijavu gostiju",
+          "Analitika i izveštaji",
+          "Prilagođeni brend"
+        ],
+        "scale": [
+          "Neograničeno kreveta",
+          "Neograničeno članova tima",
+          "Više objekata",
+          "Prioritetna podrška",
+          "API pristup"
+        ]
+      }
     }
   }
 }

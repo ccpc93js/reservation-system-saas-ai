@@ -721,6 +721,52 @@
       "confirmRemove": "{email} をこの組織から削除しますか？",
       "toastRemoved": "メンバーを削除しました",
       "toastRemoveFailed": "メンバーの削除に失敗しました"
+    },
+    "billing": {
+      "toastAdminOnly": "管理者のみが請求を管理できます",
+      "toastPlanUpdated": "プランを更新しました！",
+      "toastCheckoutFailed": "チェックアウトの開始に失敗しました",
+      "toastPortalFailed": "請求ポータルを開けませんでした",
+      "paymentRequiredTitle": "ダッシュボードにアクセスするには支払いが必要です",
+      "paymentRequiredDesc": "<strong>{plan}</strong> プラン（{price}/月）を選択しました。アカウントを有効化するには以下で支払いを完了してください。",
+      "heading": "請求とプラン",
+      "subtitle": "サブスクリプションと使用状況を管理します",
+      "planLabel": "{name} プラン",
+      "freeForever": "永久無料",
+      "cancelsOn": "{date} に解約",
+      "manageBilling": "請求を管理",
+      "opening": "開いています...",
+      "bedsLabel": "ベッド",
+      "teamMembersLabel": "チームメンバー",
+      "availablePlans": "利用可能なプラン",
+      "current": "現在",
+      "loadingEllipsis": "読み込み中...",
+      "upgrade": "アップグレード",
+      "downgrade": "ダウングレード",
+      "adminOnlyNotice": "管理者のみが請求を管理できます。",
+      "features": {
+        "free": [
+          "ベッド20台",
+          "チームメンバー1人",
+          "予約とカレンダー",
+          "ゲスト管理"
+        ],
+        "pro": [
+          "ベッド60台",
+          "チームメンバー3人",
+          "チャネルマネージャー（iCal同期）",
+          "ゲストセルフチェックインポータル",
+          "分析とレポート",
+          "カスタムブランディング"
+        ],
+        "scale": [
+          "ベッド数無制限",
+          "チームメンバー無制限",
+          "複数施設対応",
+          "優先サポート",
+          "APIアクセス"
+        ]
+      }
     }
   }
 }
