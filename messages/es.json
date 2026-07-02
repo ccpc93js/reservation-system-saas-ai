@@ -599,6 +599,49 @@
         "saving": "Guardando...",
         "save": "Guardar"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Error al obtener las habitaciones",
+      "confirmDelete": "¿Seguro que quieres eliminar esta habitación?",
+      "toastDeleteFailed": "Error al eliminar la habitación",
+      "toastDeleted": "Habitación eliminada correctamente",
+      "searchPlaceholder": "Buscar habitaciones...",
+      "new": "Nueva",
+      "colName": "Nombre de la habitación",
+      "colFloor": "Piso",
+      "colRoomType": "Tipo de habitación",
+      "colBeds": "Camas",
+      "colActions": "Acciones",
+      "noneFound": "No se encontraron habitaciones",
+      "noneYet": "Aún no hay habitaciones",
+      "noneFoundHint": "Prueba a ajustar tu búsqueda para encontrar la habitación que buscas.",
+      "noneYetHint": "Empieza creando tu primera habitación y asignándola a un tipo de habitación.",
+      "createCta": "Crear una habitación →",
+      "showingRange": "Mostrando {from} a {to} de {total}",
+      "dialog": {
+        "toastLoadFailed": "Error al cargar la habitación",
+        "toastSaveFailed": "Error al guardar la habitación",
+        "toastUpdated": "Habitación actualizada correctamente",
+        "toastCreated": "Habitación creada correctamente",
+        "confirmDelete": "¿Seguro que quieres eliminar esta habitación?",
+        "toastDeleteFailed": "Error al eliminar la habitación",
+        "toastDeleted": "Habitación eliminada correctamente",
+        "editTitle": "Editar habitación",
+        "createTitle": "Crear habitación",
+        "roomTypeLabel": "Tipo de habitación *",
+        "selectRoomType": "Selecciona el tipo de habitación",
+        "nameLabel": "Nombre de la habitación *",
+        "namePlaceholder": "p. ej., Habitación 101",
+        "floorLabel": "Piso (opcional)",
+        "floorPlaceholder": "p. ej., 1",
+        "notesLabel": "Notas (opcional)",
+        "notesPlaceholder": "Notas de la habitación",
+        "deleting": "Eliminando...",
+        "delete": "Eliminar",
+        "cancel": "Cancelar",
+        "saving": "Guardando...",
+        "save": "Guardar"
+      }
     }
   }
 }

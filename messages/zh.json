@@ -599,6 +599,49 @@
         "saving": "保存中…",
         "save": "保存"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "获取房间失败",
+      "confirmDelete": "确定要删除此房间吗？",
+      "toastDeleteFailed": "删除房间失败",
+      "toastDeleted": "房间删除成功",
+      "searchPlaceholder": "搜索房间…",
+      "new": "新增",
+      "colName": "房间名称",
+      "colFloor": "楼层",
+      "colRoomType": "房型",
+      "colBeds": "床位",
+      "colActions": "操作",
+      "noneFound": "未找到房间",
+      "noneYet": "暂无房间",
+      "noneFoundHint": "请尝试调整搜索条件以找到您要查找的房间。",
+      "noneYetHint": "先创建您的第一个房间并将其分配到一个房型。",
+      "createCta": "创建房间 →",
+      "showingRange": "显示第 {from} 至 {to} 项，共 {total} 项",
+      "dialog": {
+        "toastLoadFailed": "加载房间失败",
+        "toastSaveFailed": "保存房间失败",
+        "toastUpdated": "房间更新成功",
+        "toastCreated": "房间创建成功",
+        "confirmDelete": "确定要删除此房间吗？",
+        "toastDeleteFailed": "删除房间失败",
+        "toastDeleted": "房间删除成功",
+        "editTitle": "编辑房间",
+        "createTitle": "创建房间",
+        "roomTypeLabel": "房型 *",
+        "selectRoomType": "选择房型",
+        "nameLabel": "房间名称 *",
+        "namePlaceholder": "例如：101 房",
+        "floorLabel": "楼层（可选）",
+        "floorPlaceholder": "例如：1",
+        "notesLabel": "备注（可选）",
+        "notesPlaceholder": "房间备注",
+        "deleting": "删除中…",
+        "delete": "删除",
+        "cancel": "取消",
+        "saving": "保存中…",
+        "save": "保存"
+      }
     }
   }
 }

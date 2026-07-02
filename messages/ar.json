@@ -599,6 +599,49 @@
         "saving": "جارٍ الحفظ...",
         "save": "حفظ"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "فشل جلب الغرف",
+      "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الغرفة؟",
+      "toastDeleteFailed": "فشل حذف الغرفة",
+      "toastDeleted": "تم حذف الغرفة بنجاح",
+      "searchPlaceholder": "ابحث في الغرف...",
+      "new": "جديدة",
+      "colName": "اسم الغرفة",
+      "colFloor": "الطابق",
+      "colRoomType": "نوع الغرفة",
+      "colBeds": "الأسرّة",
+      "colActions": "الإجراءات",
+      "noneFound": "لم يتم العثور على غرف",
+      "noneYet": "لا توجد غرف بعد",
+      "noneFoundHint": "حاول تعديل بحثك للعثور على الغرفة التي تبحث عنها.",
+      "noneYetHint": "ابدأ بإنشاء غرفتك الأولى وتعيينها إلى نوع غرفة.",
+      "createCta": "إنشاء غرفة ←",
+      "showingRange": "عرض {from} إلى {to} من {total}",
+      "dialog": {
+        "toastLoadFailed": "فشل تحميل الغرفة",
+        "toastSaveFailed": "فشل حفظ الغرفة",
+        "toastUpdated": "تم تحديث الغرفة بنجاح",
+        "toastCreated": "تم إنشاء الغرفة بنجاح",
+        "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الغرفة؟",
+        "toastDeleteFailed": "فشل حذف الغرفة",
+        "toastDeleted": "تم حذف الغرفة بنجاح",
+        "editTitle": "تعديل الغرفة",
+        "createTitle": "إنشاء غرفة",
+        "roomTypeLabel": "نوع الغرفة *",
+        "selectRoomType": "اختر نوع الغرفة",
+        "nameLabel": "اسم الغرفة *",
+        "namePlaceholder": "مثال: غرفة 101",
+        "floorLabel": "الطابق (اختياري)",
+        "floorPlaceholder": "مثال: 1",
+        "notesLabel": "ملاحظات (اختياري)",
+        "notesPlaceholder": "ملاحظات الغرفة",
+        "deleting": "جارٍ الحذف...",
+        "delete": "حذف",
+        "cancel": "إلغاء",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ"
+      }
     }
   }
 }

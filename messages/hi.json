@@ -599,6 +599,49 @@
         "saving": "सहेजा जा रहा है...",
         "save": "सहेजें"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "कमरे लाने में विफल",
+      "confirmDelete": "क्या आप वाकई इस कमरे को हटाना चाहते हैं?",
+      "toastDeleteFailed": "कमरा हटाने में विफल",
+      "toastDeleted": "कमरा सफलतापूर्वक हटाया गया",
+      "searchPlaceholder": "कमरे खोजें...",
+      "new": "नया",
+      "colName": "कमरे का नाम",
+      "colFloor": "मंज़िल",
+      "colRoomType": "कमरे का प्रकार",
+      "colBeds": "बिस्तर",
+      "colActions": "क्रियाएँ",
+      "noneFound": "कोई कमरा नहीं मिला",
+      "noneYet": "अभी तक कोई कमरा नहीं",
+      "noneFoundHint": "जिस कमरे की तलाश कर रहे हैं उसे खोजने के लिए अपनी खोज समायोजित करें।",
+      "noneYetHint": "अपना पहला कमरा बनाकर और उसे एक कमरे के प्रकार से जोड़कर शुरू करें।",
+      "createCta": "एक कमरा बनाएं →",
+      "showingRange": "{total} में से {from} से {to} दिखा रहे हैं",
+      "dialog": {
+        "toastLoadFailed": "कमरा लोड करने में विफल",
+        "toastSaveFailed": "कमरा सहेजने में विफल",
+        "toastUpdated": "कमरा सफलतापूर्वक अपडेट किया गया",
+        "toastCreated": "कमरा सफलतापूर्वक बनाया गया",
+        "confirmDelete": "क्या आप वाकई इस कमरे को हटाना चाहते हैं?",
+        "toastDeleteFailed": "कमरा हटाने में विफल",
+        "toastDeleted": "कमरा सफलतापूर्वक हटाया गया",
+        "editTitle": "कमरा संपादित करें",
+        "createTitle": "कमरा बनाएं",
+        "roomTypeLabel": "कमरे का प्रकार *",
+        "selectRoomType": "कमरे का प्रकार चुनें",
+        "nameLabel": "कमरे का नाम *",
+        "namePlaceholder": "जैसे, कमरा 101",
+        "floorLabel": "मंज़िल (वैकल्पिक)",
+        "floorPlaceholder": "जैसे, 1",
+        "notesLabel": "नोट्स (वैकल्पिक)",
+        "notesPlaceholder": "कमरे के नोट्स",
+        "deleting": "हटाया जा रहा है...",
+        "delete": "हटाएं",
+        "cancel": "रद्द करें",
+        "saving": "सहेजा जा रहा है...",
+        "save": "सहेजें"
+      }
     }
   }
 }

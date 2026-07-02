@@ -599,6 +599,49 @@
         "saving": "Salvando...",
         "save": "Salvar"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Falha ao buscar quartos",
+      "confirmDelete": "Tem certeza de que deseja excluir este quarto?",
+      "toastDeleteFailed": "Falha ao excluir o quarto",
+      "toastDeleted": "Quarto excluído com sucesso",
+      "searchPlaceholder": "Buscar quartos...",
+      "new": "Novo",
+      "colName": "Nome do quarto",
+      "colFloor": "Andar",
+      "colRoomType": "Tipo de quarto",
+      "colBeds": "Camas",
+      "colActions": "Ações",
+      "noneFound": "Nenhum quarto encontrado",
+      "noneYet": "Ainda não há quartos",
+      "noneFoundHint": "Tente ajustar sua busca para encontrar o quarto que procura.",
+      "noneYetHint": "Comece criando seu primeiro quarto e atribuindo-o a um tipo de quarto.",
+      "createCta": "Criar um quarto →",
+      "showingRange": "Mostrando {from} a {to} de {total}",
+      "dialog": {
+        "toastLoadFailed": "Falha ao carregar o quarto",
+        "toastSaveFailed": "Falha ao salvar o quarto",
+        "toastUpdated": "Quarto atualizado com sucesso",
+        "toastCreated": "Quarto criado com sucesso",
+        "confirmDelete": "Tem certeza de que deseja excluir este quarto?",
+        "toastDeleteFailed": "Falha ao excluir o quarto",
+        "toastDeleted": "Quarto excluído com sucesso",
+        "editTitle": "Editar quarto",
+        "createTitle": "Criar quarto",
+        "roomTypeLabel": "Tipo de quarto *",
+        "selectRoomType": "Selecione o tipo de quarto",
+        "nameLabel": "Nome do quarto *",
+        "namePlaceholder": "ex.: Quarto 101",
+        "floorLabel": "Andar (opcional)",
+        "floorPlaceholder": "ex.: 1",
+        "notesLabel": "Notas (opcional)",
+        "notesPlaceholder": "Notas do quarto",
+        "deleting": "Excluindo...",
+        "delete": "Excluir",
+        "cancel": "Cancelar",
+        "saving": "Salvando...",
+        "save": "Salvar"
+      }
     }
   }
 }

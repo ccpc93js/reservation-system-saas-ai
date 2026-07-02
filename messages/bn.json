@@ -599,6 +599,49 @@
         "saving": "সংরক্ষণ করা হচ্ছে...",
         "save": "সংরক্ষণ করুন"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "রুম আনতে ব্যর্থ",
+      "confirmDelete": "আপনি কি নিশ্চিত যে আপনি এই রুমটি মুছতে চান?",
+      "toastDeleteFailed": "রুম মুছতে ব্যর্থ",
+      "toastDeleted": "রুম সফলভাবে মুছে ফেলা হয়েছে",
+      "searchPlaceholder": "রুম খুঁজুন...",
+      "new": "নতুন",
+      "colName": "রুমের নাম",
+      "colFloor": "তলা",
+      "colRoomType": "রুমের ধরন",
+      "colBeds": "বিছানা",
+      "colActions": "পদক্ষেপ",
+      "noneFound": "কোনো রুম পাওয়া যায়নি",
+      "noneYet": "এখনও কোনো রুম নেই",
+      "noneFoundHint": "আপনি যে রুম খুঁজছেন তা খুঁজে পেতে আপনার অনুসন্ধান সামঞ্জস্য করার চেষ্টা করুন।",
+      "noneYetHint": "আপনার প্রথম রুম তৈরি করে এবং এটি একটি রুমের ধরনের সাথে যুক্ত করে শুরু করুন।",
+      "createCta": "একটি রুম তৈরি করুন →",
+      "showingRange": "{total} এর মধ্যে {from} থেকে {to} দেখানো হচ্ছে",
+      "dialog": {
+        "toastLoadFailed": "রুম লোড করতে ব্যর্থ",
+        "toastSaveFailed": "রুম সংরক্ষণ করতে ব্যর্থ",
+        "toastUpdated": "রুম সফলভাবে আপডেট হয়েছে",
+        "toastCreated": "রুম সফলভাবে তৈরি হয়েছে",
+        "confirmDelete": "আপনি কি নিশ্চিত যে আপনি এই রুমটি মুছতে চান?",
+        "toastDeleteFailed": "রুম মুছতে ব্যর্থ",
+        "toastDeleted": "রুম সফলভাবে মুছে ফেলা হয়েছে",
+        "editTitle": "রুম সম্পাদনা করুন",
+        "createTitle": "রুম তৈরি করুন",
+        "roomTypeLabel": "রুমের ধরন *",
+        "selectRoomType": "রুমের ধরন নির্বাচন করুন",
+        "nameLabel": "রুমের নাম *",
+        "namePlaceholder": "যেমন, রুম ১০১",
+        "floorLabel": "তলা (ঐচ্ছিক)",
+        "floorPlaceholder": "যেমন, ১",
+        "notesLabel": "নোট (ঐচ্ছিক)",
+        "notesPlaceholder": "রুমের নোট",
+        "deleting": "মুছে ফেলা হচ্ছে...",
+        "delete": "মুছুন",
+        "cancel": "বাতিল",
+        "saving": "সংরক্ষণ করা হচ্ছে...",
+        "save": "সংরক্ষণ করুন"
+      }
     }
   }
 }

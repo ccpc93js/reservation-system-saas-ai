@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, DoorOpen, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import RoomsDialog from "./rooms-dialog";
@@ -17,6 +18,7 @@ export default function RoomsListClient({
   initialRooms,
   initialTotal,
 }: RoomsListClientProps) {
+  const t = useTranslations("rooms.rooms");
   const [rooms, setRooms] = useState<Room[]>(initialRooms);
   const [total, setTotal] = useState(initialTotal);
   const [page, setPage] = useState(1);
@@ -46,7 +48,7 @@ export default function RoomsListClient({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to fetch rooms");
+        toast.error(data.error || t("toastFetchFailed"));
         return;
       }
 
@@ -54,7 +56,7 @@ export default function RoomsListClient({
       setTotal(data.total);
       setPage(pageNum);
     } catch (error) {
-      toast.error("Failed to fetch rooms");
+      toast.error(t("toastFetchFailed"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -67,7 +69,7 @@ export default function RoomsListClient({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this room?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     try {
       const res = await fetch(`/api/rooms/${id}`, {
@@ -76,14 +78,14 @@ export default function RoomsListClient({
 
       if (!res.ok) {
         const data = await res.json();
-        toast.error(data.error || "Failed to delete room");
+        toast.error(data.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Room deleted successfully");
+      toast.success(t("toastDeleted"));
       handleFetch(search, page);
     } catch (error) {
-      toast.error("Failed to delete room");
+      toast.error(t("toastDeleteFailed"));
       console.error(error);
     }
   };
@@ -132,7 +134,7 @@ export default function RoomsListClient({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search rooms..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isLoading}
@@ -148,7 +150,7 @@ export default function RoomsListClient({
           disabled={isLoading}
         >
           <Plus className="h-4 w-4" />
-          New
+          {t("new")}
         </button>
       </div>
 
@@ -157,14 +159,14 @@ export default function RoomsListClient({
           <thead className="bg-gray-50 border-b">
             <tr>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
-                Room Name <SortIndicator column="name" />
+                {t("colName")} <SortIndicator column="name" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("floor")}>
-                Floor <SortIndicator column="floor" />
+                {t("colFloor")} <SortIndicator column="floor" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Room Type</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Beds</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colRoomType")}</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colBeds")}</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -176,10 +178,10 @@ export default function RoomsListClient({
               return (
                 <tr key={room.id} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm">{room.name}</td>
+                  <td className="px-4 py-3 text-sm">{room.floor || "—"}</td>
                   <td className="px-4 py-3 text-sm">
                     {roomType ? `${roomType.name} (${roomType.type})` : "—"}
                   </td>
-                  <td className="px-4 py-3 text-sm">{room.floor || "—"}</td>
                   <td className="px-4 py-3 text-sm">
                     {(room as any).bed_count || 0}
                   </td>
@@ -213,11 +215,11 @@ export default function RoomsListClient({
       {rooms.length === 0 && (
         <EmptyState
           icon={<DoorOpen className="w-8 h-8" />}
-          title={search ? "No rooms found" : "No rooms yet"}
+          title={search ? t("noneFound") : t("noneYet")}
           description={
             search
-              ? "Try adjusting your search to find the room you're looking for."
-              : "Start by creating your first room and assigning it to a room type."
+              ? t("noneFoundHint")
+              : t("noneYetHint")
           }
           action={
             !search && (
@@ -228,7 +230,7 @@ export default function RoomsListClient({
                 }}
                 className="text-sm font-medium text-primary hover:text-primary/80"
               >
-                Create a room →
+                {t("createCta")}
               </button>
             )
           }
@@ -237,7 +239,7 @@ export default function RoomsListClient({
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-500">
-          Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total}
+          {t("showingRange", { from: ((page - 1) * pageSize) + 1, to: Math.min(page * pageSize, total), total })}
         </div>
         <div className="flex gap-2">
           <button

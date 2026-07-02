@@ -599,6 +599,49 @@
         "saving": "Čuvanje...",
         "save": "Sačuvaj"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Preuzimanje soba nije uspelo",
+      "confirmDelete": "Da li ste sigurni da želite da obrišete ovu sobu?",
+      "toastDeleteFailed": "Brisanje sobe nije uspelo",
+      "toastDeleted": "Soba je uspešno obrisana",
+      "searchPlaceholder": "Pretraga soba...",
+      "new": "Nova",
+      "colName": "Naziv sobe",
+      "colFloor": "Sprat",
+      "colRoomType": "Tip sobe",
+      "colBeds": "Kreveti",
+      "colActions": "Radnje",
+      "noneFound": "Nema pronađenih soba",
+      "noneYet": "Još nema soba",
+      "noneFoundHint": "Pokušajte da prilagodite pretragu kako biste pronašli sobu koju tražite.",
+      "noneYetHint": "Počnite kreiranjem svoje prve sobe i dodeljivanjem tipa sobe.",
+      "createCta": "Kreiraj sobu →",
+      "showingRange": "Prikazano {from}–{to} od {total}",
+      "dialog": {
+        "toastLoadFailed": "Učitavanje sobe nije uspelo",
+        "toastSaveFailed": "Čuvanje sobe nije uspelo",
+        "toastUpdated": "Soba je uspešno ažurirana",
+        "toastCreated": "Soba je uspešno kreirana",
+        "confirmDelete": "Da li ste sigurni da želite da obrišete ovu sobu?",
+        "toastDeleteFailed": "Brisanje sobe nije uspelo",
+        "toastDeleted": "Soba je uspešno obrisana",
+        "editTitle": "Izmeni sobu",
+        "createTitle": "Kreiraj sobu",
+        "roomTypeLabel": "Tip sobe *",
+        "selectRoomType": "Izaberite tip sobe",
+        "nameLabel": "Naziv sobe *",
+        "namePlaceholder": "npr. Soba 101",
+        "floorLabel": "Sprat (opciono)",
+        "floorPlaceholder": "npr. 1",
+        "notesLabel": "Napomene (opciono)",
+        "notesPlaceholder": "Napomene o sobi",
+        "deleting": "Brisanje...",
+        "delete": "Obriši",
+        "cancel": "Otkaži",
+        "saving": "Čuvanje...",
+        "save": "Sačuvaj"
+      }
     }
   }
 }

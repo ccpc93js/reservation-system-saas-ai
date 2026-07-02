@@ -599,6 +599,49 @@
         "saving": "Enregistrement...",
         "save": "Enregistrer"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Échec de la récupération des chambres",
+      "confirmDelete": "Voulez-vous vraiment supprimer cette chambre ?",
+      "toastDeleteFailed": "Échec de la suppression de la chambre",
+      "toastDeleted": "Chambre supprimée avec succès",
+      "searchPlaceholder": "Rechercher des chambres...",
+      "new": "Nouvelle",
+      "colName": "Nom de la chambre",
+      "colFloor": "Étage",
+      "colRoomType": "Type de chambre",
+      "colBeds": "Lits",
+      "colActions": "Actions",
+      "noneFound": "Aucune chambre trouvée",
+      "noneYet": "Aucune chambre pour l'instant",
+      "noneFoundHint": "Essayez d'ajuster votre recherche pour trouver la chambre que vous cherchez.",
+      "noneYetHint": "Commencez par créer votre première chambre et en l'attribuant à un type de chambre.",
+      "createCta": "Créer une chambre →",
+      "showingRange": "Affichage de {from} à {to} sur {total}",
+      "dialog": {
+        "toastLoadFailed": "Échec du chargement de la chambre",
+        "toastSaveFailed": "Échec de l'enregistrement de la chambre",
+        "toastUpdated": "Chambre mise à jour avec succès",
+        "toastCreated": "Chambre créée avec succès",
+        "confirmDelete": "Voulez-vous vraiment supprimer cette chambre ?",
+        "toastDeleteFailed": "Échec de la suppression de la chambre",
+        "toastDeleted": "Chambre supprimée avec succès",
+        "editTitle": "Modifier la chambre",
+        "createTitle": "Créer une chambre",
+        "roomTypeLabel": "Type de chambre *",
+        "selectRoomType": "Sélectionner le type de chambre",
+        "nameLabel": "Nom de la chambre *",
+        "namePlaceholder": "p. ex. Chambre 101",
+        "floorLabel": "Étage (facultatif)",
+        "floorPlaceholder": "p. ex. 1",
+        "notesLabel": "Notes (facultatif)",
+        "notesPlaceholder": "Notes de la chambre",
+        "deleting": "Suppression...",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "saving": "Enregistrement...",
+        "save": "Enregistrer"
+      }
     }
   }
 }

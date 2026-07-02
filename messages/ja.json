@@ -599,6 +599,49 @@
         "saving": "保存中...",
         "save": "保存"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "客室の取得に失敗しました",
+      "confirmDelete": "この客室を削除してもよろしいですか？",
+      "toastDeleteFailed": "客室の削除に失敗しました",
+      "toastDeleted": "客室を削除しました",
+      "searchPlaceholder": "客室を検索...",
+      "new": "新規",
+      "colName": "客室名",
+      "colFloor": "階",
+      "colRoomType": "客室タイプ",
+      "colBeds": "ベッド",
+      "colActions": "操作",
+      "noneFound": "客室が見つかりません",
+      "noneYet": "客室がまだありません",
+      "noneFoundHint": "検索条件を調整して、お探しの客室を見つけてください。",
+      "noneYetHint": "最初の客室を作成し、客室タイプを割り当てて始めましょう。",
+      "createCta": "客室を作成 →",
+      "showingRange": "{total} 件中 {from}〜{to} 件を表示",
+      "dialog": {
+        "toastLoadFailed": "客室の読み込みに失敗しました",
+        "toastSaveFailed": "客室の保存に失敗しました",
+        "toastUpdated": "客室を更新しました",
+        "toastCreated": "客室を作成しました",
+        "confirmDelete": "この客室を削除してもよろしいですか？",
+        "toastDeleteFailed": "客室の削除に失敗しました",
+        "toastDeleted": "客室を削除しました",
+        "editTitle": "客室を編集",
+        "createTitle": "客室を作成",
+        "roomTypeLabel": "客室タイプ *",
+        "selectRoomType": "客室タイプを選択",
+        "nameLabel": "客室名 *",
+        "namePlaceholder": "例：101号室",
+        "floorLabel": "階（任意）",
+        "floorPlaceholder": "例：1",
+        "notesLabel": "メモ（任意）",
+        "notesPlaceholder": "客室のメモ",
+        "deleting": "削除中...",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "saving": "保存中...",
+        "save": "保存"
+      }
     }
   }
 }

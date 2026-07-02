@@ -599,6 +599,49 @@
         "saving": "Сохранение...",
         "save": "Сохранить"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Не удалось получить номера",
+      "confirmDelete": "Вы уверены, что хотите удалить этот номер?",
+      "toastDeleteFailed": "Не удалось удалить номер",
+      "toastDeleted": "Номер успешно удалён",
+      "searchPlaceholder": "Поиск номеров...",
+      "new": "Новый",
+      "colName": "Название номера",
+      "colFloor": "Этаж",
+      "colRoomType": "Тип номера",
+      "colBeds": "Кровати",
+      "colActions": "Действия",
+      "noneFound": "Номера не найдены",
+      "noneYet": "Пока нет номеров",
+      "noneFoundHint": "Попробуйте изменить поиск, чтобы найти нужный номер.",
+      "noneYetHint": "Начните с создания первого номера и назначения ему типа номера.",
+      "createCta": "Создать номер →",
+      "showingRange": "Показано {from}–{to} из {total}",
+      "dialog": {
+        "toastLoadFailed": "Не удалось загрузить номер",
+        "toastSaveFailed": "Не удалось сохранить номер",
+        "toastUpdated": "Номер успешно обновлён",
+        "toastCreated": "Номер успешно создан",
+        "confirmDelete": "Вы уверены, что хотите удалить этот номер?",
+        "toastDeleteFailed": "Не удалось удалить номер",
+        "toastDeleted": "Номер успешно удалён",
+        "editTitle": "Редактировать номер",
+        "createTitle": "Создать номер",
+        "roomTypeLabel": "Тип номера *",
+        "selectRoomType": "Выберите тип номера",
+        "nameLabel": "Название номера *",
+        "namePlaceholder": "например, Номер 101",
+        "floorLabel": "Этаж (необязательно)",
+        "floorPlaceholder": "например, 1",
+        "notesLabel": "Примечания (необязательно)",
+        "notesPlaceholder": "Примечания к номеру",
+        "deleting": "Удаление...",
+        "delete": "Удалить",
+        "cancel": "Отмена",
+        "saving": "Сохранение...",
+        "save": "Сохранить"
+      }
     }
   }
 }

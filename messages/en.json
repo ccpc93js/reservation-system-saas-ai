@@ -599,6 +599,49 @@
         "saving": "Saving...",
         "save": "Save"
       }
+    },
+    "rooms": {
+      "toastFetchFailed": "Failed to fetch rooms",
+      "confirmDelete": "Are you sure you want to delete this room?",
+      "toastDeleteFailed": "Failed to delete room",
+      "toastDeleted": "Room deleted successfully",
+      "searchPlaceholder": "Search rooms...",
+      "new": "New",
+      "colName": "Room Name",
+      "colFloor": "Floor",
+      "colRoomType": "Room Type",
+      "colBeds": "Beds",
+      "colActions": "Actions",
+      "noneFound": "No rooms found",
+      "noneYet": "No rooms yet",
+      "noneFoundHint": "Try adjusting your search to find the room you're looking for.",
+      "noneYetHint": "Start by creating your first room and assigning it to a room type.",
+      "createCta": "Create a room →",
+      "showingRange": "Showing {from} to {to} of {total}",
+      "dialog": {
+        "toastLoadFailed": "Failed to load room",
+        "toastSaveFailed": "Failed to save room",
+        "toastUpdated": "Room updated successfully",
+        "toastCreated": "Room created successfully",
+        "confirmDelete": "Are you sure you want to delete this room?",
+        "toastDeleteFailed": "Failed to delete room",
+        "toastDeleted": "Room deleted successfully",
+        "editTitle": "Edit Room",
+        "createTitle": "Create Room",
+        "roomTypeLabel": "Room Type *",
+        "selectRoomType": "Select room type",
+        "nameLabel": "Room Name *",
+        "namePlaceholder": "e.g., Room 101",
+        "floorLabel": "Floor (optional)",
+        "floorPlaceholder": "e.g., 1",
+        "notesLabel": "Notes (optional)",
+        "notesPlaceholder": "Room notes",
+        "deleting": "Deleting...",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "save": "Save"
+      }
     }
   }
 }
