@@ -1,8 +1,10 @@
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import ReservationsListClient from "@/components/reservations/reservations-list-client";
 
 export default async function ReservationsPage() {
+  const t = await getTranslations("reservations");
   const supabase = await createServerClient();
 
   // Get org context
@@ -12,7 +14,7 @@ export default async function ReservationsPage() {
     .single();
 
   if (error || !membership) {
-    return <div>Error loading reservations</div>;
+    return <div>{t("errorLoading")}</div>;
   }
 
   const orgId = (membership as any).organization_id as string;

@@ -394,5 +394,50 @@
       "rejectedResubmit": "入住申请已拒绝，客人将被要求重新提交。",
       "linkCopied": "链接已复制！"
     }
+  },
+  "reservations": {
+    "errorLoading": "加载预订失败",
+    "title": "预订",
+    "subtitle": "搜索并筛选所有预订",
+    "searchPlaceholder": "按预订号、客人姓名、房间、床位搜索…",
+    "clearSearch": "清除搜索",
+    "status": "状态",
+    "allStatuses": "所有状态",
+    "checkInFrom": "入住起始日期",
+    "checkInTo": "入住截止日期",
+    "colReservationNumber": "预订号",
+    "colGuest": "客人",
+    "colRoomBed": "房间 / 床位",
+    "colCheckIn": "入住",
+    "colCheckOut": "退房",
+    "colNights": "晚数",
+    "colStatus": "状态",
+    "colTotal": "总额",
+    "colPaid": "已付",
+    "noReservationsFound": "未找到预订",
+    "noReservationsYet": "尚无预订",
+    "noResultsHint": "请尝试调整搜索词或筛选条件以找到您要查找的内容。",
+    "noReservationsHint": "通过日历或预订表单创建您的第一笔预订以开始使用。",
+    "pageOf": "第 {page} / {totalPages} 页（共 {total} 笔预订）",
+    "statusOptions": {
+      "pending": "待处理",
+      "confirmed": "已确认",
+      "checked_in": "已入住",
+      "checked_out": "已退房",
+      "cancelled": "已取消",
+      "no_show": "未到店"
+    },
+    "toasts": {
+      "loadFailed": "预订加载失败",
+      "noGuestAssigned": "未分配客人",
+      "balanceDueCheckIn": "欠款 {amount} — 客人须在入住前付款",
+      "cannotCheckIn": "无法办理入住 — 请先修正必填字段",
+      "balanceDueCheckOut": "欠款 {amount} — 请在退房前收取全部款项",
+      "paymentNotConfirmed": "付款未确认 — 请在账单中标记为已确认",
+      "actualCheckInMissing": "未记录实际入住时间",
+      "cannotCheckOut": "无法办理退房 — 请先修正必填字段",
+      "statusUpdateFailed": "状态更新失败",
+      "statusUpdated": "状态已更新"
+    }
   }
 }

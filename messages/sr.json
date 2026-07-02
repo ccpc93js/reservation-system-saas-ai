@@ -394,5 +394,50 @@
       "rejectedResubmit": "Prijava odbijena. Od gosta će biti zatraženo da ponovo pošalje.",
       "linkCopied": "Link kopiran!"
     }
+  },
+  "reservations": {
+    "errorLoading": "Greška pri učitavanju rezervacija",
+    "title": "Rezervacije",
+    "subtitle": "Pretraži i filtriraj sve rezervacije",
+    "searchPlaceholder": "Pretraži po broju rezervacije, gostu, sobi, krevetu...",
+    "clearSearch": "Obriši pretragu",
+    "status": "Status",
+    "allStatuses": "Svi statusi",
+    "checkInFrom": "Prijava od",
+    "checkInTo": "Prijava do",
+    "colReservationNumber": "Broj rezervacije",
+    "colGuest": "Gost",
+    "colRoomBed": "Soba / Krevet",
+    "colCheckIn": "Prijava",
+    "colCheckOut": "Odjava",
+    "colNights": "Noći",
+    "colStatus": "Status",
+    "colTotal": "Ukupno",
+    "colPaid": "Plaćeno",
+    "noReservationsFound": "Nema pronađenih rezervacija",
+    "noReservationsYet": "Još uvek nema rezervacija",
+    "noResultsHint": "Pokušajte da prilagodite pojmove pretrage ili filtere da biste pronašli ono što tražite.",
+    "noReservationsHint": "Počnite kreiranjem prve rezervacije iz kalendara ili obrasca za rezervaciju.",
+    "pageOf": "Strana {page} od {totalPages} ({total} rezervacija)",
+    "statusOptions": {
+      "pending": "Na čekanju",
+      "confirmed": "Potvrđeno",
+      "checked_in": "Prijavljen",
+      "checked_out": "Odjavljen",
+      "cancelled": "Otkazano",
+      "no_show": "Nije se pojavio"
+    },
+    "toasts": {
+      "loadFailed": "Neuspešno učitavanje rezervacija",
+      "noGuestAssigned": "Nema dodeljenog gosta",
+      "balanceDueCheckIn": "Preostali dug {amount} — gost mora platiti pre prijave",
+      "cannotCheckIn": "Nije moguće prijaviti — prvo ispravite obavezna polja",
+      "balanceDueCheckOut": "Preostali dug {amount} — naplatite pun iznos pre odjave",
+      "paymentNotConfirmed": "Plaćanje nije potvrđeno — označite kao potvrđeno u foliju",
+      "actualCheckInMissing": "Stvarno vreme prijave nije zabeleženo",
+      "cannotCheckOut": "Nije moguće odjaviti — prvo ispravite obavezna polja",
+      "statusUpdateFailed": "Neuspešno ažuriranje statusa",
+      "statusUpdated": "Status ažuriran"
+    }
   }
 }

@@ -394,5 +394,50 @@
       "rejectedResubmit": "Check-in rejeitado. O hóspede será solicitado a reenviar.",
       "linkCopied": "Link copiado!"
     }
+  },
+  "reservations": {
+    "errorLoading": "Erro ao carregar reservas",
+    "title": "Reservas",
+    "subtitle": "Busque e filtre todas as reservas",
+    "searchPlaceholder": "Buscar por nº de reserva, hóspede, quarto, cama...",
+    "clearSearch": "Limpar busca",
+    "status": "Status",
+    "allStatuses": "Todos os status",
+    "checkInFrom": "Entrada a partir de",
+    "checkInTo": "Entrada até",
+    "colReservationNumber": "Nº de reserva",
+    "colGuest": "Hóspede",
+    "colRoomBed": "Quarto / Cama",
+    "colCheckIn": "Entrada",
+    "colCheckOut": "Saída",
+    "colNights": "Noites",
+    "colStatus": "Status",
+    "colTotal": "Total",
+    "colPaid": "Pago",
+    "noReservationsFound": "Nenhuma reserva encontrada",
+    "noReservationsYet": "Ainda não há reservas",
+    "noResultsHint": "Tente ajustar seus termos de busca ou filtros para encontrar o que procura.",
+    "noReservationsHint": "Comece criando sua primeira reserva pelo calendário ou pelo formulário de reserva.",
+    "pageOf": "Página {page} de {totalPages} ({total} reservas)",
+    "statusOptions": {
+      "pending": "Pendente",
+      "confirmed": "Confirmada",
+      "checked_in": "Check-in feito",
+      "checked_out": "Checkout feito",
+      "cancelled": "Cancelada",
+      "no_show": "Não compareceu"
+    },
+    "toasts": {
+      "loadFailed": "Falha ao carregar reservas",
+      "noGuestAssigned": "Nenhum hóspede atribuído",
+      "balanceDueCheckIn": "Saldo devedor {amount} — o hóspede deve pagar antes do check-in",
+      "cannotCheckIn": "Não é possível fazer check-in — corrija os campos obrigatórios primeiro",
+      "balanceDueCheckOut": "Saldo devedor {amount} — receba o pagamento total antes do checkout",
+      "paymentNotConfirmed": "Pagamento não confirmado — marque como confirmado na fatura",
+      "actualCheckInMissing": "Horário real de check-in não registrado",
+      "cannotCheckOut": "Não é possível fazer checkout — corrija os campos obrigatórios primeiro",
+      "statusUpdateFailed": "Falha ao atualizar o status",
+      "statusUpdated": "Status atualizado"
+    }
   }
 }

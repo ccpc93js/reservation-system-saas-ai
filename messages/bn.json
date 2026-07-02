@@ -394,5 +394,50 @@
       "rejectedResubmit": "চেক-ইন প্রত্যাখ্যাত হয়েছে। অতিথিকে পুনরায় জমা দিতে বলা হবে।",
       "linkCopied": "লিঙ্ক কপি হয়েছে!"
     }
+  },
+  "reservations": {
+    "errorLoading": "রিজার্ভেশন লোড করতে ত্রুটি",
+    "title": "রিজার্ভেশন",
+    "subtitle": "সব রিজার্ভেশন খুঁজুন এবং ফিল্টার করুন",
+    "searchPlaceholder": "রিজার্ভেশন #, অতিথির নাম, রুম, বেড দিয়ে খুঁজুন...",
+    "clearSearch": "সাফ করুন",
+    "status": "অবস্থা",
+    "allStatuses": "সব অবস্থা",
+    "checkInFrom": "চেক-ইন শুরু",
+    "checkInTo": "চেক-ইন শেষ",
+    "colReservationNumber": "রিজার্ভেশন #",
+    "colGuest": "অতিথি",
+    "colRoomBed": "রুম / বেড",
+    "colCheckIn": "চেক-ইন",
+    "colCheckOut": "চেক-আউট",
+    "colNights": "রাত",
+    "colStatus": "অবস্থা",
+    "colTotal": "মোট",
+    "colPaid": "পরিশোধিত",
+    "noReservationsFound": "কোনো রিজার্ভেশন পাওয়া যায়নি",
+    "noReservationsYet": "এখনো কোনো রিজার্ভেশন নেই",
+    "noResultsHint": "যা খুঁজছেন তা পেতে আপনার সার্চ শব্দ বা ফিল্টার সামঞ্জস্য করার চেষ্টা করুন।",
+    "noReservationsHint": "ক্যালেন্ডার বা বুকিং ফর্ম থেকে আপনার প্রথম রিজার্ভেশন তৈরি করে শুরু করুন।",
+    "pageOf": "পৃষ্ঠা {page} এর {totalPages} ({total} রিজার্ভেশন)",
+    "statusOptions": {
+      "pending": "মুলতুবি",
+      "confirmed": "নিশ্চিত",
+      "checked_in": "চেক-ইন হয়েছে",
+      "checked_out": "চেক-আউট হয়েছে",
+      "cancelled": "বাতিল হয়েছে",
+      "no_show": "নো-শো"
+    },
+    "toasts": {
+      "loadFailed": "রিজার্ভেশন লোড করতে ব্যর্থ",
+      "noGuestAssigned": "কোনো অতিথি নির্ধারিত নয়",
+      "balanceDueCheckIn": "বকেয়া {amount} — চেক-ইনের আগে অতিথিকে অবশ্যই পরিশোধ করতে হবে",
+      "cannotCheckIn": "চেক-ইন করা যাবে না — প্রথমে প্রয়োজনীয় ফিল্ড ঠিক করুন",
+      "balanceDueCheckOut": "বকেয়া {amount} — চেক-আউটের আগে সম্পূর্ণ পেমেন্ট নিন",
+      "paymentNotConfirmed": "পেমেন্ট নিশ্চিত হয়নি — ফোলিওতে নিশ্চিত হিসেবে চিহ্নিত করুন",
+      "actualCheckInMissing": "প্রকৃত চেক-ইন সময় রেকর্ড করা হয়নি",
+      "cannotCheckOut": "চেক-আউট করা যাবে না — প্রথমে প্রয়োজনীয় ফিল্ড ঠিক করুন",
+      "statusUpdateFailed": "অবস্থা আপডেট করতে ব্যর্থ",
+      "statusUpdated": "অবস্থা আপডেট হয়েছে"
+    }
   }
 }

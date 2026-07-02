@@ -394,5 +394,50 @@
       "rejectedResubmit": "Заезд отклонён. Гостю будет предложено отправить повторно.",
       "linkCopied": "Ссылка скопирована!"
     }
+  },
+  "reservations": {
+    "errorLoading": "Ошибка загрузки бронирований",
+    "title": "Бронирования",
+    "subtitle": "Поиск и фильтрация всех бронирований",
+    "searchPlaceholder": "Поиск по номеру брони, гостю, номеру, кровати...",
+    "clearSearch": "Очистить поиск",
+    "status": "Статус",
+    "allStatuses": "Все статусы",
+    "checkInFrom": "Заезд с",
+    "checkInTo": "Заезд по",
+    "colReservationNumber": "№ брони",
+    "colGuest": "Гость",
+    "colRoomBed": "Номер / Кровать",
+    "colCheckIn": "Заезд",
+    "colCheckOut": "Выезд",
+    "colNights": "Ночей",
+    "colStatus": "Статус",
+    "colTotal": "Итого",
+    "colPaid": "Оплачено",
+    "noReservationsFound": "Бронирования не найдены",
+    "noReservationsYet": "Пока нет бронирований",
+    "noResultsHint": "Попробуйте изменить условия поиска или фильтры, чтобы найти нужное.",
+    "noReservationsHint": "Начните с создания первого бронирования через календарь или форму бронирования.",
+    "pageOf": "Страница {page} из {totalPages} ({total} бронирований)",
+    "statusOptions": {
+      "pending": "Ожидание",
+      "confirmed": "Подтверждено",
+      "checked_in": "Заселён",
+      "checked_out": "Выехал",
+      "cancelled": "Отменено",
+      "no_show": "Неявка"
+    },
+    "toasts": {
+      "loadFailed": "Не удалось загрузить бронирования",
+      "noGuestAssigned": "Гость не назначен",
+      "balanceDueCheckIn": "Задолженность {amount} — гость должен оплатить перед заездом",
+      "cannotCheckIn": "Невозможно заселить — сначала исправьте обязательные поля",
+      "balanceDueCheckOut": "Задолженность {amount} — получите полную оплату перед выездом",
+      "paymentNotConfirmed": "Оплата не подтверждена — отметьте как подтверждённую в счёте",
+      "actualCheckInMissing": "Фактическое время заезда не зафиксировано",
+      "cannotCheckOut": "Невозможно оформить выезд — сначала исправьте обязательные поля",
+      "statusUpdateFailed": "Не удалось обновить статус",
+      "statusUpdated": "Статус обновлён"
+    }
   }
 }

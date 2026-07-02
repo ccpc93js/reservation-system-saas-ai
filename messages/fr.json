@@ -394,5 +394,50 @@
       "rejectedResubmit": "Arrivée rejetée. Il sera demandé au client de soumettre à nouveau.",
       "linkCopied": "Lien copié !"
     }
+  },
+  "reservations": {
+    "errorLoading": "Erreur lors du chargement des réservations",
+    "title": "Réservations",
+    "subtitle": "Rechercher et filtrer toutes les réservations",
+    "searchPlaceholder": "Rechercher par n° de réservation, client, chambre, lit...",
+    "clearSearch": "Effacer la recherche",
+    "status": "Statut",
+    "allStatuses": "Tous les statuts",
+    "checkInFrom": "Arrivée à partir de",
+    "checkInTo": "Arrivée jusqu'à",
+    "colReservationNumber": "N° de réservation",
+    "colGuest": "Client",
+    "colRoomBed": "Chambre / Lit",
+    "colCheckIn": "Arrivée",
+    "colCheckOut": "Départ",
+    "colNights": "Nuits",
+    "colStatus": "Statut",
+    "colTotal": "Total",
+    "colPaid": "Payé",
+    "noReservationsFound": "Aucune réservation trouvée",
+    "noReservationsYet": "Aucune réservation pour le moment",
+    "noResultsHint": "Essayez d'ajuster vos termes de recherche ou vos filtres pour trouver ce que vous cherchez.",
+    "noReservationsHint": "Commencez par créer votre première réservation depuis le calendrier ou le formulaire de réservation.",
+    "pageOf": "Page {page} sur {totalPages} ({total} réservations)",
+    "statusOptions": {
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "checked_in": "Arrivée effectuée",
+      "checked_out": "Départ effectué",
+      "cancelled": "Annulée",
+      "no_show": "Non présenté"
+    },
+    "toasts": {
+      "loadFailed": "Échec du chargement des réservations",
+      "noGuestAssigned": "Aucun client assigné",
+      "balanceDueCheckIn": "Solde dû {amount} — le client doit payer avant l'arrivée",
+      "cannotCheckIn": "Impossible d'enregistrer l'arrivée — corrigez d'abord les champs requis",
+      "balanceDueCheckOut": "Solde dû {amount} — encaissez le paiement complet avant le départ",
+      "paymentNotConfirmed": "Paiement non confirmé — marquez-le comme confirmé dans la facturation",
+      "actualCheckInMissing": "Heure d'arrivée réelle non enregistrée",
+      "cannotCheckOut": "Impossible d'enregistrer le départ — corrigez d'abord les champs requis",
+      "statusUpdateFailed": "Échec de la mise à jour du statut",
+      "statusUpdated": "Statut mis à jour"
+    }
   }
 }

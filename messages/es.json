@@ -394,5 +394,50 @@
       "rejectedResubmit": "Check-in rechazado. Se le pedirá al huésped que lo reenvíe.",
       "linkCopied": "¡Enlace copiado!"
     }
+  },
+  "reservations": {
+    "errorLoading": "Error al cargar las reservas",
+    "title": "Reservas",
+    "subtitle": "Busca y filtra todas las reservas",
+    "searchPlaceholder": "Buscar por número de reserva, huésped, habitación, cama...",
+    "clearSearch": "Borrar búsqueda",
+    "status": "Estado",
+    "allStatuses": "Todos los estados",
+    "checkInFrom": "Entrada desde",
+    "checkInTo": "Entrada hasta",
+    "colReservationNumber": "N.º de reserva",
+    "colGuest": "Huésped",
+    "colRoomBed": "Habitación / Cama",
+    "colCheckIn": "Entrada",
+    "colCheckOut": "Salida",
+    "colNights": "Noches",
+    "colStatus": "Estado",
+    "colTotal": "Total",
+    "colPaid": "Pagado",
+    "noReservationsFound": "No se encontraron reservas",
+    "noReservationsYet": "Aún no hay reservas",
+    "noResultsHint": "Intenta ajustar tus términos de búsqueda o filtros para encontrar lo que buscas.",
+    "noReservationsHint": "Comienza creando tu primera reserva desde el calendario o el formulario de reserva.",
+    "pageOf": "Página {page} de {totalPages} ({total} reservas)",
+    "statusOptions": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "checked_in": "Con check-in",
+      "checked_out": "Con checkout",
+      "cancelled": "Cancelada",
+      "no_show": "No presentado"
+    },
+    "toasts": {
+      "loadFailed": "No se pudieron cargar las reservas",
+      "noGuestAssigned": "Ningún huésped asignado",
+      "balanceDueCheckIn": "Saldo pendiente {amount} — el huésped debe pagar antes del check-in",
+      "cannotCheckIn": "No se puede hacer check-in — corrige los campos requeridos primero",
+      "balanceDueCheckOut": "Saldo pendiente {amount} — cobra el pago completo antes del checkout",
+      "paymentNotConfirmed": "Pago no confirmado — márcalo como confirmado en el folio",
+      "actualCheckInMissing": "No se registró la hora real de check-in",
+      "cannotCheckOut": "No se puede hacer checkout — corrige los campos requeridos primero",
+      "statusUpdateFailed": "No se pudo actualizar el estado",
+      "statusUpdated": "Estado actualizado"
+    }
   }
 }

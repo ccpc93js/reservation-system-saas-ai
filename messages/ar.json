@@ -394,5 +394,50 @@
       "rejectedResubmit": "تم رفض تسجيل الوصول. سيُطلب من النزيل إعادة الإرسال.",
       "linkCopied": "تم نسخ الرابط!"
     }
+  },
+  "reservations": {
+    "errorLoading": "خطأ في تحميل الحجوزات",
+    "title": "الحجوزات",
+    "subtitle": "ابحث في جميع الحجوزات وصفّها",
+    "searchPlaceholder": "ابحث برقم الحجز أو اسم النزيل أو الغرفة أو السرير...",
+    "clearSearch": "مسح البحث",
+    "status": "الحالة",
+    "allStatuses": "جميع الحالات",
+    "checkInFrom": "تسجيل الوصول من",
+    "checkInTo": "تسجيل الوصول إلى",
+    "colReservationNumber": "رقم الحجز",
+    "colGuest": "النزيل",
+    "colRoomBed": "الغرفة / السرير",
+    "colCheckIn": "تسجيل الوصول",
+    "colCheckOut": "تسجيل المغادرة",
+    "colNights": "الليالي",
+    "colStatus": "الحالة",
+    "colTotal": "الإجمالي",
+    "colPaid": "المدفوع",
+    "noReservationsFound": "لم يتم العثور على حجوزات",
+    "noReservationsYet": "لا توجد حجوزات بعد",
+    "noResultsHint": "حاول تعديل مصطلحات البحث أو عوامل التصفية للعثور على ما تبحث عنه.",
+    "noReservationsHint": "ابدأ بإنشاء أول حجز لك من التقويم أو نموذج الحجز.",
+    "pageOf": "الصفحة {page} من {totalPages} ({total} حجز)",
+    "statusOptions": {
+      "pending": "قيد الانتظار",
+      "confirmed": "مؤكد",
+      "checked_in": "تم تسجيل الوصول",
+      "checked_out": "تم تسجيل المغادرة",
+      "cancelled": "ملغى",
+      "no_show": "لم يحضر"
+    },
+    "toasts": {
+      "loadFailed": "فشل تحميل الحجوزات",
+      "noGuestAssigned": "لم يتم تعيين نزيل",
+      "balanceDueCheckIn": "الرصيد المستحق {amount} — يجب أن يدفع النزيل قبل تسجيل الوصول",
+      "cannotCheckIn": "لا يمكن تسجيل الوصول — أصلح الحقول المطلوبة أولاً",
+      "balanceDueCheckOut": "الرصيد المستحق {amount} — احصل على الدفع الكامل قبل تسجيل المغادرة",
+      "paymentNotConfirmed": "لم يتم تأكيد الدفع — ضعه كمؤكد في الفاتورة",
+      "actualCheckInMissing": "لم يتم تسجيل وقت الوصول الفعلي",
+      "cannotCheckOut": "لا يمكن تسجيل المغادرة — أصلح الحقول المطلوبة أولاً",
+      "statusUpdateFailed": "فشل تحديث الحالة",
+      "statusUpdated": "تم تحديث الحالة"
+    }
   }
 }

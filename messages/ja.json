@@ -394,5 +394,50 @@
       "rejectedResubmit": "チェックインが却下されました。ゲストに再提出を依頼します。",
       "linkCopied": "リンクをコピーしました！"
     }
+  },
+  "reservations": {
+    "errorLoading": "予約の読み込みエラー",
+    "title": "予約",
+    "subtitle": "すべての予約を検索・絞り込み",
+    "searchPlaceholder": "予約番号、ゲスト名、部屋、ベッドで検索...",
+    "clearSearch": "検索をクリア",
+    "status": "ステータス",
+    "allStatuses": "すべてのステータス",
+    "checkInFrom": "チェックイン開始日",
+    "checkInTo": "チェックイン終了日",
+    "colReservationNumber": "予約番号",
+    "colGuest": "ゲスト",
+    "colRoomBed": "部屋 / ベッド",
+    "colCheckIn": "チェックイン",
+    "colCheckOut": "チェックアウト",
+    "colNights": "泊数",
+    "colStatus": "ステータス",
+    "colTotal": "合計",
+    "colPaid": "支払済み",
+    "noReservationsFound": "予約が見つかりません",
+    "noReservationsYet": "まだ予約がありません",
+    "noResultsHint": "検索語やフィルターを調整してお試しください。",
+    "noReservationsHint": "カレンダーまたは予約フォームから最初の予約を作成しましょう。",
+    "pageOf": "{page} / {totalPages} ページ（合計 {total} 件の予約）",
+    "statusOptions": {
+      "pending": "保留中",
+      "confirmed": "確定済み",
+      "checked_in": "チェックイン済み",
+      "checked_out": "チェックアウト済み",
+      "cancelled": "キャンセル済み",
+      "no_show": "無断キャンセル"
+    },
+    "toasts": {
+      "loadFailed": "予約の読み込みに失敗しました",
+      "noGuestAssigned": "ゲストが割り当てられていません",
+      "balanceDueCheckIn": "未払い残高 {amount} — チェックイン前にゲストの支払いが必要です",
+      "cannotCheckIn": "チェックインできません — 先に必須項目を修正してください",
+      "balanceDueCheckOut": "未払い残高 {amount} — チェックアウト前に全額をお受け取りください",
+      "paymentNotConfirmed": "支払いが未確認です — 請求明細で確認済みにしてください",
+      "actualCheckInMissing": "実際のチェックイン時刻が記録されていません",
+      "cannotCheckOut": "チェックアウトできません — 先に必須項目を修正してください",
+      "statusUpdateFailed": "ステータスの更新に失敗しました",
+      "statusUpdated": "ステータスを更新しました"
+    }
   }
 }

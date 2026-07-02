@@ -394,5 +394,50 @@
       "rejectedResubmit": "Check-in rejected. Guest will be asked to resubmit.",
       "linkCopied": "Link copied!"
     }
+  },
+  "reservations": {
+    "errorLoading": "Error loading reservations",
+    "title": "Reservations",
+    "subtitle": "Search and filter all reservations",
+    "searchPlaceholder": "Search by reservation #, guest name, room, bed...",
+    "clearSearch": "Clear search",
+    "status": "Status",
+    "allStatuses": "All Statuses",
+    "checkInFrom": "Check-in From",
+    "checkInTo": "Check-in To",
+    "colReservationNumber": "Reservation #",
+    "colGuest": "Guest",
+    "colRoomBed": "Room / Bed",
+    "colCheckIn": "Check-in",
+    "colCheckOut": "Check-out",
+    "colNights": "Nights",
+    "colStatus": "Status",
+    "colTotal": "Total",
+    "colPaid": "Paid",
+    "noReservationsFound": "No reservations found",
+    "noReservationsYet": "No reservations yet",
+    "noResultsHint": "Try adjusting your search terms or filters to find what you're looking for.",
+    "noReservationsHint": "Get started by creating your first reservation from the calendar or the booking form.",
+    "pageOf": "Page {page} of {totalPages} ({total} reservations)",
+    "statusOptions": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "checked_in": "Checked In",
+      "checked_out": "Checked Out",
+      "cancelled": "Cancelled",
+      "no_show": "No Show"
+    },
+    "toasts": {
+      "loadFailed": "Failed to load reservations",
+      "noGuestAssigned": "No guest assigned",
+      "balanceDueCheckIn": "Balance due {amount} — guest must pay before check-in",
+      "cannotCheckIn": "Cannot check in — fix required fields first",
+      "balanceDueCheckOut": "Balance due {amount} — collect full payment before checkout",
+      "paymentNotConfirmed": "Payment not confirmed — mark as confirmed in folio",
+      "actualCheckInMissing": "Actual check-in time not recorded",
+      "cannotCheckOut": "Cannot check out — fix required fields first",
+      "statusUpdateFailed": "Failed to update status",
+      "statusUpdated": "Status updated"
+    }
   }
 }

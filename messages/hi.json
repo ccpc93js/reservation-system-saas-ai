@@ -394,5 +394,50 @@
       "rejectedResubmit": "चेक-इन अस्वीकृत। अतिथि को फिर से सबमिट करने के लिए कहा जाएगा।",
       "linkCopied": "लिंक कॉपी हो गया!"
     }
+  },
+  "reservations": {
+    "errorLoading": "आरक्षण लोड करने में त्रुटि",
+    "title": "आरक्षण",
+    "subtitle": "सभी आरक्षण खोजें और फ़िल्टर करें",
+    "searchPlaceholder": "आरक्षण #, अतिथि नाम, कमरा, बेड से खोजें...",
+    "clearSearch": "खोज साफ़ करें",
+    "status": "स्थिति",
+    "allStatuses": "सभी स्थितियां",
+    "checkInFrom": "चेक-इन प्रारंभ",
+    "checkInTo": "चेक-इन अंत",
+    "colReservationNumber": "आरक्षण #",
+    "colGuest": "अतिथि",
+    "colRoomBed": "कमरा / बेड",
+    "colCheckIn": "चेक-इन",
+    "colCheckOut": "चेक-आउट",
+    "colNights": "रातें",
+    "colStatus": "स्थिति",
+    "colTotal": "कुल",
+    "colPaid": "भुगतान किया गया",
+    "noReservationsFound": "कोई आरक्षण नहीं मिला",
+    "noReservationsYet": "अभी तक कोई आरक्षण नहीं",
+    "noResultsHint": "जो आप खोज रहे हैं उसे खोजने के लिए अपने खोज शब्द या फ़िल्टर समायोजित करें।",
+    "noReservationsHint": "कैलेंडर या बुकिंग फॉर्म से अपना पहला आरक्षण बनाकर शुरू करें।",
+    "pageOf": "पृष्ठ {page} / {totalPages} ({total} आरक्षण)",
+    "statusOptions": {
+      "pending": "लंबित",
+      "confirmed": "पुष्टि की गई",
+      "checked_in": "चेक-इन हो गया",
+      "checked_out": "चेक-आउट हो गया",
+      "cancelled": "रद्द किया गया",
+      "no_show": "नो-शो"
+    },
+    "toasts": {
+      "loadFailed": "आरक्षण लोड करने में विफल",
+      "noGuestAssigned": "कोई अतिथि निर्धारित नहीं",
+      "balanceDueCheckIn": "बकाया शेष {amount} — चेक-इन से पहले अतिथि को भुगतान करना होगा",
+      "cannotCheckIn": "चेक-इन नहीं हो सकता — पहले आवश्यक फ़ील्ड ठीक करें",
+      "balanceDueCheckOut": "बकाया शेष {amount} — चेक-आउट से पहले पूरा भुगतान लें",
+      "paymentNotConfirmed": "भुगतान की पुष्टि नहीं हुई — फोलियो में पुष्टि के रूप में चिह्नित करें",
+      "actualCheckInMissing": "वास्तविक चेक-इन समय दर्ज नहीं किया गया",
+      "cannotCheckOut": "चेक-आउट नहीं हो सकता — पहले आवश्यक फ़ील्ड ठीक करें",
+      "statusUpdateFailed": "स्थिति अपडेट करने में विफल",
+      "statusUpdated": "स्थिति अपडेट हो गई"
+    }
   }
 }

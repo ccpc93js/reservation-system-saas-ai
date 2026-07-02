@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
@@ -56,6 +57,15 @@ export default function ReservationsListClient({
   totalReservations,
   orgId,
 }: ReservationsListClientProps) {
+  const t = useTranslations("reservations");
+  const statusLabels: Record<string, string> = {
+    pending: t("statusOptions.pending"),
+    confirmed: t("statusOptions.confirmed"),
+    checked_in: t("statusOptions.checked_in"),
+    checked_out: t("statusOptions.checked_out"),
+    cancelled: t("statusOptions.cancelled"),
+    no_show: t("statusOptions.no_show"),
+  };
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
   const [search, setSearch] = useState(initialQuery);
@@ -163,7 +173,7 @@ export default function ReservationsListClient({
       }
     } catch (error) {
       console.error("Failed to fetch reservations:", error);
-      toast.error("Failed to load reservations");
+      toast.error(t("toasts.loadFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -212,12 +222,12 @@ export default function ReservationsListClient({
 
       if (newStatus === "checked_in") {
         const missing: string[] = [];
-        if (!resData?.guest_id) missing.push("No guest assigned");
+        if (!resData?.guest_id) missing.push(t("toasts.noGuestAssigned"));
         if (totalAmount > 0 && paidAmount < totalAmount)
-          missing.push(`Balance due ${balanceDue.toFixed(2)} — guest must pay before check-in`);
+          missing.push(t("toasts.balanceDueCheckIn", { amount: balanceDue.toFixed(2) }));
 
         if (missing.length > 0) {
-          toast.error("Cannot check in — fix required fields first", { duration: 5000 });
+          toast.error(t("toasts.cannotCheckIn"), { duration: 5000 });
           handleOpenEdit(resId, missing);
           return;
         }
@@ -225,14 +235,14 @@ export default function ReservationsListClient({
 
       if (newStatus === "checked_out") {
         const missing: string[] = [];
-        if (!resData?.guest_id) missing.push("No guest assigned");
+        if (!resData?.guest_id) missing.push(t("toasts.noGuestAssigned"));
         if (balanceDue > 0)
-          missing.push(`Balance due ${balanceDue.toFixed(2)} — collect full payment before checkout`);
-        if (!resData?.payment_confirmed) missing.push("Payment not confirmed — mark as confirmed in folio");
-        if (!resData?.actual_check_in_at) missing.push("Actual check-in time not recorded");
+          missing.push(t("toasts.balanceDueCheckOut", { amount: balanceDue.toFixed(2) }));
+        if (!resData?.payment_confirmed) missing.push(t("toasts.paymentNotConfirmed"));
+        if (!resData?.actual_check_in_at) missing.push(t("toasts.actualCheckInMissing"));
 
         if (missing.length > 0) {
-          toast.error("Cannot check out — fix required fields first", { duration: 5000 });
+          toast.error(t("toasts.cannotCheckOut"), { duration: 5000 });
           handleOpenEdit(resId, missing);
           return;
         }
@@ -249,20 +259,20 @@ export default function ReservationsListClient({
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.error || "Failed to update status");
+        toast.error(error.error || t("toasts.statusUpdateFailed"));
         return;
       }
 
       setReservations(prev =>
         prev.map(res => (res.id === resId ? { ...res, status: newStatus } : res))
       );
-      toast.success("Status updated");
+      toast.success(t("toasts.statusUpdated"));
       if (newStatus === "checked_in") {
         handleOpenEdit(resId);
       }
     } catch (error) {
       console.error("Status update error:", error);
-      toast.error("Failed to update status");
+      toast.error(t("toasts.statusUpdateFailed"));
     } finally {
       setUpdatingStatusId(null);
     }
@@ -312,9 +322,9 @@ export default function ReservationsListClient({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Reservations</h1>
+          <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-sm mt-0.5 text-muted-foreground">
-            Search and filter all reservations
+            {t("subtitle")}
           </p>
         </div>
       </div>
@@ -324,7 +334,7 @@ export default function ReservationsListClient({
         <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Search by reservation #, guest name, room, bed..."
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-9 py-2 rounded-lg border border-border text-sm bg-surface text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
@@ -334,7 +344,7 @@ export default function ReservationsListClient({
             type="button"
             onClick={() => setSearch("")}
             className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
-            title="Clear search"
+            title={t("clearSearch")}
           >
             <X className="w-4 h-4" />
           </button>
@@ -345,25 +355,25 @@ export default function ReservationsListClient({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="block text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
-            Status
+            {t("status")}
           </label>
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
             className="w-full px-3 py-2 rounded-lg border border-border text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
           >
-            <option value="">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="checked_in">Checked In</option>
-            <option value="checked_out">Checked Out</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="no_show">No Show</option>
+            <option value="">{t("allStatuses")}</option>
+            <option value="pending">{statusLabels.pending}</option>
+            <option value="confirmed">{statusLabels.confirmed}</option>
+            <option value="checked_in">{statusLabels.checked_in}</option>
+            <option value="checked_out">{statusLabels.checked_out}</option>
+            <option value="cancelled">{statusLabels.cancelled}</option>
+            <option value="no_show">{statusLabels.no_show}</option>
           </select>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
-            Check-in From
+            {t("checkInFrom")}
           </label>
           <input
             type="date"
@@ -374,7 +384,7 @@ export default function ReservationsListClient({
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
-            Check-in To
+            {t("checkInTo")}
           </label>
           <input
             type="date"
@@ -392,27 +402,27 @@ export default function ReservationsListClient({
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("reservation_number")}>
-                  Reservation # <SortIndicator column="reservation_number" />
+                  {t("colReservationNumber")} <SortIndicator column="reservation_number" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("guestName")}>
-                  Guest <SortIndicator column="guestName" />
+                  {t("colGuest")} <SortIndicator column="guestName" />
                 </th>
-                <th className="p-3">Room / Bed</th>
+                <th className="p-3">{t("colRoomBed")}</th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_in")}>
-                  Check-in <SortIndicator column="check_in" />
+                  {t("colCheckIn")} <SortIndicator column="check_in" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_out")}>
-                  Check-out <SortIndicator column="check_out" />
+                  {t("colCheckOut")} <SortIndicator column="check_out" />
                 </th>
-                <th className="p-3">Nights</th>
+                <th className="p-3">{t("colNights")}</th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("status")}>
-                  Status <SortIndicator column="status" />
+                  {t("colStatus")} <SortIndicator column="status" />
                 </th>
                 <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("total_amount")}>
-                  Total <SortIndicator column="total_amount" />
+                  {t("colTotal")} <SortIndicator column="total_amount" />
                 </th>
                 <th className="p-3 text-right cursor-pointer hover:text-foreground" onClick={() => handleSort("paid_amount")}>
-                  Paid <SortIndicator column="paid_amount" />
+                  {t("colPaid")} <SortIndicator column="paid_amount" />
                 </th>
               </tr>
             </thead>
@@ -424,12 +434,8 @@ export default function ReservationsListClient({
                   <td colSpan={9} className="px-3 py-0">
                     <EmptyState
                       icon={<BookOpen className="w-8 h-8" />}
-                      title={search ? "No reservations found" : "No reservations yet"}
-                      description={
-                        search
-                          ? "Try adjusting your search terms or filters to find what you're looking for."
-                          : "Get started by creating your first reservation from the calendar or the booking form."
-                      }
+                      title={search ? t("noReservationsFound") : t("noReservationsYet")}
+                      description={search ? t("noResultsHint") : t("noReservationsHint")}
                     />
                   </td>
                 </tr>
@@ -472,12 +478,12 @@ export default function ReservationsListClient({
                           disabled={updatingStatusId === res.id}
                           className={`px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer disabled:opacity-50 ${colors.bg} ${colors.text}`}
                         >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="checked_in">Checked In</option>
-                          <option value="checked_out">Checked Out</option>
-                          <option value="cancelled">Cancelled</option>
-                          <option value="no_show">No Show</option>
+                          <option value="pending">{statusLabels.pending}</option>
+                          <option value="confirmed">{statusLabels.confirmed}</option>
+                          <option value="checked_in">{statusLabels.checked_in}</option>
+                          <option value="checked_out">{statusLabels.checked_out}</option>
+                          <option value="cancelled">{statusLabels.cancelled}</option>
+                          <option value="no_show">{statusLabels.no_show}</option>
                         </select>
                       </td>
                       <td className="p-3 font-medium">${res.total_amount.toFixed(2)}</td>
@@ -497,7 +503,7 @@ export default function ReservationsListClient({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages} ({total} reservations)
+            {t("pageOf", { page, totalPages, total })}
           </p>
           <div className="flex gap-2">
             <button
