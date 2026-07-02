@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { Building2, Globe, Clock, Save, Palette, Upload, X, ImageIcon, ChevronDown } from "lucide-react";
 import { Country, City } from "country-state-city";
 import { createBrowserClient } from "@/lib/supabase/client";
@@ -19,15 +20,15 @@ const TIMEZONES = [
 ];
 
 const PRESET_COLORS = [
-  { label: "Purple", value: "#7c3aed" },
-  { label: "Indigo", value: "#4f46e5" },
-  { label: "Blue", value: "#2563eb" },
-  { label: "Teal", value: "#0f766e" },
-  { label: "Green", value: "#16a34a" },
-  { label: "Rose", value: "#e11d48" },
-  { label: "Orange", value: "#ea580c" },
-  { label: "Slate", value: "#334155" },
-  { label: "Black", value: "#09090b" },
+  { key: "purple", value: "#7c3aed" },
+  { key: "indigo", value: "#4f46e5" },
+  { key: "blue", value: "#2563eb" },
+  { key: "teal", value: "#0f766e" },
+  { key: "green", value: "#16a34a" },
+  { key: "rose", value: "#e11d48" },
+  { key: "orange", value: "#ea580c" },
+  { key: "slate", value: "#334155" },
+  { key: "black", value: "#09090b" },
 ];
 
 interface Props {
@@ -36,6 +37,7 @@ interface Props {
 }
 
 export default function PropertySettingsClient({ org, userRole }: Props) {
+  const t = useTranslations("settings.property");
   const isAdmin = ["owner", "manager", "admin"].includes(userRole);
   const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const supabase = createBrowserClient();
@@ -94,7 +96,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 10 * 1024 * 1024) { toast.error("File too large (max 10MB before crop)"); return; }
+    if (file.size > 10 * 1024 * 1024) { toast.error(t("toastFileTooLarge")); return; }
     const url = URL.createObjectURL(file);
     setCropSrc(url);
     e.target.value = ""; // reset so same file can be re-selected
@@ -120,10 +122,10 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ logo_url: publicUrl }),
       });
-      toast.success("Logo uploaded");
+      toast.success(t("toastLogoUploaded"));
       router.refresh();
     } catch (err: any) {
-      toast.error(err.message || "Upload failed");
+      toast.error(err.message || t("toastUploadFailed"));
     } finally {
       setUploading(false);
     }
@@ -142,10 +144,10 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
 
       // Apply theme color live
       document.documentElement.style.setProperty("--accent", hexToHsl(form.theme_color));
-      toast.success("Settings saved");
+      toast.success(t("toastSettingsSaved"));
       router.refresh();
     } catch (err: any) {
-      toast.error(err.message || "Failed to save");
+      toast.error(err.message || t("toastSaveFailed"));
     } finally {
       setSaving(false);
     }
@@ -167,14 +169,14 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <div className="sticky top-0 z-20 bg-background border-b border-border">
         <div className="max-w-2xl p-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>Property Settings</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Manage your property info and branding</p>
+            <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">{t("subtitle")}</p>
           </div>
           {isAdmin && (
             <button onClick={handleSave} disabled={saving}
               className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors">
               <Save className="w-4 h-4" />
-              {saving ? "Saving..." : "Save Changes"}
+              {saving ? t("saving") : t("saveChanges")}
             </button>
           )}
         </div>
@@ -186,17 +188,17 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <section className="rounded-xl border border-border bg-surface p-5 space-y-5">
         <div className="flex items-center gap-2">
           <Palette className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">Branding</h2>
+          <h2 className="text-sm font-semibold text-foreground">{t("branding")}</h2>
         </div>
 
         {/* Logo upload */}
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-2">Property Logo</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">{t("propertyLogo")}</label>
           <div className="flex items-center gap-4">
             {/* Preview */}
             <div className="w-16 h-16 rounded-sm border border-border bg-muted flex items-center justify-center overflow-hidden shrink-0">
               {form.logo_url ? (
-                <img src={form.logo_url} alt="Logo" className="w-full h-full object-contain" />
+                <img src={form.logo_url} alt={t("logoAlt")} className="w-full h-full object-contain" />
               ) : (
                 <ImageIcon className="w-6 h-6 text-muted-foreground" />
               )}
@@ -204,8 +206,8 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
             <div className="flex-1 space-y-2">
               {isDemo ? (
                 <p className="text-xs text-muted-foreground">
-                  Logo upload disabled in demo.{" "}
-                  <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a> to upload.
+                  {t("logoUploadDisabledDemo")}{" "}
+                  <a href="/signup" className="text-primary hover:underline font-medium">{t("createFreeAccount")}</a> {t("toUpload")}
                 </p>
               ) : (
                 <>
@@ -216,7 +218,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                     className="flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50"
                   >
                     <Upload className="w-3.5 h-3.5" />
-                    {uploading ? "Uploading..." : "Upload Logo"}
+                    {uploading ? t("uploading") : t("uploadLogo")}
                   </button>
                 </>
               )}
@@ -225,23 +227,23 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                   onClick={() => setForm((f) => ({ ...f, logo_url: "" }))}
                   className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors"
                 >
-                  <X className="w-3 h-3" /> Remove
+                  <X className="w-3 h-3" /> {t("remove")}
                 </button>
               )}
-              <p className="text-[10px] text-muted-foreground">PNG, JPG, WebP or SVG · max 2MB · Shown in sidebar</p>
+              <p className="text-[10px] text-muted-foreground">{t("logoHint")}</p>
             </div>
           </div>
         </div>
 
         {/* Theme color */}
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-3">Accent Color</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-3">{t("accentColor")}</label>
           <div className="flex items-center gap-3 flex-wrap">
             {PRESET_COLORS.map((c) => (
               <button
                 key={c.value}
                 onClick={() => isAdmin && setForm((f) => ({ ...f, theme_color: c.value }))}
-                title={c.label}
+                title={t(`color_${c.key}`)}
                 disabled={!isAdmin}
                 className="w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 disabled:hover:scale-100"
                 style={{
@@ -259,7 +261,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                 onChange={(e) => isAdmin && setForm((f) => ({ ...f, theme_color: e.target.value }))}
                 disabled={!isAdmin}
                 className="w-8 h-8 rounded-lg cursor-pointer border border-border disabled:opacity-50"
-                title="Custom color"
+                title={t("customColor")}
               />
             </div>
             <span className="text-xs font-mono text-muted-foreground">{form.theme_color}</span>
@@ -267,10 +269,10 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
           {/* Live preview */}
           <div className="mt-3 flex items-center gap-3">
             <div className="h-8 px-4 rounded-lg text-white text-xs font-medium flex items-center" style={{ backgroundColor: form.theme_color }}>
-              Button preview
+              {t("buttonPreview")}
             </div>
             <div className="text-xs px-2 py-1 rounded-full font-medium" style={{ backgroundColor: form.theme_color + "20", color: form.theme_color }}>
-              Badge preview
+              {t("badgePreview")}
             </div>
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: form.theme_color }} />
           </div>
@@ -281,36 +283,36 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Building2 className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">Basic Information</h2>
+          <h2 className="text-sm font-semibold text-foreground">{t("basicInformation")}</h2>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Property Name</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("propertyName")}</label>
             <input value={form.name} onChange={set("name")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("email")}</label>
             <input type="email" value={form.email} onChange={set("email")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("phone")}</label>
             <input value={form.phone} onChange={set("phone")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Address</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("address")}</label>
             <input value={form.address} onChange={set("address")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div className="relative" ref={cityRef}>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">City</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("city")}</label>
             <button
               type="button"
               onClick={() => isAdmin && selectedCountry && setShowCityDropdown((v) => !v)}
               disabled={!isAdmin || !selectedCountry}
-              title={!selectedCountry ? "Select a country first" : undefined}
+              title={!selectedCountry ? t("selectCountryFirst") : undefined}
               className={inputClass + " text-left flex items-center justify-between"}
             >
               <span className={form.city ? "" : "text-muted-foreground"}>
-                {form.city || (selectedCountry ? "Select city..." : "Select a country first")}
+                {form.city || (selectedCountry ? t("selectCity") : t("selectCountryFirst"))}
               </span>
               <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
             </button>
@@ -321,7 +323,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                   autoFocus
                   value={citySearch}
                   onChange={(e) => setCitySearch(e.target.value)}
-                  placeholder="Search city..."
+                  placeholder={t("searchCity")}
                   className="w-full px-3 py-2 text-sm border-b border-border bg-background focus:outline-none"
                 />
                 <div className="max-h-48 overflow-y-auto">
@@ -341,14 +343,14 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                       </button>
                     ))
                   ) : (
-                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">No cities found</p>
+                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">{t("noCitiesFound")}</p>
                   )}
                 </div>
               </div>
             )}
           </div>
           <div className="relative" ref={countryRef}>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Country</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("country")}</label>
             <button
               type="button"
               onClick={() => isAdmin && setShowCountryDropdown((v) => !v)}
@@ -356,7 +358,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
               className={inputClass + " text-left flex items-center justify-between"}
             >
               <span className={form.country ? "" : "text-muted-foreground"}>
-                {form.country || "Select country..."}
+                {form.country || t("selectCountry")}
               </span>
               <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
             </button>
@@ -367,7 +369,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                   autoFocus
                   value={countrySearch}
                   onChange={(e) => setCountrySearch(e.target.value)}
-                  placeholder="Search country..."
+                  placeholder={t("searchCountry")}
                   className="w-full px-3 py-2 text-sm border-b border-border bg-background focus:outline-none"
                 />
                 <div className="max-h-48 overflow-y-auto">
@@ -387,14 +389,14 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
                       </button>
                     ))
                   ) : (
-                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">No countries found</p>
+                    <p className="px-3 py-3 text-sm text-center text-muted-foreground">{t("noCountriesFound")}</p>
                   )}
                 </div>
               </div>
             )}
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("description")}</label>
             <textarea value={form.description} onChange={set("description")} disabled={!isAdmin} rows={3}
               className={inputClass + " resize-none"} />
           </div>
@@ -405,10 +407,10 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Globe className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">Online Presence</h2>
+          <h2 className="text-sm font-semibold text-foreground">{t("onlinePresence")}</h2>
         </div>
         <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1">Website</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-1">{t("website")}</label>
           <input type="url" value={form.website} onChange={set("website")} disabled={!isAdmin}
             placeholder="https://yourhostel.com" className={inputClass} />
         </div>
@@ -418,25 +420,25 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">Operations</h2>
+          <h2 className="text-sm font-semibold text-foreground">{t("operations")}</h2>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Default Check-In Time</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("defaultCheckIn")}</label>
             <input type="time" value={form.check_in_time} onChange={set("check_in_time")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Default Check-Out Time</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("defaultCheckOut")}</label>
             <input type="time" value={form.check_out_time} onChange={set("check_out_time")} disabled={!isAdmin} className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Timezone</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("timezone")}</label>
             <select value={form.timezone} onChange={set("timezone")} disabled={!isAdmin} className={inputClass}>
               {TIMEZONES.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">Currency</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">{t("currency")}</label>
             <select value={form.currency} onChange={set("currency")} disabled={!isAdmin} className={inputClass}>
               {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -445,7 +447,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       </section>
 
       {!isAdmin && (
-        <p className="text-xs text-muted-foreground text-center">Only admins can edit property settings.</p>
+        <p className="text-xs text-muted-foreground text-center">{t("adminOnlyNotice")}</p>
       )}
     </div>
     </div>

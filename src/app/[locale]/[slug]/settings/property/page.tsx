@@ -1,15 +1,17 @@
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import PropertySettingsClient from "@/components/settings/property-settings-client";
 
 export default async function PropertySettingsPage() {
   const supabase = await createServerClient();
+  const t = await getTranslations("settings.property");
 
   const { data: membership } = await supabase
     .from("memberships")
     .select("organization_id, role")
     .single();
 
-  if (!membership) return <div>Error loading settings</div>;
+  if (!membership) return <div>{t("errorLoading")}</div>;
 
   const { data: org } = await supabase
     .from("organizations")

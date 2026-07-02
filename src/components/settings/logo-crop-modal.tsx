@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import ReactCrop, { type Crop, type PixelCrop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { useTranslations } from "next-intl";
 import { X, ZoomIn, ZoomOut, RotateCcw, Check } from "lucide-react";
 
 interface Props {
@@ -43,6 +44,7 @@ async function getCroppedBlob(image: HTMLImageElement, crop: PixelCrop): Promise
 }
 
 export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
+  const t = useTranslations("settings.property.cropModal");
   const imgRef = useRef<HTMLImageElement>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
@@ -61,7 +63,7 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
       const blob = await getCroppedBlob(imgRef.current, completedCrop);
       onCrop(blob);
     } catch {
-      alert("Crop failed");
+      alert(t("cropFailed"));
     } finally {
       setProcessing(false);
     }
@@ -75,8 +77,8 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Crop Logo</h3>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Drag to reposition · Handles to resize</p>
+            <h3 className="text-sm font-semibold text-foreground">{t("title")}</h3>
+            <p className="text-[11px] text-muted-foreground mt-0.5">{t("dragHint")}</p>
           </div>
           <button onClick={onCancel} className="p-1.5 hover:bg-muted rounded-lg transition-colors">
             <X className="w-4 h-4 text-muted-foreground" />
@@ -86,23 +88,23 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
         {/* Guidelines */}
         <div className="px-4 py-2 bg-muted/40 border-b border-border shrink-0">
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-foreground">
-            <span className="font-bold uppercase tracking-wider mr-1 text-foreground">Guidelines:</span>
-            <span>✓ 1:1 square (40×40px sidebar)</span>
-            <span>✓ PNG transparent recommended</span>
-            <span>✓ Min 200×200px · Max 2MB</span>
+            <span className="font-bold uppercase tracking-wider mr-1 text-foreground">{t("guidelines")}</span>
+            <span>{t("guideline1")}</span>
+            <span>{t("guideline2")}</span>
+            <span>{t("guideline3")}</span>
           </div>
         </div>
 
         {/* Aspect ratio switcher */}
         <div className="flex gap-2 px-4 py-2 border-b border-border shrink-0">
-          <span className="text-[11px] font-medium text-muted-foreground self-center mr-1">Shape:</span>
+          <span className="text-[11px] font-medium text-muted-foreground self-center mr-1">{t("shape")}</span>
           {[
-            { label: "1:1 Square", value: 1 },
-            { label: "4:3", value: 4 / 3 },
-            { label: "Free", value: 0 },
+            { key: "square", label: t("shapeSquare"), value: 1 },
+            { key: "4x3", label: t("shape4x3"), value: 4 / 3 },
+            { key: "free", label: t("shapeFree"), value: 0 },
           ].map((opt) => (
             <button
-              key={opt.label}
+              key={opt.key}
               onClick={() => {
                 setAspect(opt.value);
                 if (imgRef.current && opt.value) {
@@ -136,7 +138,7 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
             <img
               ref={imgRef}
               src={src}
-              alt="Crop preview"
+              alt={t("cropPreviewAlt")}
               onLoad={onImageLoad}
               style={{ maxHeight: "220px", maxWidth: "100%", display: "block" }}
             />
@@ -146,10 +148,10 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
         {/* Preview strip */}
         {completedCrop && (
           <div className="px-4 py-2 border-t border-border bg-muted/30 flex items-center gap-3 shrink-0">
-            <span className="text-[11px] text-muted-foreground font-medium">Preview:</span>
-            <CropPreview image={imgRef.current} crop={completedCrop} size={36} label="Sidebar" />
-            <CropPreview image={imgRef.current} crop={completedCrop} size={56} label="Settings" />
-            <CropPreview image={imgRef.current} crop={completedCrop} size={80} label="Full" />
+            <span className="text-[11px] text-muted-foreground font-medium">{t("preview")}</span>
+            <CropPreview image={imgRef.current} crop={completedCrop} size={36} label={t("previewSidebar")} />
+            <CropPreview image={imgRef.current} crop={completedCrop} size={56} label={t("previewSettings")} />
+            <CropPreview image={imgRef.current} crop={completedCrop} size={80} label={t("previewFull")} />
           </div>
         )}
 
@@ -157,7 +159,7 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
         <div className="flex gap-3 px-4 py-3 border-t border-border shrink-0">
           <button onClick={onCancel}
             className="flex-1 py-2 rounded-xl text-sm font-medium text-foreground border border-border hover:bg-muted transition-colors">
-            Cancel
+            {t("cancel")}
           </button>
           <button
             onClick={handleApply}
@@ -165,7 +167,7 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
             className="flex-1 py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground flex items-center justify-center gap-2 disabled:opacity-50 hover:bg-primary/90 transition-colors"
           >
             <Check className="w-4 h-4" />
-            {processing ? "Processing..." : "Apply & Upload"}
+            {processing ? t("processing") : t("applyAndUpload")}
           </button>
         </div>
       </div>
