@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   LineChart,
   Line,
@@ -29,12 +30,13 @@ export default function AnalyticsClient({
   topRooms,
   occupancyTimeline,
 }: AnalyticsClientProps) {
+  const t = useTranslations("analytics");
   return (
     <div className="w-full space-y-8 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
-        <p className="text-muted-foreground mt-1">30-day insights and trends</p>
+        <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
+        <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
       {/* Charts Grid */}
@@ -43,7 +45,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6">
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">Booking Trends</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("bookingTrends")}</h2>
           </div>
           {bookingTrends.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
@@ -60,7 +62,7 @@ export default function AnalyticsClient({
             </ResponsiveContainer>
           ) : (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              No booking data available
+              {t("noBookingData")}
             </div>
           )}
         </div>
@@ -69,7 +71,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-lg font-semibold text-foreground">Revenue Trends</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("revenueTrends")}</h2>
           </div>
           {revenueTrends.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
@@ -86,7 +88,7 @@ export default function AnalyticsClient({
             </ResponsiveContainer>
           ) : (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              No revenue data available
+              {t("noRevenueData")}
             </div>
           )}
         </div>
@@ -95,7 +97,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-semibold text-foreground">Occupancy Timeline</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("occupancyTimeline")}</h2>
           </div>
           {occupancyTimeline.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -112,7 +114,7 @@ export default function AnalyticsClient({
             </ResponsiveContainer>
           ) : (
             <div className="h-[250px] flex items-center justify-center text-muted-foreground">
-              No occupancy data available
+              {t("noOccupancyData")}
             </div>
           )}
         </div>
@@ -121,7 +123,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <Home className="w-5 h-5 text-amber-600" />
-            <h2 className="text-lg font-semibold text-foreground">Top Rooms by Revenue</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("topRoomsByRevenue")}</h2>
           </div>
           {topRooms.length > 0 ? (
             <div className="space-y-3">
@@ -139,7 +141,7 @@ export default function AnalyticsClient({
             </div>
           ) : (
             <div className="h-40 flex items-center justify-center text-muted-foreground">
-              No room data available
+              {t("noRoomData")}
             </div>
           )}
         </div>

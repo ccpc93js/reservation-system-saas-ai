@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import AnalyticsClient from "@/components/analytics/analytics-client";
 import { getBookingTrends, getRevenueTrends, getTopRoomsByRevenue, getOccupancyTimeline } from "@/lib/analytics-metrics";
@@ -7,6 +8,7 @@ import { hasFeature } from "@/lib/plan";
 
 export default async function AnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
   const supabase = await createServerClient();
+  const t = await getTranslations("analytics");
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
@@ -29,8 +31,8 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ slug
     return (
       <Paywall
         slug={orgSlug}
-        feature="Analytics & Reports"
-        description="Occupancy trends, revenue charts, booking sources breakdown, and 30-day performance insights."
+        feature={t("paywallFeature")}
+        description={t("paywallDescription")}
         requiredPlan="pro"
       />
     );

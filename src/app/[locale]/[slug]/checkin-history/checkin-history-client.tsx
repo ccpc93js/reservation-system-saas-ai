@@ -3,10 +3,14 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Download, Search, History, RefreshCw, Trash2, Pencil, X, ChevronDown, AlertTriangle } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { COUNTRIES } from "@/lib/countries";
 import { getGuestBookLimit, PLAN_NAMES } from "@/lib/plan";
+
+const DOC_TYPE_VALUES = ["passport", "national_id", "drivers_license"] as const;
+const SERVICE_TYPE_VALUES = ["prenociste", "hostel", "privatni_smestaj", "hotel", "other"] as const;
 
 const DOC_LABELS: Record<string, string> = {
   passport: "Passport",
@@ -132,6 +136,9 @@ function recordToForm(r: any): EditForm {
 }
 
 export default function CheckinHistoryClient({ records, orgName, orgCurrency, orgId, orgPlan }: Props) {
+  const t = useTranslations("checkinHistory");
+  const docTypeLabel = (v: string) => DOC_TYPE_VALUES.includes(v as any) ? t(`docType_${v}`) : v;
+  const serviceTypeLabel = (v: string) => SERVICE_TYPE_VALUES.includes(v as any) ? t(`serviceType_${v}`) : v;
   const guestBookLimit = getGuestBookLimit(orgPlan);
   const planName = PLAN_NAMES[orgPlan as keyof typeof PLAN_NAMES] ?? orgPlan;
   const [search, setSearch] = useState("");
@@ -237,7 +244,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
       });
       if (!res.ok) {
         const { error } = await res.json();
-        alert(error ?? "Failed to save");
+        alert(error ?? t("toastSaveFailed"));
         return;
       }
       setLocalRecords((prev) =>
@@ -250,7 +257,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
   };
 
   const handleRemove = async (id: string) => {
-    if (!confirm("Remove this entry from the Guest Book?")) return;
+    if (!confirm(t("confirmRemove"))) return;
     setRemoving(id);
     try {
       const res = await fetch(`/api/checkin-registry/${id}`, { method: "DELETE" });
@@ -258,7 +265,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
         setLocalRecords((prev) => prev.filter((r) => r.id !== id));
       } else {
         const { error } = await res.json();
-        alert(error ?? "Failed to remove entry");
+        alert(error ?? t("toastRemoveFailed"));
       }
     } finally {
       setRemoving(null);
@@ -291,9 +298,9 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             <History className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground">Guest Book</h1>
+            <h1 className="text-xl font-bold text-foreground">{t("title")}</h1>
             <p className="text-xs text-muted-foreground">
-              {filtered.length} guest{filtered.length !== 1 ? "s" : ""} registered
+              {t("guestsRegistered", { count: filtered.length })}
               {guestBookLimit !== -1 && (
                 <span className={`ml-2 font-medium ${localRecords.length >= guestBookLimit ? "text-red-500" : localRecords.length >= guestBookLimit * 0.8 ? "text-amber-500" : ""}`}>
                   · {localRecords.length}/{guestBookLimit} ({planName})
@@ -306,13 +313,13 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           <button onClick={handleRefresh} disabled={refreshing}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all">
             <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
-            Refresh
+            {t("refresh")}
           </button>
           <button onClick={() => exportCSV(filtered, orgName)} disabled={filtered.length === 0}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all"
             style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 14px rgba(124,58,237,0.3)" }}>
             <Download className="w-4 h-4" />
-            Export CSV / Excel
+            {t("exportCsv")}
           </button>
         </div>
       </div>
@@ -321,7 +328,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input value={search} onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search name, ID, JMBG, ref..."
+          placeholder={t("searchPlaceholder")}
           className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
       </div>
 
@@ -329,7 +336,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
       {guestBookLimit !== -1 && localRecords.length >= guestBookLimit && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm">
           <AlertTriangle className="w-4 h-4 shrink-0" />
-          <span>Guest Book limit reached ({localRecords.length}/{guestBookLimit} on <strong>{planName}</strong> plan). Upgrade your plan to continue adding guests.</span>
+          <span>{t.rich("limitReached", {
+            strong: (chunks) => <strong>{chunks}</strong>,
+            current: localRecords.length,
+            limit: guestBookLimit,
+            plan: planName,
+          })}</span>
         </div>
       )}
 
@@ -339,8 +351,8 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
             <History className="w-8 h-8 text-muted-foreground" />
           </div>
-          <p className="text-sm font-semibold text-foreground mb-1">No records yet</p>
-          <p className="text-xs text-muted-foreground">Guests will appear here when added to the Guest Book.</p>
+          <p className="text-sm font-semibold text-foreground mb-1">{t("noRecordsYet")}</p>
+          <p className="text-xs text-muted-foreground">{t("noRecordsHint")}</p>
         </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
@@ -348,9 +360,9 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             <table className="w-full text-xs">
               <thead>
                 <tr className="bg-muted/50 border-b border-border">
-                  {["Reservation #", "Name", "Birth Date", "Citizenship", "Country of Birth",
-                    "ID Type", "ID Number", "Issue Date", "Expiry Date",
-                    "JMBG", "Service", "Room / Bed", "Arrival", "Departure", ""].map((h, i) => (
+                  {[t("colReservationNumber"), t("colName"), t("colBirthDate"), t("colCitizenship"), t("colCountryOfBirth"),
+                    t("colIdType"), t("colIdNumber"), t("colIssueDate"), t("colExpiryDate"),
+                    t("colJmbg"), t("colService"), t("colRoomBed"), t("colArrival"), t("colDeparture"), ""].map((h, i) => (
                     <th key={i} className="px-3 py-2.5 text-left font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -365,12 +377,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.date_of_birth)}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.nationality || "—"}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.country_of_birth || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{DOC_LABELS[r.document_type] ?? r.document_type ?? "—"}</td>
+                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.document_type ? docTypeLabel(r.document_type) : "—"}</td>
                       <td className="px-3 py-2.5 font-mono text-foreground whitespace-nowrap">{r.document_number || "—"}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_issued_date)}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_expiry)}</td>
                       <td className="px-3 py-2.5 font-mono text-foreground whitespace-nowrap">{r.jmbg || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{SERVICE_LABELS[r.service_type] ?? r.service_type ?? "—"}</td>
+                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.service_type ? serviceTypeLabel(r.service_type) : "—"}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{bedRoom}</td>
                       <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">
                         {r.actual_check_in_at ? fmtDateTime(r.actual_check_in_at) : fmtDate(r.check_in)}
@@ -382,12 +394,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                         <div className="flex items-center gap-1">
                           <button onClick={() => openEdit(r)}
                             className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                            title="Edit record">
+                            title={t("editRecordTitle")}>
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
                           <button onClick={() => handleRemove(r.id)} disabled={removing === r.id}
                             className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
-                            title="Remove from Guest Book">
+                            title={t("removeFromGuestBookTitle")}>
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -411,7 +423,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border shrink-0">
               <div>
-                <h2 className="text-lg font-bold text-foreground">Edit Guest Book Entry</h2>
+                <h2 className="text-lg font-bold text-foreground">{t("editEntryTitle")}</h2>
                 <p className="text-xs text-muted-foreground mt-0.5">{editForm.first_name} {editForm.last_name}</p>
               </div>
               <button onClick={closeEdit} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
@@ -422,42 +434,42 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             <div className="overflow-y-auto flex-1 p-6 space-y-5">
               {/* Personal Info */}
               <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Personal Information</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("personalInformation")}</p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>First Name</label>
+                    <label className={labelCls}>{t("firstName")}</label>
                     <input className={inputCls} value={editForm.first_name} onChange={(e) => set("first_name", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Last Name</label>
+                    <label className={labelCls}>{t("lastName")}</label>
                     <input className={inputCls} value={editForm.last_name} onChange={(e) => set("last_name", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Date of Birth</label>
+                    <label className={labelCls}>{t("dateOfBirth")}</label>
                     <input type="date" className={inputCls} value={editForm.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Citizenship</label>
+                    <label className={labelCls}>{t("citizenship")}</label>
                     <button ref={nationalityBtnRef} type="button" onClick={openNationalityDropdown}
                       className={`${inputCls} flex items-center justify-between text-left`}>
                       <span className={editForm.nationality ? "text-foreground" : "text-muted-foreground"}>
-                        {editForm.nationality || "— Select —"}
+                        {editForm.nationality || t("selectPlaceholder")}
                       </span>
                       <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
                     </button>
                   </div>
                   <div>
-                    <label className={labelCls}>Country of Birth</label>
+                    <label className={labelCls}>{t("countryOfBirth")}</label>
                     <button ref={countryOfBirthBtnRef} type="button" onClick={openCountryOfBirthDropdown}
                       className={`${inputCls} flex items-center justify-between text-left`}>
                       <span className={editForm.country_of_birth ? "text-foreground" : "text-muted-foreground"}>
-                        {editForm.country_of_birth || "— Select —"}
+                        {editForm.country_of_birth || t("selectPlaceholder")}
                       </span>
                       <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
                     </button>
                   </div>
                   <div>
-                    <label className={labelCls}>Place of Birth</label>
+                    <label className={labelCls}>{t("placeOfBirth")}</label>
                     <input className={inputCls} value={editForm.place_of_birth} onChange={(e) => set("place_of_birth", e.target.value)} />
                   </div>
                 </div>
@@ -465,35 +477,35 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
 
               {/* Document */}
               <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Identity Document</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("identityDocument")}</p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>Document Type</label>
+                    <label className={labelCls}>{t("documentType")}</label>
                     <select className={inputCls} value={editForm.document_type} onChange={(e) => set("document_type", e.target.value)}>
-                      <option value="">— Select —</option>
-                      {Object.entries(DOC_LABELS).map(([val, label]) => (
-                        <option key={val} value={val}>{label}</option>
+                      <option value="">{t("selectPlaceholder")}</option>
+                      {DOC_TYPE_VALUES.map((val) => (
+                        <option key={val} value={val}>{t(`docType_${val}`)}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className={labelCls}>Document Number</label>
+                    <label className={labelCls}>{t("documentNumber")}</label>
                     <input className={inputCls} value={editForm.document_number} onChange={(e) => set("document_number", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Issue Date</label>
+                    <label className={labelCls}>{t("issueDate")}</label>
                     <input type="date" className={inputCls} value={editForm.document_issued_date} onChange={(e) => set("document_issued_date", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Place of Issue</label>
+                    <label className={labelCls}>{t("placeOfIssue")}</label>
                     <input className={inputCls} value={editForm.document_issued_place} onChange={(e) => set("document_issued_place", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Expiry Date</label>
+                    <label className={labelCls}>{t("expiryDate")}</label>
                     <input type="date" className={inputCls} value={editForm.document_expiry} onChange={(e) => set("document_expiry", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>JMBG</label>
+                    <label className={labelCls}>{t("jmbg")}</label>
                     <input className={inputCls} value={editForm.jmbg} onChange={(e) => set("jmbg", e.target.value)} />
                   </div>
                 </div>
@@ -501,39 +513,39 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
 
               {/* Stay */}
               <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Stay Details</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("stayDetails")}</p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>Service Type</label>
+                    <label className={labelCls}>{t("serviceType")}</label>
                     <select className={inputCls} value={editForm.service_type} onChange={(e) => set("service_type", e.target.value)}>
-                      <option value="">— Select —</option>
-                      {Object.entries(SERVICE_LABELS).map(([val, label]) => (
-                        <option key={val} value={val}>{label}</option>
+                      <option value="">{t("selectPlaceholder")}</option>
+                      {SERVICE_TYPE_VALUES.map((val) => (
+                        <option key={val} value={val}>{t(`serviceType_${val}`)}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className={labelCls}>Room</label>
+                    <label className={labelCls}>{t("room")}</label>
                     <input className={inputCls} value={editForm.room_name} onChange={(e) => set("room_name", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Bed</label>
+                    <label className={labelCls}>{t("bed")}</label>
                     <input className={inputCls} value={editForm.bed_name} onChange={(e) => set("bed_name", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Check-In Date</label>
+                    <label className={labelCls}>{t("checkInDate")}</label>
                     <input type="date" className={inputCls} value={editForm.check_in} onChange={(e) => set("check_in", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Check-Out Date</label>
+                    <label className={labelCls}>{t("checkOutDate")}</label>
                     <input type="date" className={inputCls} value={editForm.check_out} onChange={(e) => set("check_out", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Actual Arrival</label>
+                    <label className={labelCls}>{t("actualArrival")}</label>
                     <input type="datetime-local" className={inputCls} value={editForm.actual_check_in_at} onChange={(e) => set("actual_check_in_at", e.target.value)} />
                   </div>
                   <div>
-                    <label className={labelCls}>Actual Departure</label>
+                    <label className={labelCls}>{t("actualDeparture")}</label>
                     <input type="datetime-local" className={inputCls} value={editForm.actual_check_out_at} onChange={(e) => set("actual_check_out_at", e.target.value)} />
                   </div>
                 </div>
@@ -544,11 +556,11 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-border shrink-0">
               <button onClick={closeEdit}
                 className="px-4 py-2 rounded-lg text-sm font-medium border border-border bg-surface hover:bg-muted text-foreground transition-colors">
-                Cancel
+                {t("cancel")}
               </button>
               <button onClick={handleSave} disabled={saving}
                 className="px-5 py-2 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors">
-                {saving ? "Saving…" : "Save Changes"}
+                {saving ? t("savingEllipsis") : t("saveChanges")}
               </button>
             </div>
           </div>
@@ -563,7 +575,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           className="bg-surface border border-border rounded-xl shadow-2xl overflow-hidden">
           <div className="p-2 border-b border-border">
             <input autoFocus value={nationalitySearch} onChange={(e) => setNationalitySearch(e.target.value)}
-              placeholder="Search country..." className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" />
+              placeholder={t("searchCountry")} className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" />
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filteredNationalities.map((c) => (
@@ -574,7 +586,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
               </button>
             ))}
             {filteredNationalities.length === 0 && (
-              <p className="px-3 py-4 text-sm text-muted-foreground text-center">No results</p>
+              <p className="px-3 py-4 text-sm text-muted-foreground text-center">{t("noResults")}</p>
             )}
           </div>
         </div>,
@@ -588,7 +600,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           className="bg-surface border border-border rounded-xl shadow-2xl overflow-hidden">
           <div className="p-2 border-b border-border">
             <input autoFocus value={countryOfBirthSearch} onChange={(e) => setCountryOfBirthSearch(e.target.value)}
-              placeholder="Search country..." className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" />
+              placeholder={t("searchCountry")} className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" />
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filteredCountriesOfBirth.map((c) => (
@@ -599,7 +611,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
               </button>
             ))}
             {filteredCountriesOfBirth.length === 0 && (
-              <p className="px-3 py-4 text-sm text-muted-foreground text-center">No results</p>
+              <p className="px-3 py-4 text-sm text-muted-foreground text-center">{t("noResults")}</p>
             )}
           </div>
         </div>,

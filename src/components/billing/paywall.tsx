@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Lock } from "lucide-react";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function Paywall({ feature, description, requiredPlan, slug }: Props) {
+  const t = useTranslations("paywall");
   const planName = requiredPlan === "pro" ? "Pro" : "Scale";
   const price = requiredPlan === "pro" ? "€19/mo" : "€39/mo";
 
@@ -26,20 +28,20 @@ export default function Paywall({ feature, description, requiredPlan, slug }: Pr
         </div>
         <div className="rounded-xl border border-border bg-surface p-4 space-y-3">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Available on {planName} plan
+            {t("availableOnPlan", { plan: planName })}
           </p>
           <p className="text-2xl font-extrabold text-foreground">{price}</p>
-          <p className="text-xs text-muted-foreground">per property · cancel anytime</p>
+          <p className="text-xs text-muted-foreground">{t("perPropertyHint")}</p>
         </div>
         <div className="flex flex-col gap-2">
           <Link href={`/${slug}/settings/billing`}
             className="w-full py-3 rounded-xl font-semibold text-sm text-white text-center transition-all"
             style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 20px rgba(124,58,237,0.3)" }}>
-            Upgrade to {planName} — {price}
+            {t("upgradeTo", { plan: planName, price })}
           </Link>
           <Link href={`/${slug}/dashboard`}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-            Back to dashboard
+            {t("backToDashboard")}
           </Link>
         </div>
       </div>
