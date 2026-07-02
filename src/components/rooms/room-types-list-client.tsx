@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, LayoutGrid, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import RoomTypeDialog from "./room-types-dialog";
@@ -17,6 +18,7 @@ export default function RoomTypesListClient({
   initialRoomTypes,
   initialTotal,
 }: RoomTypesListClientProps) {
+  const t = useTranslations("rooms.types");
   const [roomTypes, setRoomTypes] = useState<RoomType[]>(initialRoomTypes);
   const [total, setTotal] = useState(initialTotal);
   const [page, setPage] = useState(1);
@@ -46,7 +48,7 @@ export default function RoomTypesListClient({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to fetch room types");
+        toast.error(data.error || t("toastFetchFailed"));
         return;
       }
 
@@ -54,7 +56,7 @@ export default function RoomTypesListClient({
       setTotal(data.total);
       setPage(pageNum);
     } catch (error) {
-      toast.error("Failed to fetch room types");
+      toast.error(t("toastFetchFailed"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -67,7 +69,7 @@ export default function RoomTypesListClient({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this room type?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     try {
       const res = await fetch(`/api/room-types/${id}`, {
@@ -76,14 +78,14 @@ export default function RoomTypesListClient({
 
       if (!res.ok) {
         const data = await res.json();
-        toast.error(data.error || "Failed to delete room type");
+        toast.error(data.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Room type deleted successfully");
+      toast.success(t("toastDeleted"));
       handleFetch(search, page);
     } catch (error) {
-      toast.error("Failed to delete room type");
+      toast.error(t("toastDeleteFailed"));
       console.error(error);
     }
   };
@@ -132,7 +134,7 @@ export default function RoomTypesListClient({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search room types..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isLoading}
@@ -148,7 +150,7 @@ export default function RoomTypesListClient({
           disabled={isLoading}
         >
           <Plus className="h-4 w-4" />
-          New
+          {t("new")}
         </button>
       </div>
 
@@ -157,19 +159,19 @@ export default function RoomTypesListClient({
           <thead className="bg-gray-50 border-b">
             <tr>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
-                Name <SortIndicator column="name" />
+                {t("colName")} <SortIndicator column="name" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("type")}>
-                Type <SortIndicator column="type" />
+                {t("colType")} <SortIndicator column="type" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("capacity")}>
-                Capacity <SortIndicator column="capacity" />
+                {t("colCapacity")} <SortIndicator column="capacity" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("base_price")}>
-                Base Price <SortIndicator column="base_price" />
+                {t("colBasePrice")} <SortIndicator column="base_price" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Rooms</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colRooms")}</th>
+              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -214,11 +216,11 @@ export default function RoomTypesListClient({
       {roomTypes.length === 0 && (
         <EmptyState
           icon={<LayoutGrid className="w-8 h-8" />}
-          title={search ? "No room types found" : "No room types yet"}
+          title={search ? t("noneFound") : t("noneYet")}
           description={
             search
-              ? "Try adjusting your search to find the room type you're looking for."
-              : "Define room types to categorize your rooms (e.g., Dorm, Private, Suite)."
+              ? t("noneFoundHint")
+              : t("noneYetHint")
           }
           action={
             !search && (
@@ -229,7 +231,7 @@ export default function RoomTypesListClient({
                 }}
                 className="text-sm font-medium text-primary hover:text-primary/80"
               >
-                Create a room type →
+                {t("createCta")}
               </button>
             )
           }
@@ -238,7 +240,7 @@ export default function RoomTypesListClient({
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-500">
-          Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total}
+          {t("showingRange", { from: ((page - 1) * pageSize) + 1, to: Math.min(page * pageSize, total), total })}
         </div>
         <div className="flex gap-2">
           <button

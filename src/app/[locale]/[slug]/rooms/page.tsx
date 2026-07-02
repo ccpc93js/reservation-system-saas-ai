@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import RoomTypesListClient from "@/components/rooms/room-types-list-client";
 import RoomsListClient from "@/components/rooms/rooms-list-client";
@@ -8,6 +9,7 @@ type Membership = { organization_id: string };
 
 export default async function RoomsPage() {
   const supabase = await createServerClient();
+  const t = await getTranslations("rooms");
 
   // Get current user's organization
   const {
@@ -16,7 +18,7 @@ export default async function RoomsPage() {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    return <div className="text-sm text-muted-foreground">Unauthorized</div>;
+    return <div className="text-sm text-muted-foreground">{t("unauthorized")}</div>;
   }
 
   const { data: membershipRaw } = await supabase
@@ -28,7 +30,7 @@ export default async function RoomsPage() {
   const membership = membershipRaw as Membership | null;
 
   if (!membership) {
-    return <div className="text-sm text-muted-foreground">No organization found</div>;
+    return <div className="text-sm text-muted-foreground">{t("noOrgFound")}</div>;
   }
 
   // Fetch room types
@@ -62,9 +64,9 @@ export default async function RoomsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">Room Inventory</h1>
+        <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
         <p className="text-sm mt-0.5 text-muted-foreground">
-          Manage room types, rooms, and beds for your organization
+          {t("subtitle")}
         </p>
       </div>
 
@@ -72,9 +74,9 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Room Types</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("roomTypesHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {roomTypesCount} room type{roomTypesCount !== 1 ? "s" : ""}
+              {t("roomTypesCount", { count: roomTypesCount })}
             </p>
           </div>
           <ChevronDown className="h-5 w-5 transition-transform" />
@@ -91,9 +93,9 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Rooms</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("roomsHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {roomsCount} room{roomsCount !== 1 ? "s" : ""}
+              {t("roomsCount", { count: roomsCount })}
             </p>
           </div>
           <ChevronDown className="h-5 w-5 transition-transform" />
@@ -110,9 +112,9 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Beds</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t("bedsHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {bedsCount} bed{bedsCount !== 1 ? "s" : ""}
+              {t("bedsCount", { count: bedsCount })}
             </p>
           </div>
           <ChevronDown className="h-5 w-5 transition-transform" />

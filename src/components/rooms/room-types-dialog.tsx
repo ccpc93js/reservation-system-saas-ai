@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { createRoomTypeSchema, updateRoomTypeSchema } from "@/lib/validations/room";
 import { RoomType } from "@/lib/types/database";
 
@@ -17,17 +18,8 @@ interface RoomTypeDialogProps {
   onRoomTypeUpdated?: () => void;
 }
 
-const ROOM_TYPES = [
-  { value: "dorm", label: "Dorm" },
-  { value: "private", label: "Private" },
-];
-
-const GENDERS = [
-  { value: "", label: "None" },
-  { value: "mixed", label: "Mixed" },
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-];
+const ROOM_TYPE_VALUES = ["dorm", "private"] as const;
+const GENDER_VALUES = ["", "mixed", "male", "female"] as const;
 
 export default function RoomTypeDialog({
   open,
@@ -36,6 +28,7 @@ export default function RoomTypeDialog({
   onRoomTypeCreated,
   onRoomTypeUpdated,
 }: RoomTypeDialogProps) {
+  const t = useTranslations("rooms.types.dialog");
   const isEditing = !!roomTypeId;
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -73,7 +66,7 @@ export default function RoomTypeDialog({
       const roomType = await res.json();
 
       if (!res.ok) {
-        toast.error("Failed to load room type");
+        toast.error(t("toastLoadFailed"));
         return;
       }
 
@@ -86,7 +79,7 @@ export default function RoomTypeDialog({
         description: roomType.description || "",
       });
     } catch (error) {
-      toast.error("Failed to load room type");
+      toast.error(t("toastLoadFailed"));
       console.error(error);
     }
   };
@@ -107,12 +100,12 @@ export default function RoomTypeDialog({
       const responseData = await res.json();
 
       if (!res.ok) {
-        toast.error(responseData.error || "Failed to save room type");
+        toast.error(responseData.error || t("toastSaveFailed"));
         return;
       }
 
       toast.success(
-        isEditing ? "Room type updated successfully" : "Room type created successfully"
+        isEditing ? t("toastUpdated") : t("toastCreated")
       );
       onOpenChange(false);
       reset();
@@ -123,7 +116,7 @@ export default function RoomTypeDialog({
         onRoomTypeCreated();
       }
     } catch (error) {
-      toast.error("Failed to save room type");
+      toast.error(t("toastSaveFailed"));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -131,7 +124,7 @@ export default function RoomTypeDialog({
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this room type?")) return;
+    if (!confirm(t("confirmDelete"))) return;
 
     setIsDeleting(true);
     try {
@@ -142,11 +135,11 @@ export default function RoomTypeDialog({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to delete room type");
+        toast.error(data.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Room type deleted successfully");
+      toast.success(t("toastDeleted"));
       onOpenChange(false);
       reset();
 
@@ -154,7 +147,7 @@ export default function RoomTypeDialog({
         onRoomTypeUpdated();
       }
     } catch (error) {
-      toast.error("Failed to delete room type");
+      toast.error(t("toastDeleteFailed"));
       console.error(error);
     } finally {
       setIsDeleting(false);
@@ -168,7 +161,7 @@ export default function RoomTypeDialog({
         <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto z-50">
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-xl font-bold">
-              {isEditing ? "Edit Room Type" : "Create Room Type"}
+              {isEditing ? t("editTitle") : t("createTitle")}
             </Dialog.Title>
             <Dialog.Close asChild>
               <button className="p-2 hover:bg-muted rounded transition-colors">
@@ -180,10 +173,10 @@ export default function RoomTypeDialog({
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium mb-1">Room Type Name *</label>
+              <label className="block text-sm font-medium mb-1">{t("nameLabel")}</label>
               <input
                 type="text"
-                placeholder="e.g., Standard Dorm, Private Room"
+                placeholder={t("namePlaceholder")}
                 {...register("name")}
                 className={`w-full px-3 py-2 border rounded-lg ${
                   errors.name ? "border-red-500" : "border-border"
@@ -198,7 +191,7 @@ export default function RoomTypeDialog({
             {/* Type and Gender */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Type *</label>
+                <label className="block text-sm font-medium mb-1">{t("typeLabel")}</label>
                 <select
                   {...register("type")}
                   className={`w-full px-3 py-2 border rounded-lg ${
@@ -206,10 +199,10 @@ export default function RoomTypeDialog({
                   } disabled:opacity-50`}
                   disabled={isLoading || isDeleting}
                 >
-                  <option value="">Select type</option>
-                  {ROOM_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
+                  <option value="">{t("selectType")}</option>
+                  {ROOM_TYPE_VALUES.map((rt) => (
+                    <option key={rt} value={rt}>
+                      {t(`type_${rt}`)}
                     </option>
                   ))}
                 </select>
@@ -219,15 +212,15 @@ export default function RoomTypeDialog({
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Gender (optional)</label>
+                <label className="block text-sm font-medium mb-1">{t("genderLabel")}</label>
                 <select
                   {...register("gender")}
                   className="w-full px-3 py-2 border border-border rounded-lg bg-background disabled:opacity-50"
                   disabled={isLoading || isDeleting}
                 >
-                  {GENDERS.map((g) => (
-                    <option key={g.value} value={g.value}>
-                      {g.label}
+                  {GENDER_VALUES.map((g) => (
+                    <option key={g} value={g}>
+                      {t(`gender_${g || "none"}`)}
                     </option>
                   ))}
                 </select>
@@ -237,7 +230,7 @@ export default function RoomTypeDialog({
             {/* Capacity and Price */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Capacity (beds) *</label>
+                <label className="block text-sm font-medium mb-1">{t("capacityLabel")}</label>
                 <input
                   type="number"
                   min="1"
@@ -254,7 +247,7 @@ export default function RoomTypeDialog({
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Base Price ($) *</label>
+                <label className="block text-sm font-medium mb-1">{t("basePriceLabel")}</label>
                 <input
                   type="number"
                   step="0.01"
@@ -273,9 +266,9 @@ export default function RoomTypeDialog({
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium mb-1">Description (optional)</label>
+              <label className="block text-sm font-medium mb-1">{t("descriptionLabel")}</label>
               <textarea
-                placeholder="Room type description"
+                placeholder={t("descriptionPlaceholder")}
                 {...register("description")}
                 rows={3}
                 className="w-full px-3 py-2 border border-border rounded-lg bg-background disabled:opacity-50"
@@ -295,7 +288,7 @@ export default function RoomTypeDialog({
                   disabled={isLoading || isDeleting}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
                 >
-                  {isDeleting ? "Deleting..." : "Delete"}
+                  {isDeleting ? t("deleting") : t("delete")}
                 </button>
               )}
               <div className="ml-auto flex gap-2">
@@ -305,7 +298,7 @@ export default function RoomTypeDialog({
                     disabled={isLoading || isDeleting}
                     className="px-4 py-2 border border-border rounded-lg hover:bg-muted disabled:opacity-50 transition-colors"
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </Dialog.Close>
                 <button
@@ -313,7 +306,7 @@ export default function RoomTypeDialog({
                   disabled={isLoading || isDeleting}
                   className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
                 >
-                  {isLoading ? "Saving..." : "Save"}
+                  {isLoading ? t("saving") : t("save")}
                 </button>
               </div>
             </div>
