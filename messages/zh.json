@@ -687,5 +687,40 @@
         "save": "保存"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "加载团队时出错",
+      "title": "团队",
+      "memberCount": "{count, plural, other {# 位成员}}",
+      "pendingInviteCount": "{count, plural, other {# 个待处理邀请}}",
+      "inviteMember": "邀请成员",
+      "invitesDisabledDemo": "演示模式下已禁用邀请 ·",
+      "createFreeAccount": "创建免费账户",
+      "inviteFormTitle": "邀请团队成员",
+      "role_owner": "所有者",
+      "role_manager": "经理",
+      "role_admin": "管理员",
+      "role_staff": "员工",
+      "sending": "发送中…",
+      "send": "发送",
+      "inviteExpiryHint": "邀请链接 7 天后过期。对方需使用此邮箱登录以接受邀请。",
+      "membersHeading": "成员",
+      "loading": "加载中…",
+      "noMembersYet": "暂无成员",
+      "joined": "加入于 {date}",
+      "removeMemberTitle": "移除成员",
+      "pendingInvitationsHeading": "待处理邀请",
+      "expires": "过期于 {date}",
+      "toastLoadFailed": "加载团队失败",
+      "toastEmailRequired": "需要邮箱",
+      "toastInviteSent": "邀请已发送至 {email}",
+      "toastInviteFailed": "发送邀请失败",
+      "toastRoleUpdated": "角色已更新",
+      "toastRoleUpdateFailed": "更新角色失败",
+      "confirmRemove": "确定要将 {email} 从该组织中移除吗？",
+      "toastRemoved": "成员已移除",
+      "toastRemoveFailed": "移除成员失败"
+    }
   }
 }

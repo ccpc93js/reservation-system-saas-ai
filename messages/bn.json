@@ -687,5 +687,40 @@
         "save": "সংরক্ষণ করুন"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "টিম লোড করতে ত্রুটি",
+      "title": "টিম",
+      "memberCount": "{count, plural, one {# সদস্য} other {# সদস্য}}",
+      "pendingInviteCount": "{count, plural, one {# মুলতুবি আমন্ত্রণ} other {# মুলতুবি আমন্ত্রণ}}",
+      "inviteMember": "সদস্য আমন্ত্রণ করুন",
+      "invitesDisabledDemo": "ডেমোতে আমন্ত্রণ নিষ্ক্রিয় করা হয়েছে ·",
+      "createFreeAccount": "একটি ফ্রি অ্যাকাউন্ট তৈরি করুন",
+      "inviteFormTitle": "টিম সদস্য আমন্ত্রণ করুন",
+      "role_owner": "মালিক",
+      "role_manager": "ম্যানেজার",
+      "role_admin": "অ্যাডমিন",
+      "role_staff": "স্টাফ",
+      "sending": "পাঠানো হচ্ছে...",
+      "send": "পাঠান",
+      "inviteExpiryHint": "আমন্ত্রণ লিঙ্কের মেয়াদ ৭ দিনে শেষ হয়। গ্রহণ করতে তাদের এই ইমেল দিয়ে সাইন ইন করতে হবে।",
+      "membersHeading": "সদস্যরা",
+      "loading": "লোড হচ্ছে...",
+      "noMembersYet": "এখনও কোনো সদস্য নেই",
+      "joined": "{date} তারিখে যোগ দিয়েছেন",
+      "removeMemberTitle": "সদস্য সরান",
+      "pendingInvitationsHeading": "মুলতুবি আমন্ত্রণ",
+      "expires": "{date} তারিখে মেয়াদ শেষ",
+      "toastLoadFailed": "টিম লোড করতে ব্যর্থ",
+      "toastEmailRequired": "ইমেল প্রয়োজন",
+      "toastInviteSent": "{email} এ আমন্ত্রণ পাঠানো হয়েছে",
+      "toastInviteFailed": "আমন্ত্রণ পাঠাতে ব্যর্থ",
+      "toastRoleUpdated": "ভূমিকা আপডেট হয়েছে",
+      "toastRoleUpdateFailed": "ভূমিকা আপডেট করতে ব্যর্থ",
+      "confirmRemove": "এই প্রতিষ্ঠান থেকে {email} সরাতে চান?",
+      "toastRemoved": "সদস্য সরানো হয়েছে",
+      "toastRemoveFailed": "সদস্য সরাতে ব্যর্থ"
+    }
   }
 }

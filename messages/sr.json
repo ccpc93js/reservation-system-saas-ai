@@ -687,5 +687,40 @@
         "save": "Sačuvaj"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Greška pri učitavanju tima",
+      "title": "Tim",
+      "memberCount": "{count, plural, one {# član} few {# člana} other {# članova}}",
+      "pendingInviteCount": "{count, plural, one {# poziv na čekanju} few {# poziva na čekanju} other {# poziva na čekanju}}",
+      "inviteMember": "Pozovi člana",
+      "invitesDisabledDemo": "Pozivi su onemogućeni u demo verziji ·",
+      "createFreeAccount": "Kreiraj besplatan nalog",
+      "inviteFormTitle": "Pozovi člana tima",
+      "role_owner": "vlasnik",
+      "role_manager": "menadžer",
+      "role_admin": "administrator",
+      "role_staff": "osoblje",
+      "sending": "Slanje...",
+      "send": "Pošalji",
+      "inviteExpiryHint": "Link za pozivnicu ističe za 7 dana. Moraju se prijaviti sa ovim e-mailom da bi prihvatili.",
+      "membersHeading": "Članovi",
+      "loading": "Učitavanje...",
+      "noMembersYet": "Još nema članova",
+      "joined": "Pridružio se {date}",
+      "removeMemberTitle": "Ukloni člana",
+      "pendingInvitationsHeading": "Pozivi na čekanju",
+      "expires": "Ističe {date}",
+      "toastLoadFailed": "Učitavanje tima nije uspelo",
+      "toastEmailRequired": "E-pošta je obavezna",
+      "toastInviteSent": "Poziv poslat na {email}",
+      "toastInviteFailed": "Slanje poziva nije uspelo",
+      "toastRoleUpdated": "Uloga je ažurirana",
+      "toastRoleUpdateFailed": "Ažuriranje uloge nije uspelo",
+      "confirmRemove": "Ukloniti {email} iz ove organizacije?",
+      "toastRemoved": "Član uklonjen",
+      "toastRemoveFailed": "Uklanjanje člana nije uspelo"
+    }
   }
 }

@@ -687,5 +687,40 @@
         "save": "Сохранить"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Ошибка загрузки команды",
+      "title": "Команда",
+      "memberCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
+      "pendingInviteCount": "{count, plural, one {# ожидающее приглашение} few {# ожидающих приглашения} many {# ожидающих приглашений} other {# ожидающего приглашения}}",
+      "inviteMember": "Пригласить участника",
+      "invitesDisabledDemo": "Приглашения отключены в демо-версии ·",
+      "createFreeAccount": "Создать бесплатный аккаунт",
+      "inviteFormTitle": "Пригласить участника команды",
+      "role_owner": "владелец",
+      "role_manager": "менеджер",
+      "role_admin": "администратор",
+      "role_staff": "персонал",
+      "sending": "Отправка...",
+      "send": "Отправить",
+      "inviteExpiryHint": "Ссылка-приглашение действительна 7 дней. Для принятия нужно войти с этим email.",
+      "membersHeading": "Участники",
+      "loading": "Загрузка...",
+      "noMembersYet": "Пока нет участников",
+      "joined": "Присоединился {date}",
+      "removeMemberTitle": "Удалить участника",
+      "pendingInvitationsHeading": "Ожидающие приглашения",
+      "expires": "Истекает {date}",
+      "toastLoadFailed": "Не удалось загрузить команду",
+      "toastEmailRequired": "Требуется email",
+      "toastInviteSent": "Приглашение отправлено на {email}",
+      "toastInviteFailed": "Не удалось отправить приглашение",
+      "toastRoleUpdated": "Роль обновлена",
+      "toastRoleUpdateFailed": "Не удалось обновить роль",
+      "confirmRemove": "Удалить {email} из этой организации?",
+      "toastRemoved": "Участник удалён",
+      "toastRemoveFailed": "Не удалось удалить участника"
+    }
   }
 }

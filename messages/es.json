@@ -687,5 +687,40 @@
         "save": "Guardar"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Error al cargar el equipo",
+      "title": "Equipo",
+      "memberCount": "{count, plural, one {# miembro} other {# miembros}}",
+      "pendingInviteCount": "{count, plural, one {# invitación pendiente} other {# invitaciones pendientes}}",
+      "inviteMember": "Invitar miembro",
+      "invitesDisabledDemo": "Invitaciones deshabilitadas en la demo ·",
+      "createFreeAccount": "Crear una cuenta gratis",
+      "inviteFormTitle": "Invitar miembro del equipo",
+      "role_owner": "propietario",
+      "role_manager": "gerente",
+      "role_admin": "administrador",
+      "role_staff": "personal",
+      "sending": "Enviando...",
+      "send": "Enviar",
+      "inviteExpiryHint": "El enlace de invitación caduca en 7 días. Deben iniciar sesión con este correo para aceptar.",
+      "membersHeading": "Miembros",
+      "loading": "Cargando...",
+      "noMembersYet": "Aún no hay miembros",
+      "joined": "Se unió el {date}",
+      "removeMemberTitle": "Eliminar miembro",
+      "pendingInvitationsHeading": "Invitaciones pendientes",
+      "expires": "Caduca el {date}",
+      "toastLoadFailed": "Error al cargar el equipo",
+      "toastEmailRequired": "Se requiere un correo",
+      "toastInviteSent": "Invitación enviada a {email}",
+      "toastInviteFailed": "Error al enviar la invitación",
+      "toastRoleUpdated": "Rol actualizado",
+      "toastRoleUpdateFailed": "Error al actualizar el rol",
+      "confirmRemove": "¿Eliminar a {email} de esta organización?",
+      "toastRemoved": "Miembro eliminado",
+      "toastRemoveFailed": "Error al eliminar el miembro"
+    }
   }
 }

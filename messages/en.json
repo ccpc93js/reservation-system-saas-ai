@@ -687,5 +687,40 @@
         "save": "Save"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Error loading team",
+      "title": "Team",
+      "memberCount": "{count, plural, one {# member} other {# members}}",
+      "pendingInviteCount": "{count, plural, one {# pending invite} other {# pending invites}}",
+      "inviteMember": "Invite Member",
+      "invitesDisabledDemo": "Invites disabled in demo ·",
+      "createFreeAccount": "Create a free account",
+      "inviteFormTitle": "Invite team member",
+      "role_owner": "owner",
+      "role_manager": "manager",
+      "role_admin": "admin",
+      "role_staff": "staff",
+      "sending": "Sending...",
+      "send": "Send",
+      "inviteExpiryHint": "Invite link expires in 7 days. They must sign in with this email to accept.",
+      "membersHeading": "Members",
+      "loading": "Loading...",
+      "noMembersYet": "No members yet",
+      "joined": "Joined {date}",
+      "removeMemberTitle": "Remove member",
+      "pendingInvitationsHeading": "Pending Invitations",
+      "expires": "Expires {date}",
+      "toastLoadFailed": "Failed to load team",
+      "toastEmailRequired": "Email required",
+      "toastInviteSent": "Invitation sent to {email}",
+      "toastInviteFailed": "Failed to send invite",
+      "toastRoleUpdated": "Role updated",
+      "toastRoleUpdateFailed": "Failed to update role",
+      "confirmRemove": "Remove {email} from this organization?",
+      "toastRemoved": "Member removed",
+      "toastRemoveFailed": "Failed to remove member"
+    }
   }
 }

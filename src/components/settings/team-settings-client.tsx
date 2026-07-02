@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { UserPlus, Trash2, Shield, User, Mail, Clock, X } from "lucide-react";
 
 interface Member {
@@ -35,6 +36,7 @@ const roleColor: Record<string, string> = {
 };
 
 export default function TeamSettingsClient({ userRole }: Props) {
+  const t = useTranslations("settings.team");
   const isAdmin = ["owner", "manager", "admin"].includes(userRole);
   const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const [members, setMembers] = useState<Member[]>([]);
@@ -54,7 +56,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
       setMembers(data.members ?? []);
       setInvitations(data.invitations ?? []);
     } catch {
-      toast.error("Failed to load team");
+      toast.error(t("toastLoadFailed"));
     } finally {
       setLoading(false);
     }
@@ -63,7 +65,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
   useEffect(() => { load(); }, []);
 
   const handleInvite = async () => {
-    if (!inviteEmail) { toast.error("Email required"); return; }
+    if (!inviteEmail) { toast.error(t("toastEmailRequired")); return; }
     setInviting(true);
     try {
       const res = await fetch("/api/settings/team/invite", {
@@ -73,12 +75,12 @@ export default function TeamSettingsClient({ userRole }: Props) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      toast.success(`Invitation sent to ${inviteEmail}`);
+      toast.success(t("toastInviteSent", { email: inviteEmail }));
       setInviteEmail("");
       setShowInvite(false);
       load();
     } catch (err: any) {
-      toast.error(err.message || "Failed to send invite");
+      toast.error(err.message || t("toastInviteFailed"));
     } finally {
       setInviting(false);
     }
@@ -94,23 +96,23 @@ export default function TeamSettingsClient({ userRole }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setMembers((prev) => prev.map((m) => m.user_id === userId ? { ...m, role } : m));
-      toast.success("Role updated");
+      toast.success(t("toastRoleUpdated"));
     } catch (err: any) {
-      toast.error(err.message || "Failed to update role");
+      toast.error(err.message || t("toastRoleUpdateFailed"));
     }
   };
 
   const handleRemove = async (userId: string, email: string) => {
-    if (!confirm(`Remove ${email} from this organization?`)) return;
+    if (!confirm(t("confirmRemove", { email }))) return;
     setRemovingId(userId);
     try {
       const res = await fetch(`/api/settings/team/${userId}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setMembers((prev) => prev.filter((m) => m.user_id !== userId));
-      toast.success("Member removed");
+      toast.success(t("toastRemoved"));
     } catch (err: any) {
-      toast.error(err.message || "Failed to remove member");
+      toast.error(err.message || t("toastRemoveFailed"));
     } finally {
       setRemovingId(null);
     }
@@ -120,10 +122,10 @@ export default function TeamSettingsClient({ userRole }: Props) {
     <div className="p-6 max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>Team</h1>
+          <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {members.length} member{members.length !== 1 ? "s" : ""}
-            {invitations.length > 0 && ` · ${invitations.length} pending invite${invitations.length !== 1 ? "s" : ""}`}
+            {t("memberCount", { count: members.length })}
+            {invitations.length > 0 && ` · ${t("pendingInviteCount", { count: invitations.length })}`}
           </p>
         </div>
         {isAdmin && !isDemo && (
@@ -131,13 +133,13 @@ export default function TeamSettingsClient({ userRole }: Props) {
             onClick={() => setShowInvite(true)}
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
           >
-            <UserPlus className="w-4 h-4" /> Invite Member
+            <UserPlus className="w-4 h-4" /> {t("inviteMember")}
           </button>
         )}
         {isDemo && (
           <span className="text-xs text-muted-foreground">
-            Invites disabled in demo ·{" "}
-            <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a>
+            {t("invitesDisabledDemo")}{" "}
+            <a href="/signup" className="text-primary hover:underline font-medium">{t("createFreeAccount")}</a>
           </span>
         )}
       </div>
@@ -146,7 +148,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
       {showInvite && (
         <div className="rounded-xl border border-border bg-surface p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Invite team member</h3>
+            <h3 className="text-sm font-semibold">{t("inviteFormTitle")}</h3>
             <button onClick={() => setShowInvite(false)} className="p-1 hover:bg-muted rounded">
               <X className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -165,29 +167,29 @@ export default function TeamSettingsClient({ userRole }: Props) {
               onChange={(e) => setInviteRole(e.target.value)}
               className="rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
             >
-              {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+              {ROLES.map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
             </select>
             <button
               onClick={handleInvite}
               disabled={inviting}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
             >
-              {inviting ? "Sending..." : "Send"}
+              {inviting ? t("sending") : t("send")}
             </button>
           </div>
-          <p className="text-xs text-muted-foreground">Invite link expires in 7 days. They must sign in with this email to accept.</p>
+          <p className="text-xs text-muted-foreground">{t("inviteExpiryHint")}</p>
         </div>
       )}
 
       {/* Members list */}
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <div className="px-4 py-3 border-b border-border bg-muted/30">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Members</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("membersHeading")}</p>
         </div>
         {loading ? (
-          <div className="px-4 py-8 text-center text-sm text-muted-foreground">Loading...</div>
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">{t("loading")}</div>
         ) : members.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-muted-foreground">No members yet</div>
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">{t("noMembersYet")}</div>
         ) : (
           <div className="divide-y divide-border">
             {members.map((m) => (
@@ -201,7 +203,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
                     {m.is_self && <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground rounded-full">You</span>}
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    Joined {new Date(m.created_at).toLocaleDateString()}
+                    {t("joined", { date: new Date(m.created_at).toLocaleDateString() })}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -211,11 +213,11 @@ export default function TeamSettingsClient({ userRole }: Props) {
                       onChange={(e) => handleRoleChange(m.user_id, e.target.value)}
                       className="text-xs rounded-lg border border-border bg-background text-foreground px-2 py-1 focus:outline-none"
                     >
-                      {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+                      {ROLES.map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
                     </select>
                   ) : (
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${roleColor[m.role] ?? roleColor.staff}`}>
-                      {m.role}
+                      {t(`role_${m.role}`)}
                     </span>
                   )}
                   {isAdmin && !m.is_self && (
@@ -223,7 +225,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
                       onClick={() => handleRemove(m.user_id, m.email)}
                       disabled={removingId === m.user_id}
                       className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
-                      title="Remove member"
+                      title={t("removeMemberTitle")}
                     >
                       <Trash2 className="w-3.5 h-3.5 text-red-500" />
                     </button>
@@ -239,7 +241,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
       {invitations.length > 0 && (
         <div className="rounded-xl border border-border bg-surface overflow-hidden">
           <div className="px-4 py-3 border-b border-border bg-muted/30">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Pending Invitations</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("pendingInvitationsHeading")}</p>
           </div>
           <div className="divide-y divide-border">
             {invitations.map((inv) => (
@@ -252,12 +254,12 @@ export default function TeamSettingsClient({ userRole }: Props) {
                   <div className="flex items-center gap-1 mt-0.5">
                     <Clock className="w-3 h-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">
-                      Expires {new Date(inv.expires_at).toLocaleDateString()}
+                      {t("expires", { date: new Date(inv.expires_at).toLocaleDateString() })}
                     </span>
                   </div>
                 </div>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${roleColor[inv.role] ?? roleColor.staff}`}>
-                  {inv.role}
+                  {t(`role_${inv.role}`)}
                 </span>
               </div>
             ))}

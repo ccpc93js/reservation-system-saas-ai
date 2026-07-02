@@ -687,5 +687,40 @@
         "save": "حفظ"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "خطأ في تحميل الفريق",
+      "title": "الفريق",
+      "memberCount": "{count, plural, zero {لا أعضاء} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
+      "pendingInviteCount": "{count, plural, zero {لا دعوات معلقة} one {دعوة معلقة واحدة} two {دعوتان معلقتان} few {# دعوات معلقة} many {# دعوة معلقة} other {# دعوة معلقة}}",
+      "inviteMember": "دعوة عضو",
+      "invitesDisabledDemo": "الدعوات معطلة في الوضع التجريبي ·",
+      "createFreeAccount": "إنشاء حساب مجاني",
+      "inviteFormTitle": "دعوة عضو فريق",
+      "role_owner": "مالك",
+      "role_manager": "مدير",
+      "role_admin": "مشرف",
+      "role_staff": "موظف",
+      "sending": "جارٍ الإرسال...",
+      "send": "إرسال",
+      "inviteExpiryHint": "تنتهي صلاحية رابط الدعوة خلال 7 أيام. يجب عليهم تسجيل الدخول بهذا البريد للقبول.",
+      "membersHeading": "الأعضاء",
+      "loading": "جارٍ التحميل...",
+      "noMembersYet": "لا يوجد أعضاء بعد",
+      "joined": "انضم في {date}",
+      "removeMemberTitle": "إزالة العضو",
+      "pendingInvitationsHeading": "الدعوات المعلقة",
+      "expires": "تنتهي في {date}",
+      "toastLoadFailed": "فشل تحميل الفريق",
+      "toastEmailRequired": "البريد الإلكتروني مطلوب",
+      "toastInviteSent": "تم إرسال الدعوة إلى {email}",
+      "toastInviteFailed": "فشل إرسال الدعوة",
+      "toastRoleUpdated": "تم تحديث الدور",
+      "toastRoleUpdateFailed": "فشل تحديث الدور",
+      "confirmRemove": "إزالة {email} من هذه المؤسسة؟",
+      "toastRemoved": "تمت إزالة العضو",
+      "toastRemoveFailed": "فشل إزالة العضو"
+    }
   }
 }

@@ -687,5 +687,40 @@
         "save": "保存"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "チームの読み込みエラー",
+      "title": "チーム",
+      "memberCount": "{count, plural, other {メンバー # 人}}",
+      "pendingInviteCount": "{count, plural, other {保留中の招待 # 件}}",
+      "inviteMember": "メンバーを招待",
+      "invitesDisabledDemo": "デモでは招待は無効です ·",
+      "createFreeAccount": "無料アカウントを作成",
+      "inviteFormTitle": "チームメンバーを招待",
+      "role_owner": "オーナー",
+      "role_manager": "マネージャー",
+      "role_admin": "管理者",
+      "role_staff": "スタッフ",
+      "sending": "送信中...",
+      "send": "送信",
+      "inviteExpiryHint": "招待リンクは7日で失効します。承認するにはこのメールでサインインする必要があります。",
+      "membersHeading": "メンバー",
+      "loading": "読み込み中...",
+      "noMembersYet": "メンバーがまだいません",
+      "joined": "{date} に参加",
+      "removeMemberTitle": "メンバーを削除",
+      "pendingInvitationsHeading": "保留中の招待",
+      "expires": "{date} に失効",
+      "toastLoadFailed": "チームの読み込みに失敗しました",
+      "toastEmailRequired": "メールが必要です",
+      "toastInviteSent": "{email} に招待を送信しました",
+      "toastInviteFailed": "招待の送信に失敗しました",
+      "toastRoleUpdated": "役割を更新しました",
+      "toastRoleUpdateFailed": "役割の更新に失敗しました",
+      "confirmRemove": "{email} をこの組織から削除しますか？",
+      "toastRemoved": "メンバーを削除しました",
+      "toastRemoveFailed": "メンバーの削除に失敗しました"
+    }
   }
 }

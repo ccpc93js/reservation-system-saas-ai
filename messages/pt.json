@@ -687,5 +687,40 @@
         "save": "Salvar"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Erro ao carregar a equipe",
+      "title": "Equipe",
+      "memberCount": "{count, plural, one {# membro} other {# membros}}",
+      "pendingInviteCount": "{count, plural, one {# convite pendente} other {# convites pendentes}}",
+      "inviteMember": "Convidar membro",
+      "invitesDisabledDemo": "Convites desativados na demo ·",
+      "createFreeAccount": "Criar uma conta gratuita",
+      "inviteFormTitle": "Convidar membro da equipe",
+      "role_owner": "proprietário",
+      "role_manager": "gerente",
+      "role_admin": "administrador",
+      "role_staff": "equipe",
+      "sending": "Enviando...",
+      "send": "Enviar",
+      "inviteExpiryHint": "O link de convite expira em 7 dias. Eles devem entrar com este e-mail para aceitar.",
+      "membersHeading": "Membros",
+      "loading": "Carregando...",
+      "noMembersYet": "Ainda não há membros",
+      "joined": "Entrou em {date}",
+      "removeMemberTitle": "Remover membro",
+      "pendingInvitationsHeading": "Convites pendentes",
+      "expires": "Expira em {date}",
+      "toastLoadFailed": "Falha ao carregar a equipe",
+      "toastEmailRequired": "E-mail obrigatório",
+      "toastInviteSent": "Convite enviado para {email}",
+      "toastInviteFailed": "Falha ao enviar o convite",
+      "toastRoleUpdated": "Função atualizada",
+      "toastRoleUpdateFailed": "Falha ao atualizar a função",
+      "confirmRemove": "Remover {email} desta organização?",
+      "toastRemoved": "Membro removido",
+      "toastRemoveFailed": "Falha ao remover o membro"
+    }
   }
 }

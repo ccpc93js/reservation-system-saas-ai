@@ -687,5 +687,40 @@
         "save": "Enregistrer"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "Erreur lors du chargement de l'équipe",
+      "title": "Équipe",
+      "memberCount": "{count, plural, one {# membre} other {# membres}}",
+      "pendingInviteCount": "{count, plural, one {# invitation en attente} other {# invitations en attente}}",
+      "inviteMember": "Inviter un membre",
+      "invitesDisabledDemo": "Invitations désactivées en démo ·",
+      "createFreeAccount": "Créer un compte gratuit",
+      "inviteFormTitle": "Inviter un membre de l'équipe",
+      "role_owner": "propriétaire",
+      "role_manager": "responsable",
+      "role_admin": "administrateur",
+      "role_staff": "personnel",
+      "sending": "Envoi...",
+      "send": "Envoyer",
+      "inviteExpiryHint": "Le lien d'invitation expire dans 7 jours. Ils doivent se connecter avec cet e-mail pour accepter.",
+      "membersHeading": "Membres",
+      "loading": "Chargement...",
+      "noMembersYet": "Aucun membre pour l'instant",
+      "joined": "A rejoint le {date}",
+      "removeMemberTitle": "Supprimer le membre",
+      "pendingInvitationsHeading": "Invitations en attente",
+      "expires": "Expire le {date}",
+      "toastLoadFailed": "Échec du chargement de l'équipe",
+      "toastEmailRequired": "E-mail requis",
+      "toastInviteSent": "Invitation envoyée à {email}",
+      "toastInviteFailed": "Échec de l'envoi de l'invitation",
+      "toastRoleUpdated": "Rôle mis à jour",
+      "toastRoleUpdateFailed": "Échec de la mise à jour du rôle",
+      "confirmRemove": "Retirer {email} de cette organisation ?",
+      "toastRemoved": "Membre retiré",
+      "toastRemoveFailed": "Échec du retrait du membre"
+    }
   }
 }

@@ -687,5 +687,40 @@
         "save": "सहेजें"
       }
     }
+  },
+  "settings": {
+    "team": {
+      "errorLoading": "टीम लोड करने में त्रुटि",
+      "title": "टीम",
+      "memberCount": "{count, plural, one {# सदस्य} other {# सदस्य}}",
+      "pendingInviteCount": "{count, plural, one {# लंबित आमंत्रण} other {# लंबित आमंत्रण}}",
+      "inviteMember": "सदस्य आमंत्रित करें",
+      "invitesDisabledDemo": "डेमो में आमंत्रण अक्षम हैं ·",
+      "createFreeAccount": "मुफ्त खाता बनाएं",
+      "inviteFormTitle": "टीम सदस्य आमंत्रित करें",
+      "role_owner": "मालिक",
+      "role_manager": "प्रबंधक",
+      "role_admin": "एडमिन",
+      "role_staff": "स्टाफ",
+      "sending": "भेजा जा रहा है...",
+      "send": "भेजें",
+      "inviteExpiryHint": "आमंत्रण लिंक 7 दिनों में समाप्त हो जाता है। स्वीकार करने के लिए उन्हें इसी ईमेल से साइन इन करना होगा।",
+      "membersHeading": "सदस्य",
+      "loading": "लोड हो रहा है...",
+      "noMembersYet": "अभी तक कोई सदस्य नहीं",
+      "joined": "{date} को शामिल हुए",
+      "removeMemberTitle": "सदस्य हटाएं",
+      "pendingInvitationsHeading": "लंबित आमंत्रण",
+      "expires": "{date} को समाप्त",
+      "toastLoadFailed": "टीम लोड करने में विफल",
+      "toastEmailRequired": "ईमेल आवश्यक है",
+      "toastInviteSent": "{email} को आमंत्रण भेजा गया",
+      "toastInviteFailed": "आमंत्रण भेजने में विफल",
+      "toastRoleUpdated": "भूमिका अपडेट की गई",
+      "toastRoleUpdateFailed": "भूमिका अपडेट करने में विफल",
+      "confirmRemove": "क्या {email} को इस संगठन से हटाना है?",
+      "toastRemoved": "सदस्य हटाया गया",
+      "toastRemoveFailed": "सदस्य हटाने में विफल"
+    }
   }
 }
