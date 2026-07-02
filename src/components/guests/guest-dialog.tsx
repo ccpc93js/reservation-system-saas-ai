@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { COUNTRIES } from "@/lib/countries";
 import { createGuestSchema, updateGuestSchema, type CreateGuestInput } from "@/lib/validations/guest";
 import { createBrowserClient } from "@/lib/supabase/client";
@@ -21,17 +22,8 @@ interface GuestDialogProps {
   onGuestUpdated?: () => void;
 }
 
-const DOCUMENT_TYPES = [
-  { value: "passport", label: "Passport" },
-  { value: "national_id", label: "National ID" },
-  { value: "drivers_license", label: "Driver's License" },
-];
-
-const GENDERS = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "other", label: "Other" },
-];
+const DOCUMENT_TYPES = ["passport", "national_id", "drivers_license"] as const;
+const GENDERS = ["male", "female", "other"] as const;
 
 export default function GuestDialog({
   open,
@@ -41,6 +33,7 @@ export default function GuestDialog({
   onGuestCreated,
   onGuestUpdated,
 }: GuestDialogProps) {
+  const t = useTranslations("guests.dialog");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [guest, setGuest] = useState<any>(null);
@@ -74,7 +67,7 @@ export default function GuestDialog({
         setValue(key, value);
       }
     });
-    toast.success("Document data extracted and pre-filled!");
+    toast.success(t("toastExtracted"));
   };
 
   const schema = guestId ? updateGuestSchema : createGuestSchema;
@@ -170,7 +163,7 @@ export default function GuestDialog({
           unique_master_citizen: data.unique_master_citizen || "",
         });
       } catch (error) {
-        toast.error("Failed to load guest");
+        toast.error(t("toastLoadFailed"));
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -215,11 +208,11 @@ export default function GuestDialog({
           return;
         }
 
-        toast.error(result.error || "Failed to save guest");
+        toast.error(result.error || t("toastSaveFailed"));
         return;
       }
 
-      toast.success(guestId ? "Guest updated!" : "Guest created!");
+      toast.success(guestId ? t("toastUpdated") : t("toastCreated"));
 
       // For new guests, show document upload screen instead of closing
       if (!guestId && result.id) {
@@ -234,14 +227,14 @@ export default function GuestDialog({
       guestId ? onGuestUpdated?.() : null;
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error saving guest");
+      toast.error(t("toastSaveError"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!guestId || !confirm("Are you sure you want to delete this guest?")) {
+    if (!guestId || !confirm(t("confirmDelete"))) {
       return;
     }
 
@@ -254,15 +247,15 @@ export default function GuestDialog({
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.error || "Failed to delete guest");
+        toast.error(result.error || t("toastDeleteFailed"));
         return;
       }
 
-      toast.success("Guest deleted!");
+      toast.success(t("toastDeleted"));
       onOpenChange(false);
       onGuestUpdated?.();
     } catch (error) {
-      toast.error("Error deleting guest");
+      toast.error(t("toastDeleteError"));
       console.error(error);
     } finally {
       setIsDeleting(false);
@@ -285,17 +278,17 @@ export default function GuestDialog({
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Merge failed");
+        throw new Error(result.error || t("toastMergeFailed"));
       }
 
-      toast.success("Guests merged successfully!");
+      toast.success(t("toastMerged"));
       onOpenChange(false);
       reset();
       setShowMergeDialog(false);
       setDuplicateGuest(null);
       onGuestCreated?.();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Merge failed");
+      toast.error(error instanceof Error ? error.message : t("toastMergeFailed"));
     }
   };
 
@@ -308,7 +301,7 @@ export default function GuestDialog({
             aria-describedby={undefined}
             className="fixed left-[50%] top-[50%] z-[10002] w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
           >
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{t("loading")}</p>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
@@ -342,7 +335,7 @@ export default function GuestDialog({
         >
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-lg font-semibold text-foreground">
-              {guestId ? "Edit Guest" : "New Guest"}
+              {guestId ? t("editTitle") : t("newTitle")}
             </Dialog.Title>
             <Dialog.Close
               onClick={() => {
@@ -361,11 +354,11 @@ export default function GuestDialog({
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-amber-900 mb-2">
-                    Guest already exists
+                    {t("duplicateFound")}
                   </p>
                   <div className="text-sm text-amber-800 space-y-1 mb-3">
-                    <p><strong>Name:</strong> {duplicateGuest.name}</p>
-                    <p><strong>Document:</strong> {duplicateGuest.document_type} {duplicateGuest.document_number}</p>
+                    <p><strong>{t("duplicateName")}</strong> {duplicateGuest.name}</p>
+                    <p><strong>{t("duplicateDocument")}</strong> {duplicateGuest.document_type} {duplicateGuest.document_number}</p>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -376,7 +369,7 @@ export default function GuestDialog({
                       }}
                       className="text-xs px-2 py-1 rounded bg-amber-200 text-amber-900 hover:bg-amber-300 transition-colors"
                     >
-                      Use Existing
+                      {t("useExisting")}
                     </button>
                     <button
                       type="button"
@@ -385,7 +378,7 @@ export default function GuestDialog({
                       }}
                       className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-900 hover:bg-amber-200 transition-colors"
                     >
-                      Merge Records
+                      {t("mergeRecords")}
                     </button>
                   </div>
                 </div>
@@ -404,16 +397,16 @@ export default function GuestDialog({
             {!guestId && (
               <div className="rounded-lg border p-4 bg-primary/5 border-primary/20">
                 <h3 className="text-sm font-medium mb-3 text-foreground">
-                  📸 Upload ID/Passport to Auto-Fill Form
+                  {t("ocrTitle")}
                 </h3>
                 <p className="text-xs text-primary/80 mb-3">
-                  Upload a clear photo to automatically extract and fill all guest information
+                  {t("ocrSubtitle")}
                 </p>
                 <DocumentUpload
                   guestId=""
                   existingDocuments={[]}
                   onUploadComplete={(url, fileName) => {
-                    toast.success(`Document uploaded: ${fileName}`);
+                    toast.success(t("uploadSuccess", { fileName }));
                   }}
                   onExtractedData={handleExtractedData}
                   onError={(error) => {
@@ -426,8 +419,8 @@ export default function GuestDialog({
             {/* Post-creation upload mode */}
             {newlyCreatedGuestId && (
               <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50">
-                <p className="text-sm font-semibold text-emerald-900 mb-2">✓ Guest created successfully!</p>
-                <p className="text-xs text-emerald-800">Now you can upload documents. (Optional)</p>
+                <p className="text-sm font-semibold text-emerald-900 mb-2">{t("createdSuccess")}</p>
+                <p className="text-xs text-emerald-800">{t("createdSuccessHint")}</p>
               </div>
             )}
 
@@ -438,11 +431,11 @@ export default function GuestDialog({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  First Name *
+                  {t("firstName")}
                 </label>
                 <input
                   {...register("first_name")}
-                  placeholder="First name"
+                  placeholder={t("firstNamePlaceholder")}
                   className="w-full rounded-lg border px-3 py-2 text-sm"
                   style={{
                     borderColor: errors.first_name ? "#ef4444" : "hsl(var(--border))",
@@ -456,11 +449,11 @@ export default function GuestDialog({
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Last Name *
+                  {t("lastName")}
                 </label>
                 <input
                   {...register("last_name")}
-                  placeholder="Last name"
+                  placeholder={t("lastNamePlaceholder")}
                   className="w-full rounded-lg border px-3 py-2 text-sm"
                   style={{
                     borderColor: errors.last_name ? "#ef4444" : "hsl(var(--border))",
@@ -478,12 +471,12 @@ export default function GuestDialog({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Email
+                  {t("email")}
                 </label>
                 <input
                   {...register("email")}
                   type="email"
-                  placeholder="Email"
+                  placeholder={t("email")}
                   className="w-full rounded-lg border px-3 py-2 text-sm"
                   style={{
                     borderColor: errors.email ? "#ef4444" : "hsl(var(--border))",
@@ -497,11 +490,11 @@ export default function GuestDialog({
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Phone
+                  {t("phone")}
                 </label>
                 <input
                   {...register("phone")}
-                  placeholder="Phone"
+                  placeholder={t("phone")}
                   className="w-full rounded-lg border px-3 py-2 text-sm"
                   style={{
                     borderColor: errors.phone ? "#ef4444" : "hsl(var(--border))",
@@ -519,7 +512,7 @@ export default function GuestDialog({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Gender
+                  {t("gender")}
                 </label>
                 <select
                   {...register("gender")}
@@ -530,10 +523,10 @@ export default function GuestDialog({
                     color: "hsl(var(--text))",
                   }}
                 >
-                  <option value="">Select gender</option>
+                  <option value="">{t("selectGender")}</option>
                   {GENDERS.map((g) => (
-                    <option key={g.value} value={g.value}>
-                      {g.label}
+                    <option key={g} value={g}>
+                      {t(`gender_${g}`)}
                     </option>
                   ))}
                 </select>
@@ -543,7 +536,7 @@ export default function GuestDialog({
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Nationality
+                  {t("nationality")}
                 </label>
                 <div className="relative">
                   <button
@@ -559,7 +552,7 @@ export default function GuestDialog({
                       color: nationalityValue ? "hsl(var(--text))" : "hsl(var(--muted))",
                     }}
                   >
-                    <span>{nationalityValue || "Select country..."}</span>
+                    <span>{nationalityValue || t("selectCountry")}</span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
 
@@ -567,7 +560,7 @@ export default function GuestDialog({
                     <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
                       <input
                         type="text"
-                        placeholder="Search country..."
+                        placeholder={t("searchCountry")}
                         value={countrySearch}
                         onChange={(e) => setCountrySearch(e.target.value)}
                         className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
@@ -610,7 +603,7 @@ export default function GuestDialog({
                           ))
                         ) : (
                           <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>
-                            No countries found
+                            {t("noCountriesFound")}
                           </div>
                         )}
                       </div>
@@ -626,7 +619,7 @@ export default function GuestDialog({
             {/* Date of Birth */}
             <div>
               <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                Date of Birth
+                {t("dateOfBirth")}
               </label>
               <input
                 {...register("date_of_birth")}
@@ -647,11 +640,11 @@ export default function GuestDialog({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Place of Birth
+                  {t("placeOfBirth")}
                 </label>
                 <input
                   {...register("place_of_birth")}
-                  placeholder="e.g., Madrid"
+                  placeholder={t("placeOfBirthPlaceholder")}
                   className="w-full rounded-lg border px-3 py-2 text-sm"
                   style={{
                     borderColor: errors.place_of_birth ? "#ef4444" : "hsl(var(--border))",
@@ -665,7 +658,7 @@ export default function GuestDialog({
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                  Country of Birth
+                  {t("countryOfBirth")}
                 </label>
                 <div className="relative">
                   <button
@@ -678,14 +671,14 @@ export default function GuestDialog({
                       color: countryOfBirthValue ? "hsl(var(--text))" : "hsl(var(--muted))",
                     }}
                   >
-                    <span>{countryOfBirthValue || "Select country..."}</span>
+                    <span>{countryOfBirthValue || t("selectCountry")}</span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   {showCountryOfBirthDropdown && (
                     <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
                       <input
                         type="text"
-                        placeholder="Search country..."
+                        placeholder={t("searchCountry")}
                         value={countryOfBirthSearch}
                         onChange={(e) => setCountryOfBirthSearch(e.target.value)}
                         className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
@@ -710,7 +703,7 @@ export default function GuestDialog({
                             </button>
                           ))
                         ) : (
-                          <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>No countries found</div>
+                          <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>{t("noCountriesFound")}</div>
                         )}
                       </div>
                     </div>
@@ -736,13 +729,13 @@ export default function GuestDialog({
                 className="w-full text-left text-sm font-medium transition-colors"
                 style={{ color: "hsl(var(--text))" }}
               >
-                {expandDocumentInfo ? "▼" : "▶"} Document Information
+                {expandDocumentInfo ? "▼" : "▶"} {t("documentInfo")}
               </button>
               {expandDocumentInfo && (
                 <div className="mt-3 space-y-3">
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Document Type
+                      {t("documentType")}
                     </label>
                     <select
                       {...register("document_type")}
@@ -753,10 +746,10 @@ export default function GuestDialog({
                         color: "hsl(var(--text))",
                       }}
                     >
-                      <option value="">Select type</option>
+                      <option value="">{t("selectType")}</option>
                       {DOCUMENT_TYPES.map((d) => (
-                        <option key={d.value} value={d.value}>
-                          {d.label}
+                        <option key={d} value={d}>
+                          {t(`docType_${d}`)}
                         </option>
                       ))}
                     </select>
@@ -766,11 +759,11 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Document Number
+                      {t("documentNumber")}
                     </label>
                     <input
                       {...register("document_number")}
-                      placeholder="Document number"
+                      placeholder={t("documentNumberPlaceholder")}
                       className="w-full rounded-lg border px-3 py-2 text-sm"
                       style={{
                         borderColor: errors.document_number ? "#ef4444" : "hsl(var(--border))",
@@ -784,7 +777,7 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Document Expiry
+                      {t("documentExpiry")}
                     </label>
                     <input
                       {...register("document_expiry")}
@@ -802,7 +795,7 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Document Issued Date
+                      {t("documentIssuedDate")}
                     </label>
                     <input
                       {...register("document_issued_date")}
@@ -820,11 +813,11 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Document Issued Place
+                      {t("documentIssuedPlace")}
                     </label>
                     <input
                       {...register("document_issued_place")}
-                      placeholder="Issued place"
+                      placeholder={t("documentIssuedPlacePlaceholder")}
                       className="w-full rounded-lg border px-3 py-2 text-sm"
                       style={{
                         borderColor: errors.document_issued_place ? "#ef4444" : "hsl(var(--border))",
@@ -838,11 +831,11 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Place of Residence
+                      {t("placeOfResidence")}
                     </label>
                     <input
                       {...register("place_of_residence")}
-                      placeholder="Place of residence"
+                      placeholder={t("placeOfResidence")}
                       className="w-full rounded-lg border px-3 py-2 text-sm"
                       style={{
                         borderColor: errors.place_of_residence ? "#ef4444" : "hsl(var(--border))",
@@ -856,7 +849,7 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      Country of Residence
+                      {t("countryOfResidence")}
                     </label>
                     <div className="relative">
                       <button
@@ -869,14 +862,14 @@ export default function GuestDialog({
                           color: countryOfResidenceValue ? "hsl(var(--text))" : "hsl(var(--muted))",
                         }}
                       >
-                        <span>{countryOfResidenceValue || "Select country..."}</span>
+                        <span>{countryOfResidenceValue || t("selectCountry")}</span>
                         <ChevronDown className="w-4 h-4" />
                       </button>
                       {showCountryOfResidenceDropdown && (
                         <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 border" style={{ background: "hsl(var(--bg))", borderColor: "hsl(var(--border))" }}>
                           <input
                             type="text"
-                            placeholder="Search country..."
+                            placeholder={t("searchCountry")}
                             value={countryOfResidenceSearch}
                             onChange={(e) => setCountryOfResidenceSearch(e.target.value)}
                             className="w-full rounded-t-lg border-b px-3 py-2 text-sm focus:outline-none"
@@ -901,7 +894,7 @@ export default function GuestDialog({
                                 </button>
                               ))
                             ) : (
-                              <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>No countries found</div>
+                              <div className="px-3 py-3 text-center text-sm" style={{ color: "hsl(var(--muted))" }}>{t("noCountriesFound")}</div>
                             )}
                           </div>
                         </div>
@@ -913,11 +906,11 @@ export default function GuestDialog({
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                      JMBG (Serbian ID)
+                      {t("jmbg")}
                     </label>
                     <input
                       {...register("jmbg")}
-                      placeholder="JMBG"
+                      placeholder={t("jmbgPlaceholder")}
                       className="w-full rounded-lg border px-3 py-2 text-sm"
                       style={{
                         borderColor: errors.jmbg ? "#ef4444" : "hsl(var(--border))",
@@ -939,13 +932,13 @@ export default function GuestDialog({
             {(guestId || newlyCreatedGuestId) && (
               <div className="rounded-lg border p-4" style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))" }}>
                 <h3 className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
-                  Upload Document
+                  {t("uploadDocument")}
                 </h3>
                 <DocumentUpload
                   guestId={guestId || newlyCreatedGuestId || ""}
                   existingDocuments={existingDocuments}
                   onUploadComplete={(url, fileName) => {
-                    toast.success(`Document uploaded: ${fileName}`);
+                    toast.success(t("uploadSuccess", { fileName }));
                   }}
                   onExtractedData={handleExtractedData}
                   onError={(error) => {
@@ -959,11 +952,11 @@ export default function GuestDialog({
             {!newlyCreatedGuestId && (
               <div>
               <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
-                Notes (optional)
+                {t("notes")}
               </label>
               <textarea
                 {...register("notes")}
-                placeholder="Any additional notes..."
+                placeholder={t("notesPlaceholder")}
                 className="w-full rounded-lg border px-3 py-2 text-sm h-16 resize-none"
                 style={{
                   borderColor: errors.notes ? "#ef4444" : "hsl(var(--border))",
@@ -992,7 +985,7 @@ export default function GuestDialog({
                   disabled={isDeleting}
                   className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
                 >
-                  {isDeleting ? "Deleting..." : "Delete this guest"}
+                  {isDeleting ? t("deleting") : t("deleteThisGuest")}
                 </button>
               </div>
             )}
@@ -1010,7 +1003,7 @@ export default function GuestDialog({
                     }}
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
                   >
-                    Done
+                    {t("done")}
                   </button>
                 </>
               ) : (
@@ -1020,14 +1013,14 @@ export default function GuestDialog({
                     onClick={() => onOpenChange(false)}
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-background text-foreground border border-border hover:bg-muted"
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
                   >
-                    {isSubmitting ? "Saving..." : guestId ? "Save Changes" : "Create Guest"}
+                    {isSubmitting ? t("saving") : guestId ? t("saveChanges") : t("createGuest")}
                   </button>
                 </>
               )}
