@@ -1,5 +1,6 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { canAddUser, getUserLimit } from "@/lib/plan";
+import { getSiteOrigin } from "@/lib/site-url";
 
 export async function POST(request: Request) {
   try {
@@ -79,8 +80,7 @@ export async function POST(request: Request) {
       .single();
 
     // Send invite email via Resend
-    const origin = process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const origin = getSiteOrigin();
     const inviteUrl = `${origin}/invite/${invitation.token}`;
 
     await fetch("https://api.resend.com/emails", {

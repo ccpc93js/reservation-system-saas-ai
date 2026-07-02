@@ -8,7 +8,8 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 // canonical site origin, so this doesn't need a hardcoded domain per deploy.
 const allowedOrigins = ["localhost:3000"];
 if (process.env.NEXT_PUBLIC_SITE_URL) {
-  allowedOrigins.push(new URL(process.env.NEXT_PUBLIC_SITE_URL).host);
+  const raw = process.env.NEXT_PUBLIC_SITE_URL;
+  allowedOrigins.push(new URL(/^https?:\/\//.test(raw) ? raw : `https://${raw}`).host);
 }
 if (process.env.VERCEL_URL) {
   allowedOrigins.push(process.env.VERCEL_URL);

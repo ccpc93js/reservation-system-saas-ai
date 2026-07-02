@@ -1,4 +1,5 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
+import { getSiteOrigin } from "@/lib/site-url";
 
 // Vercel automatically sends `Authorization: Bearer $CRON_SECRET` for cron jobs
 // when CRON_SECRET is set in project env vars. Manual callers must do the same.
@@ -36,11 +37,7 @@ export async function POST(request: Request) {
     const supabase = await createServiceClient();
     const allResults: any[] = [];
 
-    // Derive origin: prefer explicit env var, then Vercel system env, then localhost
-    const origin =
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
-      "http://localhost:3000";
+    const origin = getSiteOrigin();
 
     for (const orgId of orgIds) {
       const { data: channels } = await supabase

@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { getSiteOrigin } from "@/lib/site-url";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "No active subscription found" }, { status: 400 });
     }
 
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const origin = getSiteOrigin();
 
     const session = await stripe.billingPortal.sessions.create({
       customer: org.stripe_customer_id,

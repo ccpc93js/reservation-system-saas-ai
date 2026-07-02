@@ -1,5 +1,6 @@
 // Email notification templates and sender
 // Uses Resend for email delivery
+import { getSiteOrigin } from "./site-url";
 
 // For testing: use Resend's onboarding domain
 // For production: verify your domain at https://resend.com/domains
@@ -47,11 +48,7 @@ async function sendEmail(
   html: string
 ): Promise<boolean> {
   try {
-    // Derive origin: prefer explicit env var, then Vercel system env, then localhost
-    const origin =
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
-      "http://localhost:3000";
+    const origin = getSiteOrigin();
     const apiUrl = `${origin}/api/email/send`;
 
     const response = await fetch(apiUrl, {

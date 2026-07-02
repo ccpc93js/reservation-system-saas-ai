@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { getSiteOrigin } from "@/lib/site-url";
 import Stripe from "stripe";
 import { STRIPE_PRICES } from "@/lib/plan";
 
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
 
     const org = (membership as any).organizations;
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const origin = getSiteOrigin();
 
     // If org already has an active subscription → update it (upgrade/downgrade)
     if (org.stripe_subscription_id) {
