@@ -847,5 +847,96 @@
         "cropFailed": "トリミングに失敗しました"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "チェックイン受付期間が終了しました",
+      "errorInvalidLink": "無効または期限切れのリンクです",
+      "errorLoadFailed": "予約の読み込みに失敗しました",
+      "rejectionMessage": "以前の提出は却下されました：{reason}\n\n内容を確認して再提出してください。",
+      "errorSubmitFailed": "チェックインの送信に失敗しました",
+      "errorSubmissionFailed": "送信に失敗しました",
+      "errorTitle": "エラー",
+      "fileErrorInvalidType": "JPG、PNG、WebP形式のファイルのみ許可されています",
+      "fileErrorTooLarge": "ファイルサイズは5MB未満にしてください",
+      "validation": {
+        "required": "必須",
+        "minChars": "{count}文字以上入力してください",
+        "invalidEmail": "メールアドレスが無効です",
+        "minDigits": "{count}桁以上入力してください"
+      },
+      "steps": {
+        "form": {
+          "label": "お客様情報",
+          "description": "情報を入力してください"
+        },
+        "photos": {
+          "label": "ID写真",
+          "description": "表面と裏面をアップロード"
+        },
+        "review": {
+          "label": "確認",
+          "description": "内容を確認してください"
+        },
+        "submit": {
+          "label": "完了",
+          "description": "確認のために送信"
+        }
+      },
+      "firstName": "名",
+      "lastName": "姓",
+      "email": "メール",
+      "phone": "電話番号",
+      "nationality": "国籍",
+      "selectCountry": "国を選択...",
+      "searchEllipsis": "検索...",
+      "noResults": "該当なし",
+      "documentType": "書類の種類",
+      "selectEllipsis": "選択...",
+      "docType_passport": "パスポート",
+      "docType_national_id": "国民IDカード",
+      "docType_drivers_license": "運転免許証",
+      "documentNumber": "書類番号",
+      "emergencyContact": "緊急連絡先番号",
+      "next": "次へ",
+      "back": "戻る",
+      "frontOfId": "身分証明書の表面",
+      "frontIdExamples": "例：パスポート、国民IDカード、運転免許証",
+      "frontIdAlt": "身分証明書の表面",
+      "change": "変更",
+      "remove": "削除",
+      "uploadPhoto": "写真をアップロード",
+      "choosePhoto": "写真を選択",
+      "backOfId": "身分証明書の裏面",
+      "optionalLabel": "（任意）",
+      "backIdHint": "利用可能な場合は裏面をアップロードしてください",
+      "backIdAlt": "身分証明書の裏面",
+      "uploadPhotoOptional": "写真をアップロード（任意）",
+      "reviewTitle": "情報を確認してください",
+      "nameCaps": "氏名",
+      "emailCaps": "メール",
+      "nationalityCaps": "国籍",
+      "documentCaps": "書類",
+      "frontIdCaps": "身分証明書の表面",
+      "front": "表面",
+      "backIdCaps": "身分証明書の裏面",
+      "backLabel": "裏面",
+      "looksGood": "問題ありません",
+      "readyToSubmit": "送信の準備はできましたか？",
+      "submitNotice": "スタッフが24時間以内に情報を確認します。IDの確認が完了すると確認メールが届きます。",
+      "submitting": "送信中...",
+      "submitCheckIn": "チェックインを送信"
+    },
+    "checkInSuccess": {
+      "title": "チェックインを送信しました！",
+      "subtitle": "チェックイン情報を受け付けました。スタッフが24時間以内にIDを確認します。",
+      "reservationLabel": "予約",
+      "checkInDateLabel": "チェックイン日",
+      "roomLabel": "客室",
+      "checkInOnDate": "予定日にチェックインしてください",
+      "arriveWithId": "確認のためIDをご用意の上お越しください",
+      "checkYourEmail": "メールをご確認ください",
+      "emailConfirmationHint": "スタッフがIDを確認次第、確認メールをお送りします"
+    }
   }
 }

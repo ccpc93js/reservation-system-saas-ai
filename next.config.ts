@@ -16,6 +16,11 @@ if (process.env.VERCEL_URL) {
 }
 
 const nextConfig: NextConfig = {
+  // Pin file tracing to this project. Without this, Next.js finds the stray
+  // package-lock.json in the parent C:\CCPCjs directory (shared by several
+  // unrelated sibling projects) and infers that as the workspace root,
+  // tracing their entire node_modules trees on every build.
+  outputFileTracingRoot: __dirname,
   serverExternalPackages: ["node-ical", "node-forge"],
   images: {
     remotePatterns: [

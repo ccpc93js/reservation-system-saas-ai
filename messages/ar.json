@@ -847,5 +847,96 @@
         "cropFailed": "فشل القص"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "انتهت فترة تسجيل الوصول",
+      "errorInvalidLink": "الرابط غير صالح أو منتهي الصلاحية",
+      "errorLoadFailed": "فشل تحميل الحجز",
+      "rejectionMessage": "تم رفض إرسالك السابق: {reason}\n\nيرجى المراجعة وإعادة الإرسال.",
+      "errorSubmitFailed": "فشل إرسال تسجيل الوصول",
+      "errorSubmissionFailed": "فشل الإرسال",
+      "errorTitle": "خطأ",
+      "fileErrorInvalidType": "يُسمح فقط بملفات JPG أو PNG أو WebP",
+      "fileErrorTooLarge": "يجب أن يكون حجم الملف أقل من 5 ميجابايت",
+      "validation": {
+        "required": "مطلوب",
+        "minChars": "{count} أحرف على الأقل",
+        "invalidEmail": "بريد إلكتروني غير صالح",
+        "minDigits": "{count} أرقام على الأقل"
+      },
+      "steps": {
+        "form": {
+          "label": "بياناتك",
+          "description": "املأ معلوماتك"
+        },
+        "photos": {
+          "label": "صور الهوية",
+          "description": "ارفع الأمام والخلف"
+        },
+        "review": {
+          "label": "المراجعة",
+          "description": "تحقق من كل شيء"
+        },
+        "submit": {
+          "label": "اكتمل",
+          "description": "إرسال للتحقق"
+        }
+      },
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "nationality": "الجنسية",
+      "selectCountry": "اختر الدولة...",
+      "searchEllipsis": "بحث...",
+      "noResults": "لا توجد نتائج",
+      "documentType": "نوع المستند",
+      "selectEllipsis": "اختر...",
+      "docType_passport": "جواز سفر",
+      "docType_national_id": "بطاقة هوية وطنية",
+      "docType_drivers_license": "رخصة قيادة",
+      "documentNumber": "رقم المستند",
+      "emergencyContact": "رقم الاتصال في حالات الطوارئ",
+      "next": "التالي",
+      "back": "رجوع",
+      "frontOfId": "الوجه الأمامي للهوية",
+      "frontIdExamples": "أمثلة: جواز سفر، بطاقة هوية وطنية، رخصة قيادة",
+      "frontIdAlt": "الوجه الأمامي للهوية",
+      "change": "تغيير",
+      "remove": "إزالة",
+      "uploadPhoto": "رفع صورة",
+      "choosePhoto": "اختيار صورة",
+      "backOfId": "الوجه الخلفي للهوية",
+      "optionalLabel": "(اختياري)",
+      "backIdHint": "ارفع الوجه الخلفي إن وُجد",
+      "backIdAlt": "الوجه الخلفي للهوية",
+      "uploadPhotoOptional": "رفع صورة (اختياري)",
+      "reviewTitle": "راجع معلوماتك",
+      "nameCaps": "الاسم",
+      "emailCaps": "البريد الإلكتروني",
+      "nationalityCaps": "الجنسية",
+      "documentCaps": "المستند",
+      "frontIdCaps": "الوجه الأمامي للهوية",
+      "front": "الأمام",
+      "backIdCaps": "الوجه الخلفي للهوية",
+      "backLabel": "الخلف",
+      "looksGood": "يبدو جيدًا",
+      "readyToSubmit": "هل أنت مستعد للإرسال؟",
+      "submitNotice": "سيقوم موظفونا بمراجعة معلوماتك خلال 24 ساعة. ستتلقى رسالة تأكيد عبر البريد الإلكتروني بمجرد التحقق من هويتك.",
+      "submitting": "جارٍ الإرسال...",
+      "submitCheckIn": "إرسال تسجيل الوصول"
+    },
+    "checkInSuccess": {
+      "title": "تم إرسال تسجيل الوصول!",
+      "subtitle": "تم استلام معلومات تسجيل الوصول الخاصة بك. سيقوم موظفونا بالتحقق من هويتك خلال 24 ساعة.",
+      "reservationLabel": "الحجز",
+      "checkInDateLabel": "تاريخ تسجيل الوصول",
+      "roomLabel": "الغرفة",
+      "checkInOnDate": "سجّل الوصول في التاريخ المحدد",
+      "arriveWithId": "يرجى الحضور مع هويتك جاهزة للتحقق",
+      "checkYourEmail": "تحقق من بريدك الإلكتروني",
+      "emailConfirmationHint": "سنرسل لك تأكيدًا بمجرد تحقق الموظفين من هويتك"
+    }
   }
 }

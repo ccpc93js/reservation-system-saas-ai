@@ -847,5 +847,96 @@
         "cropFailed": "Isecanje nije uspelo"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "Period za prijavu je zatvoren",
+      "errorInvalidLink": "Nevažeći ili istekao link",
+      "errorLoadFailed": "Učitavanje rezervacije nije uspelo",
+      "rejectionMessage": "Vaša prethodna prijava je odbijena: {reason}\n\nMolimo pregledajte i ponovo pošaljite.",
+      "errorSubmitFailed": "Slanje prijave nije uspelo",
+      "errorSubmissionFailed": "Slanje nije uspelo",
+      "errorTitle": "Greška",
+      "fileErrorInvalidType": "Dozvoljeni su samo JPG, PNG ili WebP fajlovi",
+      "fileErrorTooLarge": "Fajl mora biti manji od 5MB",
+      "validation": {
+        "required": "Obavezno",
+        "minChars": "Najmanje {count} karaktera",
+        "invalidEmail": "Nevažeća e-pošta",
+        "minDigits": "Najmanje {count} cifara"
+      },
+      "steps": {
+        "form": {
+          "label": "Vaši podaci",
+          "description": "Popunite vaše informacije"
+        },
+        "photos": {
+          "label": "Fotografije dokumenta",
+          "description": "Otpremite prednju i zadnju stranu"
+        },
+        "review": {
+          "label": "Pregled",
+          "description": "Proverite sve"
+        },
+        "submit": {
+          "label": "Završeno",
+          "description": "Pošaljite na verifikaciju"
+        }
+      },
+      "firstName": "Ime",
+      "lastName": "Prezime",
+      "email": "E-pošta",
+      "phone": "Telefon",
+      "nationality": "Nacionalnost",
+      "selectCountry": "Izaberite državu...",
+      "searchEllipsis": "Pretraga...",
+      "noResults": "Nema rezultata",
+      "documentType": "Vrsta dokumenta",
+      "selectEllipsis": "Izaberite...",
+      "docType_passport": "Pasoš",
+      "docType_national_id": "Lična karta",
+      "docType_drivers_license": "Vozačka dozvola",
+      "documentNumber": "Broj dokumenta",
+      "emergencyContact": "Broj za hitne slučajeve",
+      "next": "Dalje",
+      "back": "Nazad",
+      "frontOfId": "Prednja strana dokumenta",
+      "frontIdExamples": "Primeri: Pasoš, Lična karta, Vozačka dozvola",
+      "frontIdAlt": "Prednja strana dokumenta",
+      "change": "Promeni",
+      "remove": "Ukloni",
+      "uploadPhoto": "Otpremi fotografiju",
+      "choosePhoto": "Izaberi fotografiju",
+      "backOfId": "Zadnja strana dokumenta",
+      "optionalLabel": "(Opciono)",
+      "backIdHint": "Otpremite zadnju stranu ako je dostupna",
+      "backIdAlt": "Zadnja strana dokumenta",
+      "uploadPhotoOptional": "Otpremi fotografiju (opciono)",
+      "reviewTitle": "Pregledajte vaše informacije",
+      "nameCaps": "IME",
+      "emailCaps": "E-POŠTA",
+      "nationalityCaps": "NACIONALNOST",
+      "documentCaps": "DOKUMENT",
+      "frontIdCaps": "PREDNJA STRANA DOKUMENTA",
+      "front": "Prednja strana",
+      "backIdCaps": "ZADNJA STRANA DOKUMENTA",
+      "backLabel": "Zadnja strana",
+      "looksGood": "Sve je u redu",
+      "readyToSubmit": "Spremni za slanje?",
+      "submitNotice": "Naše osoblje će pregledati vaše informacije u roku od 24 sata. Dobićete e-mail potvrdu čim vaš dokument bude verifikovan.",
+      "submitting": "Slanje...",
+      "submitCheckIn": "Pošalji prijavu"
+    },
+    "checkInSuccess": {
+      "title": "Prijava je poslata!",
+      "subtitle": "Vaše informacije o prijavi su primljene. Naše osoblje će verifikovati vaš dokument u roku od 24 sata.",
+      "reservationLabel": "Rezervacija",
+      "checkInDateLabel": "Datum prijave",
+      "roomLabel": "Soba",
+      "checkInOnDate": "Prijavite se na zakazani datum",
+      "arriveWithId": "Molimo dođite sa spremnim dokumentom za verifikaciju",
+      "checkYourEmail": "Proverite svoju e-poštu",
+      "emailConfirmationHint": "Poslaćemo vam potvrdu čim osoblje verifikuje vaš dokument"
+    }
   }
 }

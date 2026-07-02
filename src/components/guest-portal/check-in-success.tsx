@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
 import { CheckCircle, Mail, Clock } from "lucide-react";
 
 interface CheckInSuccessProps {
@@ -13,6 +14,8 @@ interface CheckInSuccessProps {
 export default function CheckInSuccess({
   reservation,
 }: CheckInSuccessProps) {
+  const t = useTranslations("guestPortal.checkInSuccess");
+  const locale = useLocale();
   return (
     <div className="max-w-md w-full">
       <div className="bg-white rounded-lg shadow-lg p-8 text-center">
@@ -25,18 +28,17 @@ export default function CheckInSuccess({
 
         {/* Message */}
         <h1 className="text-2xl font-bold text-foreground mb-2">
-          Check-In Submitted!
+          {t("title")}
         </h1>
         <p className="text-muted-foreground mb-6">
-          Your check-in information has been received. Our staff will verify your ID
-          within 24 hours.
+          {t("subtitle")}
         </p>
 
         {/* Details */}
         <div className="bg-slate-50 rounded-lg p-6 mb-6 text-left space-y-4">
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase">
-              Reservation
+              {t("reservationLabel")}
             </p>
             <p className="text-sm font-mono text-foreground">
               {reservation.reservation_number}
@@ -44,10 +46,10 @@ export default function CheckInSuccess({
           </div>
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase">
-              Check-In Date
+              {t("checkInDateLabel")}
             </p>
             <p className="text-sm text-foreground">
-              {new Date(reservation.check_in).toLocaleDateString("en-US", {
+              {new Date(reservation.check_in).toLocaleDateString(locale, {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
@@ -58,7 +60,7 @@ export default function CheckInSuccess({
           {reservation.room && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase">
-                Room
+                {t("roomLabel")}
               </p>
               <p className="text-sm text-foreground">{reservation.room.name}</p>
             </div>
@@ -71,10 +73,10 @@ export default function CheckInSuccess({
             <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
             <div className="text-left">
               <p className="text-sm font-medium text-foreground">
-                Check-in on your scheduled date
+                {t("checkInOnDate")}
               </p>
               <p className="text-xs text-muted-foreground">
-                Please arrive with your ID ready for verification
+                {t("arriveWithId")}
               </p>
             </div>
           </div>
@@ -82,10 +84,10 @@ export default function CheckInSuccess({
             <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
             <div className="text-left">
               <p className="text-sm font-medium text-foreground">
-                Check your email
+                {t("checkYourEmail")}
               </p>
               <p className="text-xs text-muted-foreground">
-                We'll send you a confirmation once staff verifies your ID
+                {t("emailConfirmationHint")}
               </p>
             </div>
           </div>

@@ -847,5 +847,96 @@
         "cropFailed": "क्रॉप विफल"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "चेक-इन विंडो बंद हो गई है",
+      "errorInvalidLink": "अमान्य या समाप्त हो चुका लिंक",
+      "errorLoadFailed": "आरक्षण लोड करने में विफल",
+      "rejectionMessage": "आपका पिछला सबमिशन अस्वीकृत कर दिया गया था: {reason}\n\nकृपया समीक्षा करें और फिर से सबमिट करें।",
+      "errorSubmitFailed": "चेक-इन सबमिट करने में विफल",
+      "errorSubmissionFailed": "सबमिशन विफल",
+      "errorTitle": "त्रुटि",
+      "fileErrorInvalidType": "केवल JPG, PNG, या WebP फ़ाइलें अनुमत हैं",
+      "fileErrorTooLarge": "फ़ाइल का आकार 5MB से कम होना चाहिए",
+      "validation": {
+        "required": "आवश्यक",
+        "minChars": "कम से कम {count} अक्षर",
+        "invalidEmail": "अमान्य ईमेल",
+        "minDigits": "कम से कम {count} अंक"
+      },
+      "steps": {
+        "form": {
+          "label": "आपका विवरण",
+          "description": "अपनी जानकारी भरें"
+        },
+        "photos": {
+          "label": "ID फ़ोटो",
+          "description": "आगे और पीछे अपलोड करें"
+        },
+        "review": {
+          "label": "समीक्षा",
+          "description": "सब कुछ सत्यापित करें"
+        },
+        "submit": {
+          "label": "पूर्ण",
+          "description": "सत्यापन के लिए सबमिट करें"
+        }
+      },
+      "firstName": "पहला नाम",
+      "lastName": "अंतिम नाम",
+      "email": "ईमेल",
+      "phone": "फ़ोन",
+      "nationality": "राष्ट्रीयता",
+      "selectCountry": "देश चुनें...",
+      "searchEllipsis": "खोजें...",
+      "noResults": "कोई परिणाम नहीं",
+      "documentType": "दस्तावेज़ प्रकार",
+      "selectEllipsis": "चुनें...",
+      "docType_passport": "पासपोर्ट",
+      "docType_national_id": "राष्ट्रीय पहचान पत्र",
+      "docType_drivers_license": "ड्राइविंग लाइसेंस",
+      "documentNumber": "दस्तावेज़ संख्या",
+      "emergencyContact": "आपातकालीन संपर्क नंबर",
+      "next": "अगला",
+      "back": "वापस",
+      "frontOfId": "ID का अगला भाग",
+      "frontIdExamples": "उदाहरण: पासपोर्ट, राष्ट्रीय पहचान पत्र, ड्राइविंग लाइसेंस",
+      "frontIdAlt": "ID का अगला भाग",
+      "change": "बदलें",
+      "remove": "हटाएं",
+      "uploadPhoto": "फ़ोटो अपलोड करें",
+      "choosePhoto": "फ़ोटो चुनें",
+      "backOfId": "ID का पिछला भाग",
+      "optionalLabel": "(वैकल्पिक)",
+      "backIdHint": "यदि उपलब्ध हो तो पिछला भाग अपलोड करें",
+      "backIdAlt": "ID का पिछला भाग",
+      "uploadPhotoOptional": "फ़ोटो अपलोड करें (वैकल्पिक)",
+      "reviewTitle": "अपनी जानकारी की समीक्षा करें",
+      "nameCaps": "नाम",
+      "emailCaps": "ईमेल",
+      "nationalityCaps": "राष्ट्रीयता",
+      "documentCaps": "दस्तावेज़",
+      "frontIdCaps": "ID का अगला भाग",
+      "front": "आगे",
+      "backIdCaps": "ID का पिछला भाग",
+      "backLabel": "पीछे",
+      "looksGood": "सब ठीक है",
+      "readyToSubmit": "सबमिट करने के लिए तैयार?",
+      "submitNotice": "आपकी जानकारी की हमारे स्टाफ द्वारा 24 घंटों के भीतर समीक्षा की जाएगी। आपके ID सत्यापित होने के बाद आपको एक ईमेल पुष्टि प्राप्त होगी।",
+      "submitting": "सबमिट हो रहा है...",
+      "submitCheckIn": "चेक-इन सबमिट करें"
+    },
+    "checkInSuccess": {
+      "title": "चेक-इन सबमिट किया गया!",
+      "subtitle": "आपकी चेक-इन जानकारी प्राप्त हो गई है। हमारा स्टाफ 24 घंटों के भीतर आपकी ID सत्यापित करेगा।",
+      "reservationLabel": "आरक्षण",
+      "checkInDateLabel": "चेक-इन तिथि",
+      "roomLabel": "कमरा",
+      "checkInOnDate": "अपनी निर्धारित तिथि पर चेक-इन करें",
+      "arriveWithId": "कृपया सत्यापन के लिए अपनी ID के साथ पहुंचें",
+      "checkYourEmail": "अपना ईमेल जांचें",
+      "emailConfirmationHint": "स्टाफ द्वारा आपकी ID सत्यापित करने के बाद हम आपको पुष्टि भेजेंगे"
+    }
   }
 }

@@ -847,5 +847,96 @@
         "cropFailed": "Échec du recadrage"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "La fenêtre d'enregistrement est fermée",
+      "errorInvalidLink": "Lien invalide ou expiré",
+      "errorLoadFailed": "Échec du chargement de la réservation",
+      "rejectionMessage": "Votre soumission précédente a été rejetée : {reason}\n\nVeuillez vérifier et soumettre à nouveau.",
+      "errorSubmitFailed": "Échec de l'envoi de l'enregistrement",
+      "errorSubmissionFailed": "Échec de la soumission",
+      "errorTitle": "Erreur",
+      "fileErrorInvalidType": "Seuls les fichiers JPG, PNG ou WebP sont autorisés",
+      "fileErrorTooLarge": "Le fichier doit faire moins de 5 Mo",
+      "validation": {
+        "required": "Requis",
+        "minChars": "Au moins {count} caractères",
+        "invalidEmail": "E-mail invalide",
+        "minDigits": "Au moins {count} chiffres"
+      },
+      "steps": {
+        "form": {
+          "label": "Vos coordonnées",
+          "description": "Remplissez vos informations"
+        },
+        "photos": {
+          "label": "Photos de pièce d'identité",
+          "description": "Téléversez le recto et le verso"
+        },
+        "review": {
+          "label": "Vérification",
+          "description": "Vérifiez tout"
+        },
+        "submit": {
+          "label": "Terminé",
+          "description": "Soumettre pour vérification"
+        }
+      },
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "nationality": "Nationalité",
+      "selectCountry": "Sélectionner un pays...",
+      "searchEllipsis": "Rechercher...",
+      "noResults": "Aucun résultat",
+      "documentType": "Type de document",
+      "selectEllipsis": "Sélectionner...",
+      "docType_passport": "Passeport",
+      "docType_national_id": "Carte d'identité",
+      "docType_drivers_license": "Permis de conduire",
+      "documentNumber": "Numéro de document",
+      "emergencyContact": "Numéro de contact d'urgence",
+      "next": "Suivant",
+      "back": "Retour",
+      "frontOfId": "Recto de la pièce d'identité",
+      "frontIdExamples": "Exemples : Passeport, Carte d'identité, Permis de conduire",
+      "frontIdAlt": "Recto de la pièce d'identité",
+      "change": "Changer",
+      "remove": "Retirer",
+      "uploadPhoto": "Téléverser une photo",
+      "choosePhoto": "Choisir une photo",
+      "backOfId": "Verso de la pièce d'identité",
+      "optionalLabel": "(Facultatif)",
+      "backIdHint": "Téléversez le verso s'il est disponible",
+      "backIdAlt": "Verso de la pièce d'identité",
+      "uploadPhotoOptional": "Téléverser une photo (facultatif)",
+      "reviewTitle": "Vérifiez vos informations",
+      "nameCaps": "NOM",
+      "emailCaps": "E-MAIL",
+      "nationalityCaps": "NATIONALITÉ",
+      "documentCaps": "DOCUMENT",
+      "frontIdCaps": "RECTO DE LA PIÈCE D'IDENTITÉ",
+      "front": "Recto",
+      "backIdCaps": "VERSO DE LA PIÈCE D'IDENTITÉ",
+      "backLabel": "Verso",
+      "looksGood": "Tout est bon",
+      "readyToSubmit": "Prêt à soumettre ?",
+      "submitNotice": "Vos informations seront examinées par notre personnel sous 24 heures. Vous recevrez un e-mail de confirmation une fois votre pièce d'identité vérifiée.",
+      "submitting": "Envoi...",
+      "submitCheckIn": "Soumettre l'enregistrement"
+    },
+    "checkInSuccess": {
+      "title": "Enregistrement soumis !",
+      "subtitle": "Vos informations d'enregistrement ont été reçues. Notre personnel vérifiera votre pièce d'identité sous 24 heures.",
+      "reservationLabel": "Réservation",
+      "checkInDateLabel": "Date d'arrivée",
+      "roomLabel": "Chambre",
+      "checkInOnDate": "Enregistrez-vous à la date prévue",
+      "arriveWithId": "Veuillez arriver avec votre pièce d'identité prête pour vérification",
+      "checkYourEmail": "Consultez votre e-mail",
+      "emailConfirmationHint": "Nous vous enverrons une confirmation une fois votre pièce d'identité vérifiée par le personnel"
+    }
   }
 }

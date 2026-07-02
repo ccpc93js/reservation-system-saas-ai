@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import {
   Upload,
   AlertCircle,
@@ -43,20 +44,16 @@ interface CheckInFormProps {
 
 type FormStep = "form" | "photos" | "review" | "submit";
 
-const FORM_STEPS: { id: FormStep; label: string; description: string }[] = [
-  { id: "form", label: "Your Details", description: "Fill in your information" },
-  { id: "photos", label: "ID Photos", description: "Upload front and back" },
-  { id: "review", label: "Review", description: "Verify everything" },
-  { id: "submit", label: "Complete", description: "Submit for verification" },
-];
-
-const DOCUMENT_TYPES = [
-  { value: "passport", label: "Passport" },
-  { value: "national_id", label: "National ID" },
-  { value: "drivers_license", label: "Driver's License" },
-];
+const FORM_STEP_IDS: FormStep[] = ["form", "photos", "review", "submit"];
+const DOCUMENT_TYPE_VALUES = ["passport", "national_id", "drivers_license"] as const;
 
 export default function CheckInForm({ token }: CheckInFormProps) {
+  const t = useTranslations("guestPortal.checkInForm");
+  const FORM_STEPS = FORM_STEP_IDS.map((id) => ({
+    id,
+    label: t(`steps.${id}.label`),
+    description: t(`steps.${id}.description`),
+  }));
   const [currentStep, setCurrentStep] = useState<FormStep>("form");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -105,8 +102,8 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         if (!res.ok) {
           throw new Error(
             res.status === 410
-              ? "Check-in window has closed"
-              : "Invalid or expired link"
+              ? t("errorWindowClosed")
+              : t("errorInvalidLink")
           );
         }
         const result = await res.json();
@@ -129,12 +126,10 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         console.log("Check-in status:", result.check_in_status, "Rejection reason:", result.rejection_reason);
         if (result.check_in_status === "submitted" && result.rejection_reason) {
           console.log("Showing rejection error");
-          setError(
-            `Your previous submission was rejected: ${result.rejection_reason}\n\nPlease review and resubmit.`
-          );
+          setError(t("rejectionMessage", { reason: result.rejection_reason }));
         }
       } catch (err: any) {
-        setError(err.message || "Failed to load reservation");
+        setError(err.message || t("errorLoadFailed"));
       } finally {
         setLoading(false);
       }
@@ -151,36 +146,36 @@ export default function CheckInForm({ token }: CheckInFormProps) {
       case "first_name":
       case "last_name":
         if (!value.trim()) {
-          newErrors[name] = "Required";
+          newErrors[name] = t("validation.required");
         } else if (value.trim().length < 2) {
-          newErrors[name] = "At least 2 characters";
+          newErrors[name] = t("validation.minChars", { count: 2 });
         } else {
           delete newErrors[name];
         }
         break;
       case "email":
         if (!value.trim()) {
-          newErrors[name] = "Required";
+          newErrors[name] = t("validation.required");
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors[name] = "Invalid email";
+          newErrors[name] = t("validation.invalidEmail");
         } else {
           delete newErrors[name];
         }
         break;
       case "phone":
         if (!value.trim()) {
-          newErrors[name] = "Required";
+          newErrors[name] = t("validation.required");
         } else if (value.replace(/\D/g, "").length < 10) {
-          newErrors[name] = "At least 10 digits";
+          newErrors[name] = t("validation.minDigits", { count: 10 });
         } else {
           delete newErrors[name];
         }
         break;
       case "document_number":
         if (!value.trim()) {
-          newErrors[name] = "Required";
+          newErrors[name] = t("validation.required");
         } else if (value.trim().length < 3) {
-          newErrors[name] = "At least 3 characters";
+          newErrors[name] = t("validation.minChars", { count: 3 });
         } else {
           delete newErrors[name];
         }
@@ -207,7 +202,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
       setErrors({
         ...errors,
-        [`${side}_file`]: "Only JPG, PNG, or WebP files allowed",
+        [`${side}_file`]: t("fileErrorInvalidType"),
       });
       return;
     }
@@ -215,7 +210,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
     if (file.size > 5 * 1024 * 1024) {
       setErrors({
         ...errors,
-        [`${side}_file`]: "File size must be under 5MB",
+        [`${side}_file`]: t("fileErrorTooLarge"),
       });
       return;
     }
@@ -265,11 +260,11 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to submit check-in");
+        throw new Error(errorData.error || t("errorSubmitFailed"));
       }
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Submission failed");
+      setError(err.message || t("errorSubmissionFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -289,7 +284,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-1" />
           <div>
-            <h2 className="font-semibold text-foreground">Error</h2>
+            <h2 className="font-semibold text-foreground">{t("errorTitle")}</h2>
             <p className="text-sm text-muted-foreground">{error}</p>
           </div>
         </div>
@@ -354,12 +349,12 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         {/* Step 1: Form */}
         {currentStep === "form" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">Your Details</h2>
+            <h2 className="text-2xl font-bold text-foreground">{t("steps.form.label")}</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  First Name
+                  {t("firstName")}
                 </label>
                 <input
                   type="text"
@@ -379,7 +374,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Last Name
+                  {t("lastName")}
                 </label>
                 <input
                   type="text"
@@ -398,7 +393,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Email
+                {t("email")}
               </label>
               <input
                 type="email"
@@ -416,7 +411,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Phone
+                {t("phone")}
               </label>
               <input
                 type="tel"
@@ -434,7 +429,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Nationality
+                {t("nationality")}
               </label>
               <div className="relative">
                 <button
@@ -452,7 +447,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                         : "text-muted-foreground"
                     }
                   >
-                    {nationalityValue || "Select country..."}
+                    {nationalityValue || t("selectCountry")}
                   </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </button>
@@ -461,7 +456,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-50">
                     <input
                       type="text"
-                      placeholder="Search..."
+                      placeholder={t("searchEllipsis")}
                       value={countrySearch}
                       onChange={(e) => setCountrySearch(e.target.value)}
                       className="w-full px-3 py-2 border-b border-border focus:outline-none"
@@ -489,7 +484,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                         ))
                       ) : (
                         <div className="px-3 py-3 text-center text-sm text-muted-foreground">
-                          No results
+                          {t("noResults")}
                         </div>
                       )}
                     </div>
@@ -501,7 +496,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Document Type
+                  {t("documentType")}
                 </label>
                 <select
                   value={formData.document_type}
@@ -510,10 +505,10 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   }
                   className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
-                  <option value="">Select...</option>
-                  {DOCUMENT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
+                  <option value="">{t("selectEllipsis")}</option>
+                  {DOCUMENT_TYPE_VALUES.map((v) => (
+                    <option key={v} value={v}>
+                      {t(`docType_${v}`)}
                     </option>
                   ))}
                 </select>
@@ -521,7 +516,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Document Number
+                  {t("documentNumber")}
                 </label>
                 <input
                   type="text"
@@ -544,7 +539,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Emergency Contact Number
+                {t("emergencyContact")}
               </label>
               <input
                 type="tel"
@@ -565,7 +560,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 disabled={!canProceedToPhotos()}
                 className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next <ArrowRight className="w-4 h-4" />
+                {t("next")} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -574,22 +569,22 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         {/* Step 2: Photos */}
         {currentStep === "photos" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">ID Photos</h2>
+            <h2 className="text-2xl font-bold text-foreground">{t("steps.photos.label")}</h2>
 
             {/* Front ID */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Front of ID <span className="text-red-500">*</span>
+                {t("frontOfId")} <span className="text-red-500">*</span>
               </label>
               <p className="text-xs text-muted-foreground mb-3">
-                Examples: Passport, National ID, Driver's License
+                {t("frontIdExamples")}
               </p>
 
               {previews.front ? (
                 <div className="space-y-3">
                   <img
                     src={previews.front}
-                    alt="Front ID"
+                    alt={t("frontIdAlt")}
                     className="w-full rounded-lg max-h-64 object-cover"
                   />
                   <div className="flex gap-2">
@@ -598,7 +593,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                       onClick={() => fileInputFrontRef.current?.click()}
                       className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-muted"
                     >
-                      <Upload className="w-4 h-4" /> Change
+                      <Upload className="w-4 h-4" /> {t("change")}
                     </button>
                     <button
                       type="button"
@@ -608,7 +603,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                       }}
                       className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50"
                     >
-                      <X className="w-4 h-4" /> Remove
+                      <X className="w-4 h-4" /> {t("remove")}
                     </button>
                   </div>
                   <input
@@ -623,14 +618,14 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                   <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
                   <p className="text-sm text-foreground font-medium mb-3">
-                    Upload photo
+                    {t("uploadPhoto")}
                   </p>
                   <button
                     type="button"
                     onClick={() => fileInputFrontRef.current?.click()}
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
                   >
-                    <Upload className="w-4 h-4" /> Choose Photo
+                    <Upload className="w-4 h-4" /> {t("choosePhoto")}
                   </button>
                   <input
                     ref={fileInputFrontRef}
@@ -649,17 +644,17 @@ export default function CheckInForm({ token }: CheckInFormProps) {
             {/* Back ID */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">
-                Back of ID <span className="text-muted-foreground">(Optional)</span>
+                {t("backOfId")} <span className="text-muted-foreground">{t("optionalLabel")}</span>
               </label>
               <p className="text-xs text-muted-foreground mb-3">
-                Upload the back side if available
+                {t("backIdHint")}
               </p>
 
               {previews.back ? (
                 <div className="space-y-3">
                   <img
                     src={previews.back}
-                    alt="Back ID"
+                    alt={t("backIdAlt")}
                     className="w-full rounded-lg max-h-64 object-cover"
                   />
                   <div className="flex gap-2">
@@ -668,7 +663,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                       onClick={() => fileInputBackRef.current?.click()}
                       className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-muted"
                     >
-                      <Upload className="w-4 h-4" /> Change
+                      <Upload className="w-4 h-4" /> {t("change")}
                     </button>
                     <button
                       type="button"
@@ -678,7 +673,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                       }}
                       className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50"
                     >
-                      <X className="w-4 h-4" /> Remove
+                      <X className="w-4 h-4" /> {t("remove")}
                     </button>
                   </div>
                   <input
@@ -693,14 +688,14 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                   <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
                   <p className="text-sm text-foreground font-medium mb-3">
-                    Upload photo (optional)
+                    {t("uploadPhotoOptional")}
                   </p>
                   <button
                     type="button"
                     onClick={() => fileInputBackRef.current?.click()}
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
                   >
-                    <Upload className="w-4 h-4" /> Choose Photo
+                    <Upload className="w-4 h-4" /> {t("choosePhoto")}
                   </button>
                   <input
                     ref={fileInputBackRef}
@@ -718,14 +713,14 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 onClick={() => setCurrentStep("form")}
                 className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted"
               >
-                <ArrowLeft className="w-4 h-4" /> Back
+                <ArrowLeft className="w-4 h-4" /> {t("back")}
               </button>
               <button
                 onClick={() => setCurrentStep("review")}
                 disabled={!canProceedToReview()}
                 className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next <ArrowRight className="w-4 h-4" />
+                {t("next")} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -734,30 +729,29 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         {/* Step 3: Review */}
         {currentStep === "review" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">Review Your Information</h2>
+            <h2 className="text-2xl font-bold text-foreground">{t("reviewTitle")}</h2>
 
             <div className="bg-slate-50 rounded-lg p-4 space-y-3">
               <div>
-                <p className="text-xs font-semibold text-muted-foreground">NAME</p>
+                <p className="text-xs font-semibold text-muted-foreground">{t("nameCaps")}</p>
                 <p className="text-sm text-foreground">
                   {formData.first_name} {formData.last_name}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground">EMAIL</p>
+                <p className="text-xs font-semibold text-muted-foreground">{t("emailCaps")}</p>
                 <p className="text-sm text-foreground">{formData.email}</p>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground">
-                  NATIONALITY
+                  {t("nationalityCaps")}
                 </p>
                 <p className="text-sm text-foreground">{formData.nationality}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground">DOCUMENT</p>
+                <p className="text-xs font-semibold text-muted-foreground">{t("documentCaps")}</p>
                 <p className="text-sm text-foreground">
-                  {DOCUMENT_TYPES.find((d) => d.value === formData.document_type)
-                    ?.label || formData.document_type}{" "}
+                  {formData.document_type ? t(`docType_${formData.document_type}`) : formData.document_type}{" "}
                   - {formData.document_number}
                 </p>
               </div>
@@ -767,11 +761,11 @@ export default function CheckInForm({ token }: CheckInFormProps) {
               {previews.front && (
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground mb-2">
-                    FRONT ID
+                    {t("frontIdCaps")}
                   </p>
                   <img
                     src={previews.front}
-                    alt="Front"
+                    alt={t("front")}
                     className="w-full rounded-lg max-h-48 object-cover"
                   />
                 </div>
@@ -779,11 +773,11 @@ export default function CheckInForm({ token }: CheckInFormProps) {
               {previews.back && (
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground mb-2">
-                    BACK ID
+                    {t("backIdCaps")}
                   </p>
                   <img
                     src={previews.back}
-                    alt="Back"
+                    alt={t("backLabel")}
                     className="w-full rounded-lg max-h-48 object-cover"
                   />
                 </div>
@@ -795,13 +789,13 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 onClick={() => setCurrentStep("photos")}
                 className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted"
               >
-                <ArrowLeft className="w-4 h-4" /> Back
+                <ArrowLeft className="w-4 h-4" /> {t("back")}
               </button>
               <button
                 onClick={() => setCurrentStep("submit")}
                 className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
               >
-                Looks Good <ArrowRight className="w-4 h-4" />
+                {t("looksGood")} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -810,12 +804,11 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         {/* Step 4: Submit */}
         {currentStep === "submit" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">Ready to Submit?</h2>
+            <h2 className="text-2xl font-bold text-foreground">{t("readyToSubmit")}</h2>
 
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
               <p className="text-sm text-foreground">
-                Your information will be reviewed by our staff within 24 hours. You'll
-                receive an email confirmation once your ID has been verified.
+                {t("submitNotice")}
               </p>
             </div>
 
@@ -824,7 +817,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                 onClick={() => setCurrentStep("review")}
                 className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted"
               >
-                <ArrowLeft className="w-4 h-4" /> Back
+                <ArrowLeft className="w-4 h-4" /> {t("back")}
               </button>
               <button
                 onClick={handleSubmit}
@@ -833,11 +826,11 @@ export default function CheckInForm({ token }: CheckInFormProps) {
               >
                 {submitting ? (
                   <>
-                    <Loader className="w-4 h-4 animate-spin" /> Submitting...
+                    <Loader className="w-4 h-4 animate-spin" /> {t("submitting")}
                   </>
                 ) : (
                   <>
-                    <CheckCircle className="w-4 h-4" /> Submit Check-In
+                    <CheckCircle className="w-4 h-4" /> {t("submitCheckIn")}
                   </>
                 )}
               </button>

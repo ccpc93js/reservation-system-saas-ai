@@ -847,5 +847,96 @@
         "cropFailed": "Falha ao recortar"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "A janela de check-in foi encerrada",
+      "errorInvalidLink": "Link inválido ou expirado",
+      "errorLoadFailed": "Falha ao carregar a reserva",
+      "rejectionMessage": "Seu envio anterior foi rejeitado: {reason}\n\nPor favor, revise e reenvie.",
+      "errorSubmitFailed": "Falha ao enviar o check-in",
+      "errorSubmissionFailed": "Falha no envio",
+      "errorTitle": "Erro",
+      "fileErrorInvalidType": "Somente arquivos JPG, PNG ou WebP são permitidos",
+      "fileErrorTooLarge": "O arquivo deve ter menos de 5MB",
+      "validation": {
+        "required": "Obrigatório",
+        "minChars": "Pelo menos {count} caracteres",
+        "invalidEmail": "E-mail inválido",
+        "minDigits": "Pelo menos {count} dígitos"
+      },
+      "steps": {
+        "form": {
+          "label": "Seus dados",
+          "description": "Preencha suas informações"
+        },
+        "photos": {
+          "label": "Fotos do documento",
+          "description": "Envie frente e verso"
+        },
+        "review": {
+          "label": "Revisão",
+          "description": "Verifique tudo"
+        },
+        "submit": {
+          "label": "Concluído",
+          "description": "Enviar para verificação"
+        }
+      },
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "nationality": "Nacionalidade",
+      "selectCountry": "Selecione o país...",
+      "searchEllipsis": "Buscar...",
+      "noResults": "Nenhum resultado",
+      "documentType": "Tipo de documento",
+      "selectEllipsis": "Selecionar...",
+      "docType_passport": "Passaporte",
+      "docType_national_id": "Identidade nacional",
+      "docType_drivers_license": "Carteira de motorista",
+      "documentNumber": "Número do documento",
+      "emergencyContact": "Número de contato de emergência",
+      "next": "Próximo",
+      "back": "Voltar",
+      "frontOfId": "Frente do documento",
+      "frontIdExamples": "Exemplos: Passaporte, Identidade nacional, Carteira de motorista",
+      "frontIdAlt": "Frente do documento",
+      "change": "Alterar",
+      "remove": "Remover",
+      "uploadPhoto": "Enviar foto",
+      "choosePhoto": "Escolher foto",
+      "backOfId": "Verso do documento",
+      "optionalLabel": "(Opcional)",
+      "backIdHint": "Envie o verso se disponível",
+      "backIdAlt": "Verso do documento",
+      "uploadPhotoOptional": "Enviar foto (opcional)",
+      "reviewTitle": "Revise suas informações",
+      "nameCaps": "NOME",
+      "emailCaps": "E-MAIL",
+      "nationalityCaps": "NACIONALIDADE",
+      "documentCaps": "DOCUMENTO",
+      "frontIdCaps": "FRENTE DO DOCUMENTO",
+      "front": "Frente",
+      "backIdCaps": "VERSO DO DOCUMENTO",
+      "backLabel": "Verso",
+      "looksGood": "Está tudo certo",
+      "readyToSubmit": "Pronto para enviar?",
+      "submitNotice": "Suas informações serão revisadas por nossa equipe em até 24 horas. Você receberá uma confirmação por e-mail assim que seu documento for verificado.",
+      "submitting": "Enviando...",
+      "submitCheckIn": "Enviar check-in"
+    },
+    "checkInSuccess": {
+      "title": "Check-in enviado!",
+      "subtitle": "Suas informações de check-in foram recebidas. Nossa equipe verificará seu documento em até 24 horas.",
+      "reservationLabel": "Reserva",
+      "checkInDateLabel": "Data de check-in",
+      "roomLabel": "Quarto",
+      "checkInOnDate": "Faça o check-in na data programada",
+      "arriveWithId": "Por favor, chegue com seu documento pronto para verificação",
+      "checkYourEmail": "Verifique seu e-mail",
+      "emailConfirmationHint": "Enviaremos uma confirmação assim que a equipe verificar seu documento"
+    }
   }
 }

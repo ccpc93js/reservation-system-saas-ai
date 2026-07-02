@@ -847,5 +847,96 @@
         "cropFailed": "ক্রপ ব্যর্থ হয়েছে"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "চেক-ইন উইন্ডো বন্ধ হয়ে গেছে",
+      "errorInvalidLink": "অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক",
+      "errorLoadFailed": "রিজার্ভেশন লোড করতে ব্যর্থ",
+      "rejectionMessage": "আপনার পূর্ববর্তী জমা প্রত্যাখ্যান করা হয়েছে: {reason}\n\nঅনুগ্রহ করে পর্যালোচনা করে পুনরায় জমা দিন।",
+      "errorSubmitFailed": "চেক-ইন জমা দিতে ব্যর্থ",
+      "errorSubmissionFailed": "জমা দিতে ব্যর্থ হয়েছে",
+      "errorTitle": "ত্রুটি",
+      "fileErrorInvalidType": "শুধুমাত্র JPG, PNG, বা WebP ফাইল অনুমোদিত",
+      "fileErrorTooLarge": "ফাইলের আকার অবশ্যই 5MB এর কম হতে হবে",
+      "validation": {
+        "required": "আবশ্যক",
+        "minChars": "কমপক্ষে {count} অক্ষর",
+        "invalidEmail": "অবৈধ ইমেল",
+        "minDigits": "কমপক্ষে {count} সংখ্যা"
+      },
+      "steps": {
+        "form": {
+          "label": "আপনার বিবরণ",
+          "description": "আপনার তথ্য পূরণ করুন"
+        },
+        "photos": {
+          "label": "ID ছবি",
+          "description": "সামনে এবং পিছনে আপলোড করুন"
+        },
+        "review": {
+          "label": "পর্যালোচনা",
+          "description": "সবকিছু যাচাই করুন"
+        },
+        "submit": {
+          "label": "সম্পূর্ণ",
+          "description": "যাচাইয়ের জন্য জমা দিন"
+        }
+      },
+      "firstName": "প্রথম নাম",
+      "lastName": "শেষ নাম",
+      "email": "ইমেল",
+      "phone": "ফোন",
+      "nationality": "জাতীয়তা",
+      "selectCountry": "দেশ নির্বাচন করুন...",
+      "searchEllipsis": "অনুসন্ধান করুন...",
+      "noResults": "কোনো ফলাফল নেই",
+      "documentType": "নথির ধরন",
+      "selectEllipsis": "নির্বাচন করুন...",
+      "docType_passport": "পাসপোর্ট",
+      "docType_national_id": "জাতীয় পরিচয়পত্র",
+      "docType_drivers_license": "ড্রাইভিং লাইসেন্স",
+      "documentNumber": "নথি নম্বর",
+      "emergencyContact": "জরুরি যোগাযোগ নম্বর",
+      "next": "পরবর্তী",
+      "back": "পিছনে",
+      "frontOfId": "ID এর সামনের দিক",
+      "frontIdExamples": "উদাহরণ: পাসপোর্ট, জাতীয় পরিচয়পত্র, ড্রাইভিং লাইসেন্স",
+      "frontIdAlt": "ID এর সামনের দিক",
+      "change": "পরিবর্তন করুন",
+      "remove": "সরান",
+      "uploadPhoto": "ছবি আপলোড করুন",
+      "choosePhoto": "ছবি নির্বাচন করুন",
+      "backOfId": "ID এর পিছনের দিক",
+      "optionalLabel": "(ঐচ্ছিক)",
+      "backIdHint": "উপলব্ধ থাকলে পিছনের দিক আপলোড করুন",
+      "backIdAlt": "ID এর পিছনের দিক",
+      "uploadPhotoOptional": "ছবি আপলোড করুন (ঐচ্ছিক)",
+      "reviewTitle": "আপনার তথ্য পর্যালোচনা করুন",
+      "nameCaps": "নাম",
+      "emailCaps": "ইমেল",
+      "nationalityCaps": "জাতীয়তা",
+      "documentCaps": "নথি",
+      "frontIdCaps": "ID এর সামনের দিক",
+      "front": "সামনে",
+      "backIdCaps": "ID এর পিছনের দিক",
+      "backLabel": "পিছনে",
+      "looksGood": "সব ঠিক আছে",
+      "readyToSubmit": "জমা দেওয়ার জন্য প্রস্তুত?",
+      "submitNotice": "আমাদের কর্মীরা 24 ঘণ্টার মধ্যে আপনার তথ্য পর্যালোচনা করবেন। আপনার ID যাচাই হওয়ার পর আপনি একটি ইমেল নিশ্চিতকরণ পাবেন।",
+      "submitting": "জমা দেওয়া হচ্ছে...",
+      "submitCheckIn": "চেক-ইন জমা দিন"
+    },
+    "checkInSuccess": {
+      "title": "চেক-ইন জমা দেওয়া হয়েছে!",
+      "subtitle": "আপনার চেক-ইন তথ্য পাওয়া গেছে। আমাদের কর্মীরা 24 ঘণ্টার মধ্যে আপনার ID যাচাই করবেন।",
+      "reservationLabel": "রিজার্ভেশন",
+      "checkInDateLabel": "চেক-ইন তারিখ",
+      "roomLabel": "রুম",
+      "checkInOnDate": "আপনার নির্ধারিত তারিখে চেক-ইন করুন",
+      "arriveWithId": "যাচাইয়ের জন্য আপনার ID প্রস্তুত রেখে আসুন",
+      "checkYourEmail": "আপনার ইমেল দেখুন",
+      "emailConfirmationHint": "কর্মীরা আপনার ID যাচাই করার পর আমরা একটি নিশ্চিতকরণ পাঠাব"
+    }
   }
 }

@@ -847,5 +847,96 @@
         "cropFailed": "Ошибка обрезки"
       }
     }
+  },
+  "guestPortal": {
+    "checkInForm": {
+      "errorWindowClosed": "Окно регистрации закрыто",
+      "errorInvalidLink": "Недействительная или истёкшая ссылка",
+      "errorLoadFailed": "Не удалось загрузить бронирование",
+      "rejectionMessage": "Ваша предыдущая заявка была отклонена: {reason}\n\nПожалуйста, проверьте и отправьте снова.",
+      "errorSubmitFailed": "Не удалось отправить регистрацию",
+      "errorSubmissionFailed": "Ошибка отправки",
+      "errorTitle": "Ошибка",
+      "fileErrorInvalidType": "Разрешены только файлы JPG, PNG или WebP",
+      "fileErrorTooLarge": "Размер файла должен быть меньше 5 МБ",
+      "validation": {
+        "required": "Обязательно",
+        "minChars": "Минимум {count} символов",
+        "invalidEmail": "Неверный email",
+        "minDigits": "Минимум {count} цифр"
+      },
+      "steps": {
+        "form": {
+          "label": "Ваши данные",
+          "description": "Заполните свою информацию"
+        },
+        "photos": {
+          "label": "Фото документа",
+          "description": "Загрузите лицевую и оборотную стороны"
+        },
+        "review": {
+          "label": "Проверка",
+          "description": "Проверьте всё"
+        },
+        "submit": {
+          "label": "Готово",
+          "description": "Отправить на проверку"
+        }
+      },
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "email": "Email",
+      "phone": "Телефон",
+      "nationality": "Национальность",
+      "selectCountry": "Выберите страну...",
+      "searchEllipsis": "Поиск...",
+      "noResults": "Нет результатов",
+      "documentType": "Тип документа",
+      "selectEllipsis": "Выберите...",
+      "docType_passport": "Паспорт",
+      "docType_national_id": "Удостоверение личности",
+      "docType_drivers_license": "Водительские права",
+      "documentNumber": "Номер документа",
+      "emergencyContact": "Номер экстренного контакта",
+      "next": "Далее",
+      "back": "Назад",
+      "frontOfId": "Лицевая сторона документа",
+      "frontIdExamples": "Примеры: Паспорт, Удостоверение личности, Водительские права",
+      "frontIdAlt": "Лицевая сторона документа",
+      "change": "Изменить",
+      "remove": "Удалить",
+      "uploadPhoto": "Загрузить фото",
+      "choosePhoto": "Выбрать фото",
+      "backOfId": "Оборотная сторона документа",
+      "optionalLabel": "(Необязательно)",
+      "backIdHint": "Загрузите оборотную сторону, если доступна",
+      "backIdAlt": "Оборотная сторона документа",
+      "uploadPhotoOptional": "Загрузить фото (необязательно)",
+      "reviewTitle": "Проверьте свою информацию",
+      "nameCaps": "ИМЯ",
+      "emailCaps": "EMAIL",
+      "nationalityCaps": "НАЦИОНАЛЬНОСТЬ",
+      "documentCaps": "ДОКУМЕНТ",
+      "frontIdCaps": "ЛИЦЕВАЯ СТОРОНА ДОКУМЕНТА",
+      "front": "Лицевая сторона",
+      "backIdCaps": "ОБОРОТНАЯ СТОРОНА ДОКУМЕНТА",
+      "backLabel": "Оборотная сторона",
+      "looksGood": "Всё верно",
+      "readyToSubmit": "Готовы отправить?",
+      "submitNotice": "Наши сотрудники проверят вашу информацию в течение 24 часов. Вы получите подтверждение по email после проверки документа.",
+      "submitting": "Отправка...",
+      "submitCheckIn": "Отправить регистрацию"
+    },
+    "checkInSuccess": {
+      "title": "Регистрация отправлена!",
+      "subtitle": "Ваша информация о регистрации получена. Наши сотрудники проверят ваш документ в течение 24 часов.",
+      "reservationLabel": "Бронирование",
+      "checkInDateLabel": "Дата заезда",
+      "roomLabel": "Номер",
+      "checkInOnDate": "Заселяйтесь в назначенную дату",
+      "arriveWithId": "Пожалуйста, прибудьте с документом, готовым к проверке",
+      "checkYourEmail": "Проверьте свою почту",
+      "emailConfirmationHint": "Мы отправим подтверждение после проверки документа сотрудниками"
+    }
   }
 }

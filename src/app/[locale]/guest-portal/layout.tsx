@@ -11,10 +11,8 @@ export default function GuestPortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
-        {children}
-      </body>
-    </html>
+    <div className="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+      {children}
+    </div>
   );
 }
