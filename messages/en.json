@@ -1225,5 +1225,17 @@
     "toastCheckoutFailed": "Failed to check out",
     "toastCheckedOut": "Guest checked out successfully",
     "toastCheckoutFailedGuest": "Failed to check out guest"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "empty": "No notifications yet",
+    "types": {
+      "checkin_submitted": "{guestName} submitted online check-in ({reservationNumber})",
+      "reservation_created": "New reservation for {guestName} ({reservationNumber})",
+      "reservation_cancelled": "Reservation cancelled for {guestName} ({reservationNumber})",
+      "duplicate_guest": "Possible duplicate guest: {guestName} ({documentNumber})",
+      "channel_sync_failed": "{channelName} sync failed: {reason}"
+    }
   }
 }
