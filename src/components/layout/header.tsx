@@ -78,6 +78,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
     "/guests": t("pageTitles.guests"),
     "/rooms": t("pageTitles.rooms"),
     "/channels": t("pageTitles.channels"),
+    "/housekeeping": t("pageTitles.housekeeping"),
     "/settings/property": t("pageTitles.settingsProperty"),
     "/settings/team": t("pageTitles.settingsTeam"),
     "/settings/billing": t("pageTitles.settingsBilling"),

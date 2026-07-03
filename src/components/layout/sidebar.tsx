@@ -17,6 +17,7 @@ import {
   UsersRound,
   CreditCard,
   History,
+  Sparkles,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
@@ -33,6 +34,7 @@ const mainNavRoutes = [
   { path: "channels", labelKey: "channels", icon: Wifi },
   { path: "guests", labelKey: "guests", icon: Users },
   { path: "rooms", labelKey: "rooms", icon: BedDouble },
+  { path: "housekeeping", labelKey: "housekeeping", icon: Sparkles },
 ] as const;
 
 const settingsNavRoutes = [
