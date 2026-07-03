@@ -1045,5 +1045,52 @@
     "toastChannelDeleted": "Channel deleted",
     "toastDeleteFailed": "Failed to delete channel",
     "toastExportUrlCopied": "Export URL copied"
+  },
+  "demoBanner": {
+    "message": "🎭 Demo Mode — data resets on each new demo session. All features are live.",
+    "createAccountCta": "Create your free account →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 Demo Mode",
+    "welcomeTitle": "Welcome to HostMagSmart!",
+    "welcomeSubtitle": "Live demo with real data. Everything works — no limits.",
+    "suggestedThings": "Suggested things to try",
+    "startExploring": "Start exploring →",
+    "wantThisForYourHostel": "Want this for your hostel?",
+    "createFreeAccount": "Create a free account",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "Tape Calendar",
+        "desc": "Visual reservation timeline — see every bed at a glance"
+      },
+      "createBooking": {
+        "title": "Create a Booking",
+        "desc": "Hit '+ New Booking' in the header — takes 30 seconds"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "desc": "Occupancy rate, revenue trends, booking sources"
+      },
+      "channelManager": {
+        "title": "Channel Manager",
+        "desc": "See how OTA iCal sync works with Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "Guest Directory",
+        "desc": "Guest profiles, OCR ID scanning, document upload"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "Guest check-in links disabled in demo",
+    "createFreeAccount": "Create a free account",
+    "toSendLinks": "to send check-in links to guests.",
+    "toastLinkCopied": "Link copied!",
+    "copyCheckInLinkTitle": "Copy check-in link",
+    "checkInLink": "Check-In Link",
+    "copyLinkTitle": "Copy link",
+    "hideQrCode": "Hide QR Code",
+    "showQrCode": "Show QR Code",
+    "qrCodeAlt": "Check-in QR code"
   }
 }

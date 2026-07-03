@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "تم حذف القناة",
     "toastDeleteFailed": "فشل حذف القناة",
     "toastExportUrlCopied": "تم نسخ رابط التصدير"
+  },
+  "demoBanner": {
+    "message": "🎭 وضع تجريبي — يتم إعادة تعيين البيانات في كل جلسة تجريبية جديدة. جميع الميزات فعّالة.",
+    "createAccountCta": "أنشئ حسابك المجاني ←"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 وضع تجريبي",
+    "welcomeTitle": "مرحبًا بك في HostMagSmart!",
+    "welcomeSubtitle": "عرض تجريبي مباشر ببيانات حقيقية. كل شيء يعمل — بلا حدود.",
+    "suggestedThings": "أشياء مقترحة لتجربتها",
+    "startExploring": "ابدأ الاستكشاف ←",
+    "wantThisForYourHostel": "تريد هذا لنُزُلك؟",
+    "createFreeAccount": "إنشاء حساب مجاني",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "تقويم الحجوزات",
+        "desc": "جدول زمني مرئي للحجوزات — شاهد كل سرير بلمحة"
+      },
+      "createBooking": {
+        "title": "إنشاء حجز",
+        "desc": "اضغط على '+ حجز جديد' في الأعلى — يستغرق 30 ثانية"
+      },
+      "analytics": {
+        "title": "التحليلات",
+        "desc": "معدل الإشغال، اتجاهات الإيرادات، مصادر الحجز"
+      },
+      "channelManager": {
+        "title": "مدير القنوات",
+        "desc": "شاهد كيف تعمل مزامنة iCal مع Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "دليل النزلاء",
+        "desc": "ملفات النزلاء، مسح الهوية بتقنية OCR، رفع المستندات"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "روابط تسجيل وصول النزلاء معطلة في الوضع التجريبي",
+    "createFreeAccount": "إنشاء حساب مجاني",
+    "toSendLinks": "لإرسال روابط تسجيل الوصول إلى النزلاء.",
+    "toastLinkCopied": "تم نسخ الرابط!",
+    "copyCheckInLinkTitle": "نسخ رابط تسجيل الوصول",
+    "checkInLink": "رابط تسجيل الوصول",
+    "copyLinkTitle": "نسخ الرابط",
+    "hideQrCode": "إخفاء رمز QR",
+    "showQrCode": "إظهار رمز QR",
+    "qrCodeAlt": "رمز QR لتسجيل الوصول"
   }
 }

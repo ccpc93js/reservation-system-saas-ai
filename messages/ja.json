@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "チャネルを削除しました",
     "toastDeleteFailed": "チャネルの削除に失敗しました",
     "toastExportUrlCopied": "エクスポートURLをコピーしました"
+  },
+  "demoBanner": {
+    "message": "🎭 デモモード — 新しいデモセッションごとにデータがリセットされます。すべての機能が利用可能です。",
+    "createAccountCta": "無料アカウントを作成 →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 デモモード",
+    "welcomeTitle": "HostMagSmart へようこそ！",
+    "welcomeSubtitle": "実際のデータを使ったライブデモです。すべての機能が利用可能— 制限なし。",
+    "suggestedThings": "お試しいただける機能",
+    "startExploring": "探索を開始 →",
+    "wantThisForYourHostel": "あなたの施設でも使いたいですか？",
+    "createFreeAccount": "無料アカウントを作成",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "テープカレンダー",
+        "desc": "予約の視覚的なタイムライン — 各ベッドを一目で確認"
+      },
+      "createBooking": {
+        "title": "予約を作成",
+        "desc": "ヘッダーの「+ 新規予約」をクリック — 30秒で完了"
+      },
+      "analytics": {
+        "title": "分析",
+        "desc": "稼働率、収益トレンド、予約元"
+      },
+      "channelManager": {
+        "title": "チャネルマネージャー",
+        "desc": "OTA の iCal 同期が Booking.com / Airbnb とどう連携するか確認"
+      },
+      "guestDirectory": {
+        "title": "ゲストディレクトリ",
+        "desc": "ゲストプロフィール、OCR ID スキャン、書類アップロード"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "デモではゲストのチェックインリンクは無効です",
+    "createFreeAccount": "無料アカウントを作成",
+    "toSendLinks": "してゲストにチェックインリンクを送信します。",
+    "toastLinkCopied": "リンクをコピーしました！",
+    "copyCheckInLinkTitle": "チェックインリンクをコピー",
+    "checkInLink": "チェックインリンク",
+    "copyLinkTitle": "リンクをコピー",
+    "hideQrCode": "QRコードを非表示",
+    "showQrCode": "QRコードを表示",
+    "qrCodeAlt": "チェックインQRコード"
   }
 }

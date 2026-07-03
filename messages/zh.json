@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "渠道已删除",
     "toastDeleteFailed": "删除渠道失败",
     "toastExportUrlCopied": "导出链接已复制"
+  },
+  "demoBanner": {
+    "message": "🎭 演示模式 — 每次新的演示会话都会重置数据。所有功能均可正常使用。",
+    "createAccountCta": "创建免费账户 →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 演示模式",
+    "welcomeTitle": "欢迎使用 HostMagSmart！",
+    "welcomeSubtitle": "使用真实数据的实时演示。所有功能均可用 — 无任何限制。",
+    "suggestedThings": "推荐体验",
+    "startExploring": "开始探索 →",
+    "wantThisForYourHostel": "想为您的旅舍使用它吗？",
+    "createFreeAccount": "创建免费账户",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "排房日历",
+        "desc": "可视化预订时间轴 — 一目了然查看每张床位"
+      },
+      "createBooking": {
+        "title": "创建预订",
+        "desc": "点击顶部的“+ 新建预订” — 只需 30 秒"
+      },
+      "analytics": {
+        "title": "数据分析",
+        "desc": "入住率、收入趋势、预订来源"
+      },
+      "channelManager": {
+        "title": "渠道管理器",
+        "desc": "了解 OTA iCal 同步如何与 Booking.com / Airbnb 协作"
+      },
+      "guestDirectory": {
+        "title": "客人目录",
+        "desc": "客人档案、OCR 证件扫描、文件上传"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "演示模式下已禁用客人入住链接",
+    "createFreeAccount": "创建免费账户",
+    "toSendLinks": "以向客人发送入住链接。",
+    "toastLinkCopied": "链接已复制！",
+    "copyCheckInLinkTitle": "复制入住链接",
+    "checkInLink": "入住链接",
+    "copyLinkTitle": "复制链接",
+    "hideQrCode": "隐藏二维码",
+    "showQrCode": "显示二维码",
+    "qrCodeAlt": "入住二维码"
   }
 }

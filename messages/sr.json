@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "Kanal je obrisan",
     "toastDeleteFailed": "Brisanje kanala nije uspelo",
     "toastExportUrlCopied": "URL za izvoz je kopiran"
+  },
+  "demoBanner": {
+    "message": "🎭 Demo režim — podaci se resetuju na svakoj novoj demo sesiji. Sve funkcije su aktivne.",
+    "createAccountCta": "Kreirajte besplatan nalog →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 Demo režim",
+    "welcomeTitle": "Dobrodošli u HostMagSmart!",
+    "welcomeSubtitle": "Uživo demo sa stvarnim podacima. Sve radi — bez ograničenja.",
+    "suggestedThings": "Predložene stvari za isprobavanje",
+    "startExploring": "Počnite istraživanje →",
+    "wantThisForYourHostel": "Želite ovo za svoj hostel?",
+    "createFreeAccount": "Kreiraj besplatan nalog",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "Traka kalendara",
+        "desc": "Vizuelna vremenska linija rezervacija — vidite svaki krevet na prvi pogled"
+      },
+      "createBooking": {
+        "title": "Kreiraj rezervaciju",
+        "desc": "Kliknite '+ Nova rezervacija' u zaglavlju — traje 30 sekundi"
+      },
+      "analytics": {
+        "title": "Analitika",
+        "desc": "Stopa popunjenosti, trendovi prihoda, izvori rezervacija"
+      },
+      "channelManager": {
+        "title": "Menadžer kanala",
+        "desc": "Pogledajte kako OTA iCal sinhronizacija funkcioniše sa Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "Imenik gostiju",
+        "desc": "Profili gostiju, OCR skeniranje ličnih dokumenata, otpremanje dokumenata"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "Linkovi za prijavu gostiju su onemogućeni u demo verziji",
+    "createFreeAccount": "Kreiraj besplatan nalog",
+    "toSendLinks": "za slanje linkova za prijavu gostima.",
+    "toastLinkCopied": "Link kopiran!",
+    "copyCheckInLinkTitle": "Kopiraj link za prijavu",
+    "checkInLink": "Link za prijavu",
+    "copyLinkTitle": "Kopiraj link",
+    "hideQrCode": "Sakrij QR kod",
+    "showQrCode": "Prikaži QR kod",
+    "qrCodeAlt": "QR kod za prijavu"
   }
 }

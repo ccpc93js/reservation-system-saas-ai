@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
@@ -32,6 +33,7 @@ export default async function TenantLayout({
 }) {
   const { slug } = await params;
   const supabase = await createServerClient();
+  const t = await getTranslations("demoBanner");
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
@@ -77,10 +79,10 @@ export default async function TenantLayout({
         <div className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-3 px-4 py-2 text-xs font-semibold text-white"
           style={{ background: "linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed)", backgroundSize: "200%", animation: "shimmer 3s linear infinite" }}>
           <style>{`@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}`}</style>
-          <span>🎭 Demo Mode — data resets on each new demo session. All features are live.</span>
+          <span>{t("message")}</span>
           <a href="/signup"
             className="underline underline-offset-2 hover:text-purple-100 transition-colors">
-            Create your free account →
+            {t("createAccountCta")}
           </a>
         </div>
       )}

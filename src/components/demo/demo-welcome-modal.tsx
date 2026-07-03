@@ -1,53 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { X, CalendarDays, Plus, BarChart3, Wifi, Users, ArrowRight } from "lucide-react";
 
 const STORAGE_KEY = "demo_welcome_dismissed";
 
+const SUGGESTION_KEYS = ["tapeCalendar", "createBooking", "analytics", "channelManager", "guestDirectory"] as const;
 const suggestions = [
-  {
-    icon: CalendarDays,
-    title: "Tape Calendar",
-    desc: "Visual reservation timeline — see every bed at a glance",
-    href: "calendar",
-    color: "#7c3aed",
-  },
-  {
-    icon: Plus,
-    title: "Create a Booking",
-    desc: "Hit '+ New Booking' in the header — takes 30 seconds",
-    href: null,
-    color: "#8b5cf6",
-  },
-  {
-    icon: BarChart3,
-    title: "Analytics",
-    desc: "Occupancy rate, revenue trends, booking sources",
-    href: "analytics",
-    color: "#a855f7",
-  },
-  {
-    icon: Wifi,
-    title: "Channel Manager",
-    desc: "See how OTA iCal sync works with Booking.com / Airbnb",
-    href: "channels",
-    color: "#7c3aed",
-  },
-  {
-    icon: Users,
-    title: "Guest Directory",
-    desc: "Guest profiles, OCR ID scanning, document upload",
-    href: "guests",
-    color: "#9333ea",
-  },
-];
+  { key: "tapeCalendar", icon: CalendarDays, href: "calendar", color: "#7c3aed" },
+  { key: "createBooking", icon: Plus, href: null, color: "#8b5cf6" },
+  { key: "analytics", icon: BarChart3, href: "analytics", color: "#a855f7" },
+  { key: "channelManager", icon: Wifi, href: "channels", color: "#7c3aed" },
+  { key: "guestDirectory", icon: Users, href: "guests", color: "#9333ea" },
+] satisfies { key: typeof SUGGESTION_KEYS[number]; icon: typeof CalendarDays; href: string | null; color: string }[];
 
 interface Props {
   slug: string;
 }
 
 export default function DemoWelcomeModal({ slug }: Props) {
+  const t = useTranslations("demoWelcome");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -75,22 +49,22 @@ export default function DemoWelcomeModal({ slug }: Props) {
             <X className="w-4 h-4 text-white" />
           </button>
           <div className="inline-flex items-center gap-1.5 bg-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
-            🎭 Demo Mode
+            {t("demoModeBadge")}
           </div>
-          <h2 className="text-xl font-bold text-white mb-1">Welcome to HostMagSmart!</h2>
+          <h2 className="text-xl font-bold text-white mb-1">{t("welcomeTitle")}</h2>
           <p className="text-purple-100 text-sm">
-            Live demo with real data. Everything works — no limits.
+            {t("welcomeSubtitle")}
           </p>
         </div>
 
         {/* Suggestions — scrollable */}
         <div className="px-5 py-4 space-y-1.5 overflow-y-auto flex-1">
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Suggested things to try</p>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">{t("suggestedThings")}</p>
           {suggestions.map((s) => (
-            <div key={s.title}
+            <div key={s.key}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all group cursor-pointer"
               onClick={() => {
-                if (s.href) window.location.href = `/${slug}/${s.href}`;
+                if (s.href) window.location.href = `/${locale}/${slug}/${s.href}`;
                 dismiss();
               }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
@@ -98,8 +72,8 @@ export default function DemoWelcomeModal({ slug }: Props) {
                 <s.icon className="w-4 h-4" style={{ color: s.color }} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900">{s.title}</p>
-                <p className="text-xs text-gray-500 truncate">{s.desc}</p>
+                <p className="text-sm font-semibold text-gray-900">{t(`suggestions.${s.key}.title`)}</p>
+                <p className="text-xs text-gray-500 truncate">{t(`suggestions.${s.key}.desc`)}</p>
               </div>
               {s.href && (
                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -113,12 +87,12 @@ export default function DemoWelcomeModal({ slug }: Props) {
           <button onClick={dismiss}
             className="w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all"
             style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 16px rgba(124,58,237,0.3)" }}>
-            Start exploring →
+            {t("startExploring")}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2.5">
-            Want this for your hostel?{" "}
+            {t("wantThisForYourHostel")}{" "}
             <a href="/signup" className="text-purple-600 font-medium hover:underline">
-              Create a free account
+              {t("createFreeAccount")}
             </a>
           </p>
         </div>

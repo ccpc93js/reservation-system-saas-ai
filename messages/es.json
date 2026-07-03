@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "Canal eliminado",
     "toastDeleteFailed": "Error al eliminar el canal",
     "toastExportUrlCopied": "URL de exportación copiada"
+  },
+  "demoBanner": {
+    "message": "🎭 Modo demo — los datos se reinician en cada nueva sesión de demo. Todas las funciones están activas.",
+    "createAccountCta": "Crea tu cuenta gratis →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 Modo demo",
+    "welcomeTitle": "¡Bienvenido a HostMagSmart!",
+    "welcomeSubtitle": "Demo en vivo con datos reales. Todo funciona — sin límites.",
+    "suggestedThings": "Cosas sugeridas para probar",
+    "startExploring": "Empezar a explorar →",
+    "wantThisForYourHostel": "¿Quieres esto para tu hostal?",
+    "createFreeAccount": "Crear una cuenta gratis",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "Calendario de reservas",
+        "desc": "Línea de tiempo visual de reservas — ve cada cama de un vistazo"
+      },
+      "createBooking": {
+        "title": "Crear una reserva",
+        "desc": "Pulsa '+ Nueva reserva' en el encabezado — toma 30 segundos"
+      },
+      "analytics": {
+        "title": "Analítica",
+        "desc": "Tasa de ocupación, tendencias de ingresos, fuentes de reservas"
+      },
+      "channelManager": {
+        "title": "Gestor de canales",
+        "desc": "Mira cómo funciona la sincronización iCal de OTA con Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "Directorio de huéspedes",
+        "desc": "Perfiles de huéspedes, escaneo OCR de identificación, subida de documentos"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "Enlaces de check-in de huéspedes deshabilitados en la demo",
+    "createFreeAccount": "Crear una cuenta gratis",
+    "toSendLinks": "para enviar enlaces de check-in a los huéspedes.",
+    "toastLinkCopied": "¡Enlace copiado!",
+    "copyCheckInLinkTitle": "Copiar enlace de check-in",
+    "checkInLink": "Enlace de check-in",
+    "copyLinkTitle": "Copiar enlace",
+    "hideQrCode": "Ocultar código QR",
+    "showQrCode": "Mostrar código QR",
+    "qrCodeAlt": "Código QR de check-in"
   }
 }

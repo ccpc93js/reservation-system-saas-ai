@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "Canal supprimé",
     "toastDeleteFailed": "Échec de la suppression du canal",
     "toastExportUrlCopied": "URL d'export copiée"
+  },
+  "demoBanner": {
+    "message": "🎭 Mode démo — les données sont réinitialisées à chaque nouvelle session de démo. Toutes les fonctionnalités sont actives.",
+    "createAccountCta": "Créez votre compte gratuit →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 Mode démo",
+    "welcomeTitle": "Bienvenue sur HostMagSmart !",
+    "welcomeSubtitle": "Démo en direct avec de vraies données. Tout fonctionne — sans limites.",
+    "suggestedThings": "Choses suggérées à essayer",
+    "startExploring": "Commencer à explorer →",
+    "wantThisForYourHostel": "Vous voulez cela pour votre établissement ?",
+    "createFreeAccount": "Créer un compte gratuit",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "Calendrier des réservations",
+        "desc": "Chronologie visuelle des réservations — voyez chaque lit en un coup d'œil"
+      },
+      "createBooking": {
+        "title": "Créer une réservation",
+        "desc": "Cliquez sur '+ Nouvelle réservation' dans l'en-tête — 30 secondes suffisent"
+      },
+      "analytics": {
+        "title": "Analyses",
+        "desc": "Taux d'occupation, tendances des revenus, sources de réservation"
+      },
+      "channelManager": {
+        "title": "Gestionnaire de canaux",
+        "desc": "Découvrez comment fonctionne la synchro iCal OTA avec Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "Répertoire des clients",
+        "desc": "Profils clients, scan OCR de pièce d'identité, téléversement de documents"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "Les liens d'enregistrement client sont désactivés en démo",
+    "createFreeAccount": "Créer un compte gratuit",
+    "toSendLinks": "pour envoyer des liens d'enregistrement aux clients.",
+    "toastLinkCopied": "Lien copié !",
+    "copyCheckInLinkTitle": "Copier le lien d'enregistrement",
+    "checkInLink": "Lien d'enregistrement",
+    "copyLinkTitle": "Copier le lien",
+    "hideQrCode": "Masquer le code QR",
+    "showQrCode": "Afficher le code QR",
+    "qrCodeAlt": "Code QR d'enregistrement"
   }
 }

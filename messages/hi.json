@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "चैनल हटाया गया",
     "toastDeleteFailed": "चैनल हटाने में विफल",
     "toastExportUrlCopied": "निर्यात URL कॉपी हुआ"
+  },
+  "demoBanner": {
+    "message": "🎭 डेमो मोड — प्रत्येक नए डेमो सत्र में डेटा रीसेट होता है। सभी सुविधाएँ चालू हैं।",
+    "createAccountCta": "अपना मुफ्त खाता बनाएं →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 डेमो मोड",
+    "welcomeTitle": "HostMagSmart में आपका स्वागत है!",
+    "welcomeSubtitle": "वास्तविक डेटा के साथ लाइव डेमो। सब कुछ काम करता है — कोई सीमा नहीं।",
+    "suggestedThings": "आज़माने के लिए सुझाव",
+    "startExploring": "अन्वेषण शुरू करें →",
+    "wantThisForYourHostel": "अपने होस्टल के लिए यह चाहते हैं?",
+    "createFreeAccount": "मुफ्त खाता बनाएं",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "टेप कैलेंडर",
+        "desc": "विज़ुअल आरक्षण टाइमलाइन — एक नज़र में हर बिस्तर देखें"
+      },
+      "createBooking": {
+        "title": "बुकिंग बनाएं",
+        "desc": "हेडर में '+ नई बुकिंग' पर क्लिक करें — 30 सेकंड लगते हैं"
+      },
+      "analytics": {
+        "title": "एनालिटिक्स",
+        "desc": "अधिभोग दर, राजस्व रुझान, बुकिंग स्रोत"
+      },
+      "channelManager": {
+        "title": "चैनल मैनेजर",
+        "desc": "देखें कि OTA iCal सिंक Booking.com / Airbnb के साथ कैसे काम करता है"
+      },
+      "guestDirectory": {
+        "title": "अतिथि निर्देशिका",
+        "desc": "अतिथि प्रोफ़ाइल, OCR ID स्कैनिंग, दस्तावेज़ अपलोड"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "डेमो में अतिथि चेक-इन लिंक अक्षम हैं",
+    "createFreeAccount": "मुफ्त खाता बनाएं",
+    "toSendLinks": "अतिथियों को चेक-इन लिंक भेजने के लिए।",
+    "toastLinkCopied": "लिंक कॉपी किया गया!",
+    "copyCheckInLinkTitle": "चेक-इन लिंक कॉपी करें",
+    "checkInLink": "चेक-इन लिंक",
+    "copyLinkTitle": "लिंक कॉपी करें",
+    "hideQrCode": "QR कोड छुपाएं",
+    "showQrCode": "QR कोड दिखाएं",
+    "qrCodeAlt": "चेक-इन QR कोड"
   }
 }

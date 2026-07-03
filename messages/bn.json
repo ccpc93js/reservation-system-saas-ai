@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "চ্যানেল মুছে ফেলা হয়েছে",
     "toastDeleteFailed": "চ্যানেল মুছতে ব্যর্থ",
     "toastExportUrlCopied": "এক্সপোর্ট URL কপি হয়েছে"
+  },
+  "demoBanner": {
+    "message": "🎭 ডেমো মোড — প্রতিটি নতুন ডেমো সেশনে ডেটা রিসেট হয়। সমস্ত বৈশিষ্ট্য সচল।",
+    "createAccountCta": "আপনার ফ্রি অ্যাকাউন্ট তৈরি করুন →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 ডেমো মোড",
+    "welcomeTitle": "HostMagSmart এ স্বাগতম!",
+    "welcomeSubtitle": "প্রকৃত ডেটা সহ লাইভ ডেমো। সবকিছু কাজ করে — কোনো সীমা নেই।",
+    "suggestedThings": "চেষ্টা করার জন্য প্রস্তাবিত জিনিস",
+    "startExploring": "অন্বেষণ শুরু করুন →",
+    "wantThisForYourHostel": "আপনার হোস্টেলের জন্য এটি চান?",
+    "createFreeAccount": "একটি ফ্রি অ্যাকাউন্ট তৈরি করুন",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "টেপ ক্যালেন্ডার",
+        "desc": "ভিজ্যুয়াল রিজার্ভেশন টাইমলাইন — এক নজরে প্রতিটি বিছানা দেখুন"
+      },
+      "createBooking": {
+        "title": "বুকিং তৈরি করুন",
+        "desc": "হেডারে '+ নতুন বুকিং' চাপুন — মাত্র ৩০ সেকেন্ড লাগে"
+      },
+      "analytics": {
+        "title": "অ্যানালিটিক্স",
+        "desc": "দখলের হার, রাজস্ব প্রবণতা, বুকিং উৎস"
+      },
+      "channelManager": {
+        "title": "চ্যানেল ম্যানেজার",
+        "desc": "দেখুন কীভাবে OTA iCal সিঙ্ক Booking.com / Airbnb এর সাথে কাজ করে"
+      },
+      "guestDirectory": {
+        "title": "অতিথি ডিরেক্টরি",
+        "desc": "অতিথি প্রোফাইল, OCR ID স্ক্যানিং, নথি আপলোড"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "ডেমোতে অতিথি চেক-ইন লিঙ্ক নিষ্ক্রিয় করা হয়েছে",
+    "createFreeAccount": "একটি ফ্রি অ্যাকাউন্ট তৈরি করুন",
+    "toSendLinks": "অতিথিদের চেক-ইন লিঙ্ক পাঠাতে।",
+    "toastLinkCopied": "লিঙ্ক কপি হয়েছে!",
+    "copyCheckInLinkTitle": "চেক-ইন লিঙ্ক কপি করুন",
+    "checkInLink": "চেক-ইন লিঙ্ক",
+    "copyLinkTitle": "লিঙ্ক কপি করুন",
+    "hideQrCode": "QR কোড লুকান",
+    "showQrCode": "QR কোড দেখান",
+    "qrCodeAlt": "চেক-ইন QR কোড"
   }
 }

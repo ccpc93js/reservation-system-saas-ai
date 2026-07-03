@@ -1075,5 +1075,52 @@
     "toastChannelDeleted": "Канал удалён",
     "toastDeleteFailed": "Не удалось удалить канал",
     "toastExportUrlCopied": "URL экспорта скопирован"
+  },
+  "demoBanner": {
+    "message": "🎭 Демо-режим — данные сбрасываются при каждой новой демо-сессии. Все функции активны.",
+    "createAccountCta": "Создать бесплатный аккаунт →"
+  },
+  "demoWelcome": {
+    "demoModeBadge": "🎭 Демо-режим",
+    "welcomeTitle": "Добро пожаловать в HostMagSmart!",
+    "welcomeSubtitle": "Живая демонстрация с реальными данными. Всё работает — без ограничений.",
+    "suggestedThings": "Рекомендуем попробовать",
+    "startExploring": "Начать изучение →",
+    "wantThisForYourHostel": "Хотите это для своего хостела?",
+    "createFreeAccount": "Создать бесплатный аккаунт",
+    "suggestions": {
+      "tapeCalendar": {
+        "title": "Ленточный календарь",
+        "desc": "Визуальная хронология бронирований — все кровати как на ладони"
+      },
+      "createBooking": {
+        "title": "Создать бронирование",
+        "desc": "Нажмите «+ Новое бронирование» в шапке — займёт 30 секунд"
+      },
+      "analytics": {
+        "title": "Аналитика",
+        "desc": "Загрузка, тенденции доходов, источники бронирований"
+      },
+      "channelManager": {
+        "title": "Менеджер каналов",
+        "desc": "Посмотрите, как работает синхронизация iCal с Booking.com / Airbnb"
+      },
+      "guestDirectory": {
+        "title": "Справочник гостей",
+        "desc": "Профили гостей, сканирование ID через OCR, загрузка документов"
+      }
+    }
+  },
+  "checkInLinkButton": {
+    "disabledInDemo": "Ссылки на регистрацию гостей отключены в демо",
+    "createFreeAccount": "Создать бесплатный аккаунт",
+    "toSendLinks": "чтобы отправлять гостям ссылки для регистрации.",
+    "toastLinkCopied": "Ссылка скопирована!",
+    "copyCheckInLinkTitle": "Скопировать ссылку регистрации",
+    "checkInLink": "Ссылка регистрации",
+    "copyLinkTitle": "Скопировать ссылку",
+    "hideQrCode": "Скрыть QR-код",
+    "showQrCode": "Показать QR-код",
+    "qrCodeAlt": "QR-код регистрации"
   }
 }
