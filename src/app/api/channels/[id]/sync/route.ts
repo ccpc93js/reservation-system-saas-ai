@@ -1,4 +1,5 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
+import { notifyOrg } from "@/lib/notifications";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ical = require("node-ical");
 
@@ -16,6 +17,9 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  // Declared outside the try block (not just before it) so the outer catch
+  // can safely read it even if the failure happens before it's assigned.
+  let orgId: string | undefined;
   try {
     const { id } = await params;
     const serviceClient = await createServiceClient();
@@ -24,8 +28,6 @@ export async function POST(
     const auth = request.headers.get("authorization");
     const secret = process.env.CRON_SECRET;
     const isCron = !!secret && auth === `Bearer ${secret}`;
-
-    let orgId: string;
 
     if (isCron) {
       const { data: channel } = await serviceClient
@@ -47,6 +49,10 @@ export async function POST(
         .single();
       if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
       orgId = (membership as any).organization_id;
+    }
+
+    if (!orgId) {
+      return Response.json({ error: "Organization not resolved" }, { status: 500 });
     }
 
     // Get channel and verify ownership
@@ -74,6 +80,12 @@ export async function POST(
         .from("channels")
         .update({ last_error: `Failed to fetch feed: ${err.message}`, updated_at: new Date().toISOString() })
         .eq("id", id);
+      await notifyOrg(
+        orgId,
+        "channel_sync_failed",
+        { channelName: channel?.name ?? "channel", reason: err.message },
+        "/channels"
+      );
       return Response.json({ error: "Failed to fetch iCal feed" }, { status: 422 });
     }
 
@@ -217,6 +229,11 @@ export async function POST(
     return Response.json({ success: true, results });
   } catch (err: any) {
     console.error("Sync error:", err);
+    // orgId may be unassigned if the failure happened before it was resolved
+    // (e.g. during the initial channel/membership lookups) — guard before notifying.
+    if (typeof orgId === "string") {
+      await notifyOrg(orgId, "channel_sync_failed", { channelName: "channel", reason: err.message }, "/channels");
+    }
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
