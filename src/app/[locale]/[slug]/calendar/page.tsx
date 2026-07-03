@@ -23,7 +23,7 @@ export default async function CalendarPage() {
     .from("beds")
     .select(
       `
-      id, name, position,
+      id, name, position, housekeeping_status,
       rooms(id, name,
         room_types(id, name, type)
       )

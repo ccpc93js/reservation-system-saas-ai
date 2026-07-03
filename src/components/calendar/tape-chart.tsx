@@ -12,6 +12,7 @@ import {
   Ban,
   User,
   AlertCircle,
+  AlertTriangle,
 } from "lucide-react";
 
 const DAY_WIDTH = 52;
@@ -22,6 +23,7 @@ interface Bed {
   id: string;
   name: string;
   position: number | null;
+  housekeeping_status?: string;
   rooms: {
     id: string;
     name: string;
@@ -258,6 +260,12 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="text-xs font-medium text-slate-900 truncate pr-2">{bed.name}</span>
+                      {(bed.housekeeping_status === "dirty" || bed.housekeeping_status === "out_of_order") && (
+                        <AlertTriangle
+                          className="w-3 h-3 text-amber-500 shrink-0"
+                          aria-label={t(`housekeepingWarning_${bed.housekeeping_status}`)}
+                        />
+                      )}
                       <span className="text-[10px] text-slate-400 font-mono">#{bed.id.slice(0, 3)}</span>
                     </div>
                   </div>
