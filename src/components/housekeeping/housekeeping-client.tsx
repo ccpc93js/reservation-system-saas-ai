@@ -65,10 +65,10 @@ export default function HousekeepingClient({ orgId }: { orgId: string }) {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          title={t("refresh")}
-          className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-primary text-sm font-medium hover:bg-muted/70 transition-colors disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
+          {t("refresh")}
         </button>
       </div>
 
