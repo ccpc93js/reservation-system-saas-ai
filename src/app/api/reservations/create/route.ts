@@ -2,6 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import { createReservationSchema } from "@/lib/validations/reservation";
 import { differenceInDays } from "date-fns";
 import { sendReservationConfirmationEmail } from "@/lib/email";
+import { notifyOrg } from "@/lib/notifications";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -216,6 +217,19 @@ export async function POST(request: Request) {
         totalPrice
       ).catch((err) => console.error("Email send failed:", err));
     }
+
+    // Notify staff (excluding whoever created it)
+    await notifyOrg(
+      data.org_id,
+      "reservation_created",
+      {
+        guestName: `${data.first_name} ${data.last_name}`,
+        reservationNumber: reservation.id.substring(0, 8).toUpperCase(),
+        roomName: room?.beds?.rooms?.name ?? null,
+      },
+      "/reservations",
+      user.id
+    );
 
     return Response.json(
       { success: true, reservation_id: reservation.id },
