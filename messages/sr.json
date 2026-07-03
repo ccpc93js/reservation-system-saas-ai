@@ -13,7 +13,8 @@
       "settingsProperty": "Podešavanja objekta",
       "settingsTeam": "Tim",
       "settingsBilling": "Naplata i plan",
-      "settings": "Podešavanja"
+      "settings": "Podešavanja",
+      "housekeeping": "Domaćinstvo"
     },
     "searchPlaceholder": "Pretraži goste, rezervacije...",
     "clearSearch": "Obriši pretragu",
@@ -44,7 +45,8 @@
       "rooms": "Inventar soba",
       "settingsProperty": "Podešavanja objekta",
       "settingsTeam": "Tim",
-      "settingsBilling": "Naplata i plan"
+      "settingsBilling": "Naplata i plan",
+      "housekeeping": "Domaćinstvo"
     },
     "role": {
       "owner": "Vlasnik",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "Privatna",
       "unknownRoom": "Nepoznato",
       "blockTooltip": "{name} · ukupno ${amount} · {checkIn} do {checkOut}",
-      "totalSuffix": "ukupno ${amount}"
+      "totalSuffix": "ukupno ${amount}",
+      "housekeepingWarning_dirty": "Ovaj krevet treba očistiti",
+      "housekeepingWarning_out_of_order": "Ovaj krevet je van upotrebe"
     },
     "newReservation": {
       "title": "Nova rezervacija",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "Mogući dupli gost: {guestName} ({documentNumber})",
       "channel_sync_failed": "Sinhronizacija {channelName} nije uspela: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "Domaćinstvo",
+    "subtitle": "Praćenje statusa čišćenja svih kreveta",
+    "unauthorized": "Morate biti prijavljeni da biste videli ovu stranicu.",
+    "noOrgFound": "Nije pronađena organizacija za vaš nalog.",
+    "loading": "Učitavanje...",
+    "empty": "Nijedan krevet ne odgovara ovom filteru.",
+    "noRoom": "Nedodeljeno",
+    "filter_all": "Sve",
+    "filter_dirty": "Prljav",
+    "filter_out_of_order": "Van upotrebe",
+    "status_clean": "Čist",
+    "status_dirty": "Prljav",
+    "status_inspected": "Pregledan",
+    "status_out_of_order": "Van upotrebe"
   }
 }

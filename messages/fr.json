@@ -13,7 +13,8 @@
       "settingsProperty": "Paramètres de l'établissement",
       "settingsTeam": "Équipe",
       "settingsBilling": "Facturation et forfait",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "housekeeping": "Ménage"
     },
     "searchPlaceholder": "Rechercher des clients, réservations...",
     "clearSearch": "Effacer la recherche",
@@ -44,7 +45,8 @@
       "rooms": "Inventaire des chambres",
       "settingsProperty": "Paramètres de l'établissement",
       "settingsTeam": "Équipe",
-      "settingsBilling": "Facturation et forfait"
+      "settingsBilling": "Facturation et forfait",
+      "housekeeping": "Ménage"
     },
     "role": {
       "owner": "Propriétaire",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "Privée",
       "unknownRoom": "Inconnu",
       "blockTooltip": "{name} · {amount} € total · {checkIn} à {checkOut}",
-      "totalSuffix": "{amount} € total"
+      "totalSuffix": "{amount} € total",
+      "housekeepingWarning_dirty": "Ce lit doit être nettoyé",
+      "housekeepingWarning_out_of_order": "Ce lit est hors service"
     },
     "newReservation": {
       "title": "Nouvelle réservation",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "Client potentiellement en double : {guestName} ({documentNumber})",
       "channel_sync_failed": "Échec de la synchronisation de {channelName} : {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "Ménage",
+    "subtitle": "Suivre l'état de propreté de tous les lits",
+    "unauthorized": "Vous devez être connecté pour voir cette page.",
+    "noOrgFound": "Aucune organisation trouvée pour votre compte.",
+    "loading": "Chargement...",
+    "empty": "Aucun lit ne correspond à ce filtre.",
+    "noRoom": "Non assigné",
+    "filter_all": "Tous",
+    "filter_dirty": "Sale",
+    "filter_out_of_order": "Hors service",
+    "status_clean": "Propre",
+    "status_dirty": "Sale",
+    "status_inspected": "Inspecté",
+    "status_out_of_order": "Hors service"
   }
 }

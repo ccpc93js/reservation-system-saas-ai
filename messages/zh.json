@@ -13,7 +13,8 @@
       "settingsProperty": "物业设置",
       "settingsTeam": "团队",
       "settingsBilling": "账单与套餐",
-      "settings": "设置"
+      "settings": "设置",
+      "housekeeping": "客房清洁"
     },
     "searchPlaceholder": "搜索客人、预订...",
     "clearSearch": "清除搜索",
@@ -44,7 +45,8 @@
       "rooms": "房间库存",
       "settingsProperty": "物业设置",
       "settingsTeam": "团队",
-      "settingsBilling": "账单与套餐"
+      "settingsBilling": "账单与套餐",
+      "housekeeping": "客房清洁"
     },
     "role": {
       "owner": "所有者",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "独立房",
       "unknownRoom": "未知",
       "blockTooltip": "{name} · 共 ${amount} · {checkIn} 至 {checkOut}",
-      "totalSuffix": "共 ${amount}"
+      "totalSuffix": "共 ${amount}",
+      "housekeepingWarning_dirty": "此床位需要清洁",
+      "housekeepingWarning_out_of_order": "此床位停用"
     },
     "newReservation": {
       "title": "新建预订",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "可能的重复客人：{guestName}（{documentNumber}）",
       "channel_sync_failed": "{channelName} 同步失败：{reason}"
     }
+  },
+  "housekeeping": {
+    "title": "客房清洁",
+    "subtitle": "跟踪所有床位的清洁状态",
+    "unauthorized": "您必须登录才能查看此页面。",
+    "noOrgFound": "未找到您账户的组织。",
+    "loading": "加载中…",
+    "empty": "没有符合此筛选条件的床位。",
+    "noRoom": "未分配",
+    "filter_all": "全部",
+    "filter_dirty": "待清洁",
+    "filter_out_of_order": "停用",
+    "status_clean": "干净",
+    "status_dirty": "待清洁",
+    "status_inspected": "已检查",
+    "status_out_of_order": "停用"
   }
 }

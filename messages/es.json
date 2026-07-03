@@ -13,7 +13,8 @@
       "settingsProperty": "Configuración del alojamiento",
       "settingsTeam": "Equipo",
       "settingsBilling": "Facturación y plan",
-      "settings": "Configuración"
+      "settings": "Configuración",
+      "housekeeping": "Limpieza"
     },
     "searchPlaceholder": "Buscar huéspedes, reservas...",
     "clearSearch": "Borrar búsqueda",
@@ -44,7 +45,8 @@
       "rooms": "Inventario de habitaciones",
       "settingsProperty": "Configuración del alojamiento",
       "settingsTeam": "Equipo",
-      "settingsBilling": "Facturación y plan"
+      "settingsBilling": "Facturación y plan",
+      "housekeeping": "Limpieza"
     },
     "role": {
       "owner": "Propietario",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "Privada",
       "unknownRoom": "Desconocido",
       "blockTooltip": "{name} · ${amount} total · {checkIn} a {checkOut}",
-      "totalSuffix": "${amount} total"
+      "totalSuffix": "${amount} total",
+      "housekeepingWarning_dirty": "Esta cama necesita limpieza",
+      "housekeepingWarning_out_of_order": "Esta cama está fuera de servicio"
     },
     "newReservation": {
       "title": "Nueva reserva",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "Posible huésped duplicado: {guestName} ({documentNumber})",
       "channel_sync_failed": "Sincronización de {channelName} fallida: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "Limpieza",
+    "subtitle": "Seguimiento del estado de limpieza de todas las camas",
+    "unauthorized": "Debes iniciar sesión para ver esta página.",
+    "noOrgFound": "No se encontró ninguna organización para tu cuenta.",
+    "loading": "Cargando...",
+    "empty": "Ninguna cama coincide con este filtro.",
+    "noRoom": "Sin asignar",
+    "filter_all": "Todas",
+    "filter_dirty": "Sucia",
+    "filter_out_of_order": "Fuera de servicio",
+    "status_clean": "Limpia",
+    "status_dirty": "Sucia",
+    "status_inspected": "Inspeccionada",
+    "status_out_of_order": "Fuera de servicio"
   }
 }

@@ -13,7 +13,8 @@
       "settingsProperty": "إعدادات العقار",
       "settingsTeam": "الفريق",
       "settingsBilling": "الفوترة والخطة",
-      "settings": "الإعدادات"
+      "settings": "الإعدادات",
+      "housekeeping": "التدبير المنزلي"
     },
     "searchPlaceholder": "ابحث عن النزلاء أو الحجوزات...",
     "clearSearch": "مسح البحث",
@@ -44,7 +45,8 @@
       "rooms": "مخزون الغرف",
       "settingsProperty": "إعدادات العقار",
       "settingsTeam": "الفريق",
-      "settingsBilling": "الفوترة والخطة"
+      "settingsBilling": "الفوترة والخطة",
+      "housekeeping": "التدبير المنزلي"
     },
     "role": {
       "owner": "المالك",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "خاصة",
       "unknownRoom": "غير معروف",
       "blockTooltip": "{name} · إجمالي ${amount} · من {checkIn} إلى {checkOut}",
-      "totalSuffix": "إجمالي ${amount}"
+      "totalSuffix": "إجمالي ${amount}",
+      "housekeepingWarning_dirty": "هذا السرير يحتاج إلى تنظيف",
+      "housekeepingWarning_out_of_order": "هذا السرير خارج الخدمة"
     },
     "newReservation": {
       "title": "حجز جديد",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "نزيل مكرر محتمل: {guestName} ({documentNumber})",
       "channel_sync_failed": "فشلت مزامنة {channelName}: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "التدبير المنزلي",
+    "subtitle": "تتبع حالة النظافة عبر جميع الأسرّة",
+    "unauthorized": "يجب تسجيل الدخول لعرض هذه الصفحة.",
+    "noOrgFound": "لم يتم العثور على منظمة لحسابك.",
+    "loading": "جارٍ التحميل...",
+    "empty": "لا توجد أسرّة تطابق هذا الفلتر.",
+    "noRoom": "غير معيّن",
+    "filter_all": "الكل",
+    "filter_dirty": "غير نظيف",
+    "filter_out_of_order": "خارج الخدمة",
+    "status_clean": "نظيف",
+    "status_dirty": "غير نظيف",
+    "status_inspected": "تم الفحص",
+    "status_out_of_order": "خارج الخدمة"
   }
 }

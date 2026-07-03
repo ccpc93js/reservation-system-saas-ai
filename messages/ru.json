@@ -13,7 +13,8 @@
       "settingsProperty": "Настройки объекта",
       "settingsTeam": "Команда",
       "settingsBilling": "Оплата и тариф",
-      "settings": "Настройки"
+      "settings": "Настройки",
+      "housekeeping": "Уборка номеров"
     },
     "searchPlaceholder": "Поиск гостей, бронирований...",
     "clearSearch": "Очистить поиск",
@@ -44,7 +45,8 @@
       "rooms": "Номерной фонд",
       "settingsProperty": "Настройки объекта",
       "settingsTeam": "Команда",
-      "settingsBilling": "Оплата и тариф"
+      "settingsBilling": "Оплата и тариф",
+      "housekeeping": "Уборка номеров"
     },
     "role": {
       "owner": "Владелец",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "Отдельный",
       "unknownRoom": "Неизвестно",
       "blockTooltip": "{name} · всего ${amount} · с {checkIn} по {checkOut}",
-      "totalSuffix": "всего ${amount}"
+      "totalSuffix": "всего ${amount}",
+      "housekeepingWarning_dirty": "Эта кровать требует уборки",
+      "housekeepingWarning_out_of_order": "Эта кровать не используется"
     },
     "newReservation": {
       "title": "Новое бронирование",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "Возможный дублирующийся гость: {guestName} ({documentNumber})",
       "channel_sync_failed": "Ошибка синхронизации {channelName}: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "Уборка номеров",
+    "subtitle": "Отслеживание статуса уборки всех кроватей",
+    "unauthorized": "Вы должны войти в систему, чтобы просмотреть эту страницу.",
+    "noOrgFound": "Организация для вашей учетной записи не найдена.",
+    "loading": "Загрузка...",
+    "empty": "Нет кроватей, соответствующих этому фильтру.",
+    "noRoom": "Не назначено",
+    "filter_all": "Все",
+    "filter_dirty": "Грязная",
+    "filter_out_of_order": "Не используется",
+    "status_clean": "Чистая",
+    "status_dirty": "Грязная",
+    "status_inspected": "Проверена",
+    "status_out_of_order": "Не используется"
   }
 }

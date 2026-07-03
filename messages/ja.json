@@ -13,7 +13,8 @@
       "settingsProperty": "施設設定",
       "settingsTeam": "チーム",
       "settingsBilling": "請求とプラン",
-      "settings": "設定"
+      "settings": "設定",
+      "housekeeping": "ハウスキーピング"
     },
     "searchPlaceholder": "ゲスト、予約を検索...",
     "clearSearch": "検索をクリア",
@@ -44,7 +45,8 @@
       "rooms": "客室一覧",
       "settingsProperty": "施設設定",
       "settingsTeam": "チーム",
-      "settingsBilling": "請求とプラン"
+      "settingsBilling": "請求とプラン",
+      "housekeeping": "ハウスキーピング"
     },
     "role": {
       "owner": "オーナー",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "個室",
       "unknownRoom": "不明",
       "blockTooltip": "{name} · 合計 ${amount} · {checkIn}〜{checkOut}",
-      "totalSuffix": "合計 ${amount}"
+      "totalSuffix": "合計 ${amount}",
+      "housekeepingWarning_dirty": "このベッドは清掃が必要です",
+      "housekeepingWarning_out_of_order": "このベッドは使用できません"
     },
     "newReservation": {
       "title": "新規予約",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "重複の可能性があるゲスト：{guestName}（{documentNumber}）",
       "channel_sync_failed": "{channelName} の同期に失敗しました：{reason}"
     }
+  },
+  "housekeeping": {
+    "title": "ハウスキーピング",
+    "subtitle": "すべてのベッドの清掃状況を追跡",
+    "unauthorized": "このページを表示するにはサインインが必要です。",
+    "noOrgFound": "アカウントに関連付けられた組織が見つかりません。",
+    "loading": "読み込み中...",
+    "empty": "このフィルターに一致するベッドはありません。",
+    "noRoom": "未割り当て",
+    "filter_all": "すべて",
+    "filter_dirty": "清掃待ち",
+    "filter_out_of_order": "使用不可",
+    "status_clean": "清潔",
+    "status_dirty": "清掃待ち",
+    "status_inspected": "点検済み",
+    "status_out_of_order": "使用不可"
   }
 }

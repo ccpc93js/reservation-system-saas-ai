@@ -13,7 +13,8 @@
       "settingsProperty": "প্রপার্টি সেটিংস",
       "settingsTeam": "টিম",
       "settingsBilling": "বিলিং ও প্ল্যান",
-      "settings": "সেটিংস"
+      "settings": "সেটিংস",
+      "housekeeping": "হাউসকিপিং"
     },
     "searchPlaceholder": "অতিথি, রিজার্ভেশন খুঁজুন...",
     "clearSearch": "খোঁজ মুছুন",
@@ -44,7 +45,8 @@
       "rooms": "রুম ইনভেন্টরি",
       "settingsProperty": "প্রপার্টি সেটিংস",
       "settingsTeam": "টিম",
-      "settingsBilling": "বিলিং ও প্ল্যান"
+      "settingsBilling": "বিলিং ও প্ল্যান",
+      "housekeeping": "হাউসকিপিং"
     },
     "role": {
       "owner": "মালিক",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "প্রাইভেট",
       "unknownRoom": "অজানা",
       "blockTooltip": "{name} · মোট ${amount} · {checkIn} থেকে {checkOut}",
-      "totalSuffix": "মোট ${amount}"
+      "totalSuffix": "মোট ${amount}",
+      "housekeepingWarning_dirty": "এই বিছানাটি পরিষ্কার করা প্রয়োজন",
+      "housekeepingWarning_out_of_order": "এই বিছানাটি ব্যবহারের বাইরে"
     },
     "newReservation": {
       "title": "নতুন রিজার্ভেশন",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "সম্ভাব্য ডুপ্লিকেট অতিথি: {guestName} ({documentNumber})",
       "channel_sync_failed": "{channelName} সিঙ্ক ব্যর্থ হয়েছে: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "হাউসকিপিং",
+    "subtitle": "সমস্ত বিছানার পরিষ্কার অবস্থা ট্র্যাক করুন",
+    "unauthorized": "এই পৃষ্ঠাটি দেখতে আপনাকে সাইন ইন করতে হবে।",
+    "noOrgFound": "আপনার অ্যাকাউন্টের জন্য কোনো প্রতিষ্ঠান পাওয়া যায়নি।",
+    "loading": "লোড হচ্ছে...",
+    "empty": "এই ফিল্টারের সাথে কোনো বিছানা মেলে না।",
+    "noRoom": "অনির্ধারিত",
+    "filter_all": "সব",
+    "filter_dirty": "নোংরা",
+    "filter_out_of_order": "ব্যবহারের বাইরে",
+    "status_clean": "পরিষ্কার",
+    "status_dirty": "নোংরা",
+    "status_inspected": "পরিদর্শিত",
+    "status_out_of_order": "ব্যবহারের বাইরে"
   }
 }

@@ -13,7 +13,8 @@
       "settingsProperty": "प्रॉपर्टी सेटिंग्स",
       "settingsTeam": "टीम",
       "settingsBilling": "बिलिंग और प्लान",
-      "settings": "सेटिंग्स"
+      "settings": "सेटिंग्स",
+      "housekeeping": "हाउसकीपिंग"
     },
     "searchPlaceholder": "अतिथि, आरक्षण खोजें...",
     "clearSearch": "खोज साफ़ करें",
@@ -44,7 +45,8 @@
       "rooms": "कमरा सूची",
       "settingsProperty": "प्रॉपर्टी सेटिंग्स",
       "settingsTeam": "टीम",
-      "settingsBilling": "बिलिंग और प्लान"
+      "settingsBilling": "बिलिंग और प्लान",
+      "housekeeping": "हाउसकीपिंग"
     },
     "role": {
       "owner": "मालिक",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "प्राइवेट",
       "unknownRoom": "अज्ञात",
       "blockTooltip": "{name} · कुल ${amount} · {checkIn} से {checkOut}",
-      "totalSuffix": "कुल ${amount}"
+      "totalSuffix": "कुल ${amount}",
+      "housekeepingWarning_dirty": "इस बिस्तर की सफाई आवश्यक है",
+      "housekeepingWarning_out_of_order": "यह बिस्तर उपयोग से बाहर है"
     },
     "newReservation": {
       "title": "नया आरक्षण",
@@ -1267,5 +1271,21 @@
       "duplicate_guest": "संभावित डुप्लिकेट अतिथि: {guestName} ({documentNumber})",
       "channel_sync_failed": "{channelName} सिंक विफल: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "हाउसकीपिंग",
+    "subtitle": "सभी बिस्तरों की सफाई स्थिति ट्रैक करें",
+    "unauthorized": "इस पृष्ठ को देखने के लिए आपको साइन इन होना चाहिए।",
+    "noOrgFound": "आपके खाते के लिए कोई संगठन नहीं मिला।",
+    "loading": "लोड हो रहा है...",
+    "empty": "इस फ़िल्टर से कोई बिस्तर मेल नहीं खाता।",
+    "noRoom": "अनिर्धारित",
+    "filter_all": "सभी",
+    "filter_dirty": "गंदा",
+    "filter_out_of_order": "उपयोग से बाहर",
+    "status_clean": "साफ",
+    "status_dirty": "गंदा",
+    "status_inspected": "निरीक्षित",
+    "status_out_of_order": "उपयोग से बाहर"
   }
 }
