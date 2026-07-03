@@ -152,6 +152,32 @@ export async function PATCH(
         .update({ actual_check_out_at: new Date().toISOString() })
         .eq("reservation_id", id)
         .is("actual_check_out_at", null);
+
+      // Mark bed(s) dirty for housekeeping — never blocks checkout if this fails
+      try {
+        const { data: items } = await supabase
+          .from("reservation_items")
+          .select("bed_id")
+          .eq("reservation_id", id);
+
+        if (items?.length) {
+          const { error: bedError } = await supabase
+            .from("beds")
+            .update({
+              housekeeping_status: "dirty",
+              housekeeping_updated_at: new Date().toISOString(),
+              housekeeping_updated_by: null,
+            })
+            .in("id", items.map((i) => i.bed_id))
+            .neq("housekeeping_status", "out_of_order");
+
+          if (bedError) {
+            console.error("Failed to mark bed dirty on checkout:", bedError);
+          }
+        }
+      } catch (bedErr) {
+        console.error("Failed to mark bed dirty on checkout:", bedErr);
+      }
     }
 
     return Response.json({ success: true });
