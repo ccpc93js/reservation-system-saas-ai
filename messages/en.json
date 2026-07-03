@@ -13,7 +13,8 @@
       "settingsProperty": "Property Settings",
       "settingsTeam": "Team",
       "settingsBilling": "Billing & Plan",
-      "settings": "Settings"
+      "settings": "Settings",
+      "housekeeping": "Housekeeping"
     },
     "searchPlaceholder": "Search guests, reservations...",
     "clearSearch": "Clear search",
@@ -44,7 +45,8 @@
       "rooms": "Room Inventory",
       "settingsProperty": "Property Settings",
       "settingsTeam": "Team",
-      "settingsBilling": "Billing & Plan"
+      "settingsBilling": "Billing & Plan",
+      "housekeeping": "Housekeeping"
     },
     "role": {
       "owner": "Owner",
@@ -188,7 +190,9 @@
       "roomTypePrivate": "Private",
       "unknownRoom": "Unknown",
       "blockTooltip": "{name} · ${amount} total · {checkIn} to {checkOut}",
-      "totalSuffix": "${amount} total"
+      "totalSuffix": "${amount} total",
+      "housekeepingWarning_dirty": "This bed needs cleaning",
+      "housekeepingWarning_out_of_order": "This bed is out of order"
     },
     "newReservation": {
       "title": "New Reservation",
@@ -745,9 +749,27 @@
       "downgrade": "Downgrade",
       "adminOnlyNotice": "Only admins can manage billing.",
       "features": {
-        "free": ["20 beds", "1 team member", "Reservations & calendar", "Guest management"],
-        "pro": ["60 beds", "3 team members", "Channel Manager (iCal sync)", "Guest self check-in portal", "Analytics & reports", "Custom branding"],
-        "scale": ["Unlimited beds", "Unlimited team members", "Multi-property", "Priority support", "API access"]
+        "free": [
+          "20 beds",
+          "1 team member",
+          "Reservations & calendar",
+          "Guest management"
+        ],
+        "pro": [
+          "60 beds",
+          "3 team members",
+          "Channel Manager (iCal sync)",
+          "Guest self check-in portal",
+          "Analytics & reports",
+          "Custom branding"
+        ],
+        "scale": [
+          "Unlimited beds",
+          "Unlimited team members",
+          "Multi-property",
+          "Priority support",
+          "API access"
+        ]
       }
     },
     "property": {
@@ -848,10 +870,22 @@
         "minDigits": "At least {count} digits"
       },
       "steps": {
-        "form": { "label": "Your Details", "description": "Fill in your information" },
-        "photos": { "label": "ID Photos", "description": "Upload front and back" },
-        "review": { "label": "Review", "description": "Verify everything" },
-        "submit": { "label": "Complete", "description": "Submit for verification" }
+        "form": {
+          "label": "Your Details",
+          "description": "Fill in your information"
+        },
+        "photos": {
+          "label": "ID Photos",
+          "description": "Upload front and back"
+        },
+        "review": {
+          "label": "Review",
+          "description": "Verify everything"
+        },
+        "submit": {
+          "label": "Complete",
+          "description": "Submit for verification"
+        }
       },
       "firstName": "First Name",
       "lastName": "Last Name",
@@ -1237,5 +1271,21 @@
       "duplicate_guest": "Possible duplicate guest: {guestName} ({documentNumber})",
       "channel_sync_failed": "{channelName} sync failed: {reason}"
     }
+  },
+  "housekeeping": {
+    "title": "Housekeeping",
+    "subtitle": "Track cleaning status across all beds",
+    "unauthorized": "You must be signed in to view this page.",
+    "noOrgFound": "No organization found for your account.",
+    "loading": "Loading...",
+    "empty": "No beds match this filter.",
+    "noRoom": "Unassigned",
+    "filter_all": "All",
+    "filter_dirty": "Dirty",
+    "filter_out_of_order": "Out of Order",
+    "status_clean": "Clean",
+    "status_dirty": "Dirty",
+    "status_inspected": "Inspected",
+    "status_out_of_order": "Out of Order"
   }
 }
