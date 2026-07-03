@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { sendCheckInSubmittedEmail } from "@/lib/email";
+import { notifyOrg } from "@/lib/notifications";
 import { NextRequest, NextResponse } from "next/server";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -219,6 +220,17 @@ export async function POST(
       (reservation as any).reservation_number || "RES-XX-XXXX",
       reservation.check_in
     ).catch((err) => console.error("Email send failed:", err));
+
+    // Notify staff
+    await notifyOrg(
+      reservation.organization_id,
+      "checkin_submitted",
+      {
+        guestName: `${firstName} ${lastName}`,
+        reservationNumber: (reservation as any).reservation_number || "RES-XX-XXXX",
+      },
+      "/check-in-pending"
+    );
 
     return NextResponse.json({
       success: true,
