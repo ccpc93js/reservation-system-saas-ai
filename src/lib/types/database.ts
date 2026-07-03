@@ -453,6 +453,47 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          link: string | null
+          organization_id: string
+          read_at: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          link?: string | null
+          organization_id: string
+          read_at?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          link?: string | null
+          organization_id?: string
+          read_at?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           address: string | null
@@ -1062,6 +1103,7 @@ export type Channel = Tables<"channels">
 export type Invitation = Tables<"invitations">
 export type CheckinRegistryEntry = Tables<"checkin_registry">
 export type AuditLogEntry = Tables<"audit_log">
+export type Notification = Tables<"notifications">
 
 // ─── Document Types (custom API response shapes, not DB tables) ──────────────
 

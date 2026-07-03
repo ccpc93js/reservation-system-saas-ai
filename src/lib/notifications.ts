@@ -1,4 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/server";
+import type { Json } from "@/lib/types/database";
 
 export type NotificationType =
   | "checkin_submitted"
@@ -32,13 +33,13 @@ export async function notifyOrg(
         organization_id: organizationId,
         user_id: m.user_id,
         type,
-        data,
+        data: data as Json,
         link: link ?? null,
       }));
 
     if (rows.length === 0) return;
 
-    const { error } = await (service as any).from("notifications").insert(rows);
+    const { error } = await service.from("notifications").insert(rows);
     if (error) console.error("notifyOrg: insert failed", error);
   } catch (err) {
     console.error("notifyOrg: unexpected error", err);
