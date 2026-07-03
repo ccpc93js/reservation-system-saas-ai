@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
@@ -16,26 +17,26 @@ interface DuplicateMergeDialogProps {
 type SelectionType = "new" | "existing" | "combine";
 
 const GUEST_FIELDS = [
-  { key: "first_name", label: "First Name", type: "text" },
-  { key: "last_name", label: "Last Name", type: "text" },
-  { key: "email", label: "Email", type: "email" },
-  { key: "phone", label: "Phone", type: "tel" },
-  { key: "nationality", label: "Nationality", type: "text" },
-  { key: "date_of_birth", label: "Date of Birth", type: "date" },
-  { key: "gender", label: "Gender", type: "select" },
-  { key: "document_type", label: "Document Type", type: "select" },
-  { key: "document_number", label: "Document Number", type: "text" },
-  { key: "document_expiry", label: "Document Expiry", type: "date" },
-  { key: "document_issued_date", label: "Document Issued Date", type: "date" },
-  { key: "document_issued_place", label: "Document Issued Place", type: "text" },
-  { key: "place_of_birth", label: "Place of Birth", type: "text" },
-  { key: "country_of_birth", label: "Country of Birth", type: "text" },
-  { key: "place_of_residence", label: "Place of Residence", type: "text" },
-  { key: "country_of_residence", label: "Country of Residence", type: "text" },
-  { key: "jmbg", label: "JMBG", type: "text" },
-  { key: "unique_master_citizen", label: "Unique Master Citizen", type: "text" },
-  { key: "document_url", label: "Documents", type: "documents", combineOnly: true },
-  { key: "notes", label: "Notes", type: "textarea", combineOnly: true },
+  { key: "first_name", type: "text" },
+  { key: "last_name", type: "text" },
+  { key: "email", type: "email" },
+  { key: "phone", type: "tel" },
+  { key: "nationality", type: "text" },
+  { key: "date_of_birth", type: "date" },
+  { key: "gender", type: "select" },
+  { key: "document_type", type: "select" },
+  { key: "document_number", type: "text" },
+  { key: "document_expiry", type: "date" },
+  { key: "document_issued_date", type: "date" },
+  { key: "document_issued_place", type: "text" },
+  { key: "place_of_birth", type: "text" },
+  { key: "country_of_birth", type: "text" },
+  { key: "place_of_residence", type: "text" },
+  { key: "country_of_residence", type: "text" },
+  { key: "jmbg", type: "text" },
+  { key: "unique_master_citizen", type: "text" },
+  { key: "document_url", type: "documents", combineOnly: true },
+  { key: "notes", type: "textarea", combineOnly: true },
 ];
 
 export default function DuplicateMergeDialog({
@@ -45,6 +46,7 @@ export default function DuplicateMergeDialog({
   onMerge,
   onCancel,
 }: DuplicateMergeDialogProps) {
+  const t = useTranslations("duplicateMergeDialog");
   const [selections, setSelections] = useState<Record<string, SelectionType>>({});
   const [isMerging, setIsMerging] = useState(false);
   const [fullExistingGuest, setFullExistingGuest] = useState<any>(existingGuest);
@@ -123,13 +125,13 @@ export default function DuplicateMergeDialog({
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Merge failed");
+        throw new Error(result.error || t("toastMergeFailed"));
       }
 
-      toast.success("Guests merged successfully!");
+      toast.success(t("toastMerged"));
       onMerge(result);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Merge failed");
+      toast.error(error instanceof Error ? error.message : t("toastMergeFailed"));
     } finally {
       setIsMerging(false);
     }
@@ -140,7 +142,7 @@ export default function DuplicateMergeDialog({
     if (type === "documents") {
       try {
         const docs = typeof value === 'string' ? JSON.parse(value) : value;
-        return Array.isArray(docs) ? `${docs.length} document(s)` : "—";
+        return Array.isArray(docs) ? t("documentCount", { count: docs.length }) : "—";
       } catch {
         return "—";
       }
@@ -161,7 +163,7 @@ export default function DuplicateMergeDialog({
         >
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-lg font-semibold text-foreground">
-              Merge Duplicate Guests
+              {t("title")}
             </Dialog.Title>
             <button
               onClick={onCancel}
@@ -172,7 +174,7 @@ export default function DuplicateMergeDialog({
           </div>
 
           <p className="text-sm text-muted-foreground mb-6">
-            Duplicate guest detected. Choose which values to keep for each field.
+            {t("subtitle")}
           </p>
 
           {/* Fields Grid */}
@@ -186,7 +188,7 @@ export default function DuplicateMergeDialog({
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
-                      {field.label}
+                      {t(`fields.${field.key}`)}
                     </p>
 
                     <div className="grid grid-cols-3 gap-3">
@@ -206,7 +208,7 @@ export default function DuplicateMergeDialog({
                           className="mt-1"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="text-xs font-medium text-muted-foreground">New Guest</p>
+                          <p className="text-xs font-medium text-muted-foreground">{t("newGuest")}</p>
                           <p className="text-sm break-words" style={{ color: "hsl(var(--text))" }}>
                             {formatValue(newGuestData[field.key], field.type)}
                           </p>
@@ -229,7 +231,7 @@ export default function DuplicateMergeDialog({
                           className="mt-1"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="text-xs font-medium text-muted-foreground">Existing Guest</p>
+                          <p className="text-xs font-medium text-muted-foreground">{t("existingGuest")}</p>
                           <p className="text-sm break-words" style={{ color: "hsl(var(--text))" }}>
                             {formatValue(fullExistingGuest[field.key], field.type)}
                           </p>
@@ -253,8 +255,8 @@ export default function DuplicateMergeDialog({
                             className="mt-1"
                           />
                           <div className="min-w-0 flex-1">
-                            <p className="text-xs font-medium text-muted-foreground">Combine Both</p>
-                            <p className="text-xs text-emerald-600">Both values merged</p>
+                            <p className="text-xs font-medium text-muted-foreground">{t("combineBoth")}</p>
+                            <p className="text-xs text-emerald-600">{t("bothValuesMerged")}</p>
                           </div>
                         </label>
                       )}
@@ -271,20 +273,20 @@ export default function DuplicateMergeDialog({
             style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))" }}
           >
             <p className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
-              Merged Result Preview
+              {t("mergedResultPreview")}
             </p>
             <div className="text-sm space-y-1 text-muted-foreground">
               <p>
-                <strong>Name:</strong> {mergedPreview.first_name} {mergedPreview.last_name}
+                <strong>{t("nameLabel")}</strong> {mergedPreview.first_name} {mergedPreview.last_name}
               </p>
               {mergedPreview.document_type && (
                 <p>
-                  <strong>Document:</strong> {mergedPreview.document_type} {mergedPreview.document_number}
+                  <strong>{t("documentLabel")}</strong> {mergedPreview.document_type} {mergedPreview.document_number}
                 </p>
               )}
               {mergedPreview.document_url && (
                 <p>
-                  <strong>Documents:</strong>{" "}
+                  <strong>{t("documentsLabel")}</strong>{" "}
                   {formatValue(mergedPreview.document_url, "documents")}
                 </p>
               )}
@@ -298,14 +300,14 @@ export default function DuplicateMergeDialog({
               disabled={isMerging}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-background text-foreground border border-border hover:bg-muted disabled:opacity-50"
             >
-              Cancel
+              {t("cancel")}
             </button>
             <button
               onClick={handleMerge}
               disabled={isMerging}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              {isMerging ? "Merging..." : "Confirm Merge"}
+              {isMerging ? t("mergingEllipsis") : t("confirmMerge")}
             </button>
           </div>
         </Dialog.Content>

@@ -1,3 +1,470 @@
+## [1048b63] - 2026-07-03
+
+feat: Phase 16 - translate document upload, merge/OCR dialogs, cancel/checkout dialogs
+
+Final batch of the 8-file gap list found by a full next-intl audit
+sweep (grep -L "next-intl" across src/app and src/components):
+
+- src/components/guests/document-upload.tsx
+- src/components/guests/duplicate-merge-dialog.tsx
+- src/components/guests/ocr-extraction-dialog.tsx
+- src/components/reservations/cancel-reservation-dialog.tsx
+- src/components/reservations/checkout-dialog.tsx
+
+duplicate-merge-dialog.tsx and ocr-extraction-dialog.tsx both stripped
+the English `label` field off their GUEST_FIELDS arrays in favor of
+dynamic `t(`fields.${key}`)` lookups (20 keys for merge, 10 for OCR).
+cancel-reservation-dialog.tsx converted CANCELLATION_REASONS to a
+plain value array + `reason_${value}` lookups, and uses t.rich() to
+bold the guest name in the cancellation warning.
+
+119 new keys (documentUpload, duplicateMergeDialog,
+ocrExtractionDialog, cancelReservationDialog, checkoutDialog) added to
+all 11 locale files, 1111 keys total. Verified: identical key structure
+across every locale (script diff), every literal t() call resolves
+against en.json (regex + resolution script), dynamic template-literal
+lookups and t.rich() calls spot-checked manually, npx tsc --noEmit
+clean, npm run build passes (47/47 static pages, exit 0).
+
+This closes the full-app i18n audit for Phase 16.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [0358dd3] - 2026-07-03
+
+feat: Phase 16 - translate demo banner, welcome modal, check-in link button
+
+- Found via a full re-audit after the channels gap: [slug]/layout.tsx
+  demo banner, demo-welcome-modal.tsx (first-visit popup), and
+  check-in-link-button.tsx (dashboard/reservation-drawer QR+link
+  widget) had no next-intl coverage at all
+- Fixed a real bug in demo-welcome-modal.tsx: suggestion clicks did
+  `window.location.href = /${slug}/${href}` with no locale prefix,
+  so clicking a suggestion from e.g. /zh/... would drop back to
+  unprefixed (default English) routing. Now prefixes with the
+  current locale via useLocale().
+- 29 new keys (demoBanner, demoWelcome, checkInLinkButton) across all
+  11 languages, 992 keys total - verified identical structure + every
+  literal t() call resolved against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3c6f8ea] - 2026-07-03
+
+feat: Phase 16 - translate channel manager page
+
+- channels-client.tsx + channels/page.tsx: header/connection counts,
+  paywall gate, per-bed platform badges, sync/edit/delete actions,
+  relative "synced X ago" timestamps, inline edit form, add-platform
+  forms (both the connected-bed and unconnected-bed variants), all
+  toasts
+- Brand names (Booking.com, Airbnb, VRBO, Expedia, Hostelworld) stay
+  untranslated in every language, matching how currency codes and
+  plan names were handled elsewhere - only the two generic platform
+  labels ("Direct", "Other") translate
+- This section wasn't part of the original Phase 16 plan doc (guests/
+  rooms/settings/guest-portal/analytics/checkin-history) - found
+  missing when the user checked the live Chinese UI after deploy
+- 49 new keys (channels namespace) across all 11 languages, 963 keys
+  total - verified identical structure + every literal t() call
+  resolved against en.json via script; full production build passes
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3c6f8ea] - 2026-07-03
+
+feat: Phase 16 - translate channel manager page
+
+- channels-client.tsx + channels/page.tsx: header/connection counts,
+  paywall gate, per-bed platform badges, sync/edit/delete actions,
+  relative "synced X ago" timestamps, inline edit form, add-platform
+  forms (both the connected-bed and unconnected-bed variants), all
+  toasts
+- Brand names (Booking.com, Airbnb, VRBO, Expedia, Hostelworld) stay
+  untranslated in every language, matching how currency codes and
+  plan names were handled elsewhere - only the two generic platform
+  labels ("Direct", "Other") translate
+- This section wasn't part of the original Phase 16 plan doc (guests/
+  rooms/settings/guest-portal/analytics/checkin-history) - found
+  missing when the user checked the live Chinese UI after deploy
+- 49 new keys (channels namespace) across all 11 languages, 963 keys
+  total - verified identical structure + every literal t() call
+  resolved against en.json via script; full production build passes
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3c6f8ea] - 2026-07-03
+
+feat: Phase 16 - translate channel manager page
+
+- channels-client.tsx + channels/page.tsx: header/connection counts,
+  paywall gate, per-bed platform badges, sync/edit/delete actions,
+  relative "synced X ago" timestamps, inline edit form, add-platform
+  forms (both the connected-bed and unconnected-bed variants), all
+  toasts
+- Brand names (Booking.com, Airbnb, VRBO, Expedia, Hostelworld) stay
+  untranslated in every language, matching how currency codes and
+  plan names were handled elsewhere - only the two generic platform
+  labels ("Direct", "Other") translate
+- This section wasn't part of the original Phase 16 plan doc (guests/
+  rooms/settings/guest-portal/analytics/checkin-history) - found
+  missing when the user checked the live Chinese UI after deploy
+- 49 new keys (channels namespace) across all 11 languages, 963 keys
+  total - verified identical structure + every literal t() call
+  resolved against en.json via script; full production build passes
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3c6f8ea] - 2026-07-03
+
+feat: Phase 16 - translate channel manager page
+
+- channels-client.tsx + channels/page.tsx: header/connection counts,
+  paywall gate, per-bed platform badges, sync/edit/delete actions,
+  relative "synced X ago" timestamps, inline edit form, add-platform
+  forms (both the connected-bed and unconnected-bed variants), all
+  toasts
+- Brand names (Booking.com, Airbnb, VRBO, Expedia, Hostelworld) stay
+  untranslated in every language, matching how currency codes and
+  plan names were handled elsewhere - only the two generic platform
+  labels ("Direct", "Other") translate
+- This section wasn't part of the original Phase 16 plan doc (guests/
+  rooms/settings/guest-portal/analytics/checkin-history) - found
+  missing when the user checked the live Chinese UI after deploy
+- 49 new keys (channels namespace) across all 11 languages, 963 keys
+  total - verified identical structure + every literal t() call
+  resolved against en.json via script; full production build passes
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [41b394e] - 2026-07-03
+
+feat: Phase 16 - translate analytics + guest book, closes Phase 16
+
+- analytics-client.tsx + paywall.tsx: charts, empty states, paywall
+  gate copy (feature name/description passed in from analytics/page.tsx
+  via getTranslations, everything else inside Paywall itself)
+- checkin-history-client.tsx (Guest Book / Serbian compliance
+  registry): header, search, refresh/export buttons, at-limit banner
+  (t.rich for the bold plan name), empty state, full table, the large
+  edit dialog (personal info / identity document / stay details
+  sections), both searchable country dropdowns
+- Deliberately left the CSV export function's column headers and
+  DOC_LABELS/SERVICE_LABELS value maps in English - it's an audit/
+  compliance export (JMBG, official ID fields), not screen UI. Added
+  separate translated docType_*/serviceType_* lookups for on-screen
+  display only, so the exported file's structure doesn't shift per
+  interface language while the visible table shows the current locale.
+- 80 new keys (paywall, analytics, checkinHistory) across all 11
+  languages, 914 keys total - verified identical structure + every
+  literal t() call resolved against en.json via script; full
+  production build passes (14s, 47 routes)
+- This closes out Phase 16 multi-language support: every staff-facing
+  and guest-facing section of the app now has full i18n coverage
+  across 11 languages (en/zh/hi/es/fr/ar/bn/pt/ru/ja/sr)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [ce5ddbb] - 2026-07-03
+
+feat: Phase 16 - translate guest portal check-in flow
+
+- check-in-form.tsx: 4-step wizard (details/photos/review/submit),
+  all validation messages, file-upload errors, searchable
+  nationality dropdown, document type lookup, review summary,
+  submission notice - the highest-priority section per the i18n plan
+  since real international guests use this without any staff login
+- check-in-success.tsx: confirmation screen; also fixed a hardcoded
+  toLocaleDateString("en-US", ...) to use the active locale so the
+  check-in date actually renders in the guest's language
+- Fixed a real structural bug found while translating: guest-portal/
+  layout.tsx rendered its own nested <html>/<body>, left over from
+  before this route was moved under [locale] - the root layout.tsx
+  already renders <html>/<body>, so this produced invalid nested
+  markup on every guest-portal page load. Converted to a plain div
+  wrapper carrying the same background styling.
+- next.config.ts: added outputFileTracingRoot to pin Next's file
+  tracing to this project. A stray package-lock.json in the parent
+  C:\CCPCjs directory (shared by unrelated sibling projects) was
+  making Next infer that as the monorepo root and trace their entire
+  node_modules trees on every build - harmless correctness-wise but
+  worth fixing since it also affects what gets traced into the
+  Vercel serverless bundle.
+- 73 new keys (guestPortal.checkInForm + guestPortal.checkInSuccess)
+  across all 11 languages, 834 keys total - verified identical
+  structure + every literal t() call resolved against en.json via
+  script; full production build passes (45s, 47 routes)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [8f5039a] - 2026-07-02
+
+feat: Phase 16 - translate settings/property page, closes out settings
+
+- property-settings-client.tsx: branding (logo upload, accent color
+  picker with 9 named presets via t(`color_${key}`)), basic info
+  (searchable country/city dropdowns via country-state-city), online
+  presence, operations (check-in/out time, timezone, currency), all
+  toasts
+- logo-crop-modal.tsx: crop dialog title/hints/guidelines, aspect
+  ratio switcher (1:1/4:3/free), live preview labels, actions
+- Currency codes (EUR, USD...) and IANA timezone names left untouched
+  - they're identifiers, not display copy
+- 91 new keys (settings.property + settings.property.cropModal)
+  across all 11 languages, 761 keys total - verified identical
+  structure + every literal t() call resolved against en.json via
+  script
+- This closes out the entire settings section (team, billing,
+  property - 6 components across 3 commits)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [1821d47] - 2026-07-02
+
+feat: Phase 16 - translate settings/billing page
+
+- billing-client.tsx: payment-required gate banner (t.rich for the
+  bold plan name), current plan card + usage bars, plan comparison
+  cards with per-plan feature bullets, upgrade/downgrade buttons, all
+  toasts
+- Per-plan feature lists moved from a hardcoded array on each PLANS
+  entry to messages/*.json (settings.billing.features.{free,pro,scale})
+  and read via t.raw() - next-intl supports raw JSON array values, not
+  just strings, so this keeps the bullets translated without a bespoke
+  lookup scheme
+- PLAN_NAMES/PLAN_PRICES (lib/plan.ts) intentionally left untouched -
+  they're product/pricing constants, not UI copy
+- 25 new keys (settings.billing, including the 3 features arrays)
+  across all 11 languages, 686 keys total - verified identical
+  structure (including matching array lengths per locale) + every
+  literal t() call resolved against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3a1a4fb] - 2026-07-02
+
+feat: Phase 16 - translate settings/team page
+
+- team-settings-client.tsx + team/page.tsx: member/invite counts
+  (ICU plural), invite form, role dropdowns + badges (dynamic
+  t(`role_${r}`) lookup covering owner/manager/admin/staff - admin
+  isn't offered in the invite dropdown but is a valid legacy role per
+  the API's permission checks, so it needed a translation too),
+  members list, pending invitations list, all toasts/confirms
+- 31 new keys (settings.team) across all 11 languages, 650 keys total
+  - verified identical structure + every static t() call resolved
+  against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [528f8da] - 2026-07-02
+
+feat: Phase 16 - translate beds section, closes out rooms page
+
+- beds-list-client.tsx + beds-dialog.tsx: search, sortable table,
+  status badges, empty states, pagination, full create/edit form
+  (room, name, position, active toggle), delete confirm/toasts
+- 40 new keys (rooms.beds + rooms.beds.dialog) across all 11
+  languages, 619 keys total - verified identical structure + every
+  static t() call resolved against en.json via script
+- This closes out the entire rooms page (room types + rooms + beds,
+  6 components translated across 3 commits)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [60f0b45] - 2026-07-02
+
+feat: Phase 16 - translate rooms section
+
+- rooms-list-client.tsx + rooms-dialog.tsx: search, sortable table,
+  empty states, pagination, full create/edit form (room type, name,
+  floor, notes), delete confirm/toasts
+- Fixed a real pre-existing bug found while translating: the table
+  header read "Floor, Room Type" but the row cells rendered Room Type
+  then Floor, so data showed under the wrong column - reordered cells
+  to match headers
+- 44 new keys (rooms.rooms + rooms.rooms.dialog) across all 11
+  languages, 579 keys total - verified identical structure + every
+  static t() call resolved against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [65307b1] - 2026-07-02
+
+feat: Phase 16 - translate rooms page + room types section
+
+- rooms/page.tsx: outer page shell (title, unauthorized/no-org
+  states, 3 collapsible section headers with ICU-plural counts)
+- room-types-list-client.tsx + room-types-dialog.tsx: search, sortable
+  table, empty states, pagination, full create/edit form (name, type,
+  gender, capacity, base price, description), delete confirm/toasts
+- Same value-array + t(`prefix_${v}`) lookup pattern as the guest
+  dialog's DOCUMENT_TYPES/GENDERS for ROOM_TYPE_VALUES/GENDER_VALUES
+- Renamed the dialog's ROOM_TYPES.map((t) => ...) loop variable to
+  `rt` - it shadowed the new useTranslations() `t` function
+- 57 new keys (rooms namespace incl. nested rooms.types +
+  rooms.types.dialog) across all 11 languages, 540 keys total -
+  verified identical structure + every static t() call resolved
+  against en.json via script
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [31e0934] - 2026-07-02
+
+feat: Phase 16 - translate guest create/edit dialog
+
+- guest-dialog.tsx: full create/edit form (name, contact, gender,
+  nationality with searchable country dropdown, date of birth,
+  place/country of birth+residence, JMBG), collapsible document info
+  section, OCR upload prompt, document upload, duplicate-guest alert
+  with merge/use-existing actions, danger zone delete, all toasts
+- Kept DOCUMENT_TYPES/GENDERS as plain value arrays (was label pairs)
+  and translate the displayed <option> label via a `t(`docType_${v}`)`
+  / `t(`gender_${v}`)` lookup, so the underlying form value sent to
+  the API is untouched - same pattern used for pendingCheckIns
+  rejection reasons in an earlier stage
+- 69 new keys under guests.dialog across all 11 languages (483 keys
+  total) - verified identical structure across all 11 locale files;
+  static t("...") calls cross-checked against en.json via script,
+  dynamic t(`prefix_${v}`) calls checked manually since the regex
+  verification script only resolves literal string arguments
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [1f78cb3] - 2026-07-02
+
+feat: Phase 16 - translate guest directory list page
+
+- guest-list-client.tsx + guests/page.tsx: title, search, sortable
+  table headers, empty states, row actions, delete confirm/toasts,
+  pagination summary
+- 25 new message keys across all 11 languages (new guests namespace,
+  413 keys total) - verified identical structure across all 11 locale
+  files + every t() call cross-checked against en.json via script
+- guest-dialog.tsx (create/edit form, OCR scan, document upload) is a
+  separate, much larger component - left untranslated for now, next
+  in this stage
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3ccd54c] - 2026-07-02
+
+fix: upgrade Next.js 15.3.2 -> 15.5.20, fixes Vercel security gate
+
+Vercel now hard-blocks builds on Next.js versions with known CVEs
+("Vulnerable version of Next.js detected"). 15.3.2 was affected by
+several (RCE via React flight protocol, cache poisoning, middleware
+SSRF, among others) - all patched in 15.5.x. Same major version, no
+breaking changes expected; verified with a full typecheck + build.
+
+Also ran `npm audit fix` for a moderate js-yaml DoS advisory picked up
+along the way. Left one remaining moderate postcss advisory nested
+inside Next's own bundled tooling - npm's suggested fix would downgrade
+Next to 9.3.3, which isn't a real fix.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3ccd54c] - 2026-07-02
+
+fix: upgrade Next.js 15.3.2 -> 15.5.20, fixes Vercel security gate
+
+Vercel now hard-blocks builds on Next.js versions with known CVEs
+("Vulnerable version of Next.js detected"). 15.3.2 was affected by
+several (RCE via React flight protocol, cache poisoning, middleware
+SSRF, among others) - all patched in 15.5.x. Same major version, no
+breaking changes expected; verified with a full typecheck + build.
+
+Also ran `npm audit fix` for a moderate js-yaml DoS advisory picked up
+along the way. Left one remaining moderate postcss advisory nested
+inside Next's own bundled tooling - npm's suggested fix would downgrade
+Next to 9.3.3, which isn't a real fix.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3ccd54c] - 2026-07-02
+
+fix: upgrade Next.js 15.3.2 -> 15.5.20, fixes Vercel security gate
+
+Vercel now hard-blocks builds on Next.js versions with known CVEs
+("Vulnerable version of Next.js detected"). 15.3.2 was affected by
+several (RCE via React flight protocol, cache poisoning, middleware
+SSRF, among others) - all patched in 15.5.x. Same major version, no
+breaking changes expected; verified with a full typecheck + build.
+
+Also ran `npm audit fix` for a moderate js-yaml DoS advisory picked up
+along the way. Left one remaining moderate postcss advisory nested
+inside Next's own bundled tooling - npm's suggested fix would downgrade
+Next to 9.3.3, which isn't a real fix.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [5308ec0] - 2026-07-02
+
+fix: normalize NEXT_PUBLIC_SITE_URL when scheme is missing
+
+Vercel deploy failed with "TypeError: Invalid URL" because
+NEXT_PUBLIC_SITE_URL was set to "hostmagsmart.com" (no https://) in the
+dashboard, and next.config.ts's `new URL(...)` call for
+serverActions.allowedOrigins throws on a bare hostname.
+
+Six other call sites had the same latent bug (email.ts, qr-code.ts,
+billing checkout/portal, channels sync-all, team invite) - they just
+happened to build a string instead of calling `new URL()`, so they'd
+have silently produced broken links (e.g. "hostmagsmart.com/invite/...")
+instead of crashing the build.
+
+Added src/lib/site-url.ts with a single getSiteOrigin() helper that
+normalizes the scheme, and pointed all six at it instead of repeating
+the env var fallback chain ad hoc.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [70b25cc] - 2026-07-02
+
+chore: drop Vercel cron config, rely on manual channel sync
+
+Hobby plan only allows daily cron schedules; the existing */15 * * * *
+config would fail to deploy. /api/channels/sync-all already supports
+authenticated user calls (not just the cron Bearer token), and the
+channels UI already has a manual "sync now" button wired to it, so
+dropping the cron entirely doesn't lose functionality for now.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [9e1da14] - 2026-07-02
+
+chore: prepare codebase for Vercel deployment
+
+- Replace stale hand-written src/lib/types/database.ts (a Phase 1
+  starter never regenerated) with real Supabase-generated types
+  covering every table/column added since. Was masking ~250 type
+  errors as `never` across 32 files, blocking `next build`.
+- Upgrade @supabase/ssr 0.6.1 -> 0.12.0: the old version's bundled
+  types didn't match @supabase/supabase-js 2.106.1's schema shape,
+  silently collapsing every chained `.from().select().eq()...` query
+  result to `never[]` once 2+ filters were chained without an `any`
+  escape hatch.
+- Fix real bugs the new strict types surfaced: scan_sessions insert
+  used nonexistent `user_id` (should be `created_by`) and never set
+  the required unique `token`, so the OCR audit-trail insert silently
+  failed every call; reservation_items has no `status` column, so
+  occupancy/revenue queries filtering on it were broken (fixed via
+  `reservations!inner(status)` joins); document-upload.tsx read
+  `doc.filePath` off a type that never declared it; demo seed data
+  passed string floors instead of numbers and omitted the (trigger-
+  populated) reservation_number.
+- Fix Next.js 15 async params/searchParams (Promise<{...}>, awaited)
+  in 4 route handlers that predated the Next 15 upgrade.
+- Consolidate .env.example with all real vars, remove stale
+  .env.local.example.
+- next.config.ts serverActions.allowedOrigins and email.ts origin
+  derivation now read NEXT_PUBLIC_SITE_URL/VERCEL_URL instead of
+  being hardcoded to localhost.
+
+npm run build now completes with zero type errors.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [Unreleased] - 2026-07-02
 
 chore: prepare codebase for Vercel deployment

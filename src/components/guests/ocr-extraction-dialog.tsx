@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, AlertCircle, CheckCircle2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
@@ -20,16 +21,16 @@ interface OCRExtractionDialogProps {
 }
 
 const GUEST_FIELDS = [
-  { key: "first_name", label: "First Name", type: "text" },
-  { key: "last_name", label: "Last Name", type: "text" },
-  { key: "date_of_birth", label: "Date of Birth", type: "date" },
-  { key: "gender", label: "Gender", type: "select", options: ["M", "F", "Other"] },
-  { key: "nationality", label: "Nationality", type: "text" },
-  { key: "document_number", label: "Document Number", type: "text" },
-  { key: "document_expiry", label: "Document Expiry", type: "date" },
-  { key: "document_type", label: "Document Type", type: "text" },
-  { key: "place_of_birth", label: "Place of Birth", type: "text" },
-  { key: "country_of_birth", label: "Country of Birth", type: "text" },
+  { key: "first_name", type: "text" },
+  { key: "last_name", type: "text" },
+  { key: "date_of_birth", type: "date" },
+  { key: "gender", type: "select", options: ["M", "F", "Other"] },
+  { key: "nationality", type: "text" },
+  { key: "document_number", type: "text" },
+  { key: "document_expiry", type: "date" },
+  { key: "document_type", type: "text" },
+  { key: "place_of_birth", type: "text" },
+  { key: "country_of_birth", type: "text" },
 ];
 
 const getConfidenceColor = (confidence: number): string => {
@@ -53,6 +54,7 @@ export default function OCRExtractionDialog({
   isLoading,
   onUploadBackSide,
 }: OCRExtractionDialogProps) {
+  const t = useTranslations("ocrExtractionDialog");
   const [correctedData, setCorrectedData] = useState<Record<string, any>>(
     extractedData.extractedFields
   );
@@ -90,13 +92,13 @@ export default function OCRExtractionDialog({
           const result = await response.json();
 
           if (!response.ok) {
-            throw new Error(result.error || "Failed to extract back side data");
+            throw new Error(result.error || t("errorExtractBackSide"));
           }
 
           // Merge back side data with front side
           handleMergeBackSideData(result.extractedFields);
         } catch (error) {
-          const errorMsg = error instanceof Error ? error.message : "Failed to extract back side";
+          const errorMsg = error instanceof Error ? error.message : t("errorExtractBackSide");
           toast.error(errorMsg);
         } finally {
           setIsExtractingBackSide(false);
@@ -104,7 +106,7 @@ export default function OCRExtractionDialog({
       };
       reader.readAsDataURL(file);
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : "Failed to extract back side";
+      const errorMsg = error instanceof Error ? error.message : t("errorExtractBackSide");
       toast.error(errorMsg);
       setIsExtractingBackSide(false);
     }
@@ -121,7 +123,7 @@ export default function OCRExtractionDialog({
     });
     setCorrectedData(merged);
     setShowBackSideUpload(false);
-    toast.success("Back side data merged!");
+    toast.success(t("toastBackSideMerged"));
   };
 
   const getFilledPercentage = () => {
@@ -148,10 +150,10 @@ export default function OCRExtractionDialog({
           <div className="flex items-center justify-between mb-4">
             <div>
               <Dialog.Title className="text-lg font-semibold text-foreground">
-                Review Extracted Data
+                {t("title")}
               </Dialog.Title>
               <p className="text-xs text-muted-foreground mt-1">
-                {getFilledPercentage()}% of fields completed
+                {t("fieldsCompleted", { percent: getFilledPercentage() })}
               </p>
             </div>
             <button
@@ -170,7 +172,7 @@ export default function OCRExtractionDialog({
                 <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-semibold text-amber-900 mb-1">
-                    OCR Warnings
+                    {t("ocrWarnings")}
                   </p>
                   <ul className="text-sm text-amber-800 space-y-1">
                     {extractedData.warnings.map((warning, i) => (
@@ -186,7 +188,7 @@ export default function OCRExtractionDialog({
             {/* Image Preview */}
             <div>
               <p className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
-                Document Preview
+                {t("documentPreview")}
               </p>
               <div
                 className="rounded-lg border overflow-hidden bg-muted"
@@ -195,7 +197,7 @@ export default function OCRExtractionDialog({
                 {imageUrl ? (
                   <img
                     src={imageUrl}
-                    alt="Document preview"
+                    alt={t("documentPreviewAlt")}
                     className="w-full h-auto max-h-96 object-contain"
                     onError={(e) => {
                       console.error("Image failed to load:", imageUrl);
@@ -204,7 +206,7 @@ export default function OCRExtractionDialog({
                   />
                 ) : (
                   <div className="w-full h-96 flex items-center justify-center text-muted-foreground">
-                    No image provided
+                    {t("noImageProvided")}
                   </div>
                 )}
               </div>
@@ -213,7 +215,7 @@ export default function OCRExtractionDialog({
             {/* Extracted Fields */}
             <div>
               <p className="text-sm font-medium mb-3" style={{ color: "hsl(var(--text))" }}>
-                Extracted Fields (Confidence Score)
+                {t("extractedFieldsConfidence")}
               </p>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {GUEST_FIELDS.map((field) => {
@@ -245,7 +247,7 @@ export default function OCRExtractionDialog({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
                             <label className="text-xs font-medium" style={{ color: "hsl(var(--text))" }}>
-                              {field.label}
+                              {t(`fields.${field.key}`)}
                             </label>
                             <span className={`text-xs font-medium ${getConfidenceColor(confidence)}`}>
                               {displayConfidence}%
@@ -263,10 +265,10 @@ export default function OCRExtractionDialog({
                                 border: "1px solid",
                               }}
                             >
-                              <option value="">Select...</option>
+                              <option value="">{t("selectEllipsis")}</option>
                               {field.options?.map((opt) => (
                                 <option key={opt} value={opt}>
-                                  {opt}
+                                  {opt === "Other" ? t("genderOther") : opt}
                                 </option>
                               ))}
                             </select>
@@ -297,20 +299,20 @@ export default function OCRExtractionDialog({
           {showBackSideUpload && (
             <div className="mt-4 p-4 rounded-lg border border-primary/20 bg-primary/5">
               <p className="text-sm font-medium text-foreground mb-3">
-                Upload ID Back Side to Extract Missing Fields
+                {t("uploadBackSideTitle")}
               </p>
               {isExtractingBackSide ? (
                 <div className="border-2 border-dashed border-primary/30 rounded-lg p-8 text-center">
                   <div className="flex flex-col items-center gap-3">
                     <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary/30 border-t-primary"></div>
-                    <p className="text-sm text-primary font-medium">Extracting back side data...</p>
+                    <p className="text-sm text-primary font-medium">{t("extractingBackSideEllipsis")}</p>
                   </div>
                 </div>
               ) : (
                 <label className="block cursor-pointer">
                   <div className="border-2 border-dashed border-primary/30 rounded-lg p-4 text-center hover:bg-primary/10 transition-colors">
                     <p className="text-sm text-primary/80">
-                      Click to upload back side image
+                      {t("clickToUploadBackSide")}
                     </p>
                   </div>
                   <input
@@ -332,7 +334,7 @@ export default function OCRExtractionDialog({
               disabled={isLoading}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {showBackSideUpload ? "Cancel Back Side Upload" : "📄 Upload Back Side (Optional)"}
+              {showBackSideUpload ? t("cancelBackSideUpload") : t("uploadBackSideOptional")}
             </button>
             <div className="flex gap-2">
               <button
@@ -340,14 +342,14 @@ export default function OCRExtractionDialog({
                 disabled={isLoading}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-background text-foreground border border-border hover:bg-muted disabled:opacity-50"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={handleApply}
                 disabled={isLoading}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                {isLoading ? "Processing..." : "Apply Extracted Data"}
+                {isLoading ? t("processingEllipsis") : t("applyExtractedData")}
               </button>
             </div>
           </div>

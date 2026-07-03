@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, DollarSign } from "lucide-react";
 import { toast } from "sonner";
@@ -32,6 +33,7 @@ export default function CheckoutDialog({
   onComplete,
   onCancel,
 }: CheckoutDialogProps) {
+  const t = useTranslations("checkoutDialog");
   const [isLoading, setIsLoading] = useState(false);
   const [markAsPaid, setMarkAsPaid] = useState(true);
   const balanceDue = totalAmount - paidAmount;
@@ -49,15 +51,15 @@ export default function CheckoutDialog({
 
       if (!response.ok) {
         const error = await response.json();
-        toast.error(error.error || "Failed to check out");
+        toast.error(error.error || t("toastCheckoutFailed"));
         return;
       }
 
-      toast.success("Guest checked out successfully");
+      toast.success(t("toastCheckedOut"));
       onComplete();
     } catch (error) {
       console.error("Checkout error:", error);
-      toast.error("Failed to check out guest");
+      toast.error(t("toastCheckoutFailedGuest"));
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +71,7 @@ export default function CheckoutDialog({
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[9999]" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-surface p-6 shadow-lg z-[10000]">
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-lg font-bold">Check Out Guest</Dialog.Title>
+            <Dialog.Title className="text-lg font-bold">{t("title")}</Dialog.Title>
             <Dialog.Close
               onClick={onCancel}
               className="text-muted-foreground hover:text-foreground"
@@ -82,15 +84,15 @@ export default function CheckoutDialog({
             {/* Guest Info */}
             <div className="rounded-lg bg-muted/50 p-4 space-y-2">
               <div className="text-sm">
-                <span className="font-medium text-muted-foreground">Guest:</span>
+                <span className="font-medium text-muted-foreground">{t("guestLabel")}</span>
                 <span className="ml-2 text-foreground font-semibold">{guestName}</span>
               </div>
               <div className="text-sm">
-                <span className="font-medium text-muted-foreground">Reservation #:</span>
+                <span className="font-medium text-muted-foreground">{t("reservationNumberLabel")}</span>
                 <span className="ml-2 text-foreground font-mono">{reservationNumber}</span>
               </div>
               <div className="text-sm">
-                <span className="font-medium text-muted-foreground">Room / Bed:</span>
+                <span className="font-medium text-muted-foreground">{t("roomBedLabel")}</span>
                 <span className="ml-2 text-foreground">{roomName} - {bedName}</span>
               </div>
             </div>
@@ -98,11 +100,11 @@ export default function CheckoutDialog({
             {/* Stay Summary */}
             <div className="rounded-lg bg-muted/50 p-4 space-y-2">
               <div className="text-sm">
-                <span className="font-medium text-muted-foreground">Check-in:</span>
+                <span className="font-medium text-muted-foreground">{t("checkInLabel")}</span>
                 <span className="ml-2 text-foreground">{checkIn}</span>
               </div>
               <div className="text-sm">
-                <span className="font-medium text-muted-foreground">Check-out:</span>
+                <span className="font-medium text-muted-foreground">{t("checkOutLabel")}</span>
                 <span className="ml-2 text-foreground">{checkOut}</span>
               </div>
             </div>
@@ -111,19 +113,19 @@ export default function CheckoutDialog({
             <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 space-y-3">
               <div className="flex items-center gap-2 text-emerald-700 font-semibold">
                 <DollarSign className="w-4 h-4" />
-                <span>Payment Summary</span>
+                <span>{t("paymentSummary")}</span>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Total Amount:</span>
+                  <span className="text-muted-foreground">{t("totalAmountLabel")}</span>
                   <span className="font-semibold">${totalAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Already Paid:</span>
+                  <span className="text-muted-foreground">{t("alreadyPaidLabel")}</span>
                   <span className="font-semibold">${paidAmount.toFixed(2)}</span>
                 </div>
                 <div className="border-t border-emerald-200 pt-2 flex justify-between">
-                  <span className="text-emerald-700 font-semibold">Balance Due:</span>
+                  <span className="text-emerald-700 font-semibold">{t("balanceDueLabel")}</span>
                   <span className="text-emerald-700 font-bold">${balanceDue.toFixed(2)}</span>
                 </div>
               </div>
@@ -139,7 +141,7 @@ export default function CheckoutDialog({
                 className="rounded border-border"
               />
               <label htmlFor="mark-paid" className="text-sm cursor-pointer">
-                Mark as paid in full
+                {t("markAsPaidInFull")}
               </label>
             </div>
 
@@ -150,14 +152,14 @@ export default function CheckoutDialog({
                 disabled={isLoading}
                 className="flex-1 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-muted disabled:opacity-50"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={handleCheckout}
                 disabled={isLoading}
                 className="flex-1 px-3 py-2 rounded-md bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50"
               >
-                {isLoading ? "Checking out..." : "Confirm Check-Out"}
+                {isLoading ? t("checkingOutEllipsis") : t("confirmCheckOut")}
               </button>
             </div>
           </div>

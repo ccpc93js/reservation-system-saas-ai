@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Upload, X, FileText, AlertCircle, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { DocumentMetadata, UploadDocumentResponse } from "@/lib/types/database";
@@ -21,6 +22,7 @@ export default function DocumentUpload({
   onExtractedData,
   onError,
 }: DocumentUploadProps) {
+  const t = useTranslations("documentUpload");
   const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -71,7 +73,7 @@ export default function DocumentUpload({
   const handleFileSelect = async (file: File) => {
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      const error = "Only JPG, PNG, and PDF files are allowed";
+      const error = t("errorInvalidType");
       toast.error(error);
       onError?.(error);
       return;
@@ -79,7 +81,7 @@ export default function DocumentUpload({
 
     // Validate file size
     if (file.size > MAX_SIZE) {
-      const error = "File must be smaller than 10MB";
+      const error = t("errorTooLarge");
       toast.error(error);
       onError?.(error);
       return;
@@ -103,7 +105,7 @@ export default function DocumentUpload({
       await uploadFile(file);
     } else {
       // For new guests, just get the preview for OCR - don't upload yet
-      toast.success("Image ready! Click 'Extract Data' to auto-fill the form");
+      toast.success(t("toastImageReady"));
     }
   };
 
@@ -122,7 +124,7 @@ export default function DocumentUpload({
       const result = (await response.json()) as UploadDocumentResponse & { error?: string };
 
       if (!response.ok) {
-        throw new Error(result.error || "Upload failed");
+        throw new Error(result.error || t("errorUploadFailed"));
       }
 
       setUploadedFile({
@@ -138,10 +140,10 @@ export default function DocumentUpload({
         type: 'application/octet-stream'
       }]);
 
-      toast.success("Document uploaded successfully!");
+      toast.success(t("toastUploaded"));
       onUploadComplete?.(result.url, result.fileName);
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : "Upload failed";
+      const errorMsg = error instanceof Error ? error.message : t("errorUploadFailed");
       toast.error(errorMsg);
       onError?.(errorMsg);
       setPreview(null);
@@ -195,14 +197,14 @@ export default function DocumentUpload({
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "OCR extraction failed");
+        throw new Error(result.error || t("errorOcrFailed"));
       }
 
       setExtractionData(result);
       setLastExtractedImageUrl(imageToExtract);
       setShowExtractDialog(true);
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : "OCR extraction failed";
+      const errorMsg = error instanceof Error ? error.message : t("errorOcrFailed");
       toast.error(errorMsg);
       onError?.(errorMsg);
     } finally {
@@ -213,7 +215,7 @@ export default function DocumentUpload({
   const handleExtractedDataApply = (correctedData: Record<string, any>) => {
     setShowExtractDialog(false);
     onExtractedData?.(correctedData);
-    toast.success("Data extracted and applied!");
+    toast.success(t("toastExtractedApplied"));
   };
 
   const handleExtractFromDoc = async (imageUrl: string) => {
@@ -225,12 +227,12 @@ export default function DocumentUpload({
         body: JSON.stringify({ imageUrl }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "OCR extraction failed");
+      if (!response.ok) throw new Error(result.error || t("errorOcrFailed"));
       setExtractionData(result);
       setLastExtractedImageUrl(imageUrl);
       setShowExtractDialog(true);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "OCR extraction failed");
+      toast.error(error instanceof Error ? error.message : t("errorOcrFailed"));
     } finally {
       setIsExtracting(false);
     }
@@ -240,10 +242,10 @@ export default function DocumentUpload({
     return (
       <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center space-y-2">
         <Upload className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
-        <p className="text-sm font-medium text-foreground">Document upload disabled in demo</p>
+        <p className="text-sm font-medium text-foreground">{t("disabledInDemo")}</p>
         <p className="text-xs text-muted-foreground">
-          <a href="/signup" className="text-primary hover:underline font-medium">Create a free account</a>
-          {" "}to enable ID scanning and document uploads.
+          <a href="/signup" className="text-primary hover:underline font-medium">{t("createFreeAccount")}</a>
+          {" "}{t("toEnableScanning")}
         </p>
       </div>
     );
@@ -279,10 +281,10 @@ export default function DocumentUpload({
             <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
             <div>
               <p className="text-sm font-medium" style={{ color: "hsl(var(--text))" }}>
-                {isUploading ? "Uploading..." : "Drop file here or click to select"}
+                {isUploading ? t("uploadingEllipsis") : t("dropOrClick")}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                JPG, PNG, or PDF • Max 10MB
+                {t("fileTypeHint")}
               </p>
             </div>
           </div>
@@ -292,10 +294,10 @@ export default function DocumentUpload({
       {/* Preview - Image */}
       {preview && (
         <div className="relative rounded-lg overflow-hidden border space-y-2" style={{ borderColor: "hsl(var(--border))" }}>
-          <img src={preview} alt="Document preview" className="w-full h-auto max-h-64 object-cover" />
+          <img src={preview} alt={t("documentPreviewAlt")} className="w-full h-auto max-h-64 object-cover" />
           {isUploading && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <div className="text-white text-sm font-medium">Uploading...</div>
+              <div className="text-white text-sm font-medium">{t("uploadingEllipsis")}</div>
             </div>
           )}
           {/* Extract Data button for preview (before upload) */}
@@ -307,7 +309,7 @@ export default function DocumentUpload({
               className="w-full mt-2 text-sm px-3 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Sparkles className="h-4 w-4" />
-              {isExtracting ? "Extracting..." : "Extract Data from Image"}
+              {isExtracting ? t("extractingEllipsis") : t("extractDataFromImage")}
             </button>
           )}
         </div>
@@ -327,7 +329,7 @@ export default function DocumentUpload({
                 <p className="text-sm font-medium truncate" style={{ color: "hsl(var(--text))" }}>
                   {uploadedFile.name}
                 </p>
-                <p className="text-xs text-emerald-600 mt-1">✓ Uploaded successfully</p>
+                <p className="text-xs text-emerald-600 mt-1">{t("uploadedSuccessfully")}</p>
                 {preview && (
                   <button
                     type="button"
@@ -336,7 +338,7 @@ export default function DocumentUpload({
                     className="mt-2 text-xs px-2 py-1 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 flex items-center gap-1"
                   >
                     <Sparkles className="h-3 w-3" />
-                    {isExtracting ? "Extracting..." : "Extract Data"}
+                    {isExtracting ? t("extractingEllipsis") : t("extractData")}
                   </button>
                 )}
               </div>
@@ -355,13 +357,13 @@ export default function DocumentUpload({
       {/* Existing Documents List */}
       {documents.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground">Uploaded Documents:</p>
+          <p className="text-xs font-medium text-muted-foreground">{t("uploadedDocuments")}</p>
           {documents.map((doc, idx) => (
             <div key={idx} className="rounded-lg border p-3" style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--bg))" }}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   {doc.type?.startsWith('image/') ? (
-                    <img src={doc.url} alt="thumb" className="w-12 h-12 rounded object-cover flex-shrink-0" />
+                    <img src={doc.url} alt={t("thumbAlt")} className="w-12 h-12 rounded object-cover flex-shrink-0" />
                   ) : (
                     <FileText className="w-12 h-12 text-muted-foreground flex-shrink-0" />
                   )}
@@ -385,7 +387,7 @@ export default function DocumentUpload({
                         className="mt-2 text-xs px-2 py-1 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50 flex items-center gap-1"
                       >
                         <Sparkles className="h-3 w-3" />
-                        {isExtracting ? "Extracting..." : "Extract Data"}
+                        {isExtracting ? t("extractingEllipsis") : t("extractData")}
                       </button>
                     )}
                   </div>
@@ -400,7 +402,7 @@ export default function DocumentUpload({
       <div className="flex gap-2 rounded-lg p-3" style={{ background: "hsl(var(--bg))" }}>
         <AlertCircle className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Upload a clear photo or scan of the guest's passport, ID, or driver's license. Required for police registration in Serbia.
+          {t("infoBoxHint")}
         </p>
       </div>
 
