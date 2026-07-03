@@ -53,9 +53,9 @@ export default function AnalyticsClient({
         <button
           onClick={handleRefresh}
           disabled={isPending}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-primary text-sm font-medium hover:bg-muted/70 transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isPending ? "animate-spin" : ""}`} />
+          <RefreshCw className={`w-4 h-4 ${isPending ? "animate-spin" : ""}`} />
           {t("refresh")}
         </button>
       </div>
