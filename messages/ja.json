@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "チェックアウトに失敗しました",
     "toastCheckedOut": "ゲストのチェックアウトが完了しました",
     "toastCheckoutFailedGuest": "ゲストのチェックアウトに失敗しました"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "すべて既読にする",
+    "empty": "まだ通知はありません",
+    "types": {
+      "checkin_submitted": "{guestName} がオンラインチェックインを送信しました（{reservationNumber}）",
+      "reservation_created": "{guestName} の新しい予約（{reservationNumber}）",
+      "reservation_cancelled": "{guestName} の予約がキャンセルされました（{reservationNumber}）",
+      "duplicate_guest": "重複の可能性があるゲスト：{guestName}（{documentNumber}）",
+      "channel_sync_failed": "{channelName} の同期に失敗しました：{reason}"
+    }
   }
 }

@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "فشل تسجيل المغادرة",
     "toastCheckedOut": "تم تسجيل مغادرة النزيل بنجاح",
     "toastCheckoutFailedGuest": "فشل تسجيل مغادرة النزيل"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "markAllRead": "وضع علامة مقروء على الكل",
+    "empty": "لا توجد إشعارات بعد",
+    "types": {
+      "checkin_submitted": "قام {guestName} بإرسال تسجيل الوصول عبر الإنترنت ({reservationNumber})",
+      "reservation_created": "حجز جديد لـ {guestName} ({reservationNumber})",
+      "reservation_cancelled": "تم إلغاء حجز {guestName} ({reservationNumber})",
+      "duplicate_guest": "نزيل مكرر محتمل: {guestName} ({documentNumber})",
+      "channel_sync_failed": "فشلت مزامنة {channelName}: {reason}"
+    }
   }
 }

@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "चेक-आउट करने में विफल",
     "toastCheckedOut": "अतिथि सफलतापूर्वक चेक-आउट हुआ",
     "toastCheckoutFailedGuest": "अतिथि को चेक-आउट करने में विफल"
+  },
+  "notifications": {
+    "title": "सूचनाएं",
+    "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+    "empty": "अभी तक कोई सूचना नहीं",
+    "types": {
+      "checkin_submitted": "{guestName} ने ऑनलाइन चेक-इन सबमिट किया ({reservationNumber})",
+      "reservation_created": "{guestName} के लिए नया आरक्षण ({reservationNumber})",
+      "reservation_cancelled": "{guestName} का आरक्षण रद्द किया गया ({reservationNumber})",
+      "duplicate_guest": "संभावित डुप्लिकेट अतिथि: {guestName} ({documentNumber})",
+      "channel_sync_failed": "{channelName} सिंक विफल: {reason}"
+    }
   }
 }

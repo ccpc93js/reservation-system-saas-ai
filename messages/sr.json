@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "Odjava nije uspela",
     "toastCheckedOut": "Gost je uspešno odjavljen",
     "toastCheckoutFailedGuest": "Odjava gosta nije uspela"
+  },
+  "notifications": {
+    "title": "Obaveštenja",
+    "markAllRead": "Označi sve kao pročitano",
+    "empty": "Još uvek nema obaveštenja",
+    "types": {
+      "checkin_submitted": "{guestName} je poslao/la online prijavu ({reservationNumber})",
+      "reservation_created": "Nova rezervacija za {guestName} ({reservationNumber})",
+      "reservation_cancelled": "Rezervacija otkazana za {guestName} ({reservationNumber})",
+      "duplicate_guest": "Mogući dupli gost: {guestName} ({documentNumber})",
+      "channel_sync_failed": "Sinhronizacija {channelName} nije uspela: {reason}"
+    }
   }
 }

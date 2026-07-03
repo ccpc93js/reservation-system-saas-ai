@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "চেক-আউট করতে ব্যর্থ",
     "toastCheckedOut": "অতিথি সফলভাবে চেক-আউট হয়েছে",
     "toastCheckoutFailedGuest": "অতিথিকে চেক-আউট করতে ব্যর্থ"
+  },
+  "notifications": {
+    "title": "বিজ্ঞপ্তি",
+    "markAllRead": "সব পঠিত হিসেবে চিহ্নিত করুন",
+    "empty": "এখনো কোনো বিজ্ঞপ্তি নেই",
+    "types": {
+      "checkin_submitted": "{guestName} অনলাইন চেক-ইন জমা দিয়েছেন ({reservationNumber})",
+      "reservation_created": "{guestName} এর জন্য নতুন রিজার্ভেশন ({reservationNumber})",
+      "reservation_cancelled": "{guestName} এর রিজার্ভেশন বাতিল হয়েছে ({reservationNumber})",
+      "duplicate_guest": "সম্ভাব্য ডুপ্লিকেট অতিথি: {guestName} ({documentNumber})",
+      "channel_sync_failed": "{channelName} সিঙ্ক ব্যর্থ হয়েছে: {reason}"
+    }
   }
 }

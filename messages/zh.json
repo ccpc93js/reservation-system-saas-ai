@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "退房失败",
     "toastCheckedOut": "客人退房成功",
     "toastCheckoutFailedGuest": "客人退房失败"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部标为已读",
+    "empty": "暂无通知",
+    "types": {
+      "checkin_submitted": "{guestName} 提交了在线入住登记（{reservationNumber}）",
+      "reservation_created": "{guestName} 的新预订（{reservationNumber}）",
+      "reservation_cancelled": "{guestName} 的预订已取消（{reservationNumber}）",
+      "duplicate_guest": "可能的重复客人：{guestName}（{documentNumber}）",
+      "channel_sync_failed": "{channelName} 同步失败：{reason}"
+    }
   }
 }

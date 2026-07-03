@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "Échec de l'enregistrement du départ",
     "toastCheckedOut": "Départ du client enregistré avec succès",
     "toastCheckoutFailedGuest": "Échec de l'enregistrement du départ du client"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "empty": "Aucune notification pour le moment",
+    "types": {
+      "checkin_submitted": "{guestName} a soumis le check-in en ligne ({reservationNumber})",
+      "reservation_created": "Nouvelle réservation pour {guestName} ({reservationNumber})",
+      "reservation_cancelled": "Réservation annulée pour {guestName} ({reservationNumber})",
+      "duplicate_guest": "Client potentiellement en double : {guestName} ({documentNumber})",
+      "channel_sync_failed": "Échec de la synchronisation de {channelName} : {reason}"
+    }
   }
 }

@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "Falha ao fazer check-out",
     "toastCheckedOut": "Check-out do hóspede realizado com sucesso",
     "toastCheckoutFailedGuest": "Falha ao fazer check-out do hóspede"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar tudo como lido",
+    "empty": "Ainda não há notificações",
+    "types": {
+      "checkin_submitted": "{guestName} enviou o check-in online ({reservationNumber})",
+      "reservation_created": "Nova reserva para {guestName} ({reservationNumber})",
+      "reservation_cancelled": "Reserva cancelada para {guestName} ({reservationNumber})",
+      "duplicate_guest": "Possível hóspede duplicado: {guestName} ({documentNumber})",
+      "channel_sync_failed": "Falha na sincronização de {channelName}: {reason}"
+    }
   }
 }

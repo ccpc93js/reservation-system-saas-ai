@@ -1255,5 +1255,17 @@
     "toastCheckoutFailed": "Не удалось оформить выезд",
     "toastCheckedOut": "Выезд гостя успешно оформлен",
     "toastCheckoutFailedGuest": "Не удалось оформить выезд гостя"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "markAllRead": "Отметить все как прочитанные",
+    "empty": "Пока нет уведомлений",
+    "types": {
+      "checkin_submitted": "{guestName} отправил(а) онлайн-регистрацию ({reservationNumber})",
+      "reservation_created": "Новое бронирование для {guestName} ({reservationNumber})",
+      "reservation_cancelled": "Бронирование отменено для {guestName} ({reservationNumber})",
+      "duplicate_guest": "Возможный дублирующийся гость: {guestName} ({documentNumber})",
+      "channel_sync_failed": "Ошибка синхронизации {channelName}: {reason}"
+    }
   }
 }
