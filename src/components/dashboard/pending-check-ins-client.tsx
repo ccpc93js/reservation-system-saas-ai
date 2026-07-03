@@ -364,7 +364,7 @@ export default function PendingCheckInsClient() {
               className="bg-white border border-border rounded-lg p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1">
+                <div className="flex items-start gap-4 flex-1 min-w-0">
                   <input
                     type="checkbox"
                     checked={selectedIds.has(checkIn.id)}
@@ -379,28 +379,28 @@ export default function PendingCheckInsClient() {
                       {checkIn.reservation_number}
                     </span>
                   </div>
-                  <div className="grid grid-cols-4 gap-4 text-sm">
-                    <div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                    <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colCheckIn")}</p>
-                      <p className="font-medium text-foreground">
+                      <p className="font-medium text-foreground truncate">
                         {new Date(checkIn.check_in).toLocaleDateString()}
                       </p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colRoom")}</p>
-                      <p className="font-medium text-foreground">
+                      <p className="font-medium text-foreground truncate">
                         {checkIn.room}
                       </p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colEmail")}</p>
-                      <p className="font-medium text-foreground">
+                      <p className="font-medium text-foreground truncate" title={checkIn.guest?.email || undefined}>
                         {checkIn.guest?.email || t("notAvailable")}
                       </p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colSubmitted")}</p>
-                      <p className="font-medium text-foreground">
+                      <p className="font-medium text-foreground truncate">
                         {new Date(checkIn.submitted_at).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
