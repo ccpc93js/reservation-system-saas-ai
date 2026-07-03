@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { createGuestSchema } from "@/lib/validations/guest";
+import { notifyOrg } from "@/lib/notifications";
 import crypto from "crypto";
 
 export async function POST(request: Request) {
@@ -77,6 +78,16 @@ export async function POST(request: Request) {
 
       if (existingGuest) {
         console.log("Duplicate guest detected:", existingGuest);
+        await notifyOrg(
+          orgId,
+          "duplicate_guest",
+          {
+            guestName: `${existingGuest.first_name} ${existingGuest.last_name}`,
+            documentNumber: existingGuest.document_number,
+          },
+          "/guests",
+          user.id
+        );
         return Response.json(
           {
             error: "Guest with this document already exists",
