@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import type { User } from "@supabase/supabase-js";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Plus, Bell, Menu, Search as SearchIcon, Settings, LogOut, X, Globe, Check } from "lucide-react";
+import { Plus, Menu, Search as SearchIcon, Settings, LogOut, X, Globe, Check } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { locales, type Locale } from "@/i18n/routing";
+import NotificationBell from "./notification-bell";
 
 const LOCALE_NAMES: Record<Locale, string> = {
   en: "English",
@@ -271,10 +272,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         </DropdownMenu.Root>
 
         {/* Notifications */}
-        <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
+        <NotificationBell userId={user.id} orgSlug={org.slug} />
 
         {/* New Booking Button */}
         <button
