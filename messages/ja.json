@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "収益トップの客室",
     "noRoomData": "客室データがありません",
     "paywallFeature": "分析とレポート",
-    "paywallDescription": "稼働率トレンド、収益グラフ、予約元の内訳、30日間のパフォーマンスインサイト。"
+    "paywallDescription": "稼働率トレンド、収益グラフ、予約元の内訳、30日間のパフォーマンスインサイト。",
+    "refresh": "更新"
   },
   "checkinHistory": {
     "title": "ゲストブック",

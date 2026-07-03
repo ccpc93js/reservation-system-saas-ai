@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "Habitaciones con más ingresos",
     "noRoomData": "No hay datos de habitaciones disponibles",
     "paywallFeature": "Analítica e informes",
-    "paywallDescription": "Tendencias de ocupación, gráficos de ingresos, desglose de fuentes de reservas e información de rendimiento de 30 días."
+    "paywallDescription": "Tendencias de ocupación, gráficos de ingresos, desglose de fuentes de reservas e información de rendimiento de 30 días.",
+    "refresh": "Actualizar"
   },
   "checkinHistory": {
     "title": "Libro de huéspedes",

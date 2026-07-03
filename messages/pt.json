@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "Melhores quartos por receita",
     "noRoomData": "Nenhum dado de quarto disponível",
     "paywallFeature": "Análises e relatórios",
-    "paywallDescription": "Tendências de ocupação, gráficos de receita, detalhamento de fontes de reserva e insights de desempenho de 30 dias."
+    "paywallDescription": "Tendências de ocupação, gráficos de receita, detalhamento de fontes de reserva e insights de desempenho de 30 dias.",
+    "refresh": "Atualizar"
   },
   "checkinHistory": {
     "title": "Livro de hóspedes",

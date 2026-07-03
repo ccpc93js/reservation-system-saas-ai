@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "Top Rooms by Revenue",
     "noRoomData": "No room data available",
     "paywallFeature": "Analytics & Reports",
-    "paywallDescription": "Occupancy trends, revenue charts, booking sources breakdown, and 30-day performance insights."
+    "paywallDescription": "Occupancy trends, revenue charts, booking sources breakdown, and 30-day performance insights.",
+    "refresh": "Refresh"
   },
   "checkinHistory": {
     "title": "Guest Book",

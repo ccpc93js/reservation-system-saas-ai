@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "收入最高房间",
     "noRoomData": "暂无房间数据",
     "paywallFeature": "分析与报告",
-    "paywallDescription": "入住率趋势、收入图表、预订来源细分以及 30 天业绩洞察。"
+    "paywallDescription": "入住率趋势、收入图表、预订来源细分以及 30 天业绩洞察。",
+    "refresh": "刷新"
   },
   "checkinHistory": {
     "title": "住客登记簿",

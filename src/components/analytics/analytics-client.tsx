@@ -1,5 +1,6 @@
 "use client";
 
+import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import {
   LineChart,
@@ -15,7 +16,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { TrendingUp, DollarSign, Calendar, Home } from "lucide-react";
+import { TrendingUp, DollarSign, Calendar, Home, RefreshCw } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
 
 interface AnalyticsClientProps {
   bookingTrends: Array<{ date: string; bookings: number }>;
@@ -31,12 +33,31 @@ export default function AnalyticsClient({
   occupancyTimeline,
 }: AnalyticsClientProps) {
   const t = useTranslations("analytics");
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleRefresh = () => {
+    startTransition(() => {
+      router.refresh();
+    });
+  };
+
   return (
     <div className="w-full space-y-8 p-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
-        <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
+          <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={isPending}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-primary text-sm font-medium hover:bg-muted/70 transition-colors disabled:opacity-50"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${isPending ? "animate-spin" : ""}`} />
+          {t("refresh")}
+        </button>
       </div>
 
       {/* Charts Grid */}

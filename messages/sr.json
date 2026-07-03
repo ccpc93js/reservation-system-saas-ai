@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "Najbolje sobe po prihodu",
     "noRoomData": "Nema dostupnih podataka o sobama",
     "paywallFeature": "Analitika i izveštaji",
-    "paywallDescription": "Trendovi popunjenosti, grafikoni prihoda, raspodela izvora rezervacija i uvidi u performanse za 30 dana."
+    "paywallDescription": "Trendovi popunjenosti, grafikoni prihoda, raspodela izvora rezervacija i uvidi u performanse za 30 dana.",
+    "refresh": "Osveži"
   },
   "checkinHistory": {
     "title": "Knjiga gostiju",

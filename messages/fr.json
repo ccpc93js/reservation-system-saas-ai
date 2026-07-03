@@ -961,7 +961,8 @@
     "topRoomsByRevenue": "Meilleures chambres par revenu",
     "noRoomData": "Aucune donnée de chambre disponible",
     "paywallFeature": "Analyses et rapports",
-    "paywallDescription": "Tendances d'occupation, graphiques de revenus, répartition des sources de réservation et aperçus de performance sur 30 jours."
+    "paywallDescription": "Tendances d'occupation, graphiques de revenus, répartition des sources de réservation et aperçus de performance sur 30 jours.",
+    "refresh": "Actualiser"
   },
   "checkinHistory": {
     "title": "Registre des clients",
