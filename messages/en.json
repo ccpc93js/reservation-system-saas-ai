@@ -1286,6 +1286,7 @@
     "status_clean": "Clean",
     "status_dirty": "Dirty",
     "status_inspected": "Inspected",
-    "status_out_of_order": "Out of Order"
+    "status_out_of_order": "Out of Order",
+    "refresh": "Refresh"
   }
 }

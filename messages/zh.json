@@ -1286,6 +1286,7 @@
     "status_clean": "干净",
     "status_dirty": "待清洁",
     "status_inspected": "已检查",
-    "status_out_of_order": "停用"
+    "status_out_of_order": "停用",
+    "refresh": "刷新"
   }
 }

@@ -1286,6 +1286,7 @@
     "status_clean": "साफ",
     "status_dirty": "गंदा",
     "status_inspected": "निरीक्षित",
-    "status_out_of_order": "उपयोग से बाहर"
+    "status_out_of_order": "उपयोग से बाहर",
+    "refresh": "रीफ़्रेश करें"
   }
 }

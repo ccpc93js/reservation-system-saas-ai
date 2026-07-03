@@ -1286,6 +1286,7 @@
     "status_clean": "Limpia",
     "status_dirty": "Sucia",
     "status_inspected": "Inspeccionada",
-    "status_out_of_order": "Fuera de servicio"
+    "status_out_of_order": "Fuera de servicio",
+    "refresh": "Actualizar"
   }
 }

@@ -1286,6 +1286,7 @@
     "status_clean": "পরিষ্কার",
     "status_dirty": "নোংরা",
     "status_inspected": "পরিদর্শিত",
-    "status_out_of_order": "ব্যবহারের বাইরে"
+    "status_out_of_order": "ব্যবহারের বাইরে",
+    "refresh": "রিফ্রেশ"
   }
 }

@@ -1286,6 +1286,7 @@
     "status_clean": "清潔",
     "status_dirty": "清掃待ち",
     "status_inspected": "点検済み",
-    "status_out_of_order": "使用不可"
+    "status_out_of_order": "使用不可",
+    "refresh": "更新"
   }
 }

@@ -1286,6 +1286,7 @@
     "status_clean": "Čist",
     "status_dirty": "Prljav",
     "status_inspected": "Pregledan",
-    "status_out_of_order": "Van upotrebe"
+    "status_out_of_order": "Van upotrebe",
+    "refresh": "Osveži"
   }
 }

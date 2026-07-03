@@ -1286,6 +1286,7 @@
     "status_clean": "Propre",
     "status_dirty": "Sale",
     "status_inspected": "Inspecté",
-    "status_out_of_order": "Hors service"
+    "status_out_of_order": "Hors service",
+    "refresh": "Actualiser"
   }
 }

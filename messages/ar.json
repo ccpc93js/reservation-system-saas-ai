@@ -1286,6 +1286,7 @@
     "status_clean": "نظيف",
     "status_dirty": "غير نظيف",
     "status_inspected": "تم الفحص",
-    "status_out_of_order": "خارج الخدمة"
+    "status_out_of_order": "خارج الخدمة",
+    "refresh": "تحديث"
   }
 }

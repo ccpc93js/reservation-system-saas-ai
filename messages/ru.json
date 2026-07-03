@@ -1286,6 +1286,7 @@
     "status_clean": "Чистая",
     "status_dirty": "Грязная",
     "status_inspected": "Проверена",
-    "status_out_of_order": "Не используется"
+    "status_out_of_order": "Не используется",
+    "refresh": "Обновить"
   }
 }

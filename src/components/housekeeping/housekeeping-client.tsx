@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { RefreshCw } from "lucide-react";
 import { useHousekeeping, type HousekeepingBed } from "@/lib/hooks/use-housekeeping";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -15,8 +16,15 @@ const STATUS_VALUES = ["clean", "dirty", "inspected", "out_of_order"] as const;
 
 export default function HousekeepingClient({ orgId }: { orgId: string }) {
   const t = useTranslations("housekeeping");
-  const { beds, loaded, updateStatus } = useHousekeeping(orgId);
+  const { beds, loaded, updateStatus, refetch } = useHousekeeping(orgId);
   const [filter, setFilter] = useState<"all" | "dirty" | "out_of_order">("all");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const filteredBeds = useMemo(() => {
     if (filter === "all") return beds;
@@ -38,20 +46,30 @@ export default function HousekeepingClient({ orgId }: { orgId: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
-        {(["all", "dirty", "out_of_order"] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
-              filter === f
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-surface text-foreground border-border hover:bg-muted"
-            }`}
-          >
-            {t(`filter_${f}`)}
-          </button>
-        ))}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex gap-2">
+          {(["all", "dirty", "out_of_order"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+                filter === f
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-surface text-foreground border-border hover:bg-muted"
+              }`}
+            >
+              {t(`filter_${f}`)}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          title={t("refresh")}
+          className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+        >
+          <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+        </button>
       </div>
 
       {grouped.length === 0 && (
