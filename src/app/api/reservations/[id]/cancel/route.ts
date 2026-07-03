@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { sendReservationCancelledEmail } from "@/lib/email";
+import { notifyOrg } from "@/lib/notifications";
 
 type ReservationOrg = { organization_id: string };
 
@@ -109,6 +110,17 @@ export async function PATCH(
           id.substring(0, 8).toUpperCase()
         ).catch((err) => console.error("Email send failed:", err));
       }
+
+      await notifyOrg(
+        reservation.organization_id,
+        "reservation_cancelled",
+        {
+          guestName: guest ? `${guest.first_name} ${guest.last_name}` : null,
+          reservationNumber: id.substring(0, 8).toUpperCase(),
+        },
+        "/reservations",
+        user.id
+      );
     }
 
     return Response.json({ success: true });
