@@ -170,7 +170,7 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         >
           <Menu className="w-5 h-5 text-muted-foreground" />
         </button>
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+        <h2 className="font-serif text-xl font-semibold text-foreground">{title}</h2>
       </div>
 
       <div className="flex items-center gap-4">

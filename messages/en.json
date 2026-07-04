@@ -397,7 +397,10 @@
       "rejectOneFailed": "Failed to reject check-in",
       "rejectedResubmit": "Check-in rejected. Guest will be asked to resubmit.",
       "linkCopied": "Link copied!"
-    }
+    },
+    "colGuest": "Guest",
+    "colAction": "Action",
+    "waitingChip": "{count, plural, one {# guest} other {# guests}} waiting"
   },
   "reservations": {
     "errorLoading": "Error loading reservations",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "Cannot check out — fix required fields first",
       "statusUpdateFailed": "Failed to update status",
       "statusUpdated": "Status updated"
-    }
+    },
+    "refresh": "Refresh"
   },
   "guests": {
     "errorLoading": "Error loading guests",
@@ -540,7 +544,8 @@
       "toastDeleteError": "Error deleting guest",
       "toastMergeFailed": "Merge failed",
       "toastMerged": "Guests merged successfully!"
-    }
+    },
+    "refresh": "Refresh"
   },
   "rooms": {
     "unauthorized": "Unauthorized",
@@ -962,14 +967,21 @@
     "noRoomData": "No room data available",
     "paywallFeature": "Analytics & Reports",
     "paywallDescription": "Occupancy trends, revenue charts, booking sources breakdown, and 30-day performance insights.",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "statTotalBookings": "Total Bookings",
+    "statRevenue": "Revenue (30d)",
+    "statOccupancy": "Occupancy",
+    "statAdr": "ADR",
+    "statLast30d": "Last 30 days",
+    "statAvg30d": "Avg over 30 days",
+    "statAvgDailyRate": "Avg daily rate"
   },
   "checkinHistory": {
     "title": "Guest Book",
     "guestsRegistered": "{count, plural, one {# guest} other {# guests}} registered",
     "refresh": "Refresh",
     "exportCsv": "Export CSV / Excel",
-    "searchPlaceholder": "Search name, ID, JMBG, ref...",
+    "searchPlaceholder": "Search name, ID, Passport, ref...",
     "limitReached": "Guest Book limit reached ({current}/{limit} on <strong>{plan}</strong> plan). Upgrade your plan to continue adding guests.",
     "noRecordsYet": "No records yet",
     "noRecordsHint": "Guests will appear here when added to the Guest Book.",
@@ -1028,7 +1040,8 @@
     "noResults": "No results",
     "confirmRemove": "Remove this entry from the Guest Book?",
     "toastSaveFailed": "Failed to save",
-    "toastRemoveFailed": "Failed to remove entry"
+    "toastRemoveFailed": "Failed to remove entry",
+    "recordDescriptor": "Serbian police-registration record"
   },
   "channels": {
     "errorLoading": "Error loading channels",
@@ -1149,7 +1162,8 @@
     "extractData": "Extract Data",
     "uploadedDocuments": "Uploaded Documents:",
     "thumbAlt": "thumb",
-    "infoBoxHint": "Upload a clear photo or scan of the guest's passport, ID, or driver's license. Required for police registration in Serbia."
+    "infoBoxHint": "Upload a clear photo or scan of the guest's passport, ID, or driver's license. Required for police registration in Serbia.",
+    "ocrProOnly": "OCR document scanning is available on the Pro and Scale plans. Upgrade to unlock it."
   },
   "duplicateMergeDialog": {
     "title": "Merge Duplicate Guests",

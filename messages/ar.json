@@ -397,7 +397,10 @@
       "rejectOneFailed": "فشل رفض تسجيل الوصول",
       "rejectedResubmit": "تم رفض تسجيل الوصول. سيُطلب من النزيل إعادة الإرسال.",
       "linkCopied": "تم نسخ الرابط!"
-    }
+    },
+    "colGuest": "الضيف",
+    "colAction": "إجراء",
+    "waitingChip": "{count} ضيف في الانتظار"
   },
   "reservations": {
     "errorLoading": "خطأ في تحميل الحجوزات",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "لا يمكن تسجيل المغادرة — أصلح الحقول المطلوبة أولاً",
       "statusUpdateFailed": "فشل تحديث الحالة",
       "statusUpdated": "تم تحديث الحالة"
-    }
+    },
+    "refresh": "تحديث"
   },
   "guests": {
     "errorLoading": "خطأ في تحميل النزلاء",
@@ -540,7 +544,8 @@
       "toastDeleteError": "خطأ أثناء حذف النزيل",
       "toastMergeFailed": "فشل الدمج",
       "toastMerged": "تم دمج النزلاء بنجاح!"
-    }
+    },
+    "refresh": "تحديث"
   },
   "rooms": {
     "unauthorized": "غير مصرح به",
@@ -962,14 +967,21 @@
     "noRoomData": "لا توجد بيانات غرف متاحة",
     "paywallFeature": "التحليلات والتقارير",
     "paywallDescription": "اتجاهات الإشغال، مخططات الإيرادات، تفصيل مصادر الحجز، ورؤى الأداء لآخر 30 يومًا.",
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "statTotalBookings": "إجمالي الحجوزات",
+    "statRevenue": "الإيرادات (30 يوم)",
+    "statOccupancy": "الإشغال",
+    "statAdr": "متوسط السعر اليومي",
+    "statLast30d": "آخر 30 يومًا",
+    "statAvg30d": "متوسط 30 يومًا",
+    "statAvgDailyRate": "متوسط السعر اليومي"
   },
   "checkinHistory": {
     "title": "سجل النزلاء",
     "guestsRegistered": "{count, plural, zero {لا نزلاء مسجلين} one {نزيل واحد مسجل} two {نزيلان مسجلان} few {# نزلاء مسجلين} many {# نزيلًا مسجلًا} other {# نزيل مسجل}}",
     "refresh": "تحديث",
     "exportCsv": "تصدير CSV / Excel",
-    "searchPlaceholder": "ابحث بالاسم، الهوية، JMBG، المرجع...",
+    "searchPlaceholder": "ابحث بالاسم، الهوية، جواز السفر، المرجع...",
     "limitReached": "تم الوصول إلى حد سجل النزلاء ({current}/{limit} في خطة <strong>{plan}</strong>). قم بترقية خطتك لمواصلة إضافة النزلاء.",
     "noRecordsYet": "لا توجد سجلات بعد",
     "noRecordsHint": "سيظهر النزلاء هنا عند إضافتهم إلى سجل النزلاء.",
@@ -1028,7 +1040,8 @@
     "noResults": "لا توجد نتائج",
     "confirmRemove": "إزالة هذا الإدخال من سجل النزلاء؟",
     "toastSaveFailed": "فشل الحفظ",
-    "toastRemoveFailed": "فشل إزالة الإدخال"
+    "toastRemoveFailed": "فشل إزالة الإدخال",
+    "recordDescriptor": "سجل تسجيل الشرطة الصربية"
   },
   "channels": {
     "errorLoading": "خطأ في تحميل القنوات",
@@ -1149,7 +1162,8 @@
     "extractData": "استخراج البيانات",
     "uploadedDocuments": "المستندات المحملة:",
     "thumbAlt": "صورة مصغرة",
-    "infoBoxHint": "قم بتحميل صورة أو مسح واضح لجواز سفر النزيل أو بطاقة الهوية أو رخصة القيادة. مطلوب للتسجيل لدى الشرطة في صربيا."
+    "infoBoxHint": "قم بتحميل صورة أو مسح واضح لجواز سفر النزيل أو بطاقة الهوية أو رخصة القيادة. مطلوب للتسجيل لدى الشرطة في صربيا.",
+    "ocrProOnly": "مسح المستندات عبر OCR متاح في خطتي Pro و Scale. قم بالترقية لفتحه."
   },
   "duplicateMergeDialog": {
     "title": "دمج النزلاء المكررين",

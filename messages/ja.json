@@ -397,7 +397,10 @@
       "rejectOneFailed": "チェックインの却下に失敗しました",
       "rejectedResubmit": "チェックインが却下されました。ゲストに再提出を依頼します。",
       "linkCopied": "リンクをコピーしました！"
-    }
+    },
+    "colGuest": "ゲスト",
+    "colAction": "操作",
+    "waitingChip": "{count}名のゲストが待機中"
   },
   "reservations": {
     "errorLoading": "予約の読み込みエラー",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "チェックアウトできません — 先に必須項目を修正してください",
       "statusUpdateFailed": "ステータスの更新に失敗しました",
       "statusUpdated": "ステータスを更新しました"
-    }
+    },
+    "refresh": "更新"
   },
   "guests": {
     "errorLoading": "ゲストの読み込みエラー",
@@ -540,7 +544,8 @@
       "toastDeleteError": "ゲストの削除中にエラーが発生しました",
       "toastMergeFailed": "統合に失敗しました",
       "toastMerged": "ゲストを正常に統合しました！"
-    }
+    },
+    "refresh": "更新"
   },
   "rooms": {
     "unauthorized": "権限がありません",
@@ -962,14 +967,21 @@
     "noRoomData": "客室データがありません",
     "paywallFeature": "分析とレポート",
     "paywallDescription": "稼働率トレンド、収益グラフ、予約元の内訳、30日間のパフォーマンスインサイト。",
-    "refresh": "更新"
+    "refresh": "更新",
+    "statTotalBookings": "総予約数",
+    "statRevenue": "売上（30日）",
+    "statOccupancy": "稼働率",
+    "statAdr": "ADR",
+    "statLast30d": "過去30日間",
+    "statAvg30d": "30日間の平均",
+    "statAvgDailyRate": "平均日次料金"
   },
   "checkinHistory": {
     "title": "ゲストブック",
     "guestsRegistered": "{count} 名のゲストが登録済み",
     "refresh": "更新",
     "exportCsv": "CSV / Excel をエクスポート",
-    "searchPlaceholder": "氏名、ID、JMBG、参照番号で検索...",
+    "searchPlaceholder": "氏名、ID、パスポート、参照番号で検索...",
     "limitReached": "ゲストブックの上限に達しました（{plan} プランで {current}/{limit}）。ゲストを追加し続けるにはプランをアップグレードしてください。",
     "noRecordsYet": "まだ記録がありません",
     "noRecordsHint": "ゲストブックに追加されるとここに表示されます。",
@@ -1028,7 +1040,8 @@
     "noResults": "該当なし",
     "confirmRemove": "このエントリをゲストブックから削除しますか？",
     "toastSaveFailed": "保存に失敗しました",
-    "toastRemoveFailed": "エントリの削除に失敗しました"
+    "toastRemoveFailed": "エントリの削除に失敗しました",
+    "recordDescriptor": "セルビア警察登録記録"
   },
   "channels": {
     "errorLoading": "チャネルの読み込みエラー",
@@ -1149,7 +1162,8 @@
     "extractData": "データを抽出",
     "uploadedDocuments": "アップロード済み書類：",
     "thumbAlt": "サムネイル",
-    "infoBoxHint": "ゲストのパスポート、ID、または運転免許証の鮮明な写真またはスキャンをアップロードしてください。セルビアでの警察登録に必要です。"
+    "infoBoxHint": "ゲストのパスポート、ID、または運転免許証の鮮明な写真またはスキャンをアップロードしてください。セルビアでの警察登録に必要です。",
+    "ocrProOnly": "OCR書類スキャンはProおよびScaleプランで利用できます。アップグレードして解除してください。"
   },
   "duplicateMergeDialog": {
     "title": "重複ゲストを統合",

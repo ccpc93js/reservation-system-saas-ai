@@ -16,7 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { TrendingUp, DollarSign, Calendar, Home, RefreshCw } from "lucide-react";
+import { TrendingUp, DollarSign, Calendar, Home, RefreshCw, PieChart } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 
 interface AnalyticsClientProps {
@@ -42,12 +42,30 @@ export default function AnalyticsClient({
     });
   };
 
+  // Summary stats computed from 30-day trend arrays
+  const totalBookings = bookingTrends.reduce((s, d) => s + d.bookings, 0);
+  const totalRevenue = revenueTrends.reduce((s, d) => s + d.revenue, 0);
+  const avgOccupancy = occupancyTimeline.length
+    ? Math.round(occupancyTimeline.reduce((s, d) => s + d.occupancy, 0) / occupancyTimeline.length)
+    : 0;
+  const adr = totalBookings ? Math.round(totalRevenue / totalBookings) : 0;
+
+  const fmtMoney = (n: number) =>
+    n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n.toLocaleString()}`;
+
+  const stats = [
+    { label: t("statTotalBookings"), value: totalBookings.toLocaleString(), detail: t("statLast30d"), icon: Calendar },
+    { label: t("statRevenue"), value: fmtMoney(totalRevenue), detail: t("statLast30d"), icon: DollarSign },
+    { label: t("statOccupancy"), value: `${avgOccupancy}%`, detail: t("statAvg30d"), icon: PieChart },
+    { label: t("statAdr"), value: `$${adr}`, detail: t("statAvgDailyRate"), icon: TrendingUp },
+  ];
+
   return (
     <div className="w-full space-y-8 p-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
+          <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
         </div>
         <button
@@ -60,13 +78,39 @@ export default function AnalyticsClient({
         </button>
       </div>
 
+      {/* Summary Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="bg-surface border border-border rounded-2xl p-6 flex items-start justify-between gap-4"
+          >
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                {stat.label}
+              </p>
+              <p className="font-serif text-4xl font-semibold text-foreground leading-none mb-2">
+                {stat.value}
+              </p>
+              <p className="text-xs text-muted-foreground">{stat.detail}</p>
+            </div>
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-primary"
+              style={{ background: "color-mix(in srgb, hsl(var(--accent)) 12%, transparent)" }}
+            >
+              <stat.icon className="w-5 h-5" />
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Booking Trends */}
         <div className="rounded-lg border border-border bg-surface p-6">
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">{t("bookingTrends")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("bookingTrends")}</h2>
           </div>
           {bookingTrends.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
@@ -92,7 +136,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign className="w-5 h-5 text-emerald-600" />
-            <h2 className="text-lg font-semibold text-foreground">{t("revenueTrends")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("revenueTrends")}</h2>
           </div>
           {revenueTrends.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
@@ -117,8 +161,8 @@ export default function AnalyticsClient({
         {/* Occupancy Timeline */}
         <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-semibold text-foreground">{t("occupancyTimeline")}</h2>
+            <TrendingUp className="w-5 h-5 text-[#3A5F82]" />
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("occupancyTimeline")}</h2>
           </div>
           {occupancyTimeline.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -130,7 +174,7 @@ export default function AnalyticsClient({
                   contentStyle={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
                   labelStyle={{ color: "var(--color-foreground)" }}
                 />
-                <Area type="monotone" dataKey="occupancy" fill="var(--color-indigo-600)" stroke="var(--color-indigo-600)" />
+                <Area type="monotone" dataKey="occupancy" fill="#3A5F82" stroke="#3A5F82" />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -144,7 +188,7 @@ export default function AnalyticsClient({
         <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <Home className="w-5 h-5 text-amber-600" />
-            <h2 className="text-lg font-semibold text-foreground">{t("topRoomsByRevenue")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("topRoomsByRevenue")}</h2>
           </div>
           {topRooms.length > 0 ? (
             <div className="space-y-3">

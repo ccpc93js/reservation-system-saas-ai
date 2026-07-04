@@ -97,10 +97,10 @@ const STATUS_COLORS: Record<
 
 const ROOM_TYPE_STYLES: Record<string, { chip: string }> = {
   dorm: {
-    chip: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    chip: "bg-[#DDE7F0] text-[#3A5F82] border-[#C2D2E2]",
   },
   private: {
-    chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    chip: "bg-[#E0EADB] text-[#4A6740] border-[#C5D6BC]",
   },
 };
 
@@ -194,7 +194,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                     key={day.toISOString()}
                     className={cn(
                       "shrink-0 flex flex-col items-center justify-center border-r border-border transition-colors duration-200",
-                      isToday ? "bg-indigo-50 text-indigo-700" : "text-muted-foreground hover:bg-background"
+                      isToday ? "bg-[#DDE7F0] text-[#3A5F82]" : "text-muted-foreground hover:bg-background"
                     )}
                     style={{ width: DAY_WIDTH, height: 48 }}
                   >
@@ -213,17 +213,20 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
             {/* Room Section Header */}
             <div
               className={cn(
-                "flex sticky left-0 z-30 bg-muted/80 backdrop-blur-md border-b border-border w-full transition-all duration-500 hover:bg-muted",
+                "flex bg-muted border-b border-border w-full transition-all duration-500",
                 animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
               )}
               style={{ transitionDelay: `${roomIndex * 35}ms` }}
             >
-              <div className="px-4 py-2 flex items-center gap-2" style={{ width: LABEL_WIDTH }}>
+              <div
+                className="px-4 py-2 flex items-center gap-2 sticky left-0 z-30 bg-muted border-r border-border"
+                style={{ width: LABEL_WIDTH }}
+              >
                 {type === "dorm" ? <Hotel className="w-3.5 h-3.5 text-muted-foreground" /> : <BedDouble className="w-3.5 h-3.5 text-muted-foreground" />}
-                <span className="text-xs font-bold uppercase tracking-wider text-foreground">{roomName}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-foreground truncate">{roomName}</span>
                 <span
                   className={cn(
-                    "ml-auto text-[10px] px-2 py-0.5 rounded-full border font-semibold uppercase tracking-wider",
+                    "ml-auto shrink-0 text-[10px] px-2 py-0.5 rounded-full border font-semibold uppercase tracking-wider",
                     (ROOM_TYPE_STYLES[type]?.chip ?? ROOM_TYPE_STYLES.dorm.chip)
                   )}
                 >
@@ -293,7 +296,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                               ? ""
                               : isPastDate
                                 ? "bg-background/40 cursor-not-allowed"
-                                : "cursor-pointer hover:bg-indigo-50/40"
+                                : "cursor-pointer hover:bg-[#DDE7F0]/40"
                           )}
                           style={{ width: DAY_WIDTH }}
                           title={isPastDate ? t("pastDatesTooltip") : undefined}

@@ -397,7 +397,10 @@
       "rejectOneFailed": "Falha ao rejeitar o check-in",
       "rejectedResubmit": "Check-in rejeitado. O hóspede será solicitado a reenviar.",
       "linkCopied": "Link copiado!"
-    }
+    },
+    "colGuest": "Hóspede",
+    "colAction": "Ação",
+    "waitingChip": "{count, plural, one {# hóspede} other {# hóspedes}} aguardando"
   },
   "reservations": {
     "errorLoading": "Erro ao carregar reservas",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "Não é possível fazer checkout — corrija os campos obrigatórios primeiro",
       "statusUpdateFailed": "Falha ao atualizar o status",
       "statusUpdated": "Status atualizado"
-    }
+    },
+    "refresh": "Atualizar"
   },
   "guests": {
     "errorLoading": "Erro ao carregar hóspedes",
@@ -540,7 +544,8 @@
       "toastDeleteError": "Erro ao excluir hóspede",
       "toastMergeFailed": "Falha ao mesclar",
       "toastMerged": "Hóspedes mesclados com sucesso!"
-    }
+    },
+    "refresh": "Atualizar"
   },
   "rooms": {
     "unauthorized": "Não autorizado",
@@ -962,14 +967,21 @@
     "noRoomData": "Nenhum dado de quarto disponível",
     "paywallFeature": "Análises e relatórios",
     "paywallDescription": "Tendências de ocupação, gráficos de receita, detalhamento de fontes de reserva e insights de desempenho de 30 dias.",
-    "refresh": "Atualizar"
+    "refresh": "Atualizar",
+    "statTotalBookings": "Reservas totais",
+    "statRevenue": "Receita (30d)",
+    "statOccupancy": "Ocupação",
+    "statAdr": "ADR",
+    "statLast30d": "Últimos 30 dias",
+    "statAvg30d": "Média de 30 dias",
+    "statAvgDailyRate": "Diária média"
   },
   "checkinHistory": {
     "title": "Livro de hóspedes",
     "guestsRegistered": "{count, plural, one {# hóspede registrado} other {# hóspedes registrados}}",
     "refresh": "Atualizar",
     "exportCsv": "Exportar CSV / Excel",
-    "searchPlaceholder": "Buscar nome, ID, JMBG, ref...",
+    "searchPlaceholder": "Buscar nome, ID, passaporte, ref...",
     "limitReached": "Limite do livro de hóspedes atingido ({current}/{limit} no plano <strong>{plan}</strong>). Faça upgrade do seu plano para continuar adicionando hóspedes.",
     "noRecordsYet": "Ainda não há registros",
     "noRecordsHint": "Os hóspedes aparecerão aqui quando adicionados ao livro de hóspedes.",
@@ -1028,7 +1040,8 @@
     "noResults": "Nenhum resultado",
     "confirmRemove": "Remover esta entrada do livro de hóspedes?",
     "toastSaveFailed": "Falha ao salvar",
-    "toastRemoveFailed": "Falha ao remover a entrada"
+    "toastRemoveFailed": "Falha ao remover a entrada",
+    "recordDescriptor": "Registro policial sérvio"
   },
   "channels": {
     "errorLoading": "Erro ao carregar canais",
@@ -1149,7 +1162,8 @@
     "extractData": "Extrair dados",
     "uploadedDocuments": "Documentos enviados:",
     "thumbAlt": "miniatura",
-    "infoBoxHint": "Envie uma foto ou digitalização nítida do passaporte, ID ou carteira de motorista do hóspede. Necessário para registro policial na Sérvia."
+    "infoBoxHint": "Envie uma foto ou digitalização nítida do passaporte, ID ou carteira de motorista do hóspede. Necessário para registro policial na Sérvia.",
+    "ocrProOnly": "A digitalização de documentos por OCR está disponível nos planos Pro e Scale. Faça upgrade para desbloquear."
   },
   "duplicateMergeDialog": {
     "title": "Mesclar hóspedes duplicados",

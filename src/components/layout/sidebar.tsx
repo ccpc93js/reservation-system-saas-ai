@@ -91,13 +91,13 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
       )}>
         {/* Logo / org name */}
         <div className="px-6 py-6 border-b border-border/70 lg:pt-6 flex items-center justify-between">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="h-10 w-10 rounded-sm bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm overflow-hidden">
-            {org.logo_url ? (
-              <img src={org.logo_url} alt={org.name} className="w-full h-full object-contain" />
-            ) : (
-              org.name.charAt(0).toUpperCase()
-            )}
+        <Link href={`/${org.slug}/dashboard`} className="flex items-center gap-3 mb-1 group" title={org.name}>
+          <div className="h-10 w-10 rounded-md bg-surface border border-border flex items-center justify-center overflow-hidden shrink-0">
+            <img
+              src={org.logo_url || "/botanical/logo.png"}
+              alt={org.name}
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
@@ -116,7 +116,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
               {t("liveView")}
             </p>
           </div>
-        </div>
+        </Link>
         <button
           onClick={onClose}
           className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"

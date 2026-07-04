@@ -197,7 +197,7 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
                     <span className="text-sm font-bold text-foreground">{PLAN_NAMES[p.key]}</span>
                     {isCurrent && <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t("current")}</span>}
                   </div>
-                  <p className="text-lg font-extrabold text-foreground mb-3">{PLAN_PRICES[p.key]}</p>
+                  <p className="font-serif text-3xl font-semibold text-foreground mb-3">{PLAN_PRICES[p.key]}</p>
                   <div className="grid grid-cols-2 gap-1">
                     {(t.raw(`features.${p.key}`) as string[]).map((f) => (
                       <div key={f} className="flex items-center gap-1.5 text-xs text-muted-foreground">

@@ -77,7 +77,7 @@ export default function LogoCropModal({ src, onCrop, onCancel }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
           <div>
-            <h3 className="text-sm font-semibold text-foreground">{t("title")}</h3>
+            <h3 className="font-serif text-lg font-semibold text-foreground">{t("title")}</h3>
             <p className="text-[11px] text-muted-foreground mt-0.5">{t("dragHint")}</p>
           </div>
           <button onClick={onCancel} className="p-1.5 hover:bg-muted rounded-lg transition-colors">

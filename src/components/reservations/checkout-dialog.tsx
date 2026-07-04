@@ -71,7 +71,7 @@ export default function CheckoutDialog({
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[9999]" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-surface p-6 shadow-lg z-[10000]">
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-lg font-bold">{t("title")}</Dialog.Title>
+            <Dialog.Title className="font-serif text-2xl font-semibold">{t("title")}</Dialog.Title>
             <Dialog.Close
               onClick={onCancel}
               className="text-muted-foreground hover:text-foreground"

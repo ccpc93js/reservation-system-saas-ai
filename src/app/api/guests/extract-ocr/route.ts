@@ -1,5 +1,6 @@
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { hasFeature } from "@/lib/plan";
 
 interface ExtractedFields {
   [key: string]: string | null;
@@ -11,7 +12,7 @@ interface ConfidenceScores {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createServiceClient();
+    const supabase = await createServerClient();
 
     // Get current user
     const {
@@ -23,10 +24,10 @@ export async function POST(request: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
+    // Get user's organization + plan
     const { data: membership, error: membershipError } = await supabase
       .from("memberships")
-      .select("organization_id")
+      .select("organization_id, organizations(plan)")
       .eq("user_id", user.id)
       .single();
 
@@ -38,6 +39,15 @@ export async function POST(request: Request) {
     }
 
     const orgId = (membership as any).organization_id;
+
+    // OCR is a Pro/Scale feature — block on the free plan
+    const plan = (membership as any).organizations?.plan ?? "free";
+    if (!hasFeature(plan, "ocr")) {
+      return Response.json(
+        { error: "OCR document scanning is available on the Pro and Scale plans. Upgrade to unlock it.", upgradeRequired: true },
+        { status: 403 }
+      );
+    }
 
     // Parse request body
     const body = await request.json();
@@ -132,7 +142,7 @@ Response MUST be valid JSON in exactly this format:
 }`;
 
     const response = await client.messages.create({
-      model: "claude-opus-4-7",
+      model: "claude-sonnet-5",
       max_tokens: 1024,
       messages: [
         {

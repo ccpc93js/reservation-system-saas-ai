@@ -60,11 +60,11 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
     <div className="bg-surface rounded-xl border border-border shadow-sm flex flex-col">
       <div className="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-foreground">{t("title")}</h3>
+          <h3 className="font-serif text-xl font-semibold text-foreground">{t("title")}</h3>
           <p className="text-xs text-muted-foreground mt-0.5">{t("subtitle")}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[11px] font-semibold rounded-full uppercase tracking-wider">
+          <span className="px-3 py-1 bg-[#DDE7F0] text-[#3A5F82] text-[11px] font-semibold rounded-full uppercase tracking-wider">
             {t("count", { count: arrivals?.length || 0 })}
           </span>
           <button className="px-3 py-1.5 border border-border text-muted-foreground text-xs font-medium rounded-lg hover:bg-background transition-colors flex items-center gap-2">

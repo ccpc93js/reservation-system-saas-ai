@@ -6,7 +6,6 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
-  Eye,
   Loader,
   RefreshCw,
   Copy,
@@ -59,6 +58,17 @@ export default function PendingCheckInsClient() {
     "Name mismatch": t("reasons.nameMismatch"),
     "Other": t("reasons.other"),
   };
+  const timeAgo = (iso: string) => {
+    const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60) return `${s}s ago`;
+    const m = Math.floor(s / 60);
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h ago`;
+    return `${Math.floor(h / 24)}d ago`;
+  };
+  const initialsOf = (first?: string, last?: string) =>
+    `${first?.charAt(0) ?? ""}${last?.charAt(0) ?? ""}`.toUpperCase() || "G";
   const [pending, setPending] = useState<PendingCheckIn[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCheckIn, setSelectedCheckIn] = useState<PendingCheckIn | null>(
@@ -276,15 +286,27 @@ export default function PendingCheckInsClient() {
     return (
       <div className="p-6">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {t("title")}
-          </h1>
-          <p className="text-muted-foreground mb-8">
-            {t("subtitle")}
-          </p>
+          <div className="flex items-start justify-between gap-4 mb-8">
+            <div>
+              <h1 className="font-serif text-3xl font-semibold text-foreground mb-2">
+                {t("title")}
+              </h1>
+              <p className="text-muted-foreground">
+                {t("subtitle")}
+              </p>
+            </div>
+            <button
+              onClick={fetchPending}
+              disabled={loading}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-surface hover:bg-muted transition-colors disabled:opacity-50 shrink-0 text-sm font-medium"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+              {t("refresh")}
+            </button>
+          </div>
 
-          <div className="bg-background border border-border rounded-lg p-12 text-center">
-            <CheckCircle className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
+          <div className="bg-surface border border-border rounded-2xl p-12 text-center">
+            <CheckCircle className="w-12 h-12 text-[#4A6740] mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-foreground">
               {t("allCaughtUp")}
             </h2>
@@ -301,22 +323,27 @@ export default function PendingCheckInsClient() {
     <div className="p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-start justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="font-serif text-3xl font-semibold text-foreground">
               {t("title")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              {t("waitingCount", { count: pending.length })}
+              {t("subtitle")}
             </p>
           </div>
-          <button
-            onClick={fetchPending}
-            className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/70 rounded-lg transition-colors"
-          >
-            <RefreshCw className="w-4 h-4" />
-            {t("refresh")}
-          </button>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="px-3 py-1.5 rounded-full bg-[#F0E6CD] text-[#8A6A16] text-xs font-semibold whitespace-nowrap">
+              {t("waitingChip", { count: pending.length })}
+            </span>
+            <button
+              onClick={fetchPending}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-surface hover:bg-muted transition-colors text-sm font-medium"
+            >
+              <RefreshCw className="w-4 h-4" />
+              {t("refresh")}
+            </button>
+          </div>
         </div>
 
         {/* Bulk action bar */}
@@ -329,7 +356,7 @@ export default function PendingCheckInsClient() {
               <button
                 onClick={handleBulkApprove}
                 disabled={bulkSubmitting}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 bg-[#4A6740] hover:bg-[#3d5636] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {bulkSubmitting ? (
                   <Loader className="w-4 h-4 animate-spin" />
@@ -341,7 +368,7 @@ export default function PendingCheckInsClient() {
               <button
                 onClick={() => setBulkAction("reject")}
                 disabled={bulkSubmitting}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 bg-[#9C4A37] hover:bg-[#853d2e] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <XCircle className="w-4 h-4" />
                 {t("rejectAll")}
@@ -356,77 +383,64 @@ export default function PendingCheckInsClient() {
           </div>
         )}
 
-        {/* Pending list */}
-        <div className="grid gap-4">
-          {pending.map((checkIn) => (
-            <div
-              key={checkIn.id}
-              className="bg-surface border border-border rounded-lg p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1 min-w-0">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.has(checkIn.id)}
-                    onChange={() => toggleSelection(checkIn.id)}
-                    className="w-5 h-5 mt-1 cursor-pointer"
-                  />
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {checkIn.guest?.first_name} {checkIn.guest?.last_name}
-                    </h3>
-                    <span className="text-sm font-mono text-primary bg-primary/10 px-2 py-1 rounded">
-                      {checkIn.reservation_number}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                    <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">{t("colCheckIn")}</p>
-                      <p
-                        className="font-medium text-foreground truncate"
-                        title={new Date(checkIn.check_in).toLocaleDateString()}
+        {/* Pending table */}
+        <div className="rounded-2xl border border-border overflow-hidden bg-surface shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="bg-muted/40 border-b border-border text-muted-foreground text-[11px] uppercase tracking-wider">
+                  <th className="px-6 py-3 font-semibold">{t("colGuest")}</th>
+                  <th className="px-6 py-3 font-semibold">{t("colCheckIn")}</th>
+                  <th className="px-6 py-3 font-semibold">{t("colRoom")}</th>
+                  <th className="px-6 py-3 font-semibold">{t("colEmail")}</th>
+                  <th className="px-6 py-3 font-semibold">{t("colSubmitted")}</th>
+                  <th className="px-6 py-3 font-semibold text-right">{t("colAction")}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {pending.map((checkIn) => (
+                  <tr key={checkIn.id} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(checkIn.id)}
+                          onChange={() => toggleSelection(checkIn.id)}
+                          className="w-4 h-4 cursor-pointer shrink-0 accent-[#5F7048]"
+                        />
+                        <div className="w-9 h-9 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-semibold text-muted-foreground shrink-0">
+                          {initialsOf(checkIn.guest?.first_name, checkIn.guest?.last_name)}
+                        </div>
+                        <span className="font-medium text-foreground whitespace-nowrap">
+                          {checkIn.guest?.first_name} {checkIn.guest?.last_name}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                      {new Date(checkIn.check_in).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                      {checkIn.room}
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      {checkIn.guest?.email || t("notAvailable")}
+                    </td>
+                    <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                      {timeAgo(checkIn.submitted_at)}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => setSelectedCheckIn(checkIn)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-medium transition-colors"
                       >
-                        {new Date(checkIn.check_in).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">{t("colRoom")}</p>
-                      <p className="font-medium text-foreground truncate" title={checkIn.room || undefined}>
-                        {checkIn.room}
-                      </p>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">{t("colEmail")}</p>
-                      <p className="font-medium text-foreground truncate" title={checkIn.guest?.email || undefined}>
-                        {checkIn.guest?.email || t("notAvailable")}
-                      </p>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground">{t("colSubmitted")}</p>
-                      <p
-                        className="font-medium text-foreground truncate"
-                        title={new Date(checkIn.submitted_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      >
-                        {new Date(checkIn.submitted_at).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <button
-                  onClick={() => setSelectedCheckIn(checkIn)}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
-                >
-                  <Eye className="w-4 h-4" />
-                  {t("review")}
-                </button>
-              </div>
-            </div>
-          ))}
+                        {t("review")}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -436,7 +450,7 @@ export default function PendingCheckInsClient() {
           <div className="bg-surface rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="sticky top-0 bg-surface border-b border-border p-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">
+              <h2 className="font-serif text-2xl font-semibold text-foreground">
                 {t("verifyCheckIn")}
               </h2>
               <button
@@ -660,7 +674,7 @@ export default function PendingCheckInsClient() {
                   <button
                     onClick={() => handleApprove(selectedCheckIn.id)}
                     disabled={verification.isApproving}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#4A6740] hover:bg-[#3d5636] text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {verification.isApproving ? (
                       <Loader className="w-4 h-4 animate-spin" />
@@ -678,7 +692,7 @@ export default function PendingCheckInsClient() {
                       (verification.rejectionReason === "Other" &&
                         !verification.customRejectionText)
                     }
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#9C4A37] hover:bg-[#853d2e] text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {verification.isRejecting ? (
                       <Loader className="w-4 h-4 animate-spin" />
@@ -699,7 +713,7 @@ export default function PendingCheckInsClient() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-surface rounded-lg shadow-xl max-w-md w-full">
             <div className="p-6 border-b border-border flex items-center justify-between">
-              <h2 className="text-xl font-bold text-foreground">
+              <h2 className="font-serif text-2xl font-semibold text-foreground">
                 {t("rejectNCheckIns", { count: selectedIds.size })}
               </h2>
               <button
@@ -761,7 +775,7 @@ export default function PendingCheckInsClient() {
                     !bulkRejectionReason ||
                     (bulkRejectionReason === "Other" && !bulkCustomText)
                   }
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#9C4A37] hover:bg-[#853d2e] text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {bulkSubmitting ? (
                     <Loader className="w-4 h-4 animate-spin" />

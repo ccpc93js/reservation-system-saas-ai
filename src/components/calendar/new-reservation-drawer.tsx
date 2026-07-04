@@ -246,7 +246,7 @@ export default function NewReservationDrawer({
         >
           <div className="flex items-center justify-between p-6 border-b border-border bg-surface sticky top-0 z-10">
             <div>
-              <Dialog.Title className="text-lg font-bold text-foreground">{t("title")}</Dialog.Title>
+              <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">{t("title")}</Dialog.Title>
               <p className="text-xs text-muted-foreground mt-0.5">{t("subtitle")}</p>
             </div>
             <Dialog.Close className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">

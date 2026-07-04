@@ -397,7 +397,10 @@
       "rejectOneFailed": "Neuspešno odbijanje prijave",
       "rejectedResubmit": "Prijava odbijena. Od gosta će biti zatraženo da ponovo pošalje.",
       "linkCopied": "Link kopiran!"
-    }
+    },
+    "colGuest": "Gost",
+    "colAction": "Radnja",
+    "waitingChip": "{count, plural, one {# gost} other {# gostiju}} čeka"
   },
   "reservations": {
     "errorLoading": "Greška pri učitavanju rezervacija",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "Nije moguće odjaviti — prvo ispravite obavezna polja",
       "statusUpdateFailed": "Neuspešno ažuriranje statusa",
       "statusUpdated": "Status ažuriran"
-    }
+    },
+    "refresh": "Osveži"
   },
   "guests": {
     "errorLoading": "Greška pri učitavanju gostiju",
@@ -540,7 +544,8 @@
       "toastDeleteError": "Greška prilikom brisanja gosta",
       "toastMergeFailed": "Spajanje nije uspelo",
       "toastMerged": "Gosti su uspešno spojeni!"
-    }
+    },
+    "refresh": "Osveži"
   },
   "rooms": {
     "unauthorized": "Neovlašćeno",
@@ -962,14 +967,21 @@
     "noRoomData": "Nema dostupnih podataka o sobama",
     "paywallFeature": "Analitika i izveštaji",
     "paywallDescription": "Trendovi popunjenosti, grafikoni prihoda, raspodela izvora rezervacija i uvidi u performanse za 30 dana.",
-    "refresh": "Osveži"
+    "refresh": "Osveži",
+    "statTotalBookings": "Ukupno rezervacija",
+    "statRevenue": "Prihod (30d)",
+    "statOccupancy": "Popunjenost",
+    "statAdr": "ADR",
+    "statLast30d": "Poslednjih 30 dana",
+    "statAvg30d": "Prosek za 30 dana",
+    "statAvgDailyRate": "Prosečna dnevna cena"
   },
   "checkinHistory": {
     "title": "Knjiga gostiju",
     "guestsRegistered": "{count, plural, one {# gost registrovan} few {# gosta registrovana} other {# gostiju registrovano}}",
     "refresh": "Osveži",
     "exportCsv": "Izvezi CSV / Excel",
-    "searchPlaceholder": "Pretraga imena, ID-a, JMBG-a, ref...",
+    "searchPlaceholder": "Pretraga imena, ID-a, pasoša, ref...",
     "limitReached": "Dostignut je limit knjige gostiju ({current}/{limit} na planu <strong>{plan}</strong>). Nadogradite plan da biste nastavili dodavanje gostiju.",
     "noRecordsYet": "Još nema zapisa",
     "noRecordsHint": "Gosti će se pojaviti ovde kada budu dodati u knjigu gostiju.",
@@ -1028,7 +1040,8 @@
     "noResults": "Nema rezultata",
     "confirmRemove": "Ukloniti ovaj unos iz knjige gostiju?",
     "toastSaveFailed": "Čuvanje nije uspelo",
-    "toastRemoveFailed": "Uklanjanje unosa nije uspelo"
+    "toastRemoveFailed": "Uklanjanje unosa nije uspelo",
+    "recordDescriptor": "Srpska policijska evidencija prijava"
   },
   "channels": {
     "errorLoading": "Greška pri učitavanju kanala",
@@ -1149,7 +1162,8 @@
     "extractData": "Izvuci podatke",
     "uploadedDocuments": "Otpremljeni dokumenti:",
     "thumbAlt": "minijatura",
-    "infoBoxHint": "Otpremite jasnu fotografiju ili skeniranu kopiju pasoša, lične karte ili vozačke dozvole gosta. Obavezno za policijsku registraciju u Srbiji."
+    "infoBoxHint": "Otpremite jasnu fotografiju ili skeniranu kopiju pasoša, lične karte ili vozačke dozvole gosta. Obavezno za policijsku registraciju u Srbiji.",
+    "ocrProOnly": "OCR skeniranje dokumenata dostupno je u Pro i Scale planovima. Nadogradite da biste ga otključali."
   },
   "duplicateMergeDialog": {
     "title": "Spoji duple goste",

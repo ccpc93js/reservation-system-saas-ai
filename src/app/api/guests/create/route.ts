@@ -1,11 +1,11 @@
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase/server";
 import { createGuestSchema } from "@/lib/validations/guest";
 import { notifyOrg } from "@/lib/notifications";
 import crypto from "crypto";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createServiceClient();
+    const supabase = await createServerClient();
 
     // Get current user
     const {

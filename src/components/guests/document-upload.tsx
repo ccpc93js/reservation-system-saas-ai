@@ -197,6 +197,10 @@ export default function DocumentUpload({
       const result = await response.json();
 
       if (!response.ok) {
+        if (result.upgradeRequired) {
+          toast.error(t("ocrProOnly"));
+          return;
+        }
         throw new Error(result.error || t("errorOcrFailed"));
       }
 
@@ -227,7 +231,13 @@ export default function DocumentUpload({
         body: JSON.stringify({ imageUrl }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || t("errorOcrFailed"));
+      if (!response.ok) {
+        if (result.upgradeRequired) {
+          toast.error(t("ocrProOnly"));
+          return;
+        }
+        throw new Error(result.error || t("errorOcrFailed"));
+      }
       setExtractionData(result);
       setLastExtractedImageUrl(imageUrl);
       setShowExtractDialog(true);

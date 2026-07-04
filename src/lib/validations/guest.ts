@@ -50,6 +50,7 @@ export const createGuestSchema = yup.object().shape({
     .optional(),
   document_issued_date: yup.date()
     .typeError('Invalid date')
+    .nullable()
     .optional(),
   jmbg: yup.string()
     .optional(),

@@ -1,3 +1,195 @@
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b9e7c89] - 2026-07-04
+
+feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)
+
+- Login: rebuilt as the botanical split-panel — left art panel (dark ink
+  radial-gradient wash, botanical logo, room-living photo, serif pull-quote),
+  right cream form panel with serif headings, accent tabs/buttons/inputs.
+  All sign-in / sign-up / forgot-password logic unchanged; only presentation
+  and token/accent classes swapped (indigo/slate/gradients → botanical).
+- Landing: rebuilt the hero into the two-column editorial layout — serif
+  "Run your hostel / with calm." headline with italic accent line, room-
+  bedroom photo in a rounded art card, moss CTAs, ★ 4.9/5 strip; remapped the
+  rest of the page (features / how-it-works / pricing / CTA / footer / preview
+  mock) from bg-white/gray + purple utilities to design tokens + accent, with
+  serif section headings.
+- Reset-password, guest self check-in wizard, check-in success, onboarding,
+  and demo pages remapped from slate/gray/white + indigo/violet utilities to
+  the botanical token + accent system so the whole auth/guest flow reads
+  consistently.
+
+tsc clean, production build passes (48/48 pages).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [92ef7f7] - 2026-07-04
 
 feat: apply Botanical Refresh design — foundation (tokens, fonts, accent, app re-skin)

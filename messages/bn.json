@@ -397,7 +397,10 @@
       "rejectOneFailed": "চেক-ইন প্রত্যাখ্যান করতে ব্যর্থ",
       "rejectedResubmit": "চেক-ইন প্রত্যাখ্যাত হয়েছে। অতিথিকে পুনরায় জমা দিতে বলা হবে।",
       "linkCopied": "লিঙ্ক কপি হয়েছে!"
-    }
+    },
+    "colGuest": "অতিথি",
+    "colAction": "পদক্ষেপ",
+    "waitingChip": "{count} জন অতিথি অপেক্ষমাণ"
   },
   "reservations": {
     "errorLoading": "রিজার্ভেশন লোড করতে ত্রুটি",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "চেক-আউট করা যাবে না — প্রথমে প্রয়োজনীয় ফিল্ড ঠিক করুন",
       "statusUpdateFailed": "অবস্থা আপডেট করতে ব্যর্থ",
       "statusUpdated": "অবস্থা আপডেট হয়েছে"
-    }
+    },
+    "refresh": "রিফ্রেশ"
   },
   "guests": {
     "errorLoading": "অতিথি লোড করতে ত্রুটি",
@@ -540,7 +544,8 @@
       "toastDeleteError": "অতিথি মুছতে ত্রুটি",
       "toastMergeFailed": "একত্রিত করা ব্যর্থ হয়েছে",
       "toastMerged": "অতিথিরা সফলভাবে একত্রিত হয়েছে!"
-    }
+    },
+    "refresh": "রিফ্রেশ"
   },
   "rooms": {
     "unauthorized": "অননুমোদিত",
@@ -962,14 +967,21 @@
     "noRoomData": "কোনো রুম ডেটা উপলব্ধ নেই",
     "paywallFeature": "অ্যানালিটিক্স ও রিপোর্ট",
     "paywallDescription": "দখল প্রবণতা, রাজস্ব চার্ট, বুকিং উৎস বিশ্লেষণ, এবং ৩০ দিনের কর্মক্ষমতা অন্তর্দৃষ্টি।",
-    "refresh": "রিফ্রেশ"
+    "refresh": "রিফ্রেশ",
+    "statTotalBookings": "মোট বুকিং",
+    "statRevenue": "আয় (৩০ দিন)",
+    "statOccupancy": "দখল",
+    "statAdr": "ADR",
+    "statLast30d": "গত ৩০ দিন",
+    "statAvg30d": "৩০ দিনের গড়",
+    "statAvgDailyRate": "গড় দৈনিক হার"
   },
   "checkinHistory": {
     "title": "গেস্ট বুক",
     "guestsRegistered": "{count} জন অতিথি নিবন্ধিত",
     "refresh": "রিফ্রেশ",
     "exportCsv": "CSV / Excel এক্সপোর্ট করুন",
-    "searchPlaceholder": "নাম, ID, JMBG, রেফ খুঁজুন...",
+    "searchPlaceholder": "নাম, ID, পাসপোর্ট, রেফ খুঁজুন...",
     "limitReached": "গেস্ট বুক সীমায় পৌঁছেছে ({plan} প্ল্যানে {current}/{limit})। অতিথি যোগ করা চালিয়ে যেতে আপনার প্ল্যান আপগ্রেড করুন।",
     "noRecordsYet": "এখনও কোনো রেকর্ড নেই",
     "noRecordsHint": "গেস্ট বুকে যোগ করা হলে অতিথিরা এখানে প্রদর্শিত হবে।",
@@ -1028,7 +1040,8 @@
     "noResults": "কোনো ফলাফল নেই",
     "confirmRemove": "গেস্ট বুক থেকে এই এন্ট্রি সরাতে চান?",
     "toastSaveFailed": "সংরক্ষণ ব্যর্থ",
-    "toastRemoveFailed": "এন্ট্রি সরাতে ব্যর্থ"
+    "toastRemoveFailed": "এন্ট্রি সরাতে ব্যর্থ",
+    "recordDescriptor": "সার্বিয়ান পুলিশ-নিবন্ধন রেকর্ড"
   },
   "channels": {
     "errorLoading": "চ্যানেল লোড করতে ত্রুটি",
@@ -1149,7 +1162,8 @@
     "extractData": "ডেটা বের করুন",
     "uploadedDocuments": "আপলোড করা নথি:",
     "thumbAlt": "থাম্ব",
-    "infoBoxHint": "অতিথির পাসপোর্ট, ID, বা ড্রাইভিং লাইসেন্সের স্পষ্ট ছবি বা স্ক্যান আপলোড করুন। সার্বিয়ায় পুলিশ নিবন্ধনের জন্য প্রয়োজনীয়।"
+    "infoBoxHint": "অতিথির পাসপোর্ট, ID, বা ড্রাইভিং লাইসেন্সের স্পষ্ট ছবি বা স্ক্যান আপলোড করুন। সার্বিয়ায় পুলিশ নিবন্ধনের জন্য প্রয়োজনীয়।",
+    "ocrProOnly": "OCR নথি স্ক্যানিং Pro এবং Scale প্ল্যানে উপলব্ধ। আনলক করতে আপগ্রেড করুন।"
   },
   "duplicateMergeDialog": {
     "title": "ডুপ্লিকেট অতিথি একত্রিত করুন",

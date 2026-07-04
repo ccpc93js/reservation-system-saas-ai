@@ -14,7 +14,7 @@ import { getOccupancyMetrics, getRevenueMetrics, getArrivalsToday, getActiveRese
 import ArrivalsSchedule from "@/components/dashboard/arrivals-schedule";
 
 const colorMap: Record<string, { bg: string; text: string }> = {
-  indigo: { bg: "bg-indigo-50", text: "text-indigo-600" },
+  indigo: { bg: "bg-[#DDE7F0]", text: "text-[#3A5F82]" },
   amber: { bg: "bg-amber-50", text: "text-amber-600" },
   emerald: { bg: "bg-emerald-50", text: "text-emerald-600" },
 };
@@ -145,7 +145,7 @@ export default async function DashboardPage() {
       {/* Section Title */}
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">{t("todaysOverview")}</h2>
+          <h2 className="font-serif text-3xl font-semibold text-foreground">{t("todaysOverview")}</h2>
           <p className="text-sm text-muted-foreground mt-2">
             {format(new Date(), "EEEE, MMMM d, yyyy")}
           </p>
@@ -153,22 +153,22 @@ export default async function DashboardPage() {
       </div>
 
       {/* 4 Stat Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const colors = colorMap[stat.color];
           return (
             <div
               key={stat.label}
-              className="bg-surface p-10 rounded-2xl border border-border shadow-lg flex items-center justify-between group hover:shadow-xl hover:border-border transition-all cursor-pointer"
+              className="bg-surface border border-border rounded-2xl p-6 flex items-start justify-between gap-4"
             >
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                   {stat.label}
                 </p>
-                <h3 className="text-3xl font-bold text-foreground mb-2">
+                <h3 className="font-serif text-4xl font-semibold text-foreground mb-2 leading-none">
                   {stat.value}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   <span className={`${colors.text}`}>{(stat as any).detailLine1}</span>
                 </p>
                 {(stat as any).detailLine2 && (
@@ -177,8 +177,8 @@ export default async function DashboardPage() {
                   </p>
                 )}
               </div>
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform ${colors.bg} ${colors.text}`}>
-                <stat.icon className="w-8 h-8" />
+              <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${colors.bg} ${colors.text}`}>
+                <stat.icon className="w-5 h-5" />
               </div>
             </div>
           );

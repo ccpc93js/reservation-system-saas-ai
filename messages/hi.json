@@ -397,7 +397,10 @@
       "rejectOneFailed": "चेक-इन अस्वीकृत करने में विफल",
       "rejectedResubmit": "चेक-इन अस्वीकृत। अतिथि को फिर से सबमिट करने के लिए कहा जाएगा।",
       "linkCopied": "लिंक कॉपी हो गया!"
-    }
+    },
+    "colGuest": "अतिथि",
+    "colAction": "कार्रवाई",
+    "waitingChip": "{count} अतिथि प्रतीक्षारत"
   },
   "reservations": {
     "errorLoading": "आरक्षण लोड करने में त्रुटि",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "चेक-आउट नहीं हो सकता — पहले आवश्यक फ़ील्ड ठीक करें",
       "statusUpdateFailed": "स्थिति अपडेट करने में विफल",
       "statusUpdated": "स्थिति अपडेट हो गई"
-    }
+    },
+    "refresh": "रीफ़्रेश करें"
   },
   "guests": {
     "errorLoading": "अतिथि लोड करने में त्रुटि",
@@ -540,7 +544,8 @@
       "toastDeleteError": "अतिथि हटाने में त्रुटि",
       "toastMergeFailed": "मर्ज विफल",
       "toastMerged": "अतिथि सफलतापूर्वक मर्ज किए गए!"
-    }
+    },
+    "refresh": "रीफ़्रेश करें"
   },
   "rooms": {
     "unauthorized": "अनधिकृत",
@@ -962,14 +967,21 @@
     "noRoomData": "कोई कमरा डेटा उपलब्ध नहीं",
     "paywallFeature": "एनालिटिक्स और रिपोर्ट",
     "paywallDescription": "अधिभोग रुझान, राजस्व चार्ट, बुकिंग स्रोत विश्लेषण, और 30-दिन के प्रदर्शन की जानकारी।",
-    "refresh": "रीफ़्रेश करें"
+    "refresh": "रीफ़्रेश करें",
+    "statTotalBookings": "कुल बुकिंग",
+    "statRevenue": "राजस्व (30 दिन)",
+    "statOccupancy": "अधिभोग",
+    "statAdr": "ADR",
+    "statLast30d": "पिछले 30 दिन",
+    "statAvg30d": "30 दिनों का औसत",
+    "statAvgDailyRate": "औसत दैनिक दर"
   },
   "checkinHistory": {
     "title": "गेस्ट बुक",
     "guestsRegistered": "{count} पंजीकृत अतिथि",
     "refresh": "रीफ्रेश",
     "exportCsv": "CSV / Excel निर्यात करें",
-    "searchPlaceholder": "नाम, ID, JMBG, संदर्भ खोजें...",
+    "searchPlaceholder": "नाम, ID, पासपोर्ट, संदर्भ खोजें...",
     "limitReached": "गेस्ट बुक सीमा पूरी हो गई ({plan} प्लान पर {current}/{limit})। अतिथि जोड़ना जारी रखने के लिए अपना प्लान अपग्रेड करें।",
     "noRecordsYet": "अभी तक कोई रिकॉर्ड नहीं",
     "noRecordsHint": "गेस्ट बुक में जोड़े जाने पर अतिथि यहां दिखाई देंगे।",
@@ -1028,7 +1040,8 @@
     "noResults": "कोई परिणाम नहीं",
     "confirmRemove": "क्या इस प्रविष्टि को गेस्ट बुक से हटाना है?",
     "toastSaveFailed": "सहेजने में विफल",
-    "toastRemoveFailed": "प्रविष्टि हटाने में विफल"
+    "toastRemoveFailed": "प्रविष्टि हटाने में विफल",
+    "recordDescriptor": "सर्बियाई पुलिस-पंजीकरण रिकॉर्ड"
   },
   "channels": {
     "errorLoading": "चैनल लोड करने में त्रुटि",
@@ -1149,7 +1162,8 @@
     "extractData": "डेटा निकालें",
     "uploadedDocuments": "अपलोड किए गए दस्तावेज़:",
     "thumbAlt": "थंब",
-    "infoBoxHint": "अतिथि के पासपोर्ट, ID, या ड्राइविंग लाइसेंस की स्पष्ट फोटो या स्कैन अपलोड करें। सर्बिया में पुलिस पंजीकरण के लिए आवश्यक।"
+    "infoBoxHint": "अतिथि के पासपोर्ट, ID, या ड्राइविंग लाइसेंस की स्पष्ट फोटो या स्कैन अपलोड करें। सर्बिया में पुलिस पंजीकरण के लिए आवश्यक।",
+    "ocrProOnly": "OCR दस्तावेज़ स्कैनिंग Pro और Scale प्लान में उपलब्ध है। अनलॉक करने के लिए अपग्रेड करें।"
   },
   "duplicateMergeDialog": {
     "title": "डुप्लिकेट अतिथि मर्ज करें",

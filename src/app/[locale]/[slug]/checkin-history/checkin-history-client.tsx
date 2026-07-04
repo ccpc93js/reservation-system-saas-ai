@@ -292,46 +292,39 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
   return (
     <div className="p-6 space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <History className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">{t("title")}</h1>
-            <p className="text-xs text-muted-foreground">
-              {t("guestsRegistered", { count: filtered.length })}
-              {guestBookLimit !== -1 && (
-                <span className={`ml-2 font-medium ${localRecords.length >= guestBookLimit ? "text-red-500" : localRecords.length >= guestBookLimit * 0.8 ? "text-amber-500" : ""}`}>
-                  · {localRecords.length}/{guestBookLimit} ({planName})
-                </span>
-              )}
-            </p>
-          </div>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t("guestsRegistered", { count: filtered.length })} · {t("recordDescriptor")}
+            {guestBookLimit !== -1 && (
+              <span className={`ml-2 font-medium ${localRecords.length >= guestBookLimit ? "text-red-500" : localRecords.length >= guestBookLimit * 0.8 ? "text-amber-500" : ""}`}>
+                · {localRecords.length}/{guestBookLimit} ({planName})
+              </span>
+            )}
+          </p>
         </div>
+        <button onClick={() => exportCSV(filtered, orgName)} disabled={filtered.length === 0}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all shrink-0"
+          style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 14px rgba(95,112,72,0.3)" }}>
+          <Download className="w-4 h-4" />
+          {t("exportCsv")}
+        </button>
       </div>
 
-      {/* Search + table toolbar */}
+      {/* Search + table toolbar — search stays in original position */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="relative max-w-sm flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder={t("searchPlaceholder")}
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-border bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={handleRefresh} disabled={refreshing}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all">
-            <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
-            {t("refresh")}
-          </button>
-          <button onClick={() => exportCSV(filtered, orgName)} disabled={filtered.length === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all"
-            style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 14px rgba(95,112,72,0.3)" }}>
-            <Download className="w-4 h-4" />
-            {t("exportCsv")}
-          </button>
-        </div>
+        <button onClick={handleRefresh} disabled={refreshing}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all shrink-0">
+          <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+          {t("refresh")}
+        </button>
       </div>
 
       {/* At-limit banner */}
@@ -357,15 +350,15 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           <p className="text-xs text-muted-foreground">{t("noRecordsHint")}</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-border overflow-hidden">
+        <div className="rounded-2xl border border-border overflow-hidden bg-surface shadow-sm">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
-                <tr className="bg-muted/50 border-b border-border">
+                <tr className="bg-muted/40 border-b border-border">
                   {[t("colReservationNumber"), t("colName"), t("colBirthDate"), t("colCitizenship"), t("colCountryOfBirth"),
                     t("colIdType"), t("colIdNumber"), t("colIssueDate"), t("colExpiryDate"),
                     t("colJmbg"), t("colService"), t("colRoomBed"), t("colArrival"), t("colDeparture"), ""].map((h, i) => (
-                    <th key={i} className="px-3 py-2.5 text-left font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
+                    <th key={i} className="px-4 py-3 text-left font-semibold text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -373,23 +366,23 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                 {filtered.map((r, i) => {
                   const bedRoom = [r.room_name, r.bed_name].filter(Boolean).join(" · ") || "—";
                   return (
-                    <tr key={r.id} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-background" : "bg-muted/20"} hover:bg-primary/5 transition-colors`}>
-                      <td className="px-3 py-2.5 font-mono text-muted-foreground whitespace-nowrap">{r.reservation_number ?? "—"}</td>
-                      <td className="px-3 py-2.5 font-medium text-foreground whitespace-nowrap">{r.first_name} {r.last_name}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.date_of_birth)}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.nationality || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.country_of_birth || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.document_type ? docTypeLabel(r.document_type) : "—"}</td>
-                      <td className="px-3 py-2.5 font-mono text-foreground whitespace-nowrap">{r.document_number || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_issued_date)}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_expiry)}</td>
-                      <td className="px-3 py-2.5 font-mono text-foreground whitespace-nowrap">{r.jmbg || "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{r.service_type ? serviceTypeLabel(r.service_type) : "—"}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{bedRoom}</td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">
+                    <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+                      <td className="px-4 py-3.5 font-mono font-medium text-primary whitespace-nowrap">{r.reservation_number ?? "—"}</td>
+                      <td className="px-4 py-3.5 font-medium text-foreground whitespace-nowrap">{r.first_name} {r.last_name}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.date_of_birth)}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.nationality || "—"}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.country_of_birth || "—"}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.document_type ? docTypeLabel(r.document_type) : "—"}</td>
+                      <td className="px-4 py-3.5 font-mono text-foreground whitespace-nowrap">{r.document_number || "—"}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_issued_date)}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_expiry)}</td>
+                      <td className="px-4 py-3.5 font-mono text-foreground whitespace-nowrap">{r.jmbg || "—"}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.service_type ? serviceTypeLabel(r.service_type) : "—"}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{bedRoom}</td>
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">
                         {r.actual_check_in_at ? fmtDateTime(r.actual_check_in_at) : fmtDate(r.check_in)}
                       </td>
-                      <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">
+                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">
                         {r.actual_check_out_at ? fmtDateTime(r.actual_check_out_at) : fmtDate(r.check_out)}
                       </td>
                       <td className="px-2 py-2.5">
@@ -425,7 +418,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border shrink-0">
               <div>
-                <h2 className="text-lg font-bold text-foreground">{t("editEntryTitle")}</h2>
+                <h2 className="font-serif text-2xl font-semibold text-foreground">{t("editEntryTitle")}</h2>
                 <p className="text-xs text-muted-foreground mt-0.5">{editForm.first_name} {editForm.last_name}</p>
               </div>
               <button onClick={closeEdit} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">

@@ -111,10 +111,10 @@ export default function LoginPage() {
             "radial-gradient(60% 60% at 25% 20%, color-mix(in srgb, hsl(var(--accent)) 45%, transparent), transparent 65%), radial-gradient(50% 60% at 85% 90%, rgba(201,162,75,.30), transparent 65%), hsl(var(--text))",
         }}
       >
-        <div className="flex items-center gap-3 font-semibold">
+        <a href="/" className="flex items-center gap-3 font-semibold hover:opacity-90 transition-opacity">
           <Image src="/botanical/logo.png" alt="HostMagSmart" width={38} height={38} className="rounded-lg bg-white/90 p-0.5" />
           <span className="text-base">HostMagSmart</span>
-        </div>
+        </a>
         <div className="flex-1 flex items-center justify-center py-6">
           <div className="w-full max-w-sm aspect-[3/4] rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
             <Image src="/botanical/room-living.png" alt="Cozy room with plants" width={480} height={640} className="w-full h-full object-cover" />
@@ -131,13 +131,13 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
 
           {/* Branding */}
-          <div className="flex items-center gap-3 mb-7">
+          <a href="/" className="flex items-center gap-3 mb-7 hover:opacity-90 transition-opacity">
             <Image src="/botanical/logo.png" alt="HostMagSmart" width={46} height={46} className="object-contain" />
             <div>
               <h1 className="text-lg font-bold text-foreground font-sans-force tracking-tight">{tBrand("name")}</h1>
               <p className="text-xs text-muted-foreground font-medium">{tBrand("tagline")}</p>
             </div>
-          </div>
+          </a>
 
           {/* Tabs */}
           {mode !== "forgot" && (

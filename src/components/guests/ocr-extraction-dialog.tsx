@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, AlertCircle, CheckCircle2, AlertTriangle } from "lucide-react";
@@ -60,6 +60,16 @@ export default function OCRExtractionDialog({
   );
   const [showBackSideUpload, setShowBackSideUpload] = useState(false);
   const [isExtractingBackSide, setIsExtractingBackSide] = useState(false);
+
+  // This dialog is force-unmounted by its parent (conditional render) rather
+  // than closed via Radix state, and it's nested inside the guest dialog.
+  // In that case Radix's scroll-lock can leave `pointer-events: none` on
+  // <body>, freezing the whole page. Clear it on unmount as a safety net.
+  useEffect(() => {
+    return () => {
+      document.body.style.pointerEvents = "";
+    };
+  }, []);
 
   const handleFieldChange = (fieldKey: string, value: any) => {
     setCorrectedData((prev) => ({
@@ -140,16 +150,28 @@ export default function OCRExtractionDialog({
   };
 
   return (
-    <Dialog.Root open={true}>
+    <Dialog.Root open={true} modal={false} onOpenChange={(o) => { if (!o) onCancel(); }}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        {/* This dialog opens on top of the guest dialog. Keep it non-modal so
+            Radix doesn't lock <body> pointer-events (which froze the page when
+            two Radix modals were stacked), and give it a higher z-index than
+            the guest dialog (z-[10002]) so its controls are reachable. */}
+        <div className="fixed inset-0 bg-black/50 z-[10010] pointer-events-auto" onClick={onCancel} />
         <Dialog.Content
-          className="fixed left-[50%] top-[50%] z-50 w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto"
+          onInteractOutside={(e) => e.preventDefault()}
+          onWheel={(e) => {
+            // The guest dialog behind us uses Radix's RemoveScroll, which
+            // preventDefaults wheel events and blocks scrolling on this
+            // (non-modal) dialog. Scroll the container manually so the mouse
+            // wheel works.
+            e.currentTarget.scrollTop += e.deltaY;
+          }}
+          className="fixed left-[50%] top-[50%] z-[10011] w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto"
           aria-describedby={undefined}
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <Dialog.Title className="text-lg font-semibold text-foreground">
+              <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">
                 {t("title")}
               </Dialog.Title>
               <p className="text-xs text-muted-foreground mt-1">

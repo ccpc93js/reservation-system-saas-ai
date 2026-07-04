@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
+import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -198,6 +198,13 @@ export default function ReservationsListClient({
     handleFetch(search, page, filters);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await handleFetch(search, page, filters);
+    setRefreshing(false);
+  };
+
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -320,13 +327,21 @@ export default function ReservationsListClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
+          <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-sm mt-0.5 text-muted-foreground">
             {t("subtitle")}
           </p>
         </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing || isLoading}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all shrink-0"
+        >
+          <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+          {t("refresh")}
+        </button>
       </div>
 
       {/* Search box */}
@@ -398,30 +413,30 @@ export default function ReservationsListClient({
       {/* Table */}
       <div className="rounded-xl border border-border overflow-hidden bg-surface shadow-sm">
         <div className="overflow-x-auto">
-          <table className="text-left border-collapse text-xs" style={{ minWidth: "1400px" }}>
+          <table className="text-left border-collapse text-sm" style={{ minWidth: "1400px" }}>
             <thead>
-              <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("reservation_number")}>
+              <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-semibold text-[11px] uppercase tracking-wider">
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("reservation_number")}>
                   {t("colReservationNumber")} <SortIndicator column="reservation_number" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("guestName")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("guestName")}>
                   {t("colGuest")} <SortIndicator column="guestName" />
                 </th>
-                <th className="p-3">{t("colRoomBed")}</th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_in")}>
+                <th className="px-4 py-3.5">{t("colRoomBed")}</th>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_in")}>
                   {t("colCheckIn")} <SortIndicator column="check_in" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_out")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("check_out")}>
                   {t("colCheckOut")} <SortIndicator column="check_out" />
                 </th>
-                <th className="p-3">{t("colNights")}</th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("status")}>
+                <th className="px-4 py-3.5">{t("colNights")}</th>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("status")}>
                   {t("colStatus")} <SortIndicator column="status" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("total_amount")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("total_amount")}>
                   {t("colTotal")} <SortIndicator column="total_amount" />
                 </th>
-                <th className="p-3 text-right cursor-pointer hover:text-foreground" onClick={() => handleSort("paid_amount")}>
+                <th className="px-4 py-3.5 text-right cursor-pointer hover:text-foreground" onClick={() => handleSort("paid_amount")}>
                   {t("colPaid")} <SortIndicator column="paid_amount" />
                 </th>
               </tr>
@@ -453,30 +468,30 @@ export default function ReservationsListClient({
                       className="hover:bg-muted/40 cursor-pointer"
                       onClick={() => handleOpenEdit(res.id)}
                     >
-                      <td className="p-3 font-mono font-medium text-primary">
+                      <td className="px-4 py-3.5 font-mono font-medium text-primary">
                         {res.reservation_number}
                       </td>
-                      <td className="p-3">
+                      <td className="px-4 py-3.5">
                         {res.guests
                           ? `${res.guests.first_name} ${res.guests.last_name}`
                           : "—"}
                       </td>
-                      <td className="p-3">
+                      <td className="px-4 py-3.5">
                         {roomName} / {bedName}
                       </td>
-                      <td className="p-3">
+                      <td className="px-4 py-3.5">
                         {new Date(res.check_in).toLocaleDateString()}
                       </td>
-                      <td className="p-3">
+                      <td className="px-4 py-3.5">
                         {new Date(res.check_out).toLocaleDateString()}
                       </td>
-                      <td className="p-3 text-center">{daysCount}</td>
-                      <td className="p-3" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-4 py-3.5 text-center">{daysCount}</td>
+                      <td className="px-4 py-3.5" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={res.status}
                           onChange={(e) => handleStatusChange(res.id, e.target.value)}
                           disabled={updatingStatusId === res.id}
-                          className={`px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer disabled:opacity-50 ${colors.bg} ${colors.text}`}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold border-0 cursor-pointer disabled:opacity-50 ${colors.bg} ${colors.text}`}
                         >
                           <option value="pending">{statusLabels.pending}</option>
                           <option value="confirmed">{statusLabels.confirmed}</option>
@@ -486,8 +501,8 @@ export default function ReservationsListClient({
                           <option value="no_show">{statusLabels.no_show}</option>
                         </select>
                       </td>
-                      <td className="p-3 font-medium">${res.total_amount.toFixed(2)}</td>
-                      <td className={`p-3 text-right font-semibold ${res.total_amount <= 0 || res.paid_amount >= res.total_amount ? "text-emerald-600" : res.paid_amount > 0 ? "text-amber-600" : "text-red-600"}`}>
+                      <td className="px-4 py-3.5 font-medium">${res.total_amount.toFixed(2)}</td>
+                      <td className={`p-3 text-right font-semibold ${res.total_amount <= 0 || res.paid_amount >= res.total_amount ? "text-[#4A6740]" : res.paid_amount > 0 ? "text-[#8A6A16]" : "text-[#9C4A37]"}`}>
                         ${res.paid_amount.toFixed(2)}
                       </td>
                     </tr>

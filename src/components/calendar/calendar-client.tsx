@@ -70,8 +70,8 @@ export default function CalendarClient({
     <div className="max-w-[1600px] mx-auto p-4 md:p-8 font-sans space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <CalendarRange className="w-5 h-5 text-primary" />
+          <h1 className="font-serif text-3xl font-semibold text-foreground flex items-center gap-2.5">
+            <CalendarRange className="w-7 h-7 text-primary" />
             {t("title")}
           </h1>
           <p className="text-sm mt-1 text-muted-foreground">
@@ -90,13 +90,13 @@ export default function CalendarClient({
           </button>
           <div className="flex items-center gap-3 text-[11px] font-medium text-muted-foreground bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-400" /> {t("legendConfirmed")}
+              <div className="w-2 h-2 rounded-full bg-[#6E8A5E]" /> {t("legendConfirmed")}
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-amber-400" /> {t("legendPending")}
+              <div className="w-2 h-2 rounded-full bg-[#C9A24B]" /> {t("legendPending")}
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-indigo-400" /> {t("legendInHouse")}
+              <div className="w-2 h-2 rounded-full bg-accent" /> {t("legendInHouse")}
             </span>
           </div>
         </div>

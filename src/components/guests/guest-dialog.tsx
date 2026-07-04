@@ -301,6 +301,7 @@ export default function GuestDialog({
             aria-describedby={undefined}
             className="fixed left-[50%] top-[50%] z-[10002] w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
           >
+            <Dialog.Title className="sr-only">{guestId ? t("editTitle") : t("newTitle")}</Dialog.Title>
             <p className="text-muted-foreground">{t("loading")}</p>
           </Dialog.Content>
         </Dialog.Portal>
@@ -334,7 +335,7 @@ export default function GuestDialog({
           className="fixed left-[50%] top-[50%] z-[10002] w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[80vh] overflow-y-auto"
         >
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-lg font-semibold text-foreground">
+            <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">
               {guestId ? t("editTitle") : t("newTitle")}
             </Dialog.Title>
             <Dialog.Close
@@ -388,9 +389,22 @@ export default function GuestDialog({
 
           <form
             ref={submitFormRef}
-            onSubmit={handleSubmit((data) => {
-              return onSubmit(data);
-            })}
+            onSubmit={handleSubmit(
+              (data) => onSubmit(data),
+              (formErrors) => {
+                // If a validation error is inside the collapsed Document
+                // Information section, expand it so the user can see it.
+                const docFields = [
+                  "document_type", "document_number", "document_expiry",
+                  "document_issued_date", "document_issued_place",
+                  "place_of_residence", "country_of_residence",
+                  "jmbg", "unique_master_citizen",
+                ];
+                if (docFields.some((f) => (formErrors as any)[f])) {
+                  setExpandDocumentInfo(true);
+                }
+              }
+            )}
             className="space-y-4"
           >
             {/* OCR Upload Section - Show at TOP for new guests */}

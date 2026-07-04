@@ -51,8 +51,8 @@ export default function DemoWelcomeModal({ slug }: Props) {
           <div className="inline-flex items-center gap-1.5 bg-surface/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
             {t("demoModeBadge")}
           </div>
-          <h2 className="text-xl font-bold text-white mb-1">{t("welcomeTitle")}</h2>
-          <p className="text-purple-100 text-sm">
+          <h2 className="font-serif text-2xl font-semibold text-white mb-1">{t("welcomeTitle")}</h2>
+          <p className="text-white/80 text-sm">
             {t("welcomeSubtitle")}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function DemoWelcomeModal({ slug }: Props) {
           <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">{t("suggestedThings")}</p>
           {suggestions.map((s) => (
             <div key={s.key}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-border hover:border-purple-200 hover:bg-purple-50/50 transition-all group cursor-pointer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-border hover:border-accent/40 hover:bg-muted transition-all group cursor-pointer"
               onClick={() => {
                 if (s.href) window.location.href = `/${locale}/${slug}/${s.href}`;
                 dismiss();
@@ -76,7 +76,7 @@ export default function DemoWelcomeModal({ slug }: Props) {
                 <p className="text-xs text-muted-foreground truncate">{t(`suggestions.${s.key}.desc`)}</p>
               </div>
               {s.href && (
-                <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
               )}
             </div>
           ))}
@@ -91,7 +91,7 @@ export default function DemoWelcomeModal({ slug }: Props) {
           </button>
           <p className="text-center text-xs text-muted-foreground mt-2.5">
             {t("wantThisForYourHostel")}{" "}
-            <a href="/signup" className="text-purple-600 font-medium hover:underline">
+            <a href="/signup" className="text-accent font-medium hover:underline">
               {t("createFreeAccount")}
             </a>
           </p>

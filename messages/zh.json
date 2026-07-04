@@ -397,7 +397,10 @@
       "rejectOneFailed": "拒绝入住失败",
       "rejectedResubmit": "入住申请已拒绝，客人将被要求重新提交。",
       "linkCopied": "链接已复制！"
-    }
+    },
+    "colGuest": "客人",
+    "colAction": "操作",
+    "waitingChip": "{count} 位客人等待中"
   },
   "reservations": {
     "errorLoading": "加载预订失败",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "无法办理退房 — 请先修正必填字段",
       "statusUpdateFailed": "状态更新失败",
       "statusUpdated": "状态已更新"
-    }
+    },
+    "refresh": "刷新"
   },
   "guests": {
     "errorLoading": "加载客人时出错",
@@ -540,7 +544,8 @@
       "toastDeleteError": "删除客人时出错",
       "toastMergeFailed": "合并失败",
       "toastMerged": "客人合并成功！"
-    }
+    },
+    "refresh": "刷新"
   },
   "rooms": {
     "unauthorized": "未授权",
@@ -962,14 +967,21 @@
     "noRoomData": "暂无房间数据",
     "paywallFeature": "分析与报告",
     "paywallDescription": "入住率趋势、收入图表、预订来源细分以及 30 天业绩洞察。",
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "statTotalBookings": "总预订量",
+    "statRevenue": "收入（30天）",
+    "statOccupancy": "入住率",
+    "statAdr": "平均房价",
+    "statLast30d": "最近30天",
+    "statAvg30d": "30天平均",
+    "statAvgDailyRate": "平均每日房价"
   },
   "checkinHistory": {
     "title": "住客登记簿",
     "guestsRegistered": "已登记 {count} 位住客",
     "refresh": "刷新",
     "exportCsv": "导出 CSV / Excel",
-    "searchPlaceholder": "搜索姓名、证件、JMBG、参考号…",
+    "searchPlaceholder": "搜索姓名、证件、护照、参考号…",
     "limitReached": "住客登记簿已达上限（{plan} 套餐 {current}/{limit}）。请升级套餐以继续添加住客。",
     "noRecordsYet": "暂无记录",
     "noRecordsHint": "添加至住客登记簿后，住客将显示在此处。",
@@ -1028,7 +1040,8 @@
     "noResults": "无结果",
     "confirmRemove": "确定要从住客登记簿中移除此条目吗？",
     "toastSaveFailed": "保存失败",
-    "toastRemoveFailed": "移除条目失败"
+    "toastRemoveFailed": "移除条目失败",
+    "recordDescriptor": "塞尔维亚警方登记记录"
   },
   "channels": {
     "errorLoading": "加载渠道时出错",
@@ -1149,7 +1162,8 @@
     "extractData": "提取数据",
     "uploadedDocuments": "已上传文件：",
     "thumbAlt": "缩略图",
-    "infoBoxHint": "请上传客人护照、身份证或驾照的清晰照片或扫描件。塞尔维亚警方登记要求。"
+    "infoBoxHint": "请上传客人护照、身份证或驾照的清晰照片或扫描件。塞尔维亚警方登记要求。",
+    "ocrProOnly": "OCR 证件扫描仅在 Pro 和 Scale 套餐中可用。升级以解锁。"
   },
   "duplicateMergeDialog": {
     "title": "合并重复客人",

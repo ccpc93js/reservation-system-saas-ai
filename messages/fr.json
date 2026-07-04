@@ -397,7 +397,10 @@
       "rejectOneFailed": "Échec du rejet de l'arrivée",
       "rejectedResubmit": "Arrivée rejetée. Il sera demandé au client de soumettre à nouveau.",
       "linkCopied": "Lien copié !"
-    }
+    },
+    "colGuest": "Client",
+    "colAction": "Action",
+    "waitingChip": "{count, plural, one {# client} other {# clients}} en attente"
   },
   "reservations": {
     "errorLoading": "Erreur lors du chargement des réservations",
@@ -442,7 +445,8 @@
       "cannotCheckOut": "Impossible d'enregistrer le départ — corrigez d'abord les champs requis",
       "statusUpdateFailed": "Échec de la mise à jour du statut",
       "statusUpdated": "Statut mis à jour"
-    }
+    },
+    "refresh": "Actualiser"
   },
   "guests": {
     "errorLoading": "Erreur lors du chargement des clients",
@@ -540,7 +544,8 @@
       "toastDeleteError": "Erreur lors de la suppression du client",
       "toastMergeFailed": "Échec de la fusion",
       "toastMerged": "Clients fusionnés avec succès !"
-    }
+    },
+    "refresh": "Actualiser"
   },
   "rooms": {
     "unauthorized": "Non autorisé",
@@ -962,14 +967,21 @@
     "noRoomData": "Aucune donnée de chambre disponible",
     "paywallFeature": "Analyses et rapports",
     "paywallDescription": "Tendances d'occupation, graphiques de revenus, répartition des sources de réservation et aperçus de performance sur 30 jours.",
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "statTotalBookings": "Réservations totales",
+    "statRevenue": "Revenus (30j)",
+    "statOccupancy": "Occupation",
+    "statAdr": "ADR",
+    "statLast30d": "30 derniers jours",
+    "statAvg30d": "Moyenne sur 30 jours",
+    "statAvgDailyRate": "Tarif journalier moyen"
   },
   "checkinHistory": {
     "title": "Registre des clients",
     "guestsRegistered": "{count, plural, one {# client enregistré} other {# clients enregistrés}}",
     "refresh": "Actualiser",
     "exportCsv": "Exporter CSV / Excel",
-    "searchPlaceholder": "Rechercher nom, ID, JMBG, réf...",
+    "searchPlaceholder": "Rechercher nom, ID, passeport, réf...",
     "limitReached": "Limite du registre des clients atteinte ({current}/{limit} sur le forfait <strong>{plan}</strong>). Passez à un forfait supérieur pour continuer à ajouter des clients.",
     "noRecordsYet": "Aucun enregistrement pour l'instant",
     "noRecordsHint": "Les clients apparaîtront ici une fois ajoutés au registre.",
@@ -1028,7 +1040,8 @@
     "noResults": "Aucun résultat",
     "confirmRemove": "Retirer cette entrée du registre des clients ?",
     "toastSaveFailed": "Échec de l'enregistrement",
-    "toastRemoveFailed": "Échec de la suppression de l'entrée"
+    "toastRemoveFailed": "Échec de la suppression de l'entrée",
+    "recordDescriptor": "Registre de police serbe"
   },
   "channels": {
     "errorLoading": "Erreur lors du chargement des canaux",
@@ -1149,7 +1162,8 @@
     "extractData": "Extraire les données",
     "uploadedDocuments": "Documents téléversés :",
     "thumbAlt": "miniature",
-    "infoBoxHint": "Téléversez une photo ou un scan net du passeport, de la carte d'identité ou du permis de conduire du client. Requis pour l'enregistrement de police en Serbie."
+    "infoBoxHint": "Téléversez une photo ou un scan net du passeport, de la carte d'identité ou du permis de conduire du client. Requis pour l'enregistrement de police en Serbie.",
+    "ocrProOnly": "La numérisation OCR de documents est disponible dans les forfaits Pro et Scale. Mettez à niveau pour la débloquer."
   },
   "duplicateMergeDialog": {
     "title": "Fusionner les clients en double",

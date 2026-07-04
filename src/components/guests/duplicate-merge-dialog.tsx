@@ -162,7 +162,7 @@ export default function DuplicateMergeDialog({
           aria-describedby={undefined}
         >
           <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-lg font-semibold text-foreground">
+            <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">
               {t("title")}
             </Dialog.Title>
             <button

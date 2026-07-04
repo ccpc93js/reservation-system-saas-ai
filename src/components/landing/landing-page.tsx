@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   Hotel, CalendarDays, Users, Wifi, BarChart3, Shield,
-  CheckCircle, ArrowRight, Menu, X, Star, Zap, Globe,
+  CheckCircle, ArrowRight, Menu, X, Star, Globe,
   BedDouble, ClipboardCheck, CreditCard
 } from "lucide-react";
 
@@ -18,13 +18,10 @@ export default function LandingPage() {
       {/* ── NAV ── */}
       <nav className="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
-              H
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+            <Image src="/botanical/logo.png" alt="HostMagSmart" width={32} height={32} className="object-contain" />
             <span className="text-lg font-bold tracking-tight">HostMagSmart</span>
-          </div>
+          </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
@@ -78,12 +75,6 @@ export default function LandingPage() {
         <div className="relative max-w-6xl mx-auto px-6 grid lg:grid-cols-[1.05fr_.95fr] gap-12 items-center">
           {/* Left — copy */}
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-6 text-accent"
-              style={{ background: "color-mix(in srgb, hsl(var(--accent)) 12%, transparent)" }}>
-              <Zap className="w-3 h-3" />
-              AI-Powered Property Management
-            </div>
-
             <h1 className="font-serif font-semibold tracking-tight leading-[0.98] text-6xl lg:text-7xl mb-6">
               Run your hostel
               <span className="block italic text-accent">with calm.</span>
@@ -139,7 +130,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex-1 mx-4">
                   <div className="bg-surface rounded-lg px-3 py-1 text-xs text-muted-foreground text-center">
-                    app.hostmagsmart.com/your-hostel/dashboard
+                    hostmagsmart.com/your-hostel/dashboard
                   </div>
                 </div>
               </div>
@@ -416,16 +407,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-gray-900 text-muted-foreground py-12">
+      <footer className="text-muted-foreground py-12" style={{ background: "#2A2823" }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs"
-                style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
-                H
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+              <Image src="/botanical/logo.png" alt="HostMagSmart" width={28} height={28} className="rounded-md bg-white/90 p-0.5 object-contain" />
               <span className="font-bold text-white">HostMagSmart PMS</span>
-            </div>
+            </Link>
             <div className="flex gap-6 text-sm">
               <a href="#features" className="hover:text-white transition-colors">Features</a>
               <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>

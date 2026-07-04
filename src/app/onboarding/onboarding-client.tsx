@@ -94,7 +94,7 @@ export default function OnboardingClient() {
     }
   };
 
-  const inputClass = "w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 focus:bg-surface transition-all";
+  const inputClass = "w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent focus:bg-surface transition-all";
   const labelClass = "block text-[10px] font-bold text-muted-foreground mb-2 uppercase tracking-widest";
 
   const slugBorderClass = slugStatus === "taken" || slugStatus === "invalid"
@@ -188,7 +188,7 @@ export default function OnboardingClient() {
                     <div className={`flex items-center rounded-xl border overflow-hidden transition-all ${slugBorderClass}`}>
                       <div className="flex items-center gap-1 pl-3 shrink-0">
                         <Link className="w-3 h-3 text-muted-foreground" />
-                        <span className="text-[11px] text-muted-foreground pr-1 whitespace-nowrap">yourdomain.com/</span>
+                        <span className="text-[11px] text-muted-foreground pr-1 whitespace-nowrap">hostmagsmart.com/</span>
                       </div>
                       <input
                         value={form.slug}
@@ -236,10 +236,10 @@ export default function OnboardingClient() {
             {step === 2 && (
               <div className="space-y-4">
                 {/* URL confirm */}
-                <div className="rounded-xl bg-purple-50 border border-purple-100 px-4 py-3">
-                  <p className="text-[10px] font-bold text-purple-400 uppercase tracking-wider mb-1">Your dashboard URL</p>
-                  <p className="text-sm font-mono text-purple-900 break-all">
-                    yourdomain.com/<span className="font-bold text-purple-600">{form.slug}</span>/dashboard
+                <div className="rounded-xl border border-border px-4 py-3" style={{ background: "color-mix(in srgb, hsl(var(--accent)) 10%, transparent)" }}>
+                  <p className="text-[10px] font-bold text-accent uppercase tracking-wider mb-1">Your dashboard URL</p>
+                  <p className="text-sm font-mono text-foreground break-all">
+                    hostmagsmart.com/<span className="font-bold text-accent">{form.slug}</span>/dashboard
                   </p>
                 </div>
 

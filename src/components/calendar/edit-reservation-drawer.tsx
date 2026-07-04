@@ -33,8 +33,8 @@ const STATUS_OPTIONS = [
 
 const STATUS_TONE: Record<string, string> = {
   pending: "text-amber-700",
-  confirmed: "text-emerald-700",
-  checked_in: "text-indigo-700",
+  confirmed: "text-[#4A6740]",
+  checked_in: "text-[#3A5F82]",
   checked_out: "text-foreground",
   cancelled: "text-red-700",
   no_show: "text-rose-700",
@@ -507,10 +507,10 @@ export default function EditReservationDrawer({
         >
           <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 z-10 bg-surface">
             <div>
-              <Dialog.Title className="text-lg font-bold text-foreground">
+              <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">
               {reservation.guests?.first_name} {reservation.guests?.last_name}
               </Dialog.Title>
-              <p className="text-xs text-muted-foreground mt-0.5 font-mono">{t("ref", { number: reservation.reservation_number })}</p>
+              <p className="text-xs text-primary font-semibold mt-0.5 font-mono">{t("ref", { number: reservation.reservation_number })}</p>
             </div>
             <Dialog.Close className="rounded p-1 hover:bg-muted transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
@@ -568,39 +568,39 @@ export default function EditReservationDrawer({
               <button
                 type="button"
                 onClick={() => setEditingDates(true)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-[#C2D2E2] bg-[#DDE7F0] text-[#3A5F82] hover:bg-[#C8D8E8] transition-colors"
               >
                 {t("editDates")}
               </button>
             ) : (
-              <div className="space-y-3 p-3 rounded-lg border border-indigo-200 bg-indigo-50">
+              <div className="space-y-3 p-3 rounded-lg border border-[#C2D2E2] bg-[#DDE7F0]">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#3A5F82]">
                     {t("checkIn")}
                   </label>
                   <input
                     type="date"
                     value={newCheckIn}
                     onChange={(e) => setNewCheckIn(e.target.value)}
-                    className="w-full rounded-lg border border-indigo-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full rounded-lg border border-[#C2D2E2] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3A5F82]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-indigo-700">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#3A5F82]">
                     {t("checkOut")}
                   </label>
                   <input
                     type="date"
                     value={newCheckOut}
                     onChange={(e) => setNewCheckOut(e.target.value)}
-                    className="w-full rounded-lg border border-indigo-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full rounded-lg border border-[#C2D2E2] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3A5F82]"
                   />
                 </div>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingDates(false)}
-                    className="flex-1 px-3 py-2 text-sm rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-100"
+                    className="flex-1 px-3 py-2 text-sm rounded-lg border border-[#C2D2E2] text-[#3A5F82] hover:bg-[#C8D8E8]"
                   >
                     {t("cancel")}
                   </button>
@@ -608,7 +608,7 @@ export default function EditReservationDrawer({
                     type="button"
                     onClick={handleUpdateDates}
                     disabled={isUpdatingDates}
-                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 text-sm rounded-lg bg-[#3A5F82] text-white hover:bg-[#31506E] disabled:opacity-50"
                   >
                     {isUpdatingDates ? t("updating") : t("update")}
                   </button>
@@ -728,7 +728,7 @@ export default function EditReservationDrawer({
               <button
                 type="button"
                 onClick={() => setShowCheckoutDialog(true)}
-                className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-3 py-2 text-sm rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
                 {t("checkOutGuest")}
@@ -743,8 +743,8 @@ export default function EditReservationDrawer({
                 disabled={inBook || addingToBook}
                 className={`w-full px-3 py-2 text-sm rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
                   inBook
-                    ? "bg-emerald-50 border border-emerald-300 text-emerald-700 cursor-default"
-                    : "bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50"
+                    ? "bg-[#EAF0E6] border border-[#C5D6BC] text-[#4A6740] cursor-default"
+                    : "bg-[#3A5F82] hover:bg-[#31506E] text-white disabled:opacity-50"
                 }`}
               >
                 {inBook ? t("registeredInBook") : addingToBook ? t("addingToBook") : t("addToBook")}
@@ -752,8 +752,8 @@ export default function EditReservationDrawer({
             )}
 
             {/* Payment Section */}
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-4 space-y-3">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-1">{t("paymentFolio")}</p>
+            <div className="rounded-xl border border-[#C5D6BC] bg-[#E0EADB]/30 p-4 space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#4A6740] mb-1">{t("paymentFolio")}</p>
 
               {/* Folio ledger — segments by creation batch */}
               {(() => {
@@ -806,7 +806,7 @@ export default function EditReservationDrawer({
                 const balance = totalCharged - paid;
 
                 return (
-                  <div className="rounded-lg bg-surface border border-emerald-100 overflow-hidden text-xs">
+                  <div className="rounded-lg bg-surface border border-[#D8E3D1] overflow-hidden text-xs">
                     {groups.map((group, gi) => {
                       const itemIds = group.items.map((i: any) => i.id);
                       const editedRate = segmentRates[gi] ?? String(group.rate);
@@ -815,10 +815,10 @@ export default function EditReservationDrawer({
                       const isExtension = gi > 0;
 
                       return (
-                        <div key={gi} className={`border-b border-emerald-100 last:border-0 ${isExtension ? "bg-emerald-50/40" : ""}`}>
+                        <div key={gi} className={`border-b border-[#D8E3D1] last:border-0 ${isExtension ? "bg-[#E0EADB]/30" : ""}`}>
                           {/* Segment label */}
                           <div className="flex items-center justify-between px-3 pt-2 pb-0.5">
-                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isExtension ? "text-violet-600" : "text-emerald-700"}`}>
+                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isExtension ? "text-accent" : "text-[#4A6740]"}`}>
                               {isExtension ? `⤷ ${group.label}` : group.label}
                             </span>
                             {isSaving && <span className="text-[10px] text-muted-foreground italic">{t("savingSegment")}</span>}
@@ -841,7 +841,7 @@ export default function EditReservationDrawer({
                                 onChange={(e) => setSegmentRates(prev => ({ ...prev, [gi]: e.target.value }))}
                                 onBlur={() => handleSegmentRateBlur(gi, itemIds, editedRate)}
                                 disabled={isSaving}
-                                className="w-16 rounded border border-emerald-200 bg-surface px-1.5 py-0.5 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
+                                className="w-16 rounded border border-[#C5D6BC] bg-surface px-1.5 py-0.5 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-[#8CA378] disabled:opacity-50"
                               />
                               <span className="text-muted-foreground">/n</span>
                             </div>
@@ -855,7 +855,7 @@ export default function EditReservationDrawer({
                     })}
 
                     {/* Totals */}
-                    <div className="bg-emerald-50 px-3 pt-2 pb-2 space-y-1.5 border-t border-emerald-200">
+                    <div className="bg-[#EAF0E6] px-3 pt-2 pb-2 space-y-1.5 border-t border-[#C5D6BC]">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t("totalCharged")}</span>
                         <span className="font-semibold text-foreground">{paymentCurrency} {totalCharged.toFixed(2)}</span>
@@ -863,14 +863,14 @@ export default function EditReservationDrawer({
                       {deposit > 0 && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">{t("depositHeld")}</span>
-                          <span className="font-medium text-blue-600">{depositCurrency} {deposit.toFixed(2)}</span>
+                          <span className="font-medium text-[#3A5F82]">{depositCurrency} {deposit.toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t("amountPaid")}</span>
-                        <span className="font-medium text-emerald-700">{paymentCurrency} {paid.toFixed(2)}</span>
+                        <span className="font-medium text-[#4A6740]">{paymentCurrency} {paid.toFixed(2)}</span>
                       </div>
-                      <div className={`flex justify-between pt-1 border-t border-emerald-200 font-bold text-sm ${balance > 0 ? "text-red-600" : "text-emerald-700"}`}>
+                      <div className={`flex justify-between pt-1 border-t border-[#C5D6BC] font-bold text-sm ${balance > 0 ? "text-red-600" : "text-[#4A6740]"}`}>
                         <span>{balance > 0 ? t("balanceDue") : t("settled")}</span>
                         <span>{paymentCurrency} {Math.abs(balance).toFixed(2)}</span>
                       </div>
@@ -881,11 +881,11 @@ export default function EditReservationDrawer({
 
               {/* Currency row */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("currency")}</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("currency")}</label>
                 <select
                   value={paymentCurrency}
                   onChange={(e) => setPaymentCurrency(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                 >
                   {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -899,7 +899,7 @@ export default function EditReservationDrawer({
                 <button
                   type="button"
                   onClick={() => setPaymentConfirmed((v) => !v)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${paymentConfirmed ? "bg-emerald-500" : "bg-slate-300"}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#5F7048] ${paymentConfirmed ? "bg-[#5F7048]" : "bg-slate-300"}`}
                 >
                   <span className={`inline-block h-4 w-4 transform rounded-full bg-surface shadow transition-transform ${paymentConfirmed ? "translate-x-6" : "translate-x-1"}`} />
                 </button>
@@ -907,7 +907,7 @@ export default function EditReservationDrawer({
 
               {/* Amount paid */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("amountPaidLabel")}</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("amountPaidLabel")}</label>
                 <input
                   type="number"
                   min="0"
@@ -915,14 +915,14 @@ export default function EditReservationDrawer({
                   value={paidAmount}
                   onChange={(e) => setPaidAmount(e.target.value)}
                   placeholder={`${Number(reservation?.total_amount ?? 0).toFixed(2)}`}
-                  className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                 />
               </div>
 
               {/* Deposit */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("deposit")}</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("deposit")}</label>
                   <input
                     type="number"
                     min="0"
@@ -930,15 +930,15 @@ export default function EditReservationDrawer({
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="0.00"
-                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("depositCurrency")}</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("depositCurrency")}</label>
                   <select
                     value={depositCurrency}
                     onChange={(e) => setDepositCurrency(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                   >
                     {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -950,21 +950,21 @@ export default function EditReservationDrawer({
               {/* Actual arrival / departure */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("actualArrival")}</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("actualArrival")}</label>
                   <input
                     type="datetime-local"
                     value={actualCheckIn}
                     onChange={(e) => setActualCheckIn(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("actualDeparture")}</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("actualDeparture")}</label>
                   <input
                     type="datetime-local"
                     value={actualCheckOut}
                     onChange={(e) => setActualCheckOut(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                   />
                 </div>
               </div>
@@ -973,13 +973,13 @@ export default function EditReservationDrawer({
                 type="button"
                 onClick={handleSavePayment}
                 disabled={isSavingPayment}
-                className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                className="w-full px-3 py-2 text-sm rounded-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-50 transition-colors"
               >
                 {isSavingPayment ? t("savingPayment") : t("savePaymentInfo")}
               </button>
 
               {/* Extend Stay */}
-              <div className="pt-1 border-t border-emerald-200">
+              <div className="pt-1 border-t border-[#C5D6BC]">
                 <button
                   type="button"
                   onClick={() => {
@@ -990,7 +990,7 @@ export default function EditReservationDrawer({
                       if (lastRate) setExtendRate(String(lastRate));
                     }
                   }}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-emerald-400 text-emerald-700 hover:bg-emerald-100 transition-colors font-medium"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-[#A9BF9C] text-[#4A6740] hover:bg-[#DCE7D4] transition-colors font-medium"
                 >
                   {showExtend ? t("cancelExtension") : t("extendStay")}
                 </button>
@@ -1006,24 +1006,24 @@ export default function EditReservationDrawer({
                   const newBalance = newTotal - paid;
 
                   return (
-                    <div className="mt-2 rounded-lg border border-emerald-300 bg-surface p-3 space-y-3">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                    <div className="mt-2 rounded-lg border border-[#C5D6BC] bg-surface p-3 space-y-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[#4A6740]">
                         {t("currentCheckOut", { date: currentCheckOut ? new Date(currentCheckOut + "T00:00:00").toLocaleDateString() : "—" })}
                       </p>
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("newCheckOut")}</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("newCheckOut")}</label>
                           <input
                             type="date"
                             value={extendDate}
                             min={currentCheckOut}
                             onChange={(e) => setExtendDate(e.target.value)}
-                            className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                            className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-emerald-700">{t("ratePerNight")}</label>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("ratePerNight")}</label>
                           <input
                             type="number"
                             min="0"
@@ -1031,26 +1031,26 @@ export default function EditReservationDrawer({
                             value={extendRate}
                             onChange={(e) => setExtendRate(e.target.value)}
                             placeholder="0.00"
-                            className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                            className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
                           />
                         </div>
                       </div>
 
                       {extNights > 0 && (
-                        <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-2.5 space-y-1 text-xs">
+                        <div className="rounded-lg bg-[#EAF0E6] border border-[#C5D6BC] p-2.5 space-y-1 text-xs">
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">{t("extension")}</span>
                             <span className="font-medium">{t("extensionCalc", { nights: extNights, currency: paymentCurrency, rate: Number(extendRate).toFixed(2), total: `${paymentCurrency} ${extTotal.toFixed(2)}` })}</span>
                           </div>
-                          <div className="flex justify-between pt-1 border-t border-emerald-200">
+                          <div className="flex justify-between pt-1 border-t border-[#C5D6BC]">
                             <span className="text-muted-foreground">{t("newTotal")}</span>
                             <span className="font-bold text-foreground">{paymentCurrency} {newTotal.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">{t("paidSoFar")}</span>
-                            <span className="text-emerald-700 font-medium">{paymentCurrency} {paid.toFixed(2)}</span>
+                            <span className="text-[#4A6740] font-medium">{paymentCurrency} {paid.toFixed(2)}</span>
                           </div>
-                          <div className={`flex justify-between font-bold ${newBalance > 0 ? "text-red-600" : "text-emerald-700"}`}>
+                          <div className={`flex justify-between font-bold ${newBalance > 0 ? "text-red-600" : "text-[#4A6740]"}`}>
                             <span>{newBalance > 0 ? t("newBalanceDue") : t("settled")}</span>
                             <span>{paymentCurrency} {Math.abs(newBalance).toFixed(2)}</span>
                           </div>
@@ -1061,7 +1061,7 @@ export default function EditReservationDrawer({
                         type="button"
                         onClick={handleExtend}
                         disabled={isExtending || !extendDate || !extendRate || extNights === 0}
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-40 transition-colors font-medium"
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-40 transition-colors font-medium"
                       >
                         {isExtending ? t("extending") : extNights > 0 ? t("confirmExtensionWithNights", { nights: extNights }) : t("confirmExtension")}
                       </button>

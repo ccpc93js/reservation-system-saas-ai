@@ -1,8 +1,8 @@
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createServiceClient();
+    const supabase = await createServerClient();
 
     // Get current user
     const {

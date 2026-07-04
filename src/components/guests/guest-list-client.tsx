@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import GuestDialog from "@/components/guests/guest-dialog";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -35,6 +35,7 @@ export default function GuestListClient({
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
   const [total, setTotal] = useState(totalGuests);
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string | null>(null);
@@ -156,13 +157,23 @@ export default function GuestListClient({
             {t("subtitle")}
           </p>
         </div>
-        <button
-          onClick={handleOpenCreate}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          {t("newGuest")}
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={async () => { setRefreshing(true); await handleFetch(search, page); setRefreshing(false); }}
+            disabled={refreshing || isLoading}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-border bg-background hover:bg-muted disabled:opacity-50 transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+            {t("refresh")}
+          </button>
+          <button
+            onClick={handleOpenCreate}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            {t("newGuest")}
+          </button>
+        </div>
       </div>
 
       {/* Search box */}

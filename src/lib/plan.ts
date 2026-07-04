@@ -7,6 +7,7 @@ export const PLAN_LIMITS: Record<Plan, {
   channels: boolean;
   portal: boolean;
   analytics: boolean;
+  ocr: boolean;
   multiProperty: boolean;
 }> = {
   free: {
@@ -16,6 +17,7 @@ export const PLAN_LIMITS: Record<Plan, {
     channels: false,
     portal: false,
     analytics: false,
+    ocr: false,
     multiProperty: false,
   },
   pro: {
@@ -25,6 +27,7 @@ export const PLAN_LIMITS: Record<Plan, {
     channels: true,
     portal: true,
     analytics: true,
+    ocr: true,
     multiProperty: false,
   },
   scale: {
@@ -34,6 +37,7 @@ export const PLAN_LIMITS: Record<Plan, {
     channels: true,
     portal: true,
     analytics: true,
+    ocr: true,
     multiProperty: true,
   },
 };

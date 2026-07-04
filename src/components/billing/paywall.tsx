@@ -23,7 +23,7 @@ export default function Paywall({ feature, description, requiredPlan, slug }: Pr
           <Lock className="w-8 h-8 text-primary" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground mb-2">{feature}</h2>
+          <h2 className="font-serif text-2xl font-semibold text-foreground mb-2">{feature}</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
         <div className="rounded-xl border border-border bg-surface p-4 space-y-3">
