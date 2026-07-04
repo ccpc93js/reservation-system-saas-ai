@@ -4,15 +4,14 @@ import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { RefreshCw } from "lucide-react";
 import { useHousekeeping, type HousekeepingBed } from "@/lib/hooks/use-housekeeping";
+import { HOUSEKEEPING_STATUSES, type HousekeepingStatus } from "@/lib/types/housekeeping";
 
-const STATUS_COLORS: Record<string, string> = {
+const STATUS_COLORS: Record<HousekeepingStatus, string> = {
   clean: "bg-emerald-100 text-emerald-700 border-emerald-200",
   dirty: "bg-amber-100 text-amber-700 border-amber-200",
   inspected: "bg-blue-100 text-blue-700 border-blue-200",
   out_of_order: "bg-red-100 text-red-700 border-red-200",
 };
-
-const STATUS_VALUES = ["clean", "dirty", "inspected", "out_of_order"] as const;
 
 export default function HousekeepingClient({ orgId }: { orgId: string }) {
   const t = useTranslations("housekeeping");
@@ -32,11 +31,11 @@ export default function HousekeepingClient({ orgId }: { orgId: string }) {
   }, [beds, filter]);
 
   const grouped = useMemo(() => {
-    const map = new Map<string, { roomName: string; beds: HousekeepingBed[] }>();
+    const map = new Map<string, { roomId: string; roomName: string; beds: HousekeepingBed[] }>();
     for (const bed of filteredBeds) {
       const roomId = bed.rooms?.id ?? "unassigned";
       const roomName = bed.rooms?.name ?? t("noRoom");
-      if (!map.has(roomId)) map.set(roomId, { roomName, beds: [] });
+      if (!map.has(roomId)) map.set(roomId, { roomId, roomName, beds: [] });
       map.get(roomId)!.beds.push(bed);
     }
     return Array.from(map.values());
@@ -77,7 +76,7 @@ export default function HousekeepingClient({ orgId }: { orgId: string }) {
       )}
 
       {grouped.map((group) => (
-        <div key={group.roomName} className="bg-surface rounded-xl border border-border shadow-sm p-4">
+        <div key={group.roomId} className="bg-surface rounded-xl border border-border shadow-sm p-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">{group.roomName}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {group.beds.map((bed) => (
@@ -89,7 +88,7 @@ export default function HousekeepingClient({ orgId }: { orgId: string }) {
                   {t(`status_${bed.housekeeping_status}`)}
                 </span>
                 <div className="flex flex-wrap gap-1">
-                  {STATUS_VALUES.filter((s) => s !== bed.housekeeping_status).map((s) => (
+                  {HOUSEKEEPING_STATUSES.filter((s) => s !== bed.housekeeping_status).map((s) => (
                     <button
                       key={s}
                       onClick={() => updateStatus(bed.id, s)}

@@ -382,13 +382,16 @@ export default function PendingCheckInsClient() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                     <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colCheckIn")}</p>
-                      <p className="font-medium text-foreground truncate">
+                      <p
+                        className="font-medium text-foreground truncate"
+                        title={new Date(checkIn.check_in).toLocaleDateString()}
+                      >
                         {new Date(checkIn.check_in).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colRoom")}</p>
-                      <p className="font-medium text-foreground truncate">
+                      <p className="font-medium text-foreground truncate" title={checkIn.room || undefined}>
                         {checkIn.room}
                       </p>
                     </div>
@@ -400,7 +403,10 @@ export default function PendingCheckInsClient() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">{t("colSubmitted")}</p>
-                      <p className="font-medium text-foreground truncate">
+                      <p
+                        className="font-medium text-foreground truncate"
+                        title={new Date(checkIn.submitted_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      >
                         {new Date(checkIn.submitted_at).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",

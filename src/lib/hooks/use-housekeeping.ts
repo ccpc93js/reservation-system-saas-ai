@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { toast } from "sonner";
 import { createBrowserClient } from "@/lib/supabase/client";
+import type { HousekeepingStatus } from "@/lib/types/housekeeping";
 
 export interface HousekeepingBed {
   id: string;
   name: string;
   position: number | null;
-  housekeeping_status: string;
+  housekeeping_status: HousekeepingStatus;
   housekeeping_updated_at: string;
   rooms: {
     id: string;
@@ -28,41 +30,67 @@ export function useHousekeeping(orgId: string) {
       .eq("organization_id", orgId)
       .eq("is_active", true)
       .order("position");
-    setBeds(data ?? []);
+    // housekeeping_status is a DB-CHECK-constrained `text` column, not a
+    // Postgres enum, so the generated type only says `string` here — the
+    // narrowing to HousekeepingStatus is a genuine boundary cast, backed by
+    // the CHECK constraint at the DB layer.
+    setBeds((data as unknown as HousekeepingBed[]) ?? []);
     setLoaded(true);
   }, [orgId]);
 
   useEffect(() => {
-    fetchBeds();
-
+    let cancelled = false;
     const supabase = createBrowserClient();
-    const channel = supabase
-      .channel("housekeeping-org")
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "beds", filter: `organization_id=eq.${orgId}` },
-        (payload) => {
-          setBeds((prev) =>
-            prev.map((b) => (b.id === payload.new.id ? { ...b, ...(payload.new as Partial<HousekeepingBed>) } : b))
-          );
-        }
-      )
-      .subscribe();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    // Wait for the initial fetch to land before subscribing, so a realtime
+    // event arriving mid-fetch can't be dropped against still-empty state
+    // and then overwritten by the fetch's now-stale snapshot.
+    fetchBeds().then(() => {
+      if (cancelled) return;
+      channel = supabase
+        .channel("housekeeping-org")
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "beds", filter: `organization_id=eq.${orgId}` },
+          (payload) => {
+            setBeds((prev) =>
+              prev.map((b) => (b.id === payload.new.id ? { ...b, ...(payload.new as Partial<HousekeepingBed>) } : b))
+            );
+          }
+        )
+        .subscribe();
+    });
 
     return () => {
-      supabase.removeChannel(channel);
+      cancelled = true;
+      if (channel) supabase.removeChannel(channel);
     };
   }, [orgId, fetchBeds]);
 
-  const updateStatus = useCallback(async (bedId: string, status: string) => {
+  const updateStatus = useCallback(async (bedId: string, status: HousekeepingStatus) => {
+    let previousStatus: HousekeepingStatus | undefined;
     setBeds((prev) =>
-      prev.map((b) => (b.id === bedId ? { ...b, housekeeping_status: status, housekeeping_updated_at: new Date().toISOString() } : b))
+      prev.map((b) => {
+        if (b.id !== bedId) return b;
+        previousStatus = b.housekeeping_status;
+        return { ...b, housekeeping_status: status, housekeeping_updated_at: new Date().toISOString() };
+      })
     );
-    await fetch(`/api/beds/${bedId}/housekeeping`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    }).catch(() => {});
+
+    try {
+      const res = await fetch(`/api/beds/${bedId}/housekeeping`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("Failed to update status");
+    } catch {
+      setBeds((prev) =>
+        prev.map((b) => (b.id === bedId && previousStatus ? { ...b, housekeeping_status: previousStatus! } : b))
+      );
+      toast.error("Failed to update bed status");
+    }
   }, []);
 
   return { beds, loaded, updateStatus, refetch: fetchBeds };
