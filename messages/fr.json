@@ -789,15 +789,7 @@
       "remove": "Retirer",
       "logoHint": "PNG, JPG, WebP ou SVG · max 2 Mo · Affiché dans la barre latérale",
       "accentColor": "Couleur d'accent",
-      "color_purple": "Violet",
-      "color_indigo": "Indigo",
-      "color_blue": "Bleu",
       "color_teal": "Sarcelle",
-      "color_green": "Vert",
-      "color_rose": "Rose",
-      "color_orange": "Orange",
-      "color_slate": "Ardoise",
-      "color_black": "Noir",
       "customColor": "Couleur personnalisée",
       "buttonPreview": "Aperçu du bouton",
       "badgePreview": "Aperçu du badge",
@@ -849,7 +841,15 @@
         "processing": "Traitement...",
         "applyAndUpload": "Appliquer et téléverser",
         "cropFailed": "Échec du recadrage"
-      }
+      },
+      "color_moss": "Mousse",
+      "color_sage": "Sauge",
+      "color_fern": "Fougère",
+      "color_ocean": "Océan",
+      "color_clay": "Argile",
+      "color_terracotta": "Terracotta",
+      "color_plum": "Prune",
+      "color_ink": "Encre"
     }
   },
   "guestPortal": {

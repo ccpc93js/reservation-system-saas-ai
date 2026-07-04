@@ -36,7 +36,7 @@ export default function Paywall({ feature, description, requiredPlan, slug }: Pr
         <div className="flex flex-col gap-2">
           <Link href={`/${slug}/settings/billing`}
             className="w-full py-3 rounded-xl font-semibold text-sm text-white text-center transition-all"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 20px rgba(124,58,237,0.3)" }}>
+            style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 20px rgba(95,112,72,0.3)" }}>
             {t("upgradeTo", { plan: planName, price })}
           </Link>
           <Link href={`/${slug}/dashboard`}

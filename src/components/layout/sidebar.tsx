@@ -106,7 +106,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
               </p>
               {org.plan && org.plan !== "free" && (
                 <span className="text-[9px] font-bold px-1 py-0.5 rounded text-white uppercase"
-                  style={{ background: org.plan === "scale" ? "#0f766e" : "#7c3aed" }}>
+                  style={{ background: org.plan === "scale" ? "#0f766e" : "#5f7048" }}>
                   {org.plan}
                 </span>
               )}

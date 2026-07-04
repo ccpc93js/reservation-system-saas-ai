@@ -789,15 +789,7 @@
       "remove": "সরান",
       "logoHint": "PNG, JPG, WebP বা SVG · সর্বোচ্চ 2MB · সাইডবারে দেখানো হয়",
       "accentColor": "অ্যাকসেন্ট রঙ",
-      "color_purple": "বেগুনি",
-      "color_indigo": "গাঢ় নীল",
-      "color_blue": "নীল",
       "color_teal": "টিল",
-      "color_green": "সবুজ",
-      "color_rose": "গোলাপি",
-      "color_orange": "কমলা",
-      "color_slate": "স্লেট",
-      "color_black": "কালো",
       "customColor": "কাস্টম রঙ",
       "buttonPreview": "বোতাম প্রিভিউ",
       "badgePreview": "ব্যাজ প্রিভিউ",
@@ -849,7 +841,15 @@
         "processing": "প্রক্রিয়াকরণ হচ্ছে...",
         "applyAndUpload": "প্রয়োগ করুন ও আপলোড করুন",
         "cropFailed": "ক্রপ ব্যর্থ হয়েছে"
-      }
+      },
+      "color_moss": "শৈবাল সবুজ",
+      "color_sage": "সেজ সবুজ",
+      "color_fern": "ফার্ন সবুজ",
+      "color_ocean": "সমুদ্র নীল",
+      "color_clay": "মাটি রঙ",
+      "color_terracotta": "টেরাকোটা",
+      "color_plum": "বরই বেগুনি",
+      "color_ink": "কালি কালো"
     }
   },
   "guestPortal": {

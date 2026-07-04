@@ -25,7 +25,7 @@ const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId:
   {
     key: "pro",
     icon: Zap,
-    color: "#7c3aed",
+    color: "#5f7048",
     highlight: true,
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_MONTHLY ?? "",
   },

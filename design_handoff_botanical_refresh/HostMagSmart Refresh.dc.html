@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="--accent:#5f7048;--radius:12px;--paper:#F3EEE2;--surface:#FBF8F1;--ink:#2a2823;--muted:#7c776b;--line:#e7dfce;min-height:100vh;background:var(--paper);color:var(--ink);font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:14px;line-height:1.5;">
+
+  <!-- ===== META / DESIGN REFERENCE BAR ===== -->
+  <div style="position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:9px 16px;background:rgba(43,42,36,0.94);backdrop-filter:blur(8px);color:#eee7d6;">
+    <span style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;letter-spacing:.3px;padding-right:6px;">HostMagSmart</span>
+    <span style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#b7ae97;padding-right:4px;">Botanical refresh</span>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+      <button onClick="{{ showLanding }}" style="{{ mpLanding }}">Landing</button>
+      <button onClick="{{ showLogin }}" style="{{ mpLogin }}">Login</button>
+      <button onClick="{{ goDash }}" style="{{ mpDash }}">App ·  use sidebar for all 14 sections</button>
+      <button onClick="{{ showCheckin }}" style="{{ mpCheckin }}">Guest check-in</button>
+      <button onClick="{{ showOnboarding }}" style="{{ mpOnboarding }}">Onboarding</button>
+      <button onClick="{{ showInvite }}" style="{{ mpInvite }}">Invite</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;margin-left:auto;">
+      <span style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#b7ae97;">Tenant accent</span>
+      <div style="display:flex;gap:5px;">
+        <sc-for list="{{ accentList }}" as="a" hint-placeholder-count="9">
+          <button onClick="{{ a.pick }}" title="{{ a.name }}" style="{{ a.sw }}"></button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LANDING ===== -->
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+  <div style="background:var(--paper);background-image:radial-gradient(55% 45% at 15% 12%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 70%),radial-gradient(45% 55% at 92% 22%,rgba(176,125,84,.12),transparent 72%),radial-gradient(60% 50% at 70% 108%,rgba(201,162,75,.10),transparent 70%);">
+    <!-- nav -->
+    <div style="max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:28px;padding:22px 32px;">
+      <div style="display:flex;align-items:center;gap:11px;font-weight:600;">
+        <img src="assets/logo.png" alt="HostMagSmart" style="width:38px;height:38px;object-fit:contain;display:block;" />
+        <span style="font-size:17px;letter-spacing:-.01em;">HostMagSmart</span>
+      </div>
+      <div style="display:flex;gap:26px;font-size:14px;color:#5d584c;">
+        <span>Features</span><span>How it works</span><span>Pricing</span>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:20px;">
+        <span style="font-size:14px;color:#5d584c;">Try Demo</span>
+        <span onClick="{{ showLogin }}" style="font-size:14px;color:#5d584c;cursor:pointer;">Sign In</span>
+        <button onClick="{{ goDash }}" style="background:var(--accent);color:#fff;border:none;border-radius:999px;padding:10px 20px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;">Get Started Free</button>
+      </div>
+    </div>
+
+    <!-- hero -->
+    <div style="max-width:1180px;margin:0 auto;padding:36px 32px 60px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;">
+      <div>
+        <span style="display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);font-size:12.5px;font-weight:600;">✦ AI-Powered Property Management</span>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:74px;line-height:.98;letter-spacing:-.02em;margin:22px 0 0;color:var(--ink);">Run your hostel<br><span style="font-style:italic;color:var(--accent);">with calm.</span></h1>
+        <p style="max-width:440px;font-size:16px;line-height:1.65;color:#5d584c;margin:22px 0 0;">The all-in-one PMS for independent hostels and boutique hotels. Reservations, guests, channels and analytics — one quiet, considered dashboard.</p>
+        <div style="display:flex;gap:14px;margin-top:30px;">
+          <button onClick="{{ goDash }}" style="display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:15px 26px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Start for free →</button>
+          <button style="background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:15px 26px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Try demo</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:30px;color:#7c776b;font-size:13.5px;">
+          <span style="color:#c9a24b;letter-spacing:2px;">★★★★★</span>
+          <span><b style="color:var(--ink);">4.9/5</b> from 200+ hostel managers</span>
+        </div>
+      </div>
+      <!-- hero art placeholder -->
+      <div style="position:relative;">
+        <div style="position:absolute;inset:-14px -14px auto auto;width:120px;height:120px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%);animation:floaty 7s ease-in-out infinite;"></div>
+        <div style="aspect-ratio:4/5;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(60,54,40,.4);">
+          <img src="assets/room-bedroom.png" alt="Warm room with plants" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- product preview -->
+    <div style="max-width:1080px;margin:0 auto;padding:0 32px 70px;">
+      <div style="border-radius:18px;border:1px solid var(--line);background:var(--surface);box-shadow:0 40px 80px -50px rgba(60,54,40,.5);overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);">
+          <span style="width:11px;height:11px;border-radius:50%;background:#d98b7a;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#d9be7a;"></span>
+          <span style="width:11px;height:11px;border-radius:50%;background:#9fb885;"></span>
+          <span style="margin:0 auto;font-size:12px;color:#a49c88;">app.hostmagsmart.com / your-hostel / dashboard</span>
+        </div>
+        <div style="padding:22px;">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+            <sc-for list="{{ previewStats }}" as="p" hint-placeholder-count="4">
+              <div style="border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--paper);">
+                <div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a836f;">{{ p.label }}</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:var(--accent);margin-top:6px;">{{ p.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px;background:var(--paper);">
+            <div style="font-weight:600;margin-bottom:12px;">Tape Calendar</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:96px;font-size:12px;color:#7c776b;">Dorm A / Bed 1</span><span style="height:16px;border-radius:5px;flex:1;background:color-mix(in srgb,var(--accent) 30%,#fff);"></span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:96px;font-size:12px;color:#7c776b;">Dorm A / Bed 2</span><span style="width:38%;height:16px;border-radius:5px;background:#a9c297;"></span><span style="flex:1;height:16px;border-radius:5px;background:color-mix(in srgb,var(--accent) 30%,#fff);"></span></div>
+              <div style="display:flex;align-items:center;gap:12px;"><span style="width:96px;font-size:12px;color:#7c776b;">Private / Bed 1</span><span style="width:82%;height:16px;border-radius:5px;background:#e3c877;"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- features -->
+    <div style="max-width:1080px;margin:0 auto;padding:10px 32px 80px;text-align:center;">
+      <div style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;">Everything you need</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:46px;letter-spacing:-.01em;margin:10px 0 12px;">Built for hostel operators</h2>
+      <p style="max-width:560px;margin:0 auto 40px;color:#5d584c;font-size:16px;line-height:1.6;">From the first booking to the final checkout — HostMagSmart covers every touchpoint of your operation.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:left;">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="6">
+          <div style="border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--surface);">
+            <div style="width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">{{ f.icon }}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;margin-bottom:7px;">{{ f.title }}</div>
+            <div style="color:#5d584c;font-size:14px;line-height:1.55;">{{ f.body }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- CTA band -->
+    <div style="max-width:1080px;margin:0 auto 70px;padding:0 32px;">
+      <div style="border-radius:22px;padding:56px 40px;text-align:center;background:var(--ink);background-image:radial-gradient(50% 120% at 20% 0%,color-mix(in srgb,var(--accent) 40%,transparent),transparent 60%),radial-gradient(40% 120% at 90% 100%,rgba(201,162,75,.28),transparent 60%);color:#f4efe2;">
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:44px;margin:0 0 14px;">Bring calm to the front desk.</h2>
+        <p style="max-width:480px;margin:0 auto 28px;color:#cfc7b3;font-size:16px;">Set up your property in minutes. No card required.</p>
+        <button onClick="{{ goDash }}" style="background:var(--paper);color:var(--ink);border:none;border-radius:12px;padding:15px 30px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Start for free →</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===== LOGIN ===== -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+  <div style="display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 42px);">
+    <!-- art panel -->
+    <div style="position:relative;overflow:hidden;background:var(--ink);background-image:radial-gradient(60% 60% at 25% 20%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 65%),radial-gradient(50% 60% at 85% 90%,rgba(201,162,75,.30),transparent 65%);display:flex;flex-direction:column;justify-content:space-between;padding:44px;color:#f2ecdd;">
+      <div style="display:flex;align-items:center;gap:11px;font-weight:600;">
+        <img src="assets/logo.png" alt="HostMagSmart" style="width:38px;height:38px;object-fit:contain;display:block;background:rgba(255,255,255,.9);border-radius:9px;padding:2px;" />
+        <span style="font-size:16px;">HostMagSmart</span>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 0;">
+        <div style="width:100%;max-width:360px;aspect-ratio:3/4;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 60px -34px rgba(0,0,0,.6);">
+          <img src="assets/room-living.png" alt="Cozy living room with plants" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;line-height:1.3;max-width:360px;">"The quietest front desk software we've ever used."</div>
+        <div style="margin-top:12px;font-size:13px;color:#cbc3af;">— Boutique hostel, Belgrade</div>
+      </div>
+    </div>
+    <!-- form panel -->
+    <div style="display:flex;align-items:center;justify-content:center;padding:44px;background:var(--paper);">
+      <div style="width:100%;max-width:400px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px;">
+          <img src="assets/logo.png" alt="HostMagSmart" style="width:46px;height:46px;object-fit:contain;display:block;" />
+          <div>
+            <div style="font-weight:700;font-size:17px;">HostMagSmart PMS</div>
+            <div style="font-size:12.5px;color:var(--muted);">Property Management System</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;padding:5px;background:color-mix(in srgb,var(--accent) 8%,transparent);border-radius:12px;margin-bottom:26px;">
+          <button onClick="{{ signinTab }}" style="{{ authSignin }}">Sign In</button>
+          <button onClick="{{ createTab }}" style="{{ authCreate }}">Create Account</button>
+        </div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:38px;letter-spacing:-.01em;margin:0 0 6px;">Welcome back</h2>
+        <p style="color:var(--muted);margin:0 0 26px;font-size:15px;">Sign in to manage your property.</p>
+        <label style="display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Email</label>
+        <input value="cristianpalocseres@gmail.com" style="width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-family:inherit;font-size:14.5px;color:var(--ink);margin-bottom:18px;" />
+        <label style="display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Password</label>
+        <input type="password" value="hostmagsmart" style="width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-family:inherit;font-size:14.5px;color:var(--ink);margin-bottom:16px;" />
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);"><input type="checkbox" style="accent-color:var(--accent);width:15px;height:15px;" /> Remember me</label>
+          <span style="font-size:13.5px;color:var(--accent);font-weight:600;">Forgot password?</span>
+        </div>
+        <button onClick="{{ goDash }}" style="width:100%;padding:15px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;">Sign In</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===== APP SHELL ===== -->
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+  <div style="display:grid;grid-template-columns:248px 1fr;min-height:calc(100vh - 42px);background:var(--paper);">
+    <!-- sidebar -->
+    <aside style="background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:11px;padding:18px 18px 16px;border-bottom:1px solid var(--line);">
+        <img src="assets/logo.png" alt="HostMagSmart" style="width:40px;height:40px;object-fit:contain;display:block;" />
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;"><span style="font-weight:600;font-size:14px;">Hostel Downtown Inn</span><span style="font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:5px;background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);">PRO</span></div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);margin-top:2px;"><span style="width:7px;height:7px;border-radius:50%;background:#7ba05b;"></span>Live View</div>
+        </div>
+      </div>
+      <nav style="padding:14px 12px;display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;">
+        <div onClick="{{ goDash }}" style="{{ navDash }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard Overview</div>
+        <div onClick="{{ goTape }}" style="{{ navTape }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Tape Calendar</div>
+        <div onClick="{{ goRes }}" style="{{ navRes }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Reservations</div>
+        <div onClick="{{ goPending }}" style="{{ navPending }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/></svg>Pending Check-Ins</div>
+        <div onClick="{{ goGuestbook }}" style="{{ navGuestbook }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Guest Book</div>
+        <div onClick="{{ goAnalytics }}" style="{{ navAnalytics }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="9"/></svg>Analytics</div>
+        <div onClick="{{ goChannels }}" style="{{ navChannels }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 15.8a5 5 0 0 1 7 0"/><line x1="12" y1="19" x2="12.01" y2="19"/></svg>Channel Manager</div>
+        <div onClick="{{ goGuests }}" style="{{ navGuests }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Guest Directory</div>
+        <div onClick="{{ goRooms }}" style="{{ navRooms }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M2 18h20"/></svg>Room Inventory</div>
+        <div onClick="{{ goHousekeeping }}" style="{{ navHousekeeping }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>Housekeeping</div>
+        <div style="height:1px;background:var(--line);margin:10px 8px 8px;"></div>
+        <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a49c88;font-weight:700;padding:0 12px 6px;">Settings</div>
+        <div onClick="{{ goSProperty }}" style="{{ navSProperty }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Property</div>
+        <div onClick="{{ goSTeam }}" style="{{ navSTeam }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Team</div>
+        <div onClick="{{ goSBilling }}" style="{{ navSBilling }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</div>
+      </nav>
+      <div style="border-top:1px solid var(--line);padding:14px 16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">CR</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:13.5px;">cristianpalocseres</div><div style="font-size:11.5px;color:var(--muted);">Owner</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;margin-top:12px;font-size:13.5px;color:var(--muted);cursor:pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</div>
+      </div>
+    </aside>
+
+    <!-- main -->
+    <div style="display:flex;flex-direction:column;min-width:0;">
+      <!-- header -->
+      <header style="display:flex;align-items:center;gap:16px;padding:14px 26px;background:var(--surface);border-bottom:1px solid var(--line);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.9" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;">{{ pageTitle }}</span>
+        <div style="margin-left:22px;flex:1;max-width:420px;display:flex;align-items:center;gap:9px;padding:9px 14px;border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--muted);font-size:13.5px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>Search guests, reservations…
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:16px;color:var(--muted);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a13 13 0 0 0 0 18 13 13 0 0 0 0-18"/></svg>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <button style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:11px;padding:10px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;"><span style="font-size:16px;line-height:1;">+</span>New Booking</button>
+          <div style="width:36px;height:36px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">CR</div>
+        </div>
+      </header>
+
+      <!-- ==== DASHBOARD ==== -->
+      <sc-if value="{{ appDashboard }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;margin:0;">Today's Overview</h1>
+        <p style="color:var(--muted);margin:6px 0 26px;font-size:14.5px;">Saturday, July 4, 2026</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;">
+              <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;max-width:120px;">{{ s.label }}</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:42px;line-height:1;margin:12px 0 8px;">{{ s.value }}</div>
+              <div style="font-size:13px;color:{{ s.subColor }};">{{ s.sub }}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px;">{{ s.foot }}</div>
+              <div style="position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;">{{ s.icon }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-top:24px;overflow:hidden;">
+          <div style="display:flex;align-items:center;padding:20px 24px 16px;">
+            <div>
+              <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20px;">Dynamic Arrivals Schedule</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px;">Manage guests arriving today</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+              <span style="font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:999px;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);">1 ARRIVALS</span>
+              <button style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:7px 13px;font-size:13px;font-family:inherit;color:var(--ink);cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;padding:11px 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;">
+            <span>Guest Profile</span><span>Check-in</span><span>Nationality</span><span>Check-out</span><span>Status</span><span style="text-align:right;">Action</span>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;padding:16px 24px;align-items:center;">
+            <div style="display:flex;align-items:center;gap:11px;"><div style="width:34px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">AB</div><div><div style="font-weight:600;font-size:14px;">alice gc booking_com</div><div style="font-size:12px;color:var(--muted);">ID: #RES-26-0006</div></div></div>
+            <span style="font-size:13.5px;">Jul 4, 2026</span>
+            <span style="font-size:13.5px;color:var(--muted);">—</span>
+            <span style="font-size:13.5px;">Jul 9, 2026</span>
+            <span><span style="display:inline-flex;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;background:#dde7f0;color:#3a5f82;">Checked In</span></span>
+            <span style="text-align:right;font-size:13px;color:var(--muted);">Checked in</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== TAPE CALENDAR ==== -->
+      <sc-if value="{{ appTape }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px;">
+          <div>
+            <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;display:flex;align-items:center;gap:10px;"><span style="color:var(--accent);"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Tape Calendar</h1>
+            <p style="color:var(--muted);margin:6px 0 0;font-size:14px;">60-Day Horizon · Click an empty cell to create, or a block to edit.</p>
+          </div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
+            <button style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 15px;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Sync Channels</button>
+            <div style="display:flex;gap:16px;align-items:center;font-size:12.5px;color:var(--muted);padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#6f9061;"></span>Confirmed</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:#c99a2e;"></span>Pending</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--accent);"></span>In House</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;">
+            <span>Availability Timeline</span><span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#c3bba6;"></span>Past dates locked</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <div style="min-width:900px;">
+              <!-- header days -->
+              <div style="display:flex;border-bottom:1px solid var(--line);background:var(--paper);">
+                <div style="width:190px;flex:none;padding:12px 16px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700;">Property / Unit</div>
+                <div style="flex:1;display:flex;">
+                  <sc-for list="{{ days }}" as="d" hint-placeholder-count="14">
+                    <div style="{{ d.style }}"><span style="font-size:9.5px;color:var(--muted);letter-spacing:.04em;">{{ d.mon }}</span><span style="font-size:13px;font-weight:600;">{{ d.day }}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+              <!-- rows -->
+              <sc-for list="{{ tape }}" as="r" hint-placeholder-count="3">
+                <div>
+                  <div style="display:flex;align-items:center;gap:9px;padding:9px 16px;background:var(--paper);border-bottom:1px solid var(--line);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M2 18h20"/></svg><span style="font-weight:700;font-size:12.5px;letter-spacing:.02em;">{{ r.room }}</span><span style="{{ r.badge }}">{{ r.type }}</span></div>
+                  <div style="display:flex;border-bottom:1px solid var(--line);">
+                    <div style="width:190px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;"><span style="font-size:13.5px;font-weight:500;">{{ r.bed }}</span><span style="font-family:ui-monospace,monospace;font-size:10.5px;color:#a49c88;">{{ r.code }}</span></div>
+                    <div style="flex:1;position:relative;height:52px;background-image:repeating-linear-gradient(to right,transparent,transparent calc(100%/14 - 1px),var(--line) calc(100%/14 - 1px),var(--line) calc(100%/14));">
+                      <sc-if value="{{ r.hasBooking }}" hint-placeholder-val="{{ false }}">
+                        <div style="{{ r.bookStyle }}"><div style="font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.bookName }}</div><div style="font-size:10.5px;opacity:.8;">{{ r.bookSub }}</div></div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== RESERVATIONS ==== -->
+      <sc-if value="{{ appRes }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Reservations</h1>
+        <p style="color:var(--muted);margin:6px 0 22px;font-size:14.5px;">Search and filter all reservations</p>
+        <div style="display:flex;align-items:center;gap:10px;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);font-size:14px;margin-bottom:16px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>Search by reservation #, guest name, room, bed…
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Status</div><div style="padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;display:flex;justify-content:space-between;align-items:center;">All Statuses<span style="color:var(--muted);">▾</span></div></div>
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Check-in from</div><div style="padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;color:var(--muted);">mm/dd/yyyy</div></div>
+          <div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Check-in to</div><div style="padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;color:var(--muted);">mm/dd/yyyy</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1.1fr 1.4fr 1.6fr 1fr 1fr .7fr 1.1fr .9fr;padding:14px 20px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;">
+            <span>Reservation #</span><span>Guest</span><span>Room / Bed</span><span>Check-in</span><span>Check-out</span><span>Nights</span><span>Status</span><span style="text-align:right;">Total</span>
+          </div>
+          <sc-for list="{{ reservations }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:1.1fr 1.4fr 1.6fr 1fr 1fr .7fr 1.1fr .9fr;padding:16px 20px;align-items:center;border-bottom:1px solid var(--line);font-size:13.5px;">
+              <span style="color:var(--accent);font-weight:600;">{{ r.id }}</span>
+              <span>{{ r.guest }}</span>
+              <span style="color:#5d584c;">{{ r.room }}</span>
+              <span>{{ r.cin }}</span>
+              <span>{{ r.cout }}</span>
+              <span>{{ r.nights }}</span>
+              <span><span style="{{ r.sStyle }}">{{ r.status }} ▾</span></span>
+              <span style="text-align:right;font-weight:600;">{{ r.total }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== PENDING CHECK-INS ==== -->
+      <sc-if value="{{ appPending }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:24px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Pending Check-Ins</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Review and verify guest self-check-ins</p></div>
+          <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+            <span style="font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:#f0e6cd;color:#8a6a16;">3 guests waiting</span>
+            <button style="border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 15px;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer;">Refresh</button>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1.6fr 1fr 1.2fr 1.6fr 1fr .9fr;padding:14px 22px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;"><span>Guest</span><span>Check-in</span><span>Room</span><span>Email</span><span>Submitted</span><span style="text-align:right;">Action</span></div>
+          <sc-for list="{{ pending }}" as="p" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:1.6fr 1fr 1.2fr 1.6fr 1fr .9fr;padding:16px 22px;align-items:center;border-bottom:1px solid var(--line);font-size:13.5px;">
+              <span style="display:flex;align-items:center;gap:11px;"><span style="width:34px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">{{ p.initials }}</span><span style="font-weight:600;">{{ p.guest }}</span></span>
+              <span>{{ p.checkIn }}</span><span style="color:#5d584c;">{{ p.room }}</span><span style="color:#5d584c;">{{ p.email }}</span><span style="color:var(--muted);">{{ p.submitted }}</span>
+              <span style="text-align:right;"><span style="display:inline-flex;padding:6px 14px;border-radius:9px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;">Review</span></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== GUEST BOOK ==== -->
+      <sc-if value="{{ appGuestbook }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Guest Book</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">3 guests registered · Serbian police-registration record</p></div>
+          <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--muted);font-size:13.5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>Search name, ID, JMBG, ref…</div>
+            <button style="display:inline-flex;align-items:center;gap:8px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 15px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV / Excel</button>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <div style="min-width:1080px;">
+              <div style="display:grid;grid-template-columns:1fr 1.2fr .9fr 1.1fr 1fr 1fr 1.3fr 1.1fr .7fr .7fr;padding:13px 20px;background:var(--paper);border-bottom:1px solid var(--line);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;"><span>Reservation #</span><span>Name</span><span>Birth Date</span><span>Citizenship</span><span>ID Type</span><span>ID Number</span><span>JMBG</span><span>Room / Bed</span><span>Arrival</span><span>Departure</span></div>
+              <sc-for list="{{ guestbook }}" as="g" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:1fr 1.2fr .9fr 1.1fr 1fr 1fr 1.3fr 1.1fr .7fr .7fr;padding:15px 20px;align-items:center;border-bottom:1px solid var(--line);font-size:13px;">
+                  <span style="color:var(--accent);font-weight:600;">{{ g.res }}</span><span style="font-weight:600;">{{ g.name }}</span><span>{{ g.birth }}</span><span style="color:#5d584c;">{{ g.cit }}</span><span style="color:#5d584c;">{{ g.idType }}</span><span style="font-family:ui-monospace,monospace;font-size:12px;">{{ g.idNo }}</span><span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);">{{ g.jmbg }}</span><span style="color:#5d584c;">{{ g.roomBed }}</span><span>{{ g.arr }}</span><span>{{ g.dep }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== ANALYTICS ==== -->
+      <sc-if value="{{ appAnalytics }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:24px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Analytics</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">30-day insights and trends</p></div>
+          <button style="margin-left:auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 15px;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer;">Refresh</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+          <sc-for list="{{ anKpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative;">
+              <div style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;">{{ k.label }}</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:38px;line-height:1;margin:10px 0 6px;">{{ k.value }}</div>
+              <div style="font-size:12.5px;color:#4f6a3f;">{{ k.foot }}</div>
+              <div style="position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:11px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;">{{ k.icon }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;margin-bottom:18px;">Booking Trends</div>
+            <div style="display:flex;align-items:flex-end;gap:6px;height:140px;"><sc-for list="{{ bookingBars }}" as="b" hint-placeholder-count="14"><div style="{{ b.style }}"></div></sc-for></div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;margin-bottom:18px;">Revenue Trends</div>
+            <div style="display:flex;align-items:flex-end;gap:6px;height:140px;"><sc-for list="{{ revenueBars }}" as="b" hint-placeholder-count="14"><div style="{{ b.style }}"></div></sc-for></div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;grid-column:1 / -1;">
+            <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:19px;margin-bottom:18px;">Top Rooms by Revenue</div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <sc-for list="{{ topRooms }}" as="t" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:16px;"><span style="width:150px;font-size:13.5px;font-weight:500;">{{ t.name }}</span><div style="flex:1;"><div style="{{ t.style }}"></div></div><span style="width:70px;text-align:right;font-weight:600;font-size:13.5px;">{{ t.rev }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== CHANNEL MANAGER ==== -->
+      <sc-if value="{{ appChannels }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:24px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Channel Manager</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">5 connections across 5 beds · Booking.com, Airbnb, Hostelworld & more</p></div>
+          <button style="margin-left:auto;display:inline-flex;align-items:center;gap:8px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Sync All</button>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <sc-for list="{{ channels }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:16px;padding:16px 22px;border-bottom:1px solid var(--line);">
+              <div style="width:40px;height:40px;border-radius:10px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 15.8a5 5 0 0 1 7 0"/><line x1="12" y1="19" x2="12.01" y2="19"/></svg></div>
+              <div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:14px;">{{ c.platform }}</div><div style="font-size:12.5px;color:var(--muted);">{{ c.bed }}</div></div>
+              <span style="font-size:12.5px;color:var(--muted);">Last sync: {{ c.sync }}</span>
+              <span style="{{ c.statusStyle }}">{{ c.status }}</span>
+              <span style="display:inline-flex;padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--paper);font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;">Sync</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== GUEST DIRECTORY ==== -->
+      <sc-if value="{{ appGuests }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Guest Directory</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Manage your guests and view their reservation history</p></div>
+          <button style="margin-left:auto;display:inline-flex;align-items:center;gap:8px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;"><span style="font-size:16px;line-height:1;">+</span>New Guest</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);font-size:14px;margin-bottom:16px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>Search by name, email, or phone…</div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1.4fr 1.6fr 1.2fr 1.1fr 1fr .7fr;padding:14px 22px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;"><span>Guest Name</span><span>Email</span><span>Phone</span><span>Nationality</span><span>Created</span><span style="text-align:right;">Actions</span></div>
+          <sc-for list="{{ guests }}" as="g" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:1.4fr 1.6fr 1.2fr 1.1fr 1fr .7fr;padding:16px 22px;align-items:center;border-bottom:1px solid var(--line);font-size:13.5px;">
+              <span style="display:flex;align-items:center;gap:11px;"><span style="width:34px;height:34px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">{{ g.initials }}</span><span style="font-weight:600;">{{ g.name }}</span></span>
+              <span style="color:#5d584c;">{{ g.email }}</span><span style="color:#5d584c;">{{ g.phone }}</span><span>{{ g.nat }}</span><span style="color:var(--muted);">{{ g.created }}</span>
+              <span style="text-align:right;color:var(--accent);font-weight:600;cursor:pointer;">Edit</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== ROOM INVENTORY ==== -->
+      <sc-if value="{{ appRooms }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="margin-bottom:24px;"><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Room Inventory</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Manage room types, rooms, and beds for your organization</p></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;">
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);"><div><div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;">Room Types</div><div style="font-size:12px;color:var(--muted);">3 room types</div></div><span style="width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;">+</span></div>
+            <sc-for list="{{ roomTypes }}" as="t" hint-placeholder-count="3"><div style="padding:14px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:600;font-size:14px;">{{ t.name }}</span><span style="font-weight:600;font-size:14px;color:var(--accent);">{{ t.price }}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:3px;">{{ t.type }} · sleeps {{ t.cap }}</div></div></sc-for>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);"><div><div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;">Rooms</div><div style="font-size:12px;color:var(--muted);">3 rooms</div></div><span style="width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;">+</span></div>
+            <sc-for list="{{ roomsList }}" as="r" hint-placeholder-count="3"><div style="padding:14px 18px;border-bottom:1px solid var(--line);"><div style="font-weight:600;font-size:14px;">{{ r.name }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:3px;">{{ r.type }} · {{ r.beds }}</div></div></sc-for>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);"><div><div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18px;">Beds</div><div style="font-size:12px;color:var(--muted);">4 beds</div></div><span style="width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;">+</span></div>
+            <sc-for list="{{ bedsList }}" as="b" hint-placeholder-count="4"><div style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;font-size:14px;">{{ b.name }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:3px;">{{ b.room }}</div></div><span style="font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:#e0eadb;color:#4a6740;">Active</span></div></sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== HOUSEKEEPING ==== -->
+      <sc-if value="{{ appHousekeeping }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="margin-bottom:20px;"><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Housekeeping</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Track cleaning status across all beds</p></div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px;"><sc-for list="{{ hkFilters }}" as="f" hint-placeholder-count="5"><span style="{{ f.style }}">{{ f.label }}</span></sc-for></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          <sc-for list="{{ housekeeping }}" as="b" hint-placeholder-count="6">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;align-items:center;gap:14px;">
+              <div style="width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M2 18h20"/></svg></div>
+              <div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:15px;">{{ b.bed }}</div><div style="font-size:12.5px;color:var(--muted);">{{ b.room }}</div></div>
+              <span style="{{ b.pill }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ b.dotc }};"></span>{{ b.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== SETTINGS: PROPERTY ==== -->
+      <sc-if value="{{ appSProperty }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;max-width:920px;">
+        <div style="margin-bottom:24px;"><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Property Settings</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Manage your property info and branding</p></div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:18px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20px;margin-bottom:18px;">Branding</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;"><img src="assets/logo.png" alt="Logo" style="width:56px;height:56px;object-fit:contain;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--paper);" /><div><button style="border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:9px 15px;font-size:13.5px;font-family:inherit;color:var(--ink);cursor:pointer;">Upload Logo</button><div style="font-size:12px;color:var(--muted);margin-top:7px;">PNG, JPG, WebP or SVG · max 2MB · Shown in sidebar</div></div></div>
+          <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px;">Accent Color</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap;"><sc-for list="{{ brandSwatches }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.pick }}" style="{{ c.sw }}"></button></sc-for></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20px;margin-bottom:18px;">Basic Information</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Property Name</label><input value="Hostel Downtown Inn" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+            <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Email</label><input value="stay@downtowninn.rs" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+            <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">City</label><input value="Belgrade" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+            <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Currency</label><input value="USD ($)" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+          </div>
+          <div style="margin-top:22px;"><button style="border:none;background:var(--accent);color:#fff;border-radius:10px;padding:12px 22px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;">Save Changes</button></div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== SETTINGS: TEAM ==== -->
+      <sc-if value="{{ appSTeam }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;max-width:820px;">
+        <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:24px;">
+          <div><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Team</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">3 members · 1 pending invite</p></div>
+          <button style="margin-left:auto;display:inline-flex;align-items:center;gap:8px;border:none;background:var(--accent);color:#fff;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;"><span style="font-size:16px;line-height:1;">+</span>Invite Member</button>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:18px;">
+          <div style="padding:14px 22px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;">Members</div>
+          <sc-for list="{{ team }}" as="m" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);">
+              <span style="width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">{{ m.initials }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:14px;">{{ m.name }}</div><div style="font-size:12.5px;color:var(--muted);">{{ m.email }} · {{ m.joined }}</div></div>
+              <span style="{{ m.roleStyle }}">{{ m.role }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+          <div style="padding:14px 22px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;">Pending Invitations</div>
+          <sc-for list="{{ invites }}" as="i" hint-placeholder-count="1">
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 22px;">
+              <span style="width:38px;height:38px;border-radius:50%;background:#f0e6cd;color:#8a6a16;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></span>
+              <div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:14px;">{{ i.email }}</div><div style="font-size:12.5px;color:var(--muted);">{{ i.expires }}</div></div>
+              <span style="font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px;background:#f0e6cd;color:#8a6a16;">{{ i.role }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ==== SETTINGS: BILLING ==== -->
+      <sc-if value="{{ appSBilling }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:30px 30px 40px;overflow:auto;">
+        <div style="margin-bottom:22px;"><h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:32px;margin:0;">Billing &amp; Plan</h1><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px;">Manage your subscription and usage</p></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;"><div style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;">Current Plan</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:8px;"><span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;">Pro Plan</span><span style="color:var(--muted);font-size:14px;">$29/mo</span></div><div style="display:flex;gap:24px;margin-top:16px;"><div><div style="font-size:12px;color:var(--muted);">Beds</div><div style="font-weight:600;font-size:15px;">12 / 60</div></div><div><div style="font-size:12px;color:var(--muted);">Team members</div><div style="font-weight:600;font-size:15px;">3 / 3</div></div></div></div>
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;justify-content:center;"><div style="font-size:14px;color:#5d584c;line-height:1.6;">Your <b>Pro</b> plan renews monthly. Manage payment method and invoices in the billing portal.</div><button style="align-self:flex-start;margin-top:14px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:600;font-family:inherit;color:var(--ink);cursor:pointer;">Manage billing</button></div>
+        </div>
+        <div style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:12px;">Available plans</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+            <div style="{{ p.cardStyle }}">
+              <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;">{{ p.name }}</span><sc-if value="{{ p.current }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--accent);color:#fff;">CURRENT</span></sc-if></div>
+              <div style="display:flex;align-items:baseline;gap:5px;margin:10px 0 16px;"><span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;">{{ p.price }}</span><span style="color:var(--muted);font-size:13.5px;">{{ p.period }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <sc-for list="{{ p.featureItems }}" as="f" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#4a463d;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>{{ f.text }}</div></sc-for>
+              </div>
+              <button style="{{ p.btnStyle }}">{{ p.btn }}</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===== GUEST SELF CHECK-IN ===== -->
+  <sc-if value="{{ isCheckin }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:calc(100vh - 42px);background:var(--paper);background-image:radial-gradient(50% 40% at 10% 0%,color-mix(in srgb,var(--accent) 10%,transparent),transparent 60%),radial-gradient(40% 40% at 100% 100%,rgba(201,162,75,.10),transparent 60%);display:flex;flex-direction:column;align-items:center;padding:36px 20px 60px;">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:30px;">
+      <img src="assets/logo.png" alt="HostMagSmart" style="width:40px;height:40px;object-fit:contain;display:block;" />
+      <div><div style="font-weight:700;font-size:15px;">Hostel Downtown Inn</div><div style="font-size:12px;color:var(--muted);">Guest self check-in</div></div>
+    </div>
+    <div style="width:100%;max-width:620px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:36px;box-shadow:0 30px 70px -50px rgba(60,54,40,.5);">
+      <!-- steps -->
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:30px;">
+        <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;flex:1;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="{{ st.dot }}">{{ st.n }}</div>
+              <span style="font-size:11px;color:{{ st.tc }};font-weight:{{ st.fw }};white-space:nowrap;">{{ st.label }}</span>
+            </div>
+            <sc-if value="{{ st.line }}" hint-placeholder-val="{{ true }}"><div style="{{ st.lineStyle }}"></div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;margin:0 0 6px;">Your details</h2>
+      <p style="color:var(--muted);margin:0 0 26px;font-size:14.5px;">Tell us who's staying. This takes about two minutes.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">First name</label><input value="Alice" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+        <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Last name</label><input value="Green" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+        <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Nationality</label><input value="United Kingdom" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+        <div><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Date of birth</label><input value="1994-03-12" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+        <div style="grid-column:1 / -1;"><label style="display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px;">Email</label><input value="alice.green@email.com" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:30px;">
+        <span style="font-size:13.5px;color:var(--muted);">Step 1 of 4</span>
+        <button onClick="{{ nextStep }}" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:11px;padding:13px 24px;font-size:14.5px;font-weight:600;font-family:inherit;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+    <p style="margin-top:22px;font-size:12.5px;color:var(--muted);">Protected check-in · Your data is stored securely for police registration compliance.</p>
+  </div>
+  </sc-if>
+
+  <!-- ===== ONBOARDING ===== -->
+  <sc-if value="{{ isOnboarding }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:calc(100vh - 42px);background:var(--paper);background-image:radial-gradient(60% 45% at 50% 0%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 65%),radial-gradient(40% 40% at 100% 100%,rgba(201,162,75,.10),transparent 60%);display:flex;align-items:center;justify-content:center;padding:44px 20px;">
+    <div style="width:100%;max-width:460px;">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 40px 80px -50px rgba(60,54,40,.5);">
+        <div style="height:4px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 45%,#c9a24b),var(--accent));"></div>
+        <div style="padding:40px;">
+          <div style="text-align:center;margin-bottom:28px;">
+            <img src="assets/logo.png" alt="HostMagSmart" style="width:60px;height:60px;object-fit:contain;margin:0 auto 16px;display:block;" />
+            <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;letter-spacing:-.01em;margin:0;">Set up your property</h1>
+            <p style="color:var(--muted);margin:8px 0 0;font-size:14.5px;">Get your hostel configured in under a minute.</p>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:20px;">
+            <div style="height:4px;flex:1;border-radius:999px;background:var(--accent);"></div>
+            <div style="height:4px;flex:1;border-radius:999px;background:var(--line);"></div>
+          </div>
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 22px;">Step 1 of 2 — Property Info</p>
+          <label style="display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;">Property Name *</label>
+          <input value="Hostel Downtown Inn" style="width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-family:inherit;font-size:14.5px;color:var(--ink);margin-bottom:18px;" />
+          <label style="display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;">Your URL <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#a49c88;font-size:10px;">· auto-generated · editable</span></label>
+          <div style="display:flex;align-items:center;border:1px solid #a9c297;background:#eef3e8;border-radius:12px;overflow:hidden;margin-bottom:6px;">
+            <span style="display:flex;align-items:center;gap:5px;padding-left:13px;color:#a49c88;font-size:11.5px;white-space:nowrap;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>yourdomain.com/</span>
+            <input value="hostel-downtown-inn" style="flex:1;min-width:0;padding:13px 8px;border:none;background:transparent;font-family:ui-monospace,monospace;font-size:13.5px;color:var(--ink);outline:none;" />
+            <span style="padding-right:13px;color:#4a6740;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </div>
+          <p style="font-size:11.5px;color:#4a6740;margin:0 0 18px;">✓ Available</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;">
+            <div><label style="display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;">City</label><input value="Belgrade" style="width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+            <div><label style="display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;">Country</label><input value="Serbia" style="width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-family:inherit;font-size:14px;color:var(--ink);" /></div>
+          </div>
+          <button onClick="{{ goDash }}" style="width:100%;padding:14px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;">Continue →</button>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:22px;">HostMagSmart PMS · Secure property management</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===== INVITE ===== -->
+  <sc-if value="{{ isInvite }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:calc(100vh - 42px);background:var(--paper);background-image:radial-gradient(55% 45% at 50% 0%,color-mix(in srgb,var(--accent) 11%,transparent),transparent 65%),radial-gradient(40% 40% at 0% 100%,rgba(201,162,75,.10),transparent 60%);display:flex;align-items:center;justify-content:center;padding:44px 20px;">
+    <div style="width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:38px;box-shadow:0 40px 80px -50px rgba(60,54,40,.5);">
+      <div style="text-align:center;margin-bottom:26px;">
+        <div style="width:64px;height:64px;border-radius:18px;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></div>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;letter-spacing:-.01em;margin:0;">You're invited!</h1>
+        <p style="color:var(--muted);margin:10px 0 0;font-size:15px;">Join <b style="color:var(--ink);">Hostel Downtown Inn</b> as <b style="color:var(--ink);">Staff</b></p>
+      </div>
+      <div style="border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:18px;margin-bottom:22px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:11px;border-bottom:1px solid var(--line);"><span style="color:var(--muted);font-size:13.5px;">Invitation for</span><span style="font-weight:600;font-size:13.5px;">dejan@downtowninn.rs</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:11px;"><span style="color:var(--muted);font-size:13.5px;">Role</span><span style="font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);">Staff</span></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);text-align:center;margin:0 0 22px;line-height:1.6;">You must be signed in with <b style="color:#4a463d;">dejan@downtowninn.rs</b> to accept this invitation.</p>
+      <button onClick="{{ goDash }}" style="width:100%;padding:14px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:11px;">Accept invitation</button>
+      <button onClick="{{ showLogin }}" style="width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--muted);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">Sign in with a different account</button>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#6e8b46&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;,&quot;default_options&quot;:[&quot;#5f7048&quot;,&quot;#3f7168&quot;,&quot;#b07d54&quot;,&quot;#7a5570&quot;]},&quot;uiRadius&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:12,&quot;min&quot;:4,&quot;max&quot;:20,&quot;step&quot;:1,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;paperTint&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;cream&quot;,&quot;options&quot;:[&quot;cream&quot;,&quot;linen&quot;,&quot;mist&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'landing', appTab: 'dashboard', authTab: 'signin', accent: '#5f7048', step: 1 };
+  rootRef = React.createRef();
+
+  accents = [
+    { name: 'Moss', hex: '#5f7048' },
+    { name: 'Sage', hex: '#7f8a58' },
+    { name: 'Fern', hex: '#4c6b4a' },
+    { name: 'Teal', hex: '#3f7168' },
+    { name: 'Ocean', hex: '#3d6a86' },
+    { name: 'Clay', hex: '#b07d54' },
+    { name: 'Terracotta', hex: '#b0604a' },
+    { name: 'Plum', hex: '#7a5570' },
+    { name: 'Ink', hex: '#3a3d34' },
+  ];
+
+  componentDidMount() {
+    if (this.props && this.props.accentColor) this.setState({ accent: this.props.accentColor });
+    this.applyVars();
+  }
+  componentDidUpdate() { this.applyVars(); }
+  applyVars() {
+    const el = this.rootRef.current; if (!el) return;
+    const p = this.props || {};
+    el.style.setProperty('--accent', this.state.accent);
+    el.style.setProperty('--radius', (p.uiRadius != null ? p.uiRadius : 12) + 'px');
+    const paper = { cream: '#F3EEE2', linen: '#F1EBDD', mist: '#EEF0EA' }[p.paperTint || 'cream'];
+    el.style.setProperty('--paper', paper);
+  }
+  set(k, v) { this.setState({ [k]: v }); }
+
+  metaPill(active) {
+    const base = 'border:none;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;';
+    return base + (active ? 'background:#f0e9d8;color:#2b2a24;' : 'background:transparent;color:#b7ae97;');
+  }
+  navStyle(active) {
+    const base = 'display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13.5px;cursor:pointer;';
+    return base + (active
+      ? 'background:color-mix(in srgb, var(--accent) 13%, transparent);color:var(--accent);font-weight:600;'
+      : 'color:#6b6558;font-weight:500;');
+  }
+  authPill(active) {
+    const base = 'flex:1;border:none;border-radius:9px;padding:11px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;';
+    return base + (active ? 'background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(60,54,40,.12);' : 'background:transparent;color:var(--muted);');
+  }
+
+  icon(name) {
+    const c = React.createElement;
+    const s = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round' };
+    const paths = {
+      calendar: [c('rect', { x: 3, y: 4, width: 18, height: 18, rx: 2 }), c('line', { x1: 16, y1: 2, x2: 16, y2: 6 }), c('line', { x1: 8, y1: 2, x2: 8, y2: 6 }), c('line', { x1: 3, y1: 10, x2: 21, y2: 10 })],
+      users: [c('path', { d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' }), c('circle', { cx: 9, cy: 7, r: 4 }), c('path', { d: 'M23 21v-2a4 4 0 0 0-3-3.87' }), c('path', { d: 'M16 3.13a4 4 0 0 1 0 7.75' })],
+      wifi: [c('path', { d: 'M5 12.5a10 10 0 0 1 14 0' }), c('path', { d: 'M8.5 15.8a5 5 0 0 1 7 0' }), c('line', { x1: 12, y1: 19, x2: 12.01, y2: 19 })],
+      chart: [c('line', { x1: 6, y1: 20, x2: 6, y2: 12 }), c('line', { x1: 12, y1: 20, x2: 12, y2: 4 }), c('line', { x1: 18, y1: 20, x2: 18, y2: 9 })],
+      bed: [c('path', { d: 'M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8' }), c('path', { d: 'M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4' }), c('path', { d: 'M2 18h20' })],
+      check: [c('rect', { x: 8, y: 2, width: 8, height: 4, rx: 1 }), c('path', { d: 'M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3' }), c('path', { d: 'm9 14 2 2 4-4' })],
+      pie: [c('path', { d: 'M21.21 15.89A10 10 0 1 1 8 2.83' }), c('path', { d: 'M22 12A10 10 0 0 0 12 2v10z' })],
+      arrow: [c('path', { d: 'M15 3h6v6' }), c('path', { d: 'M10 14 21 3' }), c('path', { d: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6' })],
+      dollar: [c('line', { x1: 12, y1: 1, x2: 12, y2: 23 }), c('path', { d: 'M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' })],
+      clock: [c('circle', { cx: 12, cy: 12, r: 10 }), c('polyline', { points: '12 6 12 12 16 14' })],
+    };
+    return c('svg', s, ...(paths[name] || []));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isApp = s.screen === 'app';
+    const days = [
+      ['JUN', '29'], ['JUN', '30'], ['JUL', '1'], ['JUL', '2'], ['JUL', '3'], ['JUL', '4'], ['JUL', '5'],
+      ['JUL', '6'], ['JUL', '7'], ['JUL', '8'], ['JUL', '9'], ['JUL', '10'], ['JUL', '11'], ['JUL', '12'],
+    ].map((d, i) => ({
+      mon: d[0], day: d[1],
+      style: 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 0;gap:1px;border-left:1px solid var(--line);' + (i === 5 ? 'background:color-mix(in srgb,var(--accent) 10%,transparent);' : ''),
+    }));
+
+    const badge = (txt, tone) => {
+      const map = {
+        private: 'background:#e2ead9;color:#4f6a3f;',
+        dorm: 'background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);',
+      };
+      return 'font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:6px;' + map[tone];
+    };
+    const book = (left, width, tone) => {
+      const tones = {
+        confirmed: 'background:#e4ecdd;border:1px solid #a9c297;color:#48633b;',
+        pending: 'background:#f4ecd4;border:1px solid #dcc47f;color:#8a6a16;',
+        inhouse: 'background:color-mix(in srgb,var(--accent) 15%,#fff);border:1px solid color-mix(in srgb,var(--accent) 45%,#fff);color:var(--accent);',
+      };
+      return 'position:absolute;top:8px;bottom:8px;left:' + left + ';width:' + width + ';border-radius:8px;padding:7px 10px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;' + tones[tone];
+    };
+    // 14 columns; each col ~7.142%
+    const tape = [
+      { room: 'FAMILY ROOM 502', type: 'PRIVATE', badge: badge('', 'private'), bed: 'Family 502', code: '#c23',
+        hasBooking: true, bookName: 'Alice Green · Confirmed', bookSub: '$180.00 total', bookStyle: book('21.4%', '28.5%', 'confirmed') },
+      { room: 'STUDIO 403', type: 'PRIVATE', badge: badge('', 'private'), bed: 'Studio 403', code: '#5b9',
+        hasBooking: true, bookName: 'Celestin caseres', bookSub: 'Pending · $24.00', bookStyle: book('50%', '21.4%', 'pending') },
+      { room: 'ROOM 100 – PLAVA', type: 'DORM', badge: badge('', 'dorm'), bed: '101', code: '#0a9',
+        hasBooking: true, bookName: 'Marco · In House', bookSub: '$96.00 total', bookStyle: book('7.1%', '35.7%', 'inhouse') },
+    ];
+
+    const sBadge = (bg, fg) => 'display:inline-flex;align-items:center;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:600;background:' + bg + ';color:' + fg + ';';
+    const reservations = [
+      { id: 'RES-26-0006', guest: 'alice gc booking_com', room: 'Studio 404 / Studio 404', cin: '7/4/2026', cout: '7/9/2026', nights: 5, status: 'Checked In', total: '$60.00', sStyle: sBadge('#dde7f0', '#3a5f82') },
+      { id: 'RES-26-0005', guest: 'test test', room: 'Room 200 – ŽUTA / 202', cin: '7/3/2026', cout: '7/23/2026', nights: 20, status: 'Checked Out', total: '$240.00', sStyle: sBadge('#e8e2d4', '#6f6857') },
+      { id: 'RES-26-0005', guest: 'Celestin caseres', room: 'Studio 403 / Studio 403', cin: '7/14/2026', cout: '7/16/2026', nights: 2, status: 'Pending', total: '$24.00', sStyle: sBadge('#f0e6cd', '#8a6a16') },
+      { id: 'RES-26-0004', guest: 'Celestin caseres', room: 'Studio 403 / Studio 403', cin: '6/28/2026', cout: '7/14/2026', nights: 16, status: 'Cancelled', total: '$416.00', sStyle: sBadge('#eedcd5', '#9c4a37') },
+      { id: 'RES-26-0002', guest: 'test booking caseres', room: 'Room 100 – PLAVA / 101', cin: '6/27/2026', cout: '6/29/2026', nights: 2, status: 'Checked In', total: '$24.00', sStyle: sBadge('#dde7f0', '#3a5f82') },
+    ];
+
+    const stats = [
+      { label: 'Occupancy Rate', value: '10%', sub: '2/21 beds occupied', subColor: 'var(--accent)', foot: '↑ 5% from yesterday', icon: this.icon('pie') },
+      { label: 'Arrivals Today', value: '1', sub: '0 Confirmed · 0 Pending', subColor: '#a37b1e', foot: '', icon: this.icon('arrow') },
+      { label: 'Monthly Revenue', value: '$324', sub: 'Active: 2 reservations', subColor: '#4f6a3f', foot: 'Today: $60', icon: this.icon('dollar') },
+      { label: 'Avg Booking Nights', value: '7.3', sub: 'Average stay length', subColor: 'var(--muted)', foot: '', icon: this.icon('clock') },
+    ];
+
+    const steps = [1, 2, 3, 4].map((n, i) => {
+      const labels = ['Your details', 'ID photos', 'Review', 'Submit'];
+      const active = n <= s.step;
+      const current = n === s.step;
+      return {
+        n, label: labels[i],
+        dot: 'width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;' +
+          (active ? 'background:var(--accent);color:#fff;' : 'background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--muted);'),
+        tc: current ? 'var(--accent)' : 'var(--muted)',
+        fw: current ? 700 : 500,
+        line: i < 3,
+        lineStyle: 'flex:1;height:2px;margin:0 4px;margin-bottom:22px;background:' + (n < s.step ? 'var(--accent)' : 'var(--line)') + ';',
+      };
+    });
+
+    const feat = [
+      { title: 'Tape Calendar', body: 'Visual drag-and-drop reservation timeline. See every bed, every night, at a glance.', icon: this.icon('calendar') },
+      { title: 'Guest Management', body: 'Digital check-in portal, OCR ID scanning, duplicate detection and full guest history.', icon: this.icon('users') },
+      { title: 'Channel Manager', body: 'Sync with Booking.com, Airbnb and any OTA via iCal. Auto-import and block availability.', icon: this.icon('wifi') },
+      { title: 'Analytics', body: 'Occupancy, revenue and booking trends — the numbers that actually run your property.', icon: this.icon('chart') },
+      { title: 'Room Inventory', body: 'Room types, rooms and beds in one clear three-level structure you can edit in seconds.', icon: this.icon('bed') },
+      { title: 'Self Check-In', body: 'Let guests check themselves in before arrival. Review, verify, and approve in one queue.', icon: this.icon('check') },
+    ];
+
+    // ---- Pending Check-Ins ----
+    const pending = [
+      { initials: 'LM', guest: 'Lena Müller', checkIn: 'Jul 5, 2026', room: 'Studio 404', email: 'lena.m@email.com', submitted: '2h ago' },
+      { initials: 'JD', guest: 'James Doyle', checkIn: 'Jul 5, 2026', room: 'Room 100 / 102', email: 'jdoyle@email.com', submitted: '5h ago' },
+      { initials: 'AR', guest: 'Ana Ristić', checkIn: 'Jul 6, 2026', room: 'Family 502', email: 'ana.ristic@email.com', submitted: '1d ago' },
+    ];
+    // ---- Guest Book (compliance) ----
+    const guestbook = [
+      { res: 'RES-26-0006', name: 'Alice Green', birth: '1994-03-12', cit: 'United Kingdom', idType: 'Passport', idNo: 'GBR8842019', jmbg: '—', roomBed: 'Studio 404 / 404', arr: 'Jul 4', dep: 'Jul 9' },
+      { res: 'RES-26-0002', name: 'Marco Bianchi', birth: '1988-11-02', cit: 'Italy', idType: 'National ID', idNo: 'IT2231884', jmbg: '—', roomBed: 'Room 100 / 101', arr: 'Jun 27', dep: 'Jun 29' },
+      { res: 'RES-26-0005', name: 'Miloš Petrović', birth: '1991-06-21', cit: 'Serbia', idType: 'National ID', idNo: 'RS9921031', jmbg: '2106991710099', roomBed: 'Room 200 / 202', arr: 'Jul 3', dep: 'Jul 23' },
+    ];
+    // ---- Analytics ----
+    const bookingBars = [40, 55, 48, 70, 62, 88, 95, 74, 60, 82, 100, 78, 66, 90].map(h => ({ style: 'flex:1;border-radius:4px 4px 0 0;background:color-mix(in srgb,var(--accent) 55%,#fff);height:' + h + '%;' }));
+    const revenueBars = [30, 42, 38, 55, 60, 72, 68, 80, 76, 88, 84, 92, 70, 96].map(h => ({ style: 'flex:1;border-radius:4px 4px 0 0;background:#d7b45e;height:' + h + '%;' }));
+    const topRooms = [
+      { name: 'Studio 404', rev: '$1,240', style: 'height:9px;border-radius:6px;background:var(--accent);width:100%;' },
+      { name: 'Room 200 – ŽUTA', rev: '$980', style: 'height:9px;border-radius:6px;background:var(--accent);width:79%;' },
+      { name: 'Family 502', rev: '$720', style: 'height:9px;border-radius:6px;background:var(--accent);width:58%;' },
+      { name: 'Studio 403', rev: '$460', style: 'height:9px;border-radius:6px;background:var(--accent);width:37%;' },
+    ];
+    const anKpis = [
+      { label: 'Total Bookings', value: '48', foot: '+12% vs prev 30d', icon: this.icon('calendar') },
+      { label: 'Revenue (30d)', value: '$6.2k', foot: '+8% vs prev 30d', icon: this.icon('dollar') },
+      { label: 'Occupancy', value: '71%', foot: 'Avg over 30 days', icon: this.icon('pie') },
+      { label: 'ADR', value: '$34', foot: 'Avg daily rate', icon: this.icon('chart') },
+    ];
+    // ---- Channel Manager ----
+    const chDot = (active) => 'width:9px;height:9px;border-radius:50%;background:' + (active ? '#6f9061' : '#c3bba6') + ';';
+    const chStatus = (active) => 'font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;' + (active ? 'background:#e0eadb;color:#4a6740;' : 'background:#e8e2d4;color:#6f6857;');
+    const channels = [
+      { bed: 'Studio 404 / Studio 404', platform: 'Booking.com', active: true, sync: '12m ago' },
+      { bed: 'Studio 404 / Studio 404', platform: 'Airbnb', active: true, sync: '1h ago' },
+      { bed: 'Room 100 – PLAVA / 101', platform: 'Hostelworld', active: true, sync: '3h ago' },
+      { bed: 'Room 200 – ŽUTA / 202', platform: 'Booking.com', active: true, sync: 'Just now' },
+      { bed: 'Family 502', platform: 'VRBO', active: false, sync: 'Never' },
+    ].map(c => ({ ...c, dot: chDot(c.active), status: c.active ? 'Active' : 'Inactive', statusStyle: chStatus(c.active) }));
+    // ---- Guest Directory ----
+    const guests = [
+      { initials: 'AG', name: 'Alice Green', email: 'alice.green@email.com', phone: '+44 7700 900123', nat: 'United Kingdom', created: 'Jul 1, 2026' },
+      { initials: 'MB', name: 'Marco Bianchi', email: 'm.bianchi@email.com', phone: '+39 340 118 22', nat: 'Italy', created: 'Jun 20, 2026' },
+      { initials: 'MP', name: 'Miloš Petrović', email: 'milos.p@email.com', phone: '+381 63 221 90', nat: 'Serbia', created: 'Jun 12, 2026' },
+      { initials: 'CC', name: 'Celestin Caseres', email: 'celestin@email.com', phone: '+33 6 12 44 90', nat: 'France', created: 'May 30, 2026' },
+    ];
+    // ---- Room Inventory (3-level) ----
+    const roomTypes = [
+      { name: 'Private Room', type: 'Private', cap: '2', price: '$60' },
+      { name: 'Dorm Bed', type: 'Dorm', cap: '1', price: '$12' },
+      { name: 'Family Room', type: 'Private', cap: '4', price: '$120' },
+    ];
+    const roomsList = [
+      { name: 'Studio 403', type: 'Private Room', beds: '1 bed' },
+      { name: 'Studio 404', type: 'Private Room', beds: '1 bed' },
+      { name: 'Room 100 – PLAVA', type: 'Dorm Bed', beds: '6 beds' },
+    ];
+    const bedsList = [
+      { name: 'Studio 403', room: 'Studio 403' },
+      { name: '101', room: 'Room 100 – PLAVA' },
+      { name: '102', room: 'Room 100 – PLAVA' },
+      { name: 'Family 502', room: 'Family Room 502' },
+    ];
+    // ---- Housekeeping ----
+    const hk = { Clean: '#e0eadb|#4a6740', Dirty: '#f0e6cd|#8a6a16', Inspected: '#dde7f0|#3a5f82', 'Out of Order': '#eedcd5|#9c4a37' };
+    const housekeeping = [
+      { bed: 'Studio 403', room: 'Studio 403', status: 'Clean' },
+      { bed: 'Studio 404', room: 'Studio 404', status: 'Dirty' },
+      { bed: '101', room: 'Room 100 – PLAVA', status: 'Inspected' },
+      { bed: '102', room: 'Room 100 – PLAVA', status: 'Dirty' },
+      { bed: '202', room: 'Room 200 – ŽUTA', status: 'Clean' },
+      { bed: 'Family 502', room: 'Family Room 502', status: 'Out of Order' },
+    ].map(b => { const [bg, fg] = hk[b.status].split('|'); return { ...b, pill: 'display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;background:' + bg + ';color:' + fg + ';', dotc: fg }; });
+    const hkFilters = ['All', 'Clean', 'Dirty', 'Inspected', 'Out of Order'].map((f, i) => ({ label: f, style: 'padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);' + (i === 0 ? 'background:var(--accent);color:#fff;border-color:transparent;' : 'background:var(--surface);color:var(--muted);') }));
+    // ---- Team ----
+    const roleStyle = (r) => 'font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);';
+    const team = [
+      { initials: 'CR', name: 'cristianpalocseres', email: 'cristianpalocseres@gmail.com', role: 'Owner', joined: 'Joined Jan 2026' },
+      { initials: 'MS', name: 'Marta S.', email: 'marta@downtowninn.rs', role: 'Manager', joined: 'Joined Mar 2026' },
+      { initials: 'DK', name: 'Dejan K.', email: 'dejan@downtowninn.rs', role: 'Staff', joined: 'Joined May 2026' },
+    ].map(m => ({ ...m, roleStyle: roleStyle(m.role) }));
+    const invites = [{ email: 'front.desk@downtowninn.rs', role: 'staff', expires: 'Expires Jul 11, 2026' }];
+    // ---- Billing ----
+    const plans = [
+      { name: 'Free', price: '$0', period: 'forever', current: false, cardStyle: 'background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;', btn: 'Downgrade', btnStyle: 'width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;margin-top:18px;', features: ['20 beds', '1 team member', 'Reservations & calendar', 'Guest management'] },
+      { name: 'Pro', price: '$29', period: '/mo', current: true, cardStyle: 'background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:24px;position:relative;box-shadow:0 20px 44px -30px color-mix(in srgb,var(--accent) 80%,transparent);', btn: 'Current plan', btnStyle: 'width:100%;padding:11px;border-radius:10px;border:none;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);font-family:inherit;font-weight:600;font-size:13.5px;cursor:default;margin-top:18px;', features: ['60 beds', '3 team members', 'Channel Manager (iCal sync)', 'Guest self check-in', 'Analytics & reports', 'Custom branding'] },
+      { name: 'Scale', price: '$79', period: '/mo', current: false, cardStyle: 'background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;', btn: 'Upgrade', btnStyle: 'width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;margin-top:18px;', features: ['Unlimited beds', 'Unlimited team', 'Multi-property', 'Priority support', 'API access'] },
+    ].map(p => ({ ...p, featureItems: p.features.map(f => ({ text: f })) }));
+    const brandSwatches = this.accents.map(a => ({ pick: () => this.set('accent', a.hex), sw: 'width:30px;height:30px;border-radius:8px;cursor:pointer;background:' + a.hex + ';border:2px solid ' + (a.hex === s.accent ? '#fff' : 'transparent') + ';outline:' + (a.hex === s.accent ? '2px solid ' + a.hex : '1px solid var(--line)') + ';outline-offset:1px;' }));
+
+    const titles = { dashboard: 'Dashboard', tape: 'Tape Calendar', reservations: 'Reservations', pending: 'Pending Check-Ins', guestbook: 'Guest Book', analytics: 'Analytics', channels: 'Channel Manager', guests: 'Guest Directory', rooms: 'Room Inventory', housekeeping: 'Housekeeping', sProperty: 'Property Settings', sTeam: 'Team', sBilling: 'Billing' };
+    const T = s.appTab;
+    const goTab = (t) => () => this.setState({ screen: 'app', appTab: t });
+
+    return {
+      rootRef: this.rootRef,
+      isLanding: s.screen === 'landing', isLogin: s.screen === 'login', isApp, isCheckin: s.screen === 'checkin',
+      isOnboarding: s.screen === 'onboarding', isInvite: s.screen === 'invite',
+      appDashboard: T === 'dashboard', appTape: T === 'tape', appRes: T === 'reservations',
+      appPending: T === 'pending', appGuestbook: T === 'guestbook', appAnalytics: T === 'analytics',
+      appChannels: T === 'channels', appGuests: T === 'guests', appRooms: T === 'rooms', appHousekeeping: T === 'housekeeping',
+      appSProperty: T === 'sProperty', appSTeam: T === 'sTeam', appSBilling: T === 'sBilling',
+      pageTitle: titles[T] || 'Dashboard',
+
+      showLanding: () => this.set('screen', 'landing'),
+      showLogin: () => this.set('screen', 'login'),
+      showCheckin: () => this.set('screen', 'checkin'),
+      showOnboarding: () => this.set('screen', 'onboarding'),
+      showInvite: () => this.set('screen', 'invite'),
+      goDash: goTab('dashboard'), goTape: goTab('tape'), goRes: goTab('reservations'),
+      goPending: goTab('pending'), goGuestbook: goTab('guestbook'), goAnalytics: goTab('analytics'),
+      goChannels: goTab('channels'), goGuests: goTab('guests'), goRooms: goTab('rooms'), goHousekeeping: goTab('housekeeping'),
+      goSProperty: goTab('sProperty'), goSTeam: goTab('sTeam'), goSBilling: goTab('sBilling'),
+      signinTab: () => this.set('authTab', 'signin'),
+      createTab: () => this.set('authTab', 'create'),
+      nextStep: () => this.setState(st => ({ step: Math.min(4, st.step + 1) })),
+
+      mpLanding: this.metaPill(s.screen === 'landing'),
+      mpLogin: this.metaPill(s.screen === 'login'),
+      mpDash: this.metaPill(isApp),
+      mpTape: this.metaPill(false),
+      mpRes: this.metaPill(false),
+      mpCheckin: this.metaPill(s.screen === 'checkin'),
+      mpOnboarding: this.metaPill(s.screen === 'onboarding'),
+      mpInvite: this.metaPill(s.screen === 'invite'),
+
+      navDash: this.navStyle(isApp && T === 'dashboard'),
+      navTape: this.navStyle(isApp && T === 'tape'),
+      navRes: this.navStyle(isApp && T === 'reservations'),
+      navPending: this.navStyle(isApp && T === 'pending'),
+      navGuestbook: this.navStyle(isApp && T === 'guestbook'),
+      navAnalytics: this.navStyle(isApp && T === 'analytics'),
+      navChannels: this.navStyle(isApp && T === 'channels'),
+      navGuests: this.navStyle(isApp && T === 'guests'),
+      navRooms: this.navStyle(isApp && T === 'rooms'),
+      navHousekeeping: this.navStyle(isApp && T === 'housekeeping'),
+      navSProperty: this.navStyle(isApp && T === 'sProperty'),
+      navSTeam: this.navStyle(isApp && T === 'sTeam'),
+      navSBilling: this.navStyle(isApp && T === 'sBilling'),
+      navIdle: this.navStyle(false),
+
+      pending, guestbook, bookingBars, revenueBars, topRooms, anKpis, channels, guests, roomTypes, roomsList, bedsList, housekeeping, hkFilters, team, invites, plans, brandSwatches,
+
+      authSignin: this.authPill(s.authTab === 'signin'),
+      authCreate: this.authPill(s.authTab === 'create'),
+
+      accentList: this.accents.map(a => ({
+        name: a.name,
+        pick: () => this.set('accent', a.hex),
+        sw: 'width:20px;height:20px;border-radius:50%;border:2px solid ' + (a.hex === s.accent ? '#f0e9d8' : 'transparent') + ';outline:' + (a.hex === s.accent ? '2px solid ' + a.hex : 'none') + ';outline-offset:1px;background:' + a.hex + ';cursor:pointer;padding:0;',
+      })),
+
+      previewStats: [
+        { label: 'Occupancy', value: '87%' }, { label: 'Arrivals Today', value: '12' },
+        { label: 'Revenue', value: '€2,840' }, { label: 'Avg Stay', value: '3.2n' },
+      ],
+      features: feat,
+      days, tape, reservations, stats, steps,
+    };
+  }
+}
+</script>
+</body>
+</html>

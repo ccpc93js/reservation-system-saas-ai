@@ -20,15 +20,15 @@ const TIMEZONES = [
 ];
 
 const PRESET_COLORS = [
-  { key: "purple", value: "#7c3aed" },
-  { key: "indigo", value: "#4f46e5" },
-  { key: "blue", value: "#2563eb" },
-  { key: "teal", value: "#0f766e" },
-  { key: "green", value: "#16a34a" },
-  { key: "rose", value: "#e11d48" },
-  { key: "orange", value: "#ea580c" },
-  { key: "slate", value: "#334155" },
-  { key: "black", value: "#09090b" },
+  { key: "moss", value: "#5f7048" },
+  { key: "sage", value: "#7f8a58" },
+  { key: "fern", value: "#4c6b4a" },
+  { key: "teal", value: "#3f7168" },
+  { key: "ocean", value: "#3d6a86" },
+  { key: "clay", value: "#b07d54" },
+  { key: "terracotta", value: "#b0604a" },
+  { key: "plum", value: "#7a5570" },
+  { key: "ink", value: "#3a3d34" },
 ];
 
 interface Props {
@@ -57,7 +57,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
     currency: org.currency ?? "EUR",
     check_in_time: org.check_in_time ?? "14:00",
     check_out_time: org.check_out_time ?? "11:00",
-    theme_color: org.theme_color ?? "#7c3aed",
+    theme_color: org.theme_color ?? "#5f7048",
     logo_url: org.logo_url ?? "",
   });
   const [saving, setSaving] = useState(false);

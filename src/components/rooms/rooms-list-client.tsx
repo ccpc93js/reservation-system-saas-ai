@@ -131,14 +131,14 @@ export default function RoomsListClient({
     <div className="space-y-4">
       <div className="flex justify-between items-center gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             disabled={isLoading}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg bg-white disabled:opacity-50"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg bg-surface disabled:opacity-50"
           />
         </div>
         <button
@@ -156,12 +156,12 @@ export default function RoomsListClient({
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-background border-b">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("name")}>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
                 {t("colName")} <SortIndicator column="name" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-gray-100" onClick={() => handleSort("floor")}>
+              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("floor")}>
                 {t("colFloor")} <SortIndicator column="floor" />
               </th>
               <th className="px-4 py-3 text-left font-medium text-sm">{t("colRoomType")}</th>
@@ -176,7 +176,7 @@ export default function RoomsListClient({
               sortedRooms.map((room) => {
               const roomType = (room as any).room_types;
               return (
-                <tr key={room.id} className="border-b hover:bg-gray-50">
+                <tr key={room.id} className="border-b hover:bg-background">
                   <td className="px-4 py-3 text-sm">{room.name}</td>
                   <td className="px-4 py-3 text-sm">{room.floor || "—"}</td>
                   <td className="px-4 py-3 text-sm">
@@ -238,7 +238,7 @@ export default function RoomsListClient({
       )}
 
       <div className="flex justify-between items-center">
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-muted-foreground">
           {t("showingRange", { from: ((page - 1) * pageSize) + 1, to: Math.min(page * pageSize, total), total })}
         </div>
         <div className="flex gap-2">

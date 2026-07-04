@@ -789,15 +789,7 @@
       "remove": "削除",
       "logoHint": "PNG、JPG、WebPまたはSVG · 最大2MB · サイドバーに表示",
       "accentColor": "アクセントカラー",
-      "color_purple": "パープル",
-      "color_indigo": "インディゴ",
-      "color_blue": "ブルー",
       "color_teal": "ティール",
-      "color_green": "グリーン",
-      "color_rose": "ローズ",
-      "color_orange": "オレンジ",
-      "color_slate": "スレート",
-      "color_black": "ブラック",
       "customColor": "カスタムカラー",
       "buttonPreview": "ボタンプレビュー",
       "badgePreview": "バッジプレビュー",
@@ -849,7 +841,15 @@
         "processing": "処理中...",
         "applyAndUpload": "適用してアップロード",
         "cropFailed": "トリミングに失敗しました"
-      }
+      },
+      "color_moss": "モスグリーン",
+      "color_sage": "セージ",
+      "color_fern": "シダ色",
+      "color_ocean": "オーシャン",
+      "color_clay": "クレイ",
+      "color_terracotta": "テラコッタ",
+      "color_plum": "プラム",
+      "color_ink": "インク"
     }
   },
   "guestPortal": {

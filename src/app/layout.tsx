@@ -1,8 +1,23 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Hanken_Grotesk } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import { Toaster } from "sonner";
 import { rtlLocales } from "@/i18n/routing";
 import "./globals.css";
+
+const serif = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const sans = Hanken_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-hanken",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +39,7 @@ export default async function RootLayout({
   const dir = (rtlLocales as string[]).includes(locale) ? "rtl" : "ltr";
 
   return (
-    <html lang={locale} dir={dir} suppressHydrationWarning>
+    <html lang={locale} dir={dir} className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
       <body>
         {children}
         <Toaster

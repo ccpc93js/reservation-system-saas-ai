@@ -19,7 +19,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
               H
             </div>
             <span className="text-lg font-bold tracking-tight">HostMagSmart</span>
@@ -43,7 +43,7 @@ export default function LandingPage() {
             </Link>
             <Link href="/login?mode=signup"
               className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 14px rgba(124,58,237,0.35)" }}>
+              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 14px rgba(95,112,72,0.35)" }}>
               Get Started Free
             </Link>
           </div>
@@ -62,7 +62,7 @@ export default function LandingPage() {
             <div className="pt-2 flex flex-col gap-2">
               <Link href="/login" className="text-center text-sm font-medium text-gray-600 py-2 border border-gray-200 rounded-lg">Sign In</Link>
               <Link href="/login?mode=signup" className="text-center text-sm font-semibold text-white py-2 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+                style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
                 Get Started Free
               </Link>
             </div>
@@ -75,9 +75,9 @@ export default function LandingPage() {
         {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-20"
-            style={{ background: "radial-gradient(circle, #a855f7, transparent 70%)" }} />
+            style={{ background: "radial-gradient(circle, #7f8a58, transparent 70%)" }} />
           <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-10"
-            style={{ background: "radial-gradient(circle, #7c3aed, transparent 70%)" }} />
+            style={{ background: "radial-gradient(circle, #5f7048, transparent 70%)" }} />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 text-center">
@@ -88,7 +88,7 @@ export default function LandingPage() {
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 max-w-4xl mx-auto">
             Manage your hostel
-            <span className="block" style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", background: "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)" }}>
+            <span className="block" style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", background: "linear-gradient(135deg, #5f7048, #7f8a58, #b07d54)" }}>
               smarter, faster.
             </span>
           </h1>
@@ -101,7 +101,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/login?mode=signup"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold text-base transition-all"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 8px 32px rgba(124,58,237,0.35)" }}>
+              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 8px 32px rgba(95,112,72,0.35)" }}>
               Start for free <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/demo"
@@ -121,7 +121,7 @@ export default function LandingPage() {
           {/* Dashboard preview */}
           <div className="mt-16 relative mx-auto max-w-5xl">
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200"
-              style={{ boxShadow: "0 32px 80px rgba(124,58,237,0.15), 0 8px 32px rgba(0,0,0,0.1)" }}>
+              style={{ boxShadow: "0 32px 80px rgba(95,112,72,0.15), 0 8px 32px rgba(0,0,0,0.1)" }}>
               {/* Mock browser chrome */}
               <div className="bg-gray-100 border-b border-gray-200 px-4 py-3 flex items-center gap-2">
                 <div className="flex gap-1.5">
@@ -139,7 +139,7 @@ export default function LandingPage() {
               <div className="bg-gray-50 p-6">
                 <div className="grid grid-cols-4 gap-3 mb-4">
                   {[
-                    { label: "Occupancy", value: "87%", color: "#7c3aed" },
+                    { label: "Occupancy", value: "87%", color: "#5f7048" },
                     { label: "Arrivals Today", value: "12", color: "#10b981" },
                     { label: "Revenue", value: "€2,840", color: "#f59e0b" },
                     { label: "Avg Stay", value: "3.2 nights", color: "#6366f1" },
@@ -194,7 +194,7 @@ export default function LandingPage() {
                 icon: CalendarDays,
                 title: "Tape Calendar",
                 desc: "Visual drag-and-drop reservation timeline. See every bed, every night, at a glance.",
-                color: "#7c3aed",
+                color: "#5f7048",
               },
               {
                 icon: Users,
@@ -206,31 +206,31 @@ export default function LandingPage() {
                 icon: Wifi,
                 title: "Channel Manager",
                 desc: "Sync with Booking.com, Airbnb, and any OTA via iCal. Auto-import and block availability.",
-                color: "#a855f7",
+                color: "#7f8a58",
               },
               {
                 icon: BarChart3,
                 title: "Analytics",
                 desc: "Occupancy trends, revenue charts, booking sources. Make decisions with real data.",
-                color: "#7c3aed",
+                color: "#5f7048",
               },
               {
                 icon: BedDouble,
                 title: "Room Inventory",
                 desc: "Manage room types, rooms, and individual beds. Define pricing per bed or per room.",
-                color: "#6d28d9",
+                color: "#4c5b3a",
               },
               {
                 icon: ClipboardCheck,
                 title: "Self Check-In",
                 desc: "Send guests a unique link to pre-fill details, upload ID photos, and complete check-in before arrival.",
-                color: "#9333ea",
+                color: "#4c6b4a",
               },
               {
                 icon: Globe,
                 title: "Multi-Tenant",
                 desc: "Each property gets its own branded URL, color scheme, and logo. Perfect for hostel groups.",
-                color: "#7c3aed",
+                color: "#5f7048",
               },
               {
                 icon: Shield,
@@ -242,7 +242,7 @@ export default function LandingPage() {
                 icon: CreditCard,
                 title: "Payment Tracking",
                 desc: "Track paid, unpaid, and partial payments per reservation. Clear financial overview at all times.",
-                color: "#a855f7",
+                color: "#7f8a58",
               },
             ].map((feat) => (
               <div key={feat.title}
@@ -357,7 +357,7 @@ export default function LandingPage() {
                 {plan.highlight && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                     <span className="text-xs font-bold text-white px-3 py-1 rounded-full"
-                      style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+                      style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
                       Most Popular
                     </span>
                   </div>
@@ -381,7 +381,7 @@ export default function LandingPage() {
                   className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${plan.highlight
                     ? "text-white"
                     : "text-gray-700 border border-gray-200 hover:border-purple-300 hover:bg-purple-50"}`}
-                  style={plan.highlight ? { background: "linear-gradient(135deg, #7c3aed, #a855f7)" } : {}}>
+                  style={plan.highlight ? { background: "linear-gradient(135deg, #5f7048, #7f8a58)" } : {}}>
                   {plan.cta}
                 </Link>
               </div>
@@ -391,7 +391,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA BANNER ── */}
-      <section className="py-20" style={{ background: "linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%)" }}>
+      <section className="py-20" style={{ background: "linear-gradient(135deg, #5f7048 0%, #4c6b4a 50%, #7f8a58 100%)" }}>
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-extrabold text-white mb-4 tracking-tight">
             Ready to run your hostel smarter?
@@ -413,7 +413,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }}>
+                style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
                 H
               </div>
               <span className="font-bold text-white">HostMagSmart PMS</span>

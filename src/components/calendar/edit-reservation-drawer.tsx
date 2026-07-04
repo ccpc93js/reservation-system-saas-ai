@@ -35,7 +35,7 @@ const STATUS_TONE: Record<string, string> = {
   pending: "text-amber-700",
   confirmed: "text-emerald-700",
   checked_in: "text-indigo-700",
-  checked_out: "text-slate-700",
+  checked_out: "text-foreground",
   cancelled: "text-red-700",
   no_show: "text-rose-700",
 };
@@ -557,7 +557,7 @@ export default function EditReservationDrawer({
               )}
               <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide">
                 <span className="text-muted-foreground">{t("statusLabel")}</span>
-                <span className={STATUS_TONE[status] ?? "text-slate-700"}>
+                <span className={STATUS_TONE[status] ?? "text-foreground"}>
                   {statusLabels[status] ?? status}
                 </span>
               </p>
@@ -582,7 +582,7 @@ export default function EditReservationDrawer({
                     type="date"
                     value={newCheckIn}
                     onChange={(e) => setNewCheckIn(e.target.value)}
-                    className="w-full rounded-lg border border-indigo-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full rounded-lg border border-indigo-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
@@ -593,7 +593,7 @@ export default function EditReservationDrawer({
                     type="date"
                     value={newCheckOut}
                     onChange={(e) => setNewCheckOut(e.target.value)}
-                    className="w-full rounded-lg border border-indigo-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full rounded-lg border border-indigo-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -806,7 +806,7 @@ export default function EditReservationDrawer({
                 const balance = totalCharged - paid;
 
                 return (
-                  <div className="rounded-lg bg-white border border-emerald-100 overflow-hidden text-xs">
+                  <div className="rounded-lg bg-surface border border-emerald-100 overflow-hidden text-xs">
                     {groups.map((group, gi) => {
                       const itemIds = group.items.map((i: any) => i.id);
                       const editedRate = segmentRates[gi] ?? String(group.rate);
@@ -841,7 +841,7 @@ export default function EditReservationDrawer({
                                 onChange={(e) => setSegmentRates(prev => ({ ...prev, [gi]: e.target.value }))}
                                 onBlur={() => handleSegmentRateBlur(gi, itemIds, editedRate)}
                                 disabled={isSaving}
-                                className="w-16 rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
+                                className="w-16 rounded border border-emerald-200 bg-surface px-1.5 py-0.5 text-xs text-right font-mono focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50"
                               />
                               <span className="text-muted-foreground">/n</span>
                             </div>
@@ -885,7 +885,7 @@ export default function EditReservationDrawer({
                 <select
                   value={paymentCurrency}
                   onChange={(e) => setPaymentCurrency(e.target.value)}
-                  className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 >
                   {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -901,7 +901,7 @@ export default function EditReservationDrawer({
                   onClick={() => setPaymentConfirmed((v) => !v)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${paymentConfirmed ? "bg-emerald-500" : "bg-slate-300"}`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${paymentConfirmed ? "translate-x-6" : "translate-x-1"}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-surface shadow transition-transform ${paymentConfirmed ? "translate-x-6" : "translate-x-1"}`} />
                 </button>
               </label>
 
@@ -915,7 +915,7 @@ export default function EditReservationDrawer({
                   value={paidAmount}
                   onChange={(e) => setPaidAmount(e.target.value)}
                   placeholder={`${Number(reservation?.total_amount ?? 0).toFixed(2)}`}
-                  className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
               </div>
 
@@ -930,7 +930,7 @@ export default function EditReservationDrawer({
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="0.00"
-                    className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   />
                 </div>
                 <div>
@@ -938,7 +938,7 @@ export default function EditReservationDrawer({
                   <select
                     value={depositCurrency}
                     onChange={(e) => setDepositCurrency(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   >
                     {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -955,7 +955,7 @@ export default function EditReservationDrawer({
                     type="datetime-local"
                     value={actualCheckIn}
                     onChange={(e) => setActualCheckIn(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   />
                 </div>
                 <div>
@@ -964,7 +964,7 @@ export default function EditReservationDrawer({
                     type="datetime-local"
                     value={actualCheckOut}
                     onChange={(e) => setActualCheckOut(e.target.value)}
-                    className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   />
                 </div>
               </div>
@@ -1006,7 +1006,7 @@ export default function EditReservationDrawer({
                   const newBalance = newTotal - paid;
 
                   return (
-                    <div className="mt-2 rounded-lg border border-emerald-300 bg-white p-3 space-y-3">
+                    <div className="mt-2 rounded-lg border border-emerald-300 bg-surface p-3 space-y-3">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
                         {t("currentCheckOut", { date: currentCheckOut ? new Date(currentCheckOut + "T00:00:00").toLocaleDateString() : "—" })}
                       </p>
@@ -1019,7 +1019,7 @@ export default function EditReservationDrawer({
                             value={extendDate}
                             min={currentCheckOut}
                             onChange={(e) => setExtendDate(e.target.value)}
-                            className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                            className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                           />
                         </div>
                         <div>
@@ -1031,7 +1031,7 @@ export default function EditReservationDrawer({
                             value={extendRate}
                             onChange={(e) => setExtendRate(e.target.value)}
                             placeholder="0.00"
-                            className="w-full rounded-lg border border-emerald-300 bg-white text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                            className="w-full rounded-lg border border-emerald-300 bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                           />
                         </div>
                       </div>

@@ -4,10 +4,10 @@
 
 /* ─── HostMagSmart Design Tokens ──────────────────────────────────────────────── */
 :root {
-  /* Backgrounds */
-  --bg: 250 20% 98%;             /* #F8F7FC — cool off-white */
-  --surface: 0 0% 100%;          /* #FFFFFF — cards, panels */
-  --border: 250 15% 90%;         /* #E4E2F0 — dividers */
+  /* Backgrounds — Botanical Refresh (warm cream paper) */
+  --bg: 40 30% 92%;              /* #F3EEE2 — cream paper */
+  --surface: 40 33% 97%;         /* #FBF8F1 — cards, panels */
+  --border: 40 22% 85%;          /* #E7DFCE — dividers */
 
   /* Tailwind/shadcn-compatible aliases */
   --background: var(--bg);
@@ -29,38 +29,38 @@
   --input: var(--border);
   --ring: var(--accent);
 
-  /* Text */
-  --text: 250 15% 10%;           /* #161520 — near-black with purple tint */
-  --text-muted: 250 8% 45%;      /* #6E6B80 — muted purple-gray */
+  /* Text — warm near-black */
+  --text: 45 12% 14%;            /* #2A2823 */
+  --text-muted: 42 8% 45%;       /* #7C776B */
 
-  /* Accent — purple */
-  --accent: 262 83% 54%;         /* #7C3AED — indigo-purple */
+  /* Accent — moss (per-tenant themes override this) */
+  --accent: 90 22% 36%;          /* #5F7048 — moss green */
   --accent-fg: 0 0% 100%;        /* white text on accent */
-  --accent-hover: 262 83% 46%;   /* darker hover */
+  --accent-hover: 90 22% 30%;    /* #4C5B3A */
 
-  /* Status colors */
-  --success: 142 72% 29%;        /* #147A45 */
-  --success-fg: 142 72% 97%;
-  --success-bg: 142 72% 96%;
+  /* Status colors — muted to sit in the warm palette */
+  --success: 128 24% 34%;        /* #43663B */
+  --success-fg: 128 24% 97%;
+  --success-bg: 128 24% 92%;
 
-  --warning: 38 92% 40%;         /* #C97D0A */
-  --warning-fg: 38 92% 98%;
-  --warning-bg: 38 92% 96%;
+  --warning: 38 55% 42%;         /* #A9781E */
+  --warning-fg: 38 55% 98%;
+  --warning-bg: 38 55% 92%;
 
-  --danger: 0 72% 44%;           /* #C02B2B */
-  --danger-fg: 0 72% 98%;
-  --danger-bg: 0 72% 97%;
+  --danger: 8 45% 42%;           /* #9C4A37 */
+  --danger-fg: 8 45% 98%;
+  --danger-bg: 8 45% 93%;
 
   /* Misc */
-  --radius: 0.5rem;
-  --sidebar-width: 240px;
+  --radius: 0.75rem;             /* 12px — softer */
+  --sidebar-width: 248px;
 }
 
 /* ─── Dark Mode ─────────────────────────────────────────────────────────────── */
 .dark {
-  --bg: 40 7% 9%;               /* #161614 */
-  --surface: 40 7% 12%;         /* #1E1E1B */
-  --border: 40 7% 18%;          /* #2E2E2A */
+  --bg: 48 8% 10%;              /* #1B1A17 — warm charcoal */
+  --surface: 45 9% 13%;         /* #211F1B */
+  --border: 42 8% 22%;          /* #3A362F */
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -81,15 +81,16 @@
   --input: var(--border);
   --ring: var(--accent);
 
-  --text: 250 20% 96%;           /* #F3F2FA */
-  --text-muted: 250 10% 64%;    /* #9E9BB5 */
+  --text: 42 18% 92%;           /* #EFEBE0 */
+  --text-muted: 42 8% 62%;      /* #A49C8E */
 
-  --accent: 262 90% 70%;        /* #A78BFA — lighter purple for dark bg */
-  --accent-fg: 262 83% 15%;     /* dark purple text on light accent */
+  --accent: 92 25% 62%;         /* #9DB07E — lighter moss for contrast */
+  --accent-fg: 45 12% 12%;      /* dark warm text on light accent */
+  --accent-hover: 92 25% 70%;
 
-  --success: 142 60% 55%;       /* #3DBE7A */
-  --warning: 38 90% 58%;        /* #F4A820 */
-  --danger: 0 80% 72%;          /* #F07A7A */
+  --success: 128 30% 60%;       /* muted sage */
+  --warning: 38 60% 62%;        /* muted gold */
+  --danger: 8 55% 62%;          /* muted clay-red */
 }
 
 /* ─── Base Styles ───────────────────────────────────────────────────────────── */
@@ -107,9 +108,23 @@ html {
 body {
   background-color: hsl(var(--bg));
   color: hsl(var(--text));
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  font-family: var(--font-hanken), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
   line-height: 1.5;
+}
+
+/* Botanical: page titles render in the display serif automatically.
+   Big stat numbers / hero text opt in per-component via `font-serif`. */
+h1 {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Utility so components can force the botanical body sans back on
+   an <h1> in dense/compact contexts where serif would read wrong. */
+.font-sans-force {
+  font-family: var(--font-hanken), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */

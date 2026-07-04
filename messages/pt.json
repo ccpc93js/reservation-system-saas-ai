@@ -789,15 +789,7 @@
       "remove": "Remover",
       "logoHint": "PNG, JPG, WebP ou SVG · máx. 2MB · Exibido na barra lateral",
       "accentColor": "Cor de destaque",
-      "color_purple": "Roxo",
-      "color_indigo": "Índigo",
-      "color_blue": "Azul",
-      "color_teal": "Verde-azulado",
-      "color_green": "Verde",
-      "color_rose": "Rosa",
-      "color_orange": "Laranja",
-      "color_slate": "Ardósia",
-      "color_black": "Preto",
+      "color_teal": "Azul-petróleo",
       "customColor": "Cor personalizada",
       "buttonPreview": "Prévia do botão",
       "badgePreview": "Prévia do selo",
@@ -849,7 +841,15 @@
         "processing": "Processando...",
         "applyAndUpload": "Aplicar e enviar",
         "cropFailed": "Falha ao recortar"
-      }
+      },
+      "color_moss": "Musgo",
+      "color_sage": "Sálvia",
+      "color_fern": "Samambaia",
+      "color_ocean": "Oceano",
+      "color_clay": "Argila",
+      "color_terracotta": "Terracota",
+      "color_plum": "Ameixa",
+      "color_ink": "Tinta"
     }
   },
   "guestPortal": {

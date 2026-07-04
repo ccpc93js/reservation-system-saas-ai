@@ -789,15 +789,7 @@
       "remove": "Удалить",
       "logoHint": "PNG, JPG, WebP или SVG · макс. 2МБ · Отображается в боковой панели",
       "accentColor": "Акцентный цвет",
-      "color_purple": "Фиолетовый",
-      "color_indigo": "Индиго",
-      "color_blue": "Синий",
       "color_teal": "Бирюзовый",
-      "color_green": "Зелёный",
-      "color_rose": "Розовый",
-      "color_orange": "Оранжевый",
-      "color_slate": "Сланцевый",
-      "color_black": "Чёрный",
       "customColor": "Пользовательский цвет",
       "buttonPreview": "Предпросмотр кнопки",
       "badgePreview": "Предпросмотр значка",
@@ -849,7 +841,15 @@
         "processing": "Обработка...",
         "applyAndUpload": "Применить и загрузить",
         "cropFailed": "Ошибка обрезки"
-      }
+      },
+      "color_moss": "Мох",
+      "color_sage": "Шалфей",
+      "color_fern": "Папоротник",
+      "color_ocean": "Океан",
+      "color_clay": "Глина",
+      "color_terracotta": "Терракота",
+      "color_plum": "Слива",
+      "color_ink": "Чернила"
     }
   },
   "guestPortal": {

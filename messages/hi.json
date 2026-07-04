@@ -789,15 +789,7 @@
       "remove": "हटाएं",
       "logoHint": "PNG, JPG, WebP या SVG · अधिकतम 2MB · साइडबार में दिखाया गया",
       "accentColor": "एक्सेंट रंग",
-      "color_purple": "बैंगनी",
-      "color_indigo": "इंडिगो",
-      "color_blue": "नीला",
       "color_teal": "टील",
-      "color_green": "हरा",
-      "color_rose": "गुलाबी",
-      "color_orange": "नारंगी",
-      "color_slate": "स्लेट",
-      "color_black": "काला",
       "customColor": "कस्टम रंग",
       "buttonPreview": "बटन पूर्वावलोकन",
       "badgePreview": "बैज पूर्वावलोकन",
@@ -849,7 +841,15 @@
         "processing": "प्रोसेस हो रहा है...",
         "applyAndUpload": "लागू करें और अपलोड करें",
         "cropFailed": "क्रॉप विफल"
-      }
+      },
+      "color_moss": "काई हरा",
+      "color_sage": "सेज हरा",
+      "color_fern": "फर्न हरा",
+      "color_ocean": "समुद्री नीला",
+      "color_clay": "मिट्टी रंग",
+      "color_terracotta": "टेराकोटा",
+      "color_plum": "बेर बैंगनी",
+      "color_ink": "स्याही काला"
     }
   },
   "guestPortal": {

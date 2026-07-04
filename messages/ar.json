@@ -789,15 +789,7 @@
       "remove": "إزالة",
       "logoHint": "PNG أو JPG أو WebP أو SVG · بحد أقصى 2 ميجابايت · يظهر في الشريط الجانبي",
       "accentColor": "لون التمييز",
-      "color_purple": "أرجواني",
-      "color_indigo": "نيلي",
-      "color_blue": "أزرق",
-      "color_teal": "تركواز",
-      "color_green": "أخضر",
-      "color_rose": "وردي",
-      "color_orange": "برتقالي",
-      "color_slate": "رمادي أردوازي",
-      "color_black": "أسود",
+      "color_teal": "أزرق مخضر",
       "customColor": "لون مخصص",
       "buttonPreview": "معاينة الزر",
       "badgePreview": "معاينة الشارة",
@@ -849,7 +841,15 @@
         "processing": "جارٍ المعالجة...",
         "applyAndUpload": "تطبيق وتحميل",
         "cropFailed": "فشل القص"
-      }
+      },
+      "color_moss": "طحلبي",
+      "color_sage": "مريمية",
+      "color_fern": "سرخسي",
+      "color_ocean": "محيطي",
+      "color_clay": "طيني",
+      "color_terracotta": "طوبي",
+      "color_plum": "برقوقي",
+      "color_ink": "حبري"
     }
   },
   "guestPortal": {

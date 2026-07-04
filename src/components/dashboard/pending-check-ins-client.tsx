@@ -283,7 +283,7 @@ export default function PendingCheckInsClient() {
             {t("subtitle")}
           </p>
 
-          <div className="bg-slate-50 border border-border rounded-lg p-12 text-center">
+          <div className="bg-background border border-border rounded-lg p-12 text-center">
             <CheckCircle className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-foreground">
               {t("allCaughtUp")}
@@ -361,7 +361,7 @@ export default function PendingCheckInsClient() {
           {pending.map((checkIn) => (
             <div
               key={checkIn.id}
-              className="bg-white border border-border rounded-lg p-6 hover:shadow-md transition-shadow"
+              className="bg-surface border border-border rounded-lg p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -433,9 +433,9 @@ export default function PendingCheckInsClient() {
       {/* Verification Modal */}
       {selectedCheckIn && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-surface rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-border p-6 flex items-center justify-between">
+            <div className="sticky top-0 bg-surface border-b border-border p-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">
                 {t("verifyCheckIn")}
               </h2>
@@ -454,7 +454,7 @@ export default function PendingCheckInsClient() {
                 <h3 className="text-lg font-semibold text-foreground mb-4">
                   {t("guestInformation")}
                 </h3>
-                <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4 bg-background p-4 rounded-lg">
                   {Object.entries(selectedCheckIn.self_check_in_data).map(
                     ([key, value]) => (
                       <div key={key}>
@@ -512,7 +512,7 @@ export default function PendingCheckInsClient() {
                       type="text"
                       readOnly
                       value={generateGuestPortalLink(selectedCheckIn.check_in_token)}
-                      className="flex-1 px-3 py-2 bg-slate-50 border border-border rounded-lg text-sm font-mono text-muted-foreground"
+                      className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm font-mono text-muted-foreground"
                     />
                     <button
                       onClick={() => {
@@ -534,14 +534,14 @@ export default function PendingCheckInsClient() {
                         showQR: !prev.showQR,
                       }))
                     }
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-slate-50 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-background transition-colors"
                   >
                     <QrCode className="w-4 h-4" />
                     {verification.showQR ? t("hideQR") : t("showQR")}
                   </button>
 
                   {verification.showQR && (
-                    <div className="p-4 bg-slate-50 rounded-lg flex justify-center">
+                    <div className="p-4 bg-background rounded-lg flex justify-center">
                       <img
                         src={generateQRCodeUrl(selectedCheckIn.check_in_token)}
                         alt="Guest portal QR code"
@@ -559,7 +559,7 @@ export default function PendingCheckInsClient() {
                     {t("verificationStatus")}
                   </label>
                   <div className="space-y-2">
-                    <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-background transition-colors">
                       <input
                         type="radio"
                         name="verification"
@@ -579,7 +579,7 @@ export default function PendingCheckInsClient() {
                       </span>
                     </label>
 
-                    <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                    <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-background transition-colors">
                       <input
                         type="radio"
                         name="verification"
@@ -697,7 +697,7 @@ export default function PendingCheckInsClient() {
       {/* Bulk Rejection Modal */}
       {bulkAction === "reject" && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-surface rounded-lg shadow-xl max-w-md w-full">
             <div className="p-6 border-b border-border flex items-center justify-between">
               <h2 className="text-xl font-bold text-foreground">
                 {t("rejectNCheckIns", { count: selectedIds.size })}

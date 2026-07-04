@@ -58,7 +58,7 @@ export default function CheckInLinkButton({
           type="text"
           readOnly
           value={link}
-          className="flex-1 px-3 py-2 bg-slate-50 border border-border rounded-lg text-sm font-mono text-muted-foreground"
+          className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm font-mono text-muted-foreground"
         />
         <button
           type="button"
@@ -73,14 +73,14 @@ export default function CheckInLinkButton({
       <button
         type="button"
         onClick={() => setShowQR(!showQR)}
-        className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-slate-50 transition-colors text-sm"
+        className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-background transition-colors text-sm"
       >
         <QrCode className="w-4 h-4" />
         {showQR ? t("hideQrCode") : t("showQrCode")}
       </button>
 
       {showQR && (
-        <div className="p-4 bg-slate-50 rounded-lg flex justify-center">
+        <div className="p-4 bg-background rounded-lg flex justify-center">
           <img
             src={generateQRCodeUrl(checkInToken)}
             alt={t("qrCodeAlt")}

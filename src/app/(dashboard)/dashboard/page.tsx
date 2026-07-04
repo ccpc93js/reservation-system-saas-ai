@@ -91,8 +91,8 @@ export default async function DashboardPage() {
       {/* Section Title */}
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Today's Overview</h2>
-          <p className="text-sm text-slate-500 mt-2">
+          <h2 className="text-2xl font-bold text-foreground">Today's Overview</h2>
+          <p className="text-sm text-muted-foreground mt-2">
             {format(new Date(), "EEEE, MMMM d, yyyy")}
           </p>
         </div>
@@ -105,20 +105,20 @@ export default async function DashboardPage() {
           return (
             <div
               key={stat.label}
-              className="bg-white p-10 rounded-2xl border border-slate-200 shadow-lg flex items-center justify-between group hover:shadow-xl hover:border-slate-300 transition-all cursor-pointer"
+              className="bg-surface p-10 rounded-2xl border border-border shadow-lg flex items-center justify-between group hover:shadow-xl hover:border-border transition-all cursor-pointer"
             >
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                   {stat.label}
                 </p>
-                <h3 className="text-3xl font-bold text-slate-900 mb-2">
+                <h3 className="text-3xl font-bold text-foreground mb-2">
                   {stat.value}
                 </h3>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-muted-foreground">
                   <span className={`${colors.text}`}>{(stat as any).detailLine1}</span>
                 </p>
                 {(stat as any).detailLine2 && (
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {(stat as any).detailLine2}
                   </p>
                 )}

@@ -789,15 +789,7 @@
       "remove": "Ukloni",
       "logoHint": "PNG, JPG, WebP ili SVG · maks. 2MB · Prikazuje se u bočnoj traci",
       "accentColor": "Akcentna boja",
-      "color_purple": "Ljubičasta",
-      "color_indigo": "Indigo",
-      "color_blue": "Plava",
       "color_teal": "Tirkizna",
-      "color_green": "Zelena",
-      "color_rose": "Roze",
-      "color_orange": "Narandžasta",
-      "color_slate": "Škriljasta",
-      "color_black": "Crna",
       "customColor": "Prilagođena boja",
       "buttonPreview": "Pregled dugmeta",
       "badgePreview": "Pregled značke",
@@ -849,7 +841,15 @@
         "processing": "Obrada...",
         "applyAndUpload": "Primeni i otpremi",
         "cropFailed": "Isecanje nije uspelo"
-      }
+      },
+      "color_moss": "Mahovina",
+      "color_sage": "Žalfija",
+      "color_fern": "Paprat",
+      "color_ocean": "Okean",
+      "color_clay": "Glina",
+      "color_terracotta": "Terakota",
+      "color_plum": "Šljiva",
+      "color_ink": "Mastilo"
     }
   },
   "guestPortal": {

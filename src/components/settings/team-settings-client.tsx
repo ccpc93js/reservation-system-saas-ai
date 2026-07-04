@@ -29,10 +29,10 @@ interface Props {
 
 const ROLES = ["owner", "manager", "staff"];
 const roleColor: Record<string, string> = {
-  owner: "bg-purple-100 text-purple-700",
-  manager: "bg-blue-100 text-blue-700",
-  admin: "bg-blue-100 text-blue-700",
-  staff: "bg-gray-100 text-gray-600",
+  owner: "bg-[#E0EADB] text-[#4A6740]",
+  manager: "bg-[#DDE7F0] text-[#3A5F82]",
+  admin: "bg-[#DDE7F0] text-[#3A5F82]",
+  staff: "bg-[#E8E2D4] text-[#6F6857]",
 };
 
 export default function TeamSettingsClient({ userRole }: Props) {

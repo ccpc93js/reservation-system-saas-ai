@@ -58,39 +58,39 @@ const STATUS_COLORS: Record<
   { bg: string; border: string; text: string; icon: ElementType }
 > = {
   confirmed: {
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    text: "text-emerald-700",
+    bg: "bg-[#E0EADB]",
+    border: "border-[#C5D6BC]",
+    text: "text-[#4A6740]",
     icon: CheckCircle2,
   },
   pending: {
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    text: "text-amber-700",
+    bg: "bg-[#F0E6CD]",
+    border: "border-[#E0D0A8]",
+    text: "text-[#8A6A16]",
     icon: Clock,
   },
   checked_in: {
-    bg: "bg-indigo-50",
-    border: "border-indigo-200",
-    text: "text-indigo-700",
+    bg: "bg-[#DDE7F0]",
+    border: "border-[#C2D2E2]",
+    text: "text-[#3A5F82]",
     icon: User,
   },
   checked_out: {
-    bg: "bg-slate-100",
-    border: "border-slate-200",
-    text: "text-slate-600",
+    bg: "bg-[#E8E2D4]",
+    border: "border-[#D6CDB8]",
+    text: "text-[#6F6857]",
     icon: CheckCircle2,
   },
   cancelled: {
-    bg: "bg-red-50",
-    border: "border-red-200",
-    text: "text-red-700",
+    bg: "bg-[#EEDCD5]",
+    border: "border-[#E0C4B8]",
+    text: "text-[#9C4A37]",
     icon: Ban,
   },
   no_show: {
-    bg: "bg-slate-100",
-    border: "border-slate-300",
-    text: "text-slate-500",
+    bg: "bg-muted",
+    border: "border-border",
+    text: "text-muted-foreground",
     icon: AlertCircle,
   },
 };
@@ -171,7 +171,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
       <div className="px-4 py-2.5 border-b border-border bg-muted/30 flex items-center justify-between gap-3">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("availabilityTimeline")}</p>
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-200 border border-slate-300" aria-hidden="true" />
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-200 border border-border" aria-hidden="true" />
           <span>{t("pastDatesLocked")}</span>
         </div>
       </div>
@@ -193,8 +193,8 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                   <div
                     key={day.toISOString()}
                     className={cn(
-                      "shrink-0 flex flex-col items-center justify-center border-r border-slate-100 transition-colors duration-200",
-                      isToday ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:bg-slate-50"
+                      "shrink-0 flex flex-col items-center justify-center border-r border-border transition-colors duration-200",
+                      isToday ? "bg-indigo-50 text-indigo-700" : "text-muted-foreground hover:bg-background"
                     )}
                     style={{ width: DAY_WIDTH, height: 48 }}
                   >
@@ -213,14 +213,14 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
             {/* Room Section Header */}
             <div
               className={cn(
-                "flex sticky left-0 z-30 bg-slate-100/80 backdrop-blur-md border-b border-slate-200 w-full transition-all duration-500 hover:bg-slate-100",
+                "flex sticky left-0 z-30 bg-muted/80 backdrop-blur-md border-b border-border w-full transition-all duration-500 hover:bg-muted",
                 animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
               )}
               style={{ transitionDelay: `${roomIndex * 35}ms` }}
             >
               <div className="px-4 py-2 flex items-center gap-2" style={{ width: LABEL_WIDTH }}>
-                {type === "dorm" ? <Hotel className="w-3.5 h-3.5 text-slate-500" /> : <BedDouble className="w-3.5 h-3.5 text-slate-500" />}
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-700">{roomName}</span>
+                {type === "dorm" ? <Hotel className="w-3.5 h-3.5 text-muted-foreground" /> : <BedDouble className="w-3.5 h-3.5 text-muted-foreground" />}
+                <span className="text-xs font-bold uppercase tracking-wider text-foreground">{roomName}</span>
                 <span
                   className={cn(
                     "ml-auto text-[10px] px-2 py-0.5 rounded-full border font-semibold uppercase tracking-wider",
@@ -245,7 +245,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                 <div
                   key={bed.id}
                   className={cn(
-                    "flex group hover:bg-slate-50/50 transition-all duration-500 border-b border-slate-100",
+                    "flex group hover:bg-background/50 transition-all duration-500 border-b border-border",
                     animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
                   )}
                   style={{
@@ -255,11 +255,11 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                 >
                   {/* Bed Label */}
                   <div
-                    className="shrink-0 flex items-center px-4 border-r border-slate-200 bg-surface group-hover:bg-slate-50 sticky left-0 z-20 transition-colors"
+                    className="shrink-0 flex items-center px-4 border-r border-border bg-surface group-hover:bg-background sticky left-0 z-20 transition-colors"
                     style={{ width: LABEL_WIDTH }}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="text-xs font-medium text-slate-900 truncate pr-2">{bed.name}</span>
+                      <span className="text-xs font-medium text-foreground truncate pr-2">{bed.name}</span>
                       {(bed.housekeeping_status === "dirty" || bed.housekeeping_status === "out_of_order") && (
                         <span
                           className="shrink-0 inline-flex"
@@ -273,7 +273,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                           />
                         </span>
                       )}
-                      <span className="text-[10px] text-slate-400 font-mono">#{bed.id.slice(0, 3)}</span>
+                      <span className="text-[10px] text-muted-foreground font-mono">#{bed.id.slice(0, 3)}</span>
                     </div>
                   </div>
 
@@ -288,11 +288,11 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                         <div
                           key={i}
                           className={cn(
-                            "shrink-0 border-r border-slate-100/60 transition-colors duration-150",
+                            "shrink-0 border-r border-border/60 transition-colors duration-150",
                             hasReservation
                               ? ""
                               : isPastDate
-                                ? "bg-slate-50/40 cursor-not-allowed"
+                                ? "bg-background/40 cursor-not-allowed"
                                 : "cursor-pointer hover:bg-indigo-50/40"
                           )}
                           style={{ width: DAY_WIDTH }}
@@ -359,7 +359,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                             }}
                           >
                             <div className="flex items-center gap-1 overflow-hidden w-full">
-                              <div className={cn("w-4 h-4 rounded-sm flex items-center justify-center shrink-0 bg-white/60", colors.text)}>
+                              <div className={cn("w-4 h-4 rounded-sm flex items-center justify-center shrink-0 bg-surface/60", colors.text)}>
                                 <Icon className="w-2.5 h-2.5" />
                               </div>
                               <span className={cn("truncate text-[10px] font-semibold tracking-tight", colors.text)}>{fullName}</span>

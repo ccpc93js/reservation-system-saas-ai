@@ -14,12 +14,12 @@ const STATUS_COLORS: Record<
   string,
   { bg: string; text: string }
 > = {
-  pending: { bg: "bg-amber-100", text: "text-amber-700" },
-  confirmed: { bg: "bg-emerald-100", text: "text-emerald-700" },
-  checked_in: { bg: "bg-primary/10", text: "text-primary" },
-  checked_out: { bg: "bg-slate-100", text: "text-slate-600" },
-  cancelled: { bg: "bg-red-100", text: "text-red-700" },
-  no_show: { bg: "bg-gray-100", text: "text-gray-600" },
+  pending: { bg: "bg-[#F0E6CD]", text: "text-[#8A6A16]" },
+  confirmed: { bg: "bg-[#E0EADB]", text: "text-[#4A6740]" },
+  checked_in: { bg: "bg-[#DDE7F0]", text: "text-[#3A5F82]" },
+  checked_out: { bg: "bg-[#E8E2D4]", text: "text-[#6F6857]" },
+  cancelled: { bg: "bg-[#EEDCD5]", text: "text-[#9C4A37]" },
+  no_show: { bg: "bg-[#E8E2D4]", text: "text-[#6F6857]" },
 };
 
 interface Reservation {

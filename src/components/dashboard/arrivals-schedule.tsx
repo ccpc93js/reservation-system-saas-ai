@@ -57,17 +57,17 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
-      <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="bg-surface rounded-xl border border-border shadow-sm flex flex-col">
+      <div className="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{t("title")}</h3>
-          <p className="text-xs text-slate-500 mt-0.5">{t("subtitle")}</p>
+          <h3 className="text-sm font-semibold text-foreground">{t("title")}</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">{t("subtitle")}</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[11px] font-semibold rounded-full uppercase tracking-wider">
             {t("count", { count: arrivals?.length || 0 })}
           </span>
-          <button className="px-3 py-1.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <button className="px-3 py-1.5 border border-border text-muted-foreground text-xs font-medium rounded-lg hover:bg-background transition-colors flex items-center gap-2">
             <Filter className="w-3.5 h-3.5" /> {t("filter")}
           </button>
         </div>
@@ -77,7 +77,7 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
         <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] scrollbar-none">
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-50/70 border-b border-slate-200 text-xs text-slate-500 font-medium">
+              <tr className="bg-background/70 border-b border-border text-xs text-muted-foreground font-medium">
                 <th className="py-3 px-5 w-1/4">{t("colGuestProfile")}</th>
                 <th className="py-3 px-5">{t("colCheckIn")}</th>
                 <th className="py-3 px-5">{t("colNationality")}</th>
@@ -93,29 +93,29 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
                 const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
                 return (
-                  <tr key={res.id} className="hover:bg-slate-50/50 transition-colors group">
+                  <tr key={res.id} className="hover:bg-background/50 transition-colors group">
                     <td className="py-3 px-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-xs border border-slate-200">
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-semibold text-xs border border-border">
                           {initials || "G"}
                         </div>
                         <div>
-                          <p className="font-medium text-slate-900">
+                          <p className="font-medium text-foreground">
                             {firstName} {lastName}
                           </p>
-                          <p className="text-[11px] text-slate-500">
+                          <p className="text-[11px] text-muted-foreground">
                             {t("idPrefix", { id: res.reservation_number || res.id.slice(0, 6) })}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-5 text-slate-600 text-xs">
+                    <td className="py-3 px-5 text-muted-foreground text-xs">
                       {format(new Date(res.check_in), "MMM d, yyyy")}
                     </td>
                     <td className="py-3 px-5">
-                      <p className="font-medium text-slate-700">{res.guests?.nationality || "—"}</p>
+                      <p className="font-medium text-foreground">{res.guests?.nationality || "—"}</p>
                     </td>
-                    <td className="py-3 px-5 text-slate-600 text-xs">
+                    <td className="py-3 px-5 text-muted-foreground text-xs">
                       {format(new Date(res.check_out), "MMM d, yyyy")}
                     </td>
                     <td className="py-3 px-5">
@@ -134,12 +134,12 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
                         <button
                           onClick={() => handleCheckIn(res.id)}
                           disabled={checking === res.id}
-                          className="px-3 py-1.5 bg-white border border-slate-200 shadow-sm hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+                          className="px-3 py-1.5 bg-surface border border-border shadow-sm hover:border-border hover:bg-background text-foreground rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                         >
                           {checking === res.id ? t("checkingIn") : t("checkIn")}
                         </button>
                       ) : (
-                        <span className="text-xs text-slate-500">{t("checkedIn")}</span>
+                        <span className="text-xs text-muted-foreground">{t("checkedIn")}</span>
                       )}
                     </td>
                   </tr>
@@ -150,9 +150,9 @@ export default function ArrivalsSchedule({ initialArrivals }: ArrivalsSchedulePr
         </div>
       ) : (
         <div className="px-6 py-12 text-center">
-          <Users className="w-8 h-8 mx-auto mb-3 text-slate-300" />
-          <p className="text-sm font-medium text-slate-900">{t("noArrivals")}</p>
-          <p className="text-xs text-slate-500 mt-1">{t("noArrivalsHint")}</p>
+          <Users className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
+          <p className="text-sm font-medium text-foreground">{t("noArrivals")}</p>
+          <p className="text-xs text-muted-foreground mt-1">{t("noArrivalsHint")}</p>
         </div>
       )}
     </div>

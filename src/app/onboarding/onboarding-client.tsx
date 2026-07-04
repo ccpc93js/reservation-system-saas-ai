@@ -113,9 +113,9 @@ export default function OnboardingClient() {
           style={{ background: "linear-gradient(135deg, #ffffff 0%, #f5f3ff 50%, #ede9fe 100%)" }}>
           <div className="relative flex items-center justify-center w-20 h-20">
             <div className="absolute inset-0 rounded-2xl animate-ping opacity-20"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }} />
+              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }} />
             <div className="w-20 h-20 rounded-2xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #6d28d9 0%, #a855f7 100%)", boxShadow: "0 8px 32px rgba(139,92,246,0.4)" }}>
+              style={{ background: "linear-gradient(135deg, #4c5b3a 0%, #7f8a58 100%)", boxShadow: "0 8px 32px rgba(95,112,72,0.4)" }}>
               <Building2 className="w-10 h-10 text-white" />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function OnboardingClient() {
           <div className="flex gap-1.5">
             {[0, 1, 2].map((i) => (
               <div key={i} className="w-2 h-2 rounded-full"
-                style={{ background: "#a855f7", animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
+                style={{ background: "#7f8a58", animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
             ))}
           </div>
           <style>{`@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-8px);opacity:1}}`}</style>
@@ -134,18 +134,18 @@ export default function OnboardingClient() {
       )}
 
       <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139,92,246,0.08) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(95,112,72,0.08) 0%, transparent 70%)" }} />
 
       <div className="relative w-full max-w-md">
         <div className="rounded-3xl overflow-hidden"
-          style={{ background: "#ffffff", border: "1px solid rgba(139,92,246,0.2)", boxShadow: "0 0 60px rgba(139,92,246,0.1), 0 24px 48px rgba(109,40,217,0.08)" }}>
+          style={{ background: "#ffffff", border: "1px solid rgba(95,112,72,0.2)", boxShadow: "0 0 60px rgba(95,112,72,0.1), 0 24px 48px rgba(109,40,217,0.08)" }}>
 
-          <div style={{ height: "3px", background: "linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed)" }} />
+          <div style={{ height: "3px", background: "linear-gradient(90deg, #5f7048, #7f8a58, #5f7048)" }} />
 
           <div className="p-10">
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
-                style={{ background: "linear-gradient(135deg, #6d28d9 0%, #a855f7 100%)", boxShadow: "0 8px 32px rgba(139,92,246,0.35)" }}>
+                style={{ background: "linear-gradient(135deg, #4c5b3a 0%, #7f8a58 100%)", boxShadow: "0 8px 32px rgba(95,112,72,0.35)" }}>
                 <Building2 className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Set up your property</h1>
@@ -156,7 +156,7 @@ export default function OnboardingClient() {
             <div className="flex gap-2 mb-8">
               {[1, 2].map((s) => (
                 <div key={s} className="h-1 flex-1 rounded-full transition-all duration-500"
-                  style={{ background: s <= step ? "linear-gradient(90deg, #7c3aed, #a855f7)" : "#f0f0f0" }} />
+                  style={{ background: s <= step ? "linear-gradient(90deg, #5f7048, #7f8a58)" : "#f0f0f0" }} />
               ))}
             </div>
 
@@ -222,7 +222,7 @@ export default function OnboardingClient() {
                   onClick={() => canProceed && setStep(2)}
                   disabled={!canProceed}
                   className="w-full py-3.5 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all mt-2 disabled:opacity-30"
-                  style={{ background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}
+                  style={{ background: "linear-gradient(135deg, #5f7048 0%, #7f8a58 100%)", boxShadow: "0 4px 20px rgba(95,112,72,0.35)" }}
                 >
                   {slugStatus === "checking"
                     ? <><Loader2 className="w-4 h-4 animate-spin" /> Checking…</>
@@ -269,7 +269,7 @@ export default function OnboardingClient() {
                   </button>
                   <button onClick={handleCreate} disabled={saving}
                     className="flex-1 py-3.5 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2 disabled:opacity-50"
-                    style={{ background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}>
+                    style={{ background: "linear-gradient(135deg, #5f7048 0%, #7f8a58 100%)", boxShadow: "0 4px 20px rgba(95,112,72,0.35)" }}>
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                     {saving ? "Creating..." : "Launch Property"}
                   </button>

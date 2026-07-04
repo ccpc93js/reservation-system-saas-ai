@@ -73,9 +73,9 @@ export default function DemoPage() {
           <>
             <div className="relative inline-flex items-center justify-center w-20 h-20">
               <div className="absolute inset-0 rounded-2xl animate-ping opacity-20"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)" }} />
+                style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }} />
               <div className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #6d28d9, #a855f7)", boxShadow: "0 8px 32px rgba(139,92,246,0.4)" }}>
+                style={{ background: "linear-gradient(135deg, #4c5b3a, #7f8a58)", boxShadow: "0 8px 32px rgba(95,112,72,0.4)" }}>
                 <Building2 className="w-10 h-10 text-white" />
               </div>
             </div>

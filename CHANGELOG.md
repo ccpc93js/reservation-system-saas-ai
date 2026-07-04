@@ -1,3 +1,451 @@
+## [a01ae0e] - 2026-07-04
+
+docs: add design reference doc for UI redesign via Claude Artifacts
+
+Design tokens (light/dark), tech constraints, per-tenant accent
+presets, full screen inventory, and density notes - for pasting into
+a Claude Artifacts conversation to design a new UI style.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [abbd331] - 2026-07-04
+
+fix: address remaining Phase 18 review findings
+
+- src/lib/types/housekeeping.ts: new shared HOUSEKEEPING_STATUSES
+  const + HousekeepingStatus type, replacing 3 independently hardcoded
+  copies of the same 4-value list (API route, client STATUS_VALUES,
+  STATUS_COLORS keys) - a future status addition/rename now only
+  needs one edit instead of three with no compiler signal on drift.
+
+- beds/[id]/housekeeping/route.ts: added the explicit membership
+  check the sibling beds/[id]/route.ts CRUD endpoint already does,
+  instead of relying solely on RLS - closes the inconsistent
+  authorization-philosophy gap between two adjacent endpoints on the
+  same resource. Also scopes the update itself to organization_id as
+  defense in depth.
+
+- use-housekeeping.ts: the initial fetch and the Realtime subscription
+  now sequence properly (subscribe only after the fetch resolves),
+  closing a race where a concurrent update from another user during
+  the fetch window could be dropped and then overwritten by the
+  fetch's stale snapshot. updateStatus also now checks response.ok,
+  rolls back the optimistic UI update, and shows an error toast on
+  failure, instead of silently leaving the UI showing a status that
+  was never actually persisted.
+
+- pending-check-ins-client.tsx: added a title hover-fallback to the
+  3 cells (check-in date, room, submitted time) that lost their full
+  value when truncate was added earlier this session to fix the
+  card-overlap bug - only the email cell had gotten one.
+
+- housekeeping-client.tsx: room groups are now keyed by roomId instead
+  of roomName in the React .map() - two rooms sharing a display name
+  would otherwise collide as the same React key.
+
+Found during a full-phase code review (8-angle diff scan) requested
+after Phase 18 shipped.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [5823c68] - 2026-07-04
+
+fix: extract shared finalizeCheckout helper, fixing missing email on second checkout path
+
+The "mark bed dirty" logic was duplicated verbatim across
+/api/reservations/[id]/checkout and the generic /api/reservations/[id]
+PATCH route (used by the Reservations list dropdown and
+edit-reservation-drawer). Extracted both bed-dirtying and the
+checkout confirmation email into src/lib/checkout.ts's
+finalizeCheckout(), called from both routes.
+
+This also fixes a real, previously-unnoticed gap: checking out via the
+Reservations list or edit drawer never sent the checkout confirmation
+email that the dedicated CheckoutDialog path sends - both paths now
+behave identically. Each side effect (bed-dirty, email) keeps its own
+inner try/catch so a failure in either can never block or fail the
+checkout response.
+
+Found during a full-phase code review requested after Phase 18
+shipped.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [8f704bd] - 2026-07-04
+
+fix: add missing local migration files for notifications and housekeeping
+
+Both the Phase 17 notifications table and the Phase 18 beds
+housekeeping_status columns were applied directly to the live
+Supabase project via mcp__supabase__apply_migration, but never saved
+as local .sql files under supabase/migrations/ - breaking the
+established convention this project otherwise follows for every
+schema change (10 prior migration files exist). Any environment
+rebuilt from the checked-in migrations (fresh CI, supabase db reset,
+staging re-provision) was missing both, and every housekeeping/
+notifications code path would fail with a column/table-does-not-exist
+error despite the app code being correct.
+
+Filenames/timestamps match exactly what's already applied live, per
+mcp__supabase__list_migrations (20260703140527_create_notifications_table,
+20260703202235_add_housekeeping_status_to_beds) - these are the
+historical record of what already ran, not a new migration to apply.
+
+Found during a full-phase code review (8-angle diff scan) requested
+after Phase 18 shipped.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [dab5375] - 2026-07-04
+
+fix: prevent info card text overlap on Pending Check-Ins when sidebar is open
+
+Root cause: the 4-column info grid (check-in date, room, email,
+submitted time) had no min-w-0 on its grid cells. CSS grid/flex items
+default to min-width: auto, which refuses to shrink below content
+size — so a long, space-less email address overflowed its cell and
+visually bled into the neighboring "Submitted" column instead of
+wrapping or truncating. This only became visible once the sidebar
+being open left less width for the content area.
+
+Fixed by adding min-w-0 to every grid cell (and the outer flex
+container, since the same min-width:auto default applies up the flex
+chain) plus truncate on each value, with a title attribute on the
+email so the full address is still available on hover. Grid also
+goes 2 columns on narrow screens (sm:grid-cols-4) instead of always
+cramming 4 in, matching the app's existing responsive patterns.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [c9f240c] - 2026-07-04
+
+style: standardize refresh button style across housekeeping and analytics
+
+Both switched from the rounded-full pill to the bordered rounded-xl
+rectangle already used on the Guest Book page's Refresh/Export CSV
+buttons, so all three pages now share one consistent refresh button
+design.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [104bb3d] - 2026-07-04
+
+feat: add refresh button to analytics page
+
+Analytics is fully server-rendered with no client-side data fetching,
+so refresh triggers a Next.js router.refresh() (wrapped in
+useTransition for the pending/spin state) to re-run the server
+component and pull fresh metrics. Same pill-button styling as the
+housekeeping and checkin-history refresh buttons. New "refresh" key
+added to the analytics i18n namespace across all 11 locales, 1139
+keys total.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [e16c06f] - 2026-07-04
+
+style: move Refresh/Export buttons from page header to table toolbar
+
+Guest Book page header now shows only title/count; Refresh and Export
+CSV/Excel moved to a toolbar row alongside the search input, directly
+above the table — for consistency with other table-driven pages.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [d82c76e] - 2026-07-04
+
+style: restyle housekeeping refresh button as a labeled pill
+
+Icon-only square button changed to a rounded-full pill with icon +
+"Refresh" label, matching the requested look.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [ecbf19a] - 2026-07-03
+
+fix: show housekeeping status info on tape chart warning icon hover
+
+Wraps the warning icon in a span with a native title attribute (lucide
+icons don't accept title directly) so hovering shows "This bed needs
+cleaning" / "This bed is out of order" as a tooltip. Also colors the
+icon amber for dirty vs red for out_of_order, matching the housekeeping
+board's own status colors, so the two states are visually distinct at
+a glance without needing to hover.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [fc41ed4] - 2026-07-03
+
+fix: mark bed dirty on checkout via the generic reservation PATCH route too
+
+Root cause: checking out a guest through the Reservations list's inline
+status dropdown or the edit-reservation-drawer's status field calls
+PATCH /api/reservations/[id] (the generic update route), not the
+dedicated /api/reservations/[id]/checkout route Task 2 of Phase 18
+patched. That generic route already had its own special-cased
+"if status === checked_out" block (for checkin_registry), so it was
+the obvious place to have missed - confirmed via querying real
+checked-out reservations and their beds' housekeeping_updated_at
+timestamps, which showed no auto-dirty had ever fired for a bed
+checked out through this path.
+
+Same fix as Task 2: fetch reservation_items -> bed_id, mark dirty
+excluding out_of_order, wrapped in its own inner try/catch so a bed
+update failure can never turn an already-successful status update
+into a false error response (the route already has one broad outer
+try/catch).
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [38467ac] - 2026-07-03
+
+feat: add manual refresh button to housekeeping board
+
+Wires the useHousekeeping hook's existing refetch() to a button next
+to the filter tabs, with a spin animation while in flight. New
+"refresh" key added to the housekeeping i18n namespace across all 11
+locales, 1138 keys total.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [ee19a37] - 2026-07-03
+
+docs: add Phase 18 housekeeping design doc and implementation plan
+
+docs/phases/PHASE_18_PLAN.md - brainstorming skill output: understanding
+summary, assumptions, decision log, full design (data model, auto-dirty
+trigger, manual API, Realtime hook, UI, warning badge, edge cases).
+
+docs/plans/2026-07-03-phase18-housekeeping.md - writing-plans skill
+output: 11 bite-sized tasks executed via subagent-driven-development.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3ef75b3] - 2026-07-03
+
+feat: translate housekeeping namespace into all 10 non-English locales
+
+18 keys per locale (sidebar.nav, header.pageTitles, calendar.tapeChart
+warnings x2, housekeeping namespace x13) - same script-based pattern
+as every prior i18n stage. Verified identical key structure across
+all 11 locales, 1137 keys total.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [58823ac] - 2026-07-03
+
+feat: add housekeeping i18n keys to en.json
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [2a43e37] - 2026-07-03
+
+feat: show housekeeping warning badge on tape chart bed rows
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [16b2cfc] - 2026-07-03
+
+feat: add housekeeping nav entry and page title
+
+## [05dabd8] - 2026-07-03
+
+feat: add housekeeping board page
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [e148bc4] - 2026-07-03
+
+feat: add useHousekeeping client hook with Realtime subscription
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [924600d] - 2026-07-03
+
+feat: add manual housekeeping status API route
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [924600d] - 2026-07-03
+
+feat: add manual housekeeping status API route
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [924600d] - 2026-07-03
+
+feat: add manual housekeeping status API route
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [924600d] - 2026-07-03
+
+feat: add manual housekeeping status API route
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [cb6cf3a] - 2026-07-03
+
+feat: auto-mark bed dirty on guest checkout
+
+## [31678ca] - 2026-07-03
+
+feat: add housekeeping_status columns to beds table
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [791de7f] - 2026-07-03
+
+feat: translate notifications namespace into all 10 non-English locales
+
+8 keys per locale (title, markAllRead, empty, types.{5 events}) -
+same script-based pattern used throughout Phase 16. Verified identical
+key structure across all 11 locales via flatten-and-diff script,
+1119 keys total.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [2d6746f] - 2026-07-03
+
+feat: add notifications i18n namespace to en.json
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [d8b18d8] - 2026-07-03
+
+feat: replace placeholder bell with real NotificationBell dropdown
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [9a1d8c9] - 2026-07-03
+
+feat: add useNotifications client hook with Realtime subscription
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [69c2656] - 2026-07-03
+
+feat: add mark-as-read and mark-all-read notification endpoints
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [87f325a] - 2026-07-03
+
+feat: notify staff on channel sync failure
+
+Two insertion points: the inner catch for iCal-fetch failures, and
+the outer catch for anything else. Hoisted `orgId` out of the `try`
+block (it needs to be readable from the `catch` block, which is a
+separate scope in TS/JS — a `let` declared inside `try` isn't visible
+there) and added an explicit `if (!orgId)` guard so the rest of the
+function keeps a definite `string` type. Uses `channel.name` for the
+notification's display label (verified against channels-client.tsx —
+that's the primary label shown in the UI; `platform` is a secondary
+badge).
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3f2d9bd] - 2026-07-03
+
+feat: notify staff on duplicate guest detection
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3f2d9bd] - 2026-07-03
+
+feat: notify staff on duplicate guest detection
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3f2d9bd] - 2026-07-03
+
+feat: notify staff on duplicate guest detection
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [273777a] - 2026-07-03
+
+feat: notify staff on reservation cancellation
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [86ddd13] - 2026-07-03
+
+feat: notify staff on new reservation created
+
+## [f6877da] - 2026-07-03
+
+feat: notify staff on guest check-in submission
+
+## [c8a1570] - 2026-07-03
+
+docs: add Phase 17 notifications design doc and implementation plan
+
+docs/phases/PHASE_17_PLAN.md - brainstorming skill output: understanding
+summary, assumptions, decision log, full design (data model, server
+triggers, client/Realtime, UI, edge cases, verification strategy).
+
+docs/plans/2026-07-03-phase17-notifications.md - writing-plans skill
+output: 14 bite-sized tasks executed via subagent-driven-development.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [dc24e4c] - 2026-07-03
+
+fix: regenerate Supabase database types to include notifications table
+
+src/lib/types/database.ts was stale — it predated the Task 1 migration,
+so `.from("notifications")` didn't typecheck without an `any` escape
+hatch. Regenerated via mcp__supabase__generate_typescript_types and
+restored the hand-appended convenience type aliases (Room, Bed,
+RoomType, DocumentMetadata, etc.) that the raw generator output
+doesn't include, plus a new `Notification` alias.
+
+Removed the `any` cast from src/lib/notifications.ts now that the
+table is properly typed; kept a narrow `data as Json` cast at the
+insert boundary since caller-supplied `Record<string, unknown>`
+genuinely isn't statically assignable to the generated `Json` type.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [ed426a8] - 2026-07-03
+
+feat: add notifyOrg helper for Phase 17 notifications
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [e1403b0] - 2026-07-03
+
+feat: Phase 16 - translate document upload, merge/OCR dialogs, cancel/checkout dialogs
+
+Final batch of the 8-file gap list found by a full next-intl audit
+sweep (grep -L "next-intl" across src/app and src/components):
+
+- src/components/guests/document-upload.tsx
+- src/components/guests/duplicate-merge-dialog.tsx
+- src/components/guests/ocr-extraction-dialog.tsx
+- src/components/reservations/cancel-reservation-dialog.tsx
+- src/components/reservations/checkout-dialog.tsx
+
+duplicate-merge-dialog.tsx and ocr-extraction-dialog.tsx both stripped
+the English `label` field off their GUEST_FIELDS arrays in favor of
+dynamic `t(`fields.${key}`)` lookups (20 keys for merge, 10 for OCR).
+cancel-reservation-dialog.tsx converted CANCELLATION_REASONS to a
+plain value array + `reason_${value}` lookups, and uses t.rich() to
+bold the guest name in the cancellation warning.
+
+119 new keys (documentUpload, duplicateMergeDialog,
+ocrExtractionDialog, cancelReservationDialog, checkoutDialog) added to
+all 11 locale files, 1111 keys total. Verified: identical key structure
+across every locale (script diff), every literal t() call resolves
+against en.json (regex + resolution script), dynamic template-literal
+lookups and t.rich() calls spot-checked manually, npx tsc --noEmit
+clean, npm run build passes (47/47 static pages, exit 0).
+
+This closes the full-app i18n audit for Phase 16.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [1048b63] - 2026-07-03
 
 feat: Phase 16 - translate document upload, merge/OCR dialogs, cancel/checkout dialogs

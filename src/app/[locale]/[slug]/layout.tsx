@@ -5,7 +5,7 @@ import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
 
 function hexToHsl(hex: string): string {
-  if (!hex || !hex.startsWith("#")) return "262 83% 54%";
+  if (!hex || !hex.startsWith("#")) return "90 22% 36%";
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
@@ -64,7 +64,7 @@ export default async function TenantLayout({
     redirect("/onboarding");
   }
 
-  const accentHsl = hexToHsl((org as any).theme_color ?? "#7c3aed");
+  const accentHsl = hexToHsl((org as any).theme_color ?? "#5f7048");
   const isDemo = slug === "demo-hostel";
 
   return (
@@ -77,11 +77,11 @@ export default async function TenantLayout({
       {/* Demo mode banner */}
       {isDemo && (
         <div className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-3 px-4 py-2 text-xs font-semibold text-white"
-          style={{ background: "linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed)", backgroundSize: "200%", animation: "shimmer 3s linear infinite" }}>
+          style={{ background: "linear-gradient(90deg, #5f7048, #7f8a58, #5f7048)", backgroundSize: "200%", animation: "shimmer 3s linear infinite" }}>
           <style>{`@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}`}</style>
           <span>{t("message")}</span>
           <a href="/signup"
-            className="underline underline-offset-2 hover:text-purple-100 transition-colors">
+            className="underline underline-offset-2 hover:text-white/80 transition-colors">
             {t("createAccountCta")}
           </a>
         </div>

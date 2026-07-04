@@ -27,7 +27,7 @@ export async function POST() {
           timezone: "Europe/Madrid",
           currency: "EUR",
           locale: "en",
-          theme_color: "#7c3aed",
+          theme_color: "#5f7048",
           check_in_time: "15:00",
           check_out_time: "11:00",
           description: "A vibrant hostel in the heart of Barcelona. This is a demo account — explore all features!",

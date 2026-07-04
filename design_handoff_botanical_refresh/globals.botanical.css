@@ -1,0 +1,59 @@
+/* ============================================================
+   HostMagSmart — Botanical refresh design tokens
+   Paste these variable blocks over the matching sections in
+   src/app/globals.css. Everything already reads hsl(var(--x)),
+   so replacing these values re-skins the whole app.
+   ============================================================ */
+
+:root {
+  /* Surfaces --------------------------------------------------- */
+  --bg:          40 30% 92%;   /* #F3EEE2  cream paper background */
+  --surface:     40 33% 97%;   /* #FBF8F1  cards, panels          */
+  --border:      40 22% 85%;   /* #E7DFCE  dividers               */
+  --text:        45 12% 14%;   /* #2A2823  warm near-black        */
+  --text-muted:  42  8% 45%;   /* #7C776B                         */
+
+  /* Accent (new default = moss). Per-tenant themes override this */
+  --accent:       90 22% 36%;  /* #5F7048 moss                    */
+  --accent-fg:     0  0% 100%; /* white text on accent            */
+  --accent-hover:  90 22% 30%; /* #4C5B3A                         */
+
+  /* Status — muted to sit in the warm palette ------------------ */
+  --success:  128 24% 34%;     /* #43663B */
+  --warning:   38 55% 42%;     /* #A9781E */
+  --danger:     8 45% 42%;     /* #9C4A37 */
+
+  --radius: 0.75rem;           /* 12px — softer than before        */
+  --sidebar-width: 248px;
+}
+
+/* Warm dark mode — NOT a simple invert. Charcoal + lighter moss. */
+.dark {
+  --bg:         48  8% 10%;    /* #1B1A17 */
+  --surface:    45  9% 13%;    /* #211F1B */
+  --border:     42  8% 22%;    /* #3A362F */
+  --text:       42 18% 92%;    /* #EFEBE0 */
+  --text-muted: 42  8% 62%;    /* #A49C8E */
+  --accent:     92 25% 62%;    /* #9DB07E lighter moss for contrast */
+  --accent-hover:92 25% 70%;
+}
+
+/* ---- Per-tenant accent presets (Settings → Property) ----------
+   Keep the 9-slot system; only the hex values change. Store the
+   HSL triplet in organizations.theme_color, or map hex→HSL on read.
+
+   moss        #5F7048   90 22% 36%
+   sage        #7F8A58   72 22% 45%
+   fern        #4C6B4A  116 18% 36%
+   teal        #3F7168  170 28% 34%
+   ocean       #3D6A86  203 38% 38%
+   clay        #B07D54   26 38% 51%
+   terracotta  #B0604A   12 43% 49%
+   plum        #7A5570  316 18% 40%
+   ink         #3A3D34   82 10% 22%
+--------------------------------------------------------------- */
+
+/* Optional: derive hover/tints from --accent instead of hardcoding.
+   Use these helpers in components for accent washes:            */
+/*  background: color-mix(in srgb, hsl(var(--accent)) 13%, transparent);  (soft tint) */
+/*  background: color-mix(in srgb, hsl(var(--accent)) 82%, black);        (hover)      */

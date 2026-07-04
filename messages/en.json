@@ -789,15 +789,7 @@
       "remove": "Remove",
       "logoHint": "PNG, JPG, WebP or SVG · max 2MB · Shown in sidebar",
       "accentColor": "Accent Color",
-      "color_purple": "Purple",
-      "color_indigo": "Indigo",
-      "color_blue": "Blue",
       "color_teal": "Teal",
-      "color_green": "Green",
-      "color_rose": "Rose",
-      "color_orange": "Orange",
-      "color_slate": "Slate",
-      "color_black": "Black",
       "customColor": "Custom color",
       "buttonPreview": "Button preview",
       "badgePreview": "Badge preview",
@@ -849,7 +841,15 @@
         "processing": "Processing...",
         "applyAndUpload": "Apply & Upload",
         "cropFailed": "Crop failed"
-      }
+      },
+      "color_moss": "Moss",
+      "color_sage": "Sage",
+      "color_fern": "Fern",
+      "color_ocean": "Ocean",
+      "color_clay": "Clay",
+      "color_terracotta": "Terracotta",
+      "color_plum": "Plum",
+      "color_ink": "Ink"
     }
   },
   "guestPortal": {

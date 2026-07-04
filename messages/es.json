@@ -789,15 +789,7 @@
       "remove": "Eliminar",
       "logoHint": "PNG, JPG, WebP o SVG · máx. 2MB · Se muestra en la barra lateral",
       "accentColor": "Color de acento",
-      "color_purple": "Morado",
-      "color_indigo": "Índigo",
-      "color_blue": "Azul",
       "color_teal": "Verde azulado",
-      "color_green": "Verde",
-      "color_rose": "Rosa",
-      "color_orange": "Naranja",
-      "color_slate": "Pizarra",
-      "color_black": "Negro",
       "customColor": "Color personalizado",
       "buttonPreview": "Vista previa del botón",
       "badgePreview": "Vista previa de la insignia",
@@ -849,7 +841,15 @@
         "processing": "Procesando...",
         "applyAndUpload": "Aplicar y subir",
         "cropFailed": "Error al recortar"
-      }
+      },
+      "color_moss": "Musgo",
+      "color_sage": "Salvia",
+      "color_fern": "Helecho",
+      "color_ocean": "Océano",
+      "color_clay": "Arcilla",
+      "color_terracotta": "Terracota",
+      "color_plum": "Ciruela",
+      "color_ink": "Tinta"
     }
   },
   "guestPortal": {

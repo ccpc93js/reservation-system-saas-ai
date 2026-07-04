@@ -254,7 +254,7 @@ export default function GuestListClient({
                         </button>
                         <button
                           onClick={() => handleDelete(guest.id)}
-                          className="p-1.5 rounded hover:bg-red-100 transition-colors text-slate-400 hover:text-red-600"
+                          className="p-1.5 rounded hover:bg-red-100 transition-colors text-muted-foreground hover:text-red-600"
                           title={t("deleteGuestTitle")}
                         >
                           <Trash2 className="w-4 h-4" />

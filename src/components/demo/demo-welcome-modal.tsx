@@ -8,11 +8,11 @@ const STORAGE_KEY = "demo_welcome_dismissed";
 
 const SUGGESTION_KEYS = ["tapeCalendar", "createBooking", "analytics", "channelManager", "guestDirectory"] as const;
 const suggestions = [
-  { key: "tapeCalendar", icon: CalendarDays, href: "calendar", color: "#7c3aed" },
+  { key: "tapeCalendar", icon: CalendarDays, href: "calendar", color: "#5f7048" },
   { key: "createBooking", icon: Plus, href: null, color: "#8b5cf6" },
-  { key: "analytics", icon: BarChart3, href: "analytics", color: "#a855f7" },
-  { key: "channelManager", icon: Wifi, href: "channels", color: "#7c3aed" },
-  { key: "guestDirectory", icon: Users, href: "guests", color: "#9333ea" },
+  { key: "analytics", icon: BarChart3, href: "analytics", color: "#7f8a58" },
+  { key: "channelManager", icon: Wifi, href: "channels", color: "#5f7048" },
+  { key: "guestDirectory", icon: Users, href: "guests", color: "#4c6b4a" },
 ] satisfies { key: typeof SUGGESTION_KEYS[number]; icon: typeof CalendarDays; href: string | null; color: string }[];
 
 interface Props {
@@ -38,17 +38,17 @@ export default function DemoWelcomeModal({ slug }: Props) {
 
   return (
     <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col"
-        style={{ maxHeight: "calc(100vh - 32px)", boxShadow: "0 32px 80px rgba(124,58,237,0.2), 0 8px 32px rgba(0,0,0,0.1)" }}>
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-md flex flex-col"
+        style={{ maxHeight: "calc(100vh - 32px)", boxShadow: "0 32px 80px rgba(95,112,72,0.2), 0 8px 32px rgba(0,0,0,0.1)" }}>
 
         {/* Header */}
         <div className="relative px-6 pt-6 pb-4 shrink-0"
-          style={{ background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)", borderRadius: "1rem 1rem 0 0" }}>
+          style={{ background: "linear-gradient(135deg, #5f7048 0%, #7f8a58 100%)", borderRadius: "1rem 1rem 0 0" }}>
           <button onClick={dismiss}
-            className="absolute top-3 right-3 p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+            className="absolute top-3 right-3 p-1.5 rounded-lg bg-surface/20 hover:bg-surface/30 transition-colors">
             <X className="w-4 h-4 text-white" />
           </button>
-          <div className="inline-flex items-center gap-1.5 bg-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
+          <div className="inline-flex items-center gap-1.5 bg-surface/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
             {t("demoModeBadge")}
           </div>
           <h2 className="text-xl font-bold text-white mb-1">{t("welcomeTitle")}</h2>
@@ -59,10 +59,10 @@ export default function DemoWelcomeModal({ slug }: Props) {
 
         {/* Suggestions — scrollable */}
         <div className="px-5 py-4 space-y-1.5 overflow-y-auto flex-1">
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">{t("suggestedThings")}</p>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">{t("suggestedThings")}</p>
           {suggestions.map((s) => (
             <div key={s.key}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all group cursor-pointer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-border hover:border-purple-200 hover:bg-purple-50/50 transition-all group cursor-pointer"
               onClick={() => {
                 if (s.href) window.location.href = `/${locale}/${slug}/${s.href}`;
                 dismiss();
@@ -72,24 +72,24 @@ export default function DemoWelcomeModal({ slug }: Props) {
                 <s.icon className="w-4 h-4" style={{ color: s.color }} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900">{t(`suggestions.${s.key}.title`)}</p>
-                <p className="text-xs text-gray-500 truncate">{t(`suggestions.${s.key}.desc`)}</p>
+                <p className="text-sm font-semibold text-foreground">{t(`suggestions.${s.key}.title`)}</p>
+                <p className="text-xs text-muted-foreground truncate">{t(`suggestions.${s.key}.desc`)}</p>
               </div>
               {s.href && (
-                <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all shrink-0" />
               )}
             </div>
           ))}
         </div>
 
         {/* Footer */}
-        <div className="px-5 pb-5 pt-3 border-t border-gray-100 shrink-0">
+        <div className="px-5 pb-5 pt-3 border-t border-border shrink-0">
           <button onClick={dismiss}
             className="w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 16px rgba(124,58,237,0.3)" }}>
+            style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 16px rgba(95,112,72,0.3)" }}>
             {t("startExploring")}
           </button>
-          <p className="text-center text-xs text-gray-400 mt-2.5">
+          <p className="text-center text-xs text-muted-foreground mt-2.5">
             {t("wantThisForYourHostel")}{" "}
             <a href="/signup" className="text-purple-600 font-medium hover:underline">
               {t("createFreeAccount")}

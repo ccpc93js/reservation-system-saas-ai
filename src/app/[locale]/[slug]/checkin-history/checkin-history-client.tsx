@@ -327,7 +327,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
           </button>
           <button onClick={() => exportCSV(filtered, orgName)} disabled={filtered.length === 0}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 14px rgba(124,58,237,0.3)" }}>
+            style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 14px rgba(95,112,72,0.3)" }}>
             <Download className="w-4 h-4" />
             {t("exportCsv")}
           </button>

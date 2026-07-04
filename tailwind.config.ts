@@ -43,12 +43,13 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
+          "var(--font-hanken)",
           "-apple-system",
           "BlinkMacSystemFont",
-          "Inter",
           "Segoe UI",
           "sans-serif",
         ],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
