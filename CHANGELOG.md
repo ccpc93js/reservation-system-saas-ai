@@ -1,3 +1,39 @@
+## [92ef7f7] - 2026-07-04
+
+feat: apply Botanical Refresh design — foundation (tokens, fonts, accent, app re-skin)
+
+Stage 1 of the botanical-refresh redesign from design_handoff_botanical_refresh/.
+This re-skins the entire authenticated app; landing + login get a bespoke
+redesign in a follow-up.
+
+- Tokens (globals.css): replaced light + dark variable blocks with the warm
+  botanical palette — cream paper #F3EEE2, surface #FBF8F1, warm near-black
+  text, moss accent #5F7048, muted status colors, 12px radius, 248px sidebar.
+  Warm charcoal dark mode with lighter-moss accent.
+- Fonts: wired Cormorant Garamond (display serif) + Hanken Grotesk (body sans)
+  via next/font in the root layout; added fontFamily.serif to tailwind and
+  switched body default to Hanken. Base h1 rule renders every page title in
+  the serif automatically.
+- Accent presets: swapped the 9 per-tenant theme_color presets to the
+  botanical set (moss/sage/fern/teal/ocean/clay/terracotta/plum/ink); default
+  moved purple → moss everywhere it was hardcoded (tenant layout fallback,
+  property settings, demo seed, demo banner gradient). Added color_* i18n
+  keys for the new preset names across all 11 locales, removed the old ones.
+- Status pills: reservation + tape-chart + team-role status colors retuned to
+  the muted botanical palette (Confirmed/Pending/Checked-In/Checked-Out/
+  Cancelled) per the handoff cheatsheet.
+- App surfaces: remapped ~176 hardcoded slate/gray/white utility classes to
+  design tokens (bg-surface/bg-muted/text-foreground/text-muted-foreground/
+  border-border) across 12 app components that previously ignored the token
+  system — chiefly the dashboard, which was fully hardcoded. Also swapped all
+  inline purple hex/rgba gradients to moss/sage across shared surfaces.
+- Assets: copied the botanical logo + room photos into public/botanical/.
+
+Landing page, login split-panel, and onboarding keep their old purple styling
+for now (Stage 2). tsc clean, production build passes.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [a01ae0e] - 2026-07-04
 
 docs: add design reference doc for UI redesign via Claude Artifacts

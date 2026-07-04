@@ -80,8 +80,8 @@ export default function DemoPage() {
               </div>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Launching demo</h2>
-              <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
+              <h2 className="text-xl font-bold text-foreground mb-1">Launching demo</h2>
+              <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 {status}
               </p>

@@ -18,7 +18,7 @@ export default function CheckInSuccess({
   const locale = useLocale();
   return (
     <div className="max-w-md w-full">
-      <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+      <div className="bg-surface rounded-lg shadow-lg p-8 text-center">
         {/* Success icon */}
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
@@ -35,7 +35,7 @@ export default function CheckInSuccess({
         </p>
 
         {/* Details */}
-        <div className="bg-slate-50 rounded-lg p-6 mb-6 text-left space-y-4">
+        <div className="bg-background rounded-lg p-6 mb-6 text-left space-y-4">
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase">
               {t("reservationLabel")}

@@ -28,20 +28,20 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-xl max-w-md w-full p-8">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="bg-surface rounded-2xl border border-border shadow-xl max-w-md w-full p-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+          <div className="h-10 w-10 rounded-lg bg-accent flex items-center justify-center text-white">
             <Hotel className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">{tBrand("name")}</h2>
-            <p className="text-xs text-slate-500">{tBrand("taglineShort")}</p>
+            <h2 className="text-xl font-bold text-foreground">{tBrand("name")}</h2>
+            <p className="text-xs text-muted-foreground">{tBrand("taglineShort")}</p>
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-slate-900 mb-1">{t("title")}</h3>
-        <p className="text-sm text-slate-500 mb-6">{t("subtitle")}</p>
+        <h3 className="text-lg font-semibold text-foreground mb-1">{t("title")}</h3>
+        <p className="text-sm text-muted-foreground mb-6">{t("subtitle")}</p>
 
         {done ? (
           <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-4 text-sm text-emerald-700">
@@ -50,14 +50,14 @@ export default function ResetPasswordPage() {
         ) : (
           <form onSubmit={handleReset} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">{t("newPasswordLabel")}</label>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">{t("newPasswordLabel")}</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t("passwordPlaceholder")}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
+                className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
               />
             </div>
             <button

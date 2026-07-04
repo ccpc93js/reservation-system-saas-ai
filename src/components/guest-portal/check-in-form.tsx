@@ -280,7 +280,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
 
   if (!data) {
     return (
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+      <div className="max-w-md w-full p-6 bg-surface rounded-lg shadow-lg">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-1" />
           <div>
@@ -345,7 +345,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-surface rounded-lg shadow-lg p-6">
         {/* Step 1: Form */}
         {currentStep === "form" && (
           <div className="space-y-6">
@@ -731,7 +731,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-foreground">{t("reviewTitle")}</h2>
 
-            <div className="bg-slate-50 rounded-lg p-4 space-y-3">
+            <div className="bg-background rounded-lg p-4 space-y-3">
               <div>
                 <p className="text-xs font-semibold text-muted-foreground">{t("nameCaps")}</p>
                 <p className="text-sm text-foreground">

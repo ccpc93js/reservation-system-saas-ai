@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import {
   Hotel, CalendarDays, Users, Wifi, BarChart3, Shield,
@@ -12,10 +13,10 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
+    <div className="min-h-screen bg-background text-foreground font-sans">
 
       {/* ── NAV ── */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+      <nav className="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
@@ -26,19 +27,19 @@ export default function LandingPage() {
           </div>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-gray-900 transition-colors">How it works</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-foreground transition-colors">How it works</a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
           </div>
 
           <div className="hidden md:flex items-center gap-3">
             <Link href="/demo"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+              className="text-sm font-medium text-muted-foreground hover:text-foreground px-4 py-2 rounded-lg hover:bg-background transition-colors">
               Try Demo
             </Link>
             <Link href="/login"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+              className="text-sm font-medium text-muted-foreground hover:text-foreground px-4 py-2 rounded-lg hover:bg-background transition-colors">
               Sign In
             </Link>
             <Link href="/login?mode=signup"
@@ -49,18 +50,18 @@ export default function LandingPage() {
           </div>
 
           {/* Mobile menu toggle */}
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-50">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-background">
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 px-6 py-4 space-y-3 bg-white">
-            <a href="#features" className="block text-sm font-medium text-gray-600 py-2">Features</a>
-            <a href="#how-it-works" className="block text-sm font-medium text-gray-600 py-2">How it works</a>
-            <a href="#pricing" className="block text-sm font-medium text-gray-600 py-2">Pricing</a>
+          <div className="md:hidden border-t border-border px-6 py-4 space-y-3 bg-surface">
+            <a href="#features" className="block text-sm font-medium text-muted-foreground py-2">Features</a>
+            <a href="#how-it-works" className="block text-sm font-medium text-muted-foreground py-2">How it works</a>
+            <a href="#pricing" className="block text-sm font-medium text-muted-foreground py-2">Pricing</a>
             <div className="pt-2 flex flex-col gap-2">
-              <Link href="/login" className="text-center text-sm font-medium text-gray-600 py-2 border border-gray-200 rounded-lg">Sign In</Link>
+              <Link href="/login" className="text-center text-sm font-medium text-muted-foreground py-2 border border-border rounded-lg">Sign In</Link>
               <Link href="/login?mode=signup" className="text-center text-sm font-semibold text-white py-2 rounded-lg"
                 style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)" }}>
                 Get Started Free
@@ -71,72 +72,79 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-24 pb-32">
-        {/* Background blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-20"
-            style={{ background: "radial-gradient(circle, #7f8a58, transparent 70%)" }} />
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-10"
-            style={{ background: "radial-gradient(circle, #5f7048, transparent 70%)" }} />
+      <section className="relative overflow-hidden pt-16 pb-28"
+        style={{ backgroundImage: "radial-gradient(55% 45% at 15% 12%, color-mix(in srgb, hsl(var(--accent)) 13%, transparent), transparent 70%), radial-gradient(45% 55% at 92% 22%, rgba(176,125,84,.12), transparent 72%)" }}>
+
+        <div className="relative max-w-6xl mx-auto px-6 grid lg:grid-cols-[1.05fr_.95fr] gap-12 items-center">
+          {/* Left — copy */}
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-6 text-accent"
+              style={{ background: "color-mix(in srgb, hsl(var(--accent)) 12%, transparent)" }}>
+              <Zap className="w-3 h-3" />
+              AI-Powered Property Management
+            </div>
+
+            <h1 className="font-serif font-semibold tracking-tight leading-[0.98] text-6xl lg:text-7xl mb-6">
+              Run your hostel
+              <span className="block italic text-accent">with calm.</span>
+            </h1>
+
+            <p className="text-lg text-muted-foreground max-w-md mb-8 leading-relaxed">
+              The all-in-one PMS for independent hostels and boutique hotels.
+              Reservations, guests, channels and analytics — one quiet, considered dashboard.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <Link href="/login?mode=signup"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-accent text-accent-fg font-semibold text-base hover:bg-accent-hover transition-all">
+                Start for free <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="/demo"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-surface text-foreground font-semibold text-base border border-border hover:bg-muted transition-all">
+                Try demo
+              </Link>
+            </div>
+
+            {/* Social proof strip */}
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex" style={{ color: "#c9a24b" }}>
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+              </div>
+              <span><strong className="text-foreground">4.9/5</strong> from 200+ hostel managers</span>
+            </div>
+          </div>
+
+          {/* Right — hero art */}
+          <div className="relative hidden lg:block">
+            <div className="absolute -top-3 -right-3 w-28 h-28 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, color-mix(in srgb, hsl(var(--accent)) 22%, transparent), transparent 70%)" }} />
+            <div className="aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-2xl">
+              <Image src="/botanical/room-bedroom.png" alt="Warm room with plants" width={640} height={800} className="w-full h-full object-cover" priority />
+            </div>
+          </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 text-xs font-semibold px-3 py-1.5 rounded-full border border-purple-100 mb-8">
-            <Zap className="w-3 h-3" />
-            AI-Powered Property Management
-          </div>
-
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-6 max-w-4xl mx-auto">
-            Manage your hostel
-            <span className="block" style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", background: "linear-gradient(135deg, #5f7048, #7f8a58, #b07d54)" }}>
-              smarter, faster.
-            </span>
-          </h1>
-
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-            HostMagSmart is the all-in-one PMS for independent hostels and boutique hotels.
-            Reservations, guests, channels, and analytics — one dashboard, zero chaos.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/login?mode=signup"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold text-base transition-all"
-              style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 8px 32px rgba(95,112,72,0.35)" }}>
-              Start for free <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-gray-700 font-semibold text-base border border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition-all">
-              Try demo
-            </Link>
-          </div>
-
-          {/* Social proof strip */}
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
-            </div>
-            <span><strong className="text-gray-700">4.9/5</strong> from 200+ hostel managers</span>
-          </div>
+        <div className="relative max-w-6xl mx-auto px-6 text-center">
 
           {/* Dashboard preview */}
           <div className="mt-16 relative mx-auto max-w-5xl">
-            <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200"
+            <div className="rounded-2xl overflow-hidden shadow-2xl border border-border"
               style={{ boxShadow: "0 32px 80px rgba(95,112,72,0.15), 0 8px 32px rgba(0,0,0,0.1)" }}>
               {/* Mock browser chrome */}
-              <div className="bg-gray-100 border-b border-gray-200 px-4 py-3 flex items-center gap-2">
+              <div className="bg-muted border-b border-border px-4 py-3 flex items-center gap-2">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-400" />
                   <div className="w-3 h-3 rounded-full bg-yellow-400" />
                   <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
                 <div className="flex-1 mx-4">
-                  <div className="bg-white rounded-lg px-3 py-1 text-xs text-gray-400 text-center">
+                  <div className="bg-surface rounded-lg px-3 py-1 text-xs text-muted-foreground text-center">
                     app.hostmagsmart.com/your-hostel/dashboard
                   </div>
                 </div>
               </div>
               {/* Mock dashboard */}
-              <div className="bg-gray-50 p-6">
+              <div className="bg-background p-6">
                 <div className="grid grid-cols-4 gap-3 mb-4">
                   {[
                     { label: "Occupancy", value: "87%", color: "#5f7048" },
@@ -144,15 +152,15 @@ export default function LandingPage() {
                     { label: "Revenue", value: "€2,840", color: "#f59e0b" },
                     { label: "Avg Stay", value: "3.2 nights", color: "#6366f1" },
                   ].map((card) => (
-                    <div key={card.label} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                      <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{card.label}</p>
+                    <div key={card.label} className="bg-surface rounded-xl p-4 border border-border shadow-sm">
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{card.label}</p>
                       <p className="text-xl font-bold" style={{ color: card.color }}>{card.value}</p>
                     </div>
                   ))}
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                <div className="bg-surface rounded-xl border border-border shadow-sm p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-gray-700">Tape Calendar</p>
+                    <p className="text-sm font-semibold text-foreground">Tape Calendar</p>
                     <div className="flex gap-2">
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">● Confirmed</span>
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-medium">● Pending</span>
@@ -161,10 +169,10 @@ export default function LandingPage() {
                   <div className="space-y-2">
                     {["Dorm A / Bed 1", "Dorm A / Bed 2", "Private Room / Bed 1"].map((bed, i) => (
                       <div key={bed} className="flex items-center gap-2">
-                        <span className="text-[10px] text-gray-500 w-28 shrink-0">{bed}</span>
-                        <div className="flex-1 h-6 bg-gray-50 rounded-lg overflow-hidden flex">
-                          {i === 0 && <div className="h-full w-3/5 rounded-lg bg-purple-200 mr-1" />}
-                          {i === 1 && <><div className="h-full w-1/4 rounded-lg bg-emerald-200 mr-1" /><div className="h-full w-2/5 rounded-lg bg-purple-200 ml-2" /></>}
+                        <span className="text-[10px] text-muted-foreground w-28 shrink-0">{bed}</span>
+                        <div className="flex-1 h-6 bg-background rounded-lg overflow-hidden flex">
+                          {i === 0 && <div className="h-full w-3/5 rounded-lg bg-[#B8C4A6] mr-1" />}
+                          {i === 1 && <><div className="h-full w-1/4 rounded-lg bg-emerald-200 mr-1" /><div className="h-full w-2/5 rounded-lg bg-[#B8C4A6] ml-2" /></>}
                           {i === 2 && <div className="h-full w-4/5 rounded-lg bg-amber-200" />}
                         </div>
                       </div>
@@ -178,12 +186,12 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section id="features" className="py-24 bg-white">
+      <section id="features" className="py-24 bg-surface">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-purple-600 uppercase tracking-wider mb-3">Everything you need</p>
+            <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Everything you need</p>
             <h2 className="text-4xl font-extrabold tracking-tight mb-4">Built for hostel operators</h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               From the first booking to the final checkout — HostMagSmart covers every touchpoint of your operation.
             </p>
           </div>
@@ -246,13 +254,13 @@ export default function LandingPage() {
               },
             ].map((feat) => (
               <div key={feat.title}
-                className="group p-6 rounded-2xl border border-gray-100 hover:border-purple-100 hover:shadow-lg hover:shadow-purple-50 transition-all bg-white">
+                className="group p-6 rounded-2xl border border-border hover:border-border hover:shadow-lg hover:shadow-black/5 transition-all bg-surface">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
                   style={{ background: feat.color + "15" }}>
                   <feat.icon className="w-5 h-5" style={{ color: feat.color }} />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 mb-2">{feat.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{feat.desc}</p>
+                <h3 className="text-base font-semibold text-foreground mb-2">{feat.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feat.desc}</p>
               </div>
             ))}
           </div>
@@ -264,16 +272,16 @@ export default function LandingPage() {
         style={{ background: "linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)" }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-purple-600 uppercase tracking-wider mb-3">Simple setup</p>
+            <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Simple setup</p>
             <h2 className="text-4xl font-extrabold tracking-tight mb-4">Up and running in minutes</h2>
-            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
               No training needed. No IT team. Just sign up and start managing.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Connector line */}
-            <div className="hidden md:block absolute top-10 left-1/3 right-1/3 h-0.5 bg-purple-100" />
+            <div className="hidden md:block absolute top-10 left-1/3 right-1/3 h-0.5 bg-border" />
 
             {[
               {
@@ -295,13 +303,13 @@ export default function LandingPage() {
                 icon: CalendarDays,
               },
             ].map((s) => (
-              <div key={s.step} className="relative bg-white rounded-2xl p-8 border border-purple-100 shadow-sm">
-                <div className="text-5xl font-black text-purple-100 mb-4 leading-none">{s.step}</div>
-                <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center mb-4">
-                  <s.icon className="w-5 h-5 text-white" />
+              <div key={s.step} className="relative bg-surface rounded-2xl p-8 border border-border shadow-sm">
+                <div className="text-5xl font-black text-[#cfc7b3] mb-4 leading-none">{s.step}</div>
+                <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center mb-4">
+                  <s.icon className="w-5 h-5 text-accent-fg" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{s.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -309,12 +317,12 @@ export default function LandingPage() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" className="py-24 bg-white">
+      <section id="pricing" className="py-24 bg-surface">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-purple-600 uppercase tracking-wider mb-3">Pricing</p>
+            <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Pricing</p>
             <h2 className="text-4xl font-extrabold tracking-tight mb-4">Simple, transparent pricing</h2>
-            <p className="text-lg text-gray-500">Start free. Upgrade when you grow.</p>
+            <p className="text-lg text-muted-foreground">Start free. Upgrade when you grow.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -352,8 +360,8 @@ export default function LandingPage() {
             ].map((plan) => (
               <div key={plan.name}
                 className={`rounded-2xl p-8 border ${plan.highlight
-                  ? "border-purple-500 shadow-xl shadow-purple-100 relative"
-                  : "border-gray-200"}`}>
+                  ? "border-accent shadow-xl shadow-black/5 relative"
+                  : "border-border"}`}>
                 {plan.highlight && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                     <span className="text-xs font-bold text-white px-3 py-1 rounded-full"
@@ -362,16 +370,16 @@ export default function LandingPage() {
                     </span>
                   </div>
                 )}
-                <p className="text-sm font-semibold text-gray-500 mb-1">{plan.name}</p>
+                <p className="text-sm font-semibold text-muted-foreground mb-1">{plan.name}</p>
                 <div className="flex items-end gap-1 mb-2">
-                  <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
-                  <span className="text-sm text-gray-400 mb-1">{plan.period}</span>
+                  <span className="text-4xl font-extrabold text-foreground">{plan.price}</span>
+                  <span className="text-sm text-muted-foreground mb-1">{plan.period}</span>
                 </div>
-                <p className="text-sm text-gray-500 mb-6">{plan.desc}</p>
+                <p className="text-sm text-muted-foreground mb-6">{plan.desc}</p>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-purple-500 shrink-0" />
+                    <li key={f} className="flex items-center gap-2.5 text-sm text-foreground">
+                      <CheckCircle className="w-4 h-4 text-accent shrink-0" />
                       {f}
                     </li>
                   ))}
@@ -380,7 +388,7 @@ export default function LandingPage() {
                   href={plan.planKey ? `/login?mode=signup&plan=${plan.planKey}` : "/login?mode=signup"}
                   className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${plan.highlight
                     ? "text-white"
-                    : "text-gray-700 border border-gray-200 hover:border-purple-300 hover:bg-purple-50"}`}
+                    : "text-foreground border border-border hover:border-accent/40 hover:bg-[color-mix(in_srgb,hsl(var(--accent))_10%,transparent)]"}`}
                   style={plan.highlight ? { background: "linear-gradient(135deg, #5f7048, #7f8a58)" } : {}}>
                   {plan.cta}
                 </Link>
@@ -396,19 +404,19 @@ export default function LandingPage() {
           <h2 className="text-4xl font-extrabold text-white mb-4 tracking-tight">
             Ready to run your hostel smarter?
           </h2>
-          <p className="text-purple-100 text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-[#cfc7b3] text-lg mb-8 max-w-xl mx-auto">
             Join hundreds of hostel managers who save hours every week with HostMagSmart.
             Free to start. No credit card required.
           </p>
           <Link href="/login?mode=signup"
-            className="inline-flex items-center gap-2 bg-white text-purple-700 font-bold px-8 py-4 rounded-2xl text-base hover:bg-purple-50 transition-colors shadow-xl">
+            className="inline-flex items-center gap-2 bg-surface text-accent font-bold px-8 py-4 rounded-2xl text-base hover:bg-[color-mix(in_srgb,hsl(var(--accent))_10%,transparent)] transition-colors shadow-xl">
             Create your free account <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-gray-900 text-muted-foreground py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
@@ -424,7 +432,7 @@ export default function LandingPage() {
               <Link href="/login" className="hover:text-white transition-colors">Login</Link>
               <Link href="/login?mode=signup" className="hover:text-white transition-colors">Sign Up</Link>
             </div>
-            <p className="text-sm text-gray-600">© {new Date().getFullYear()} HostMagSmart. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} HostMagSmart. All rights reserved.</p>
           </div>
         </div>
       </footer>

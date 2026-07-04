@@ -94,14 +94,14 @@ export default function OnboardingClient() {
     }
   };
 
-  const inputClass = "w-full rounded-xl border border-gray-200 bg-gray-50 text-gray-900 px-4 py-3 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 focus:bg-white transition-all";
-  const labelClass = "block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest";
+  const inputClass = "w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 focus:bg-surface transition-all";
+  const labelClass = "block text-[10px] font-bold text-muted-foreground mb-2 uppercase tracking-widest";
 
   const slugBorderClass = slugStatus === "taken" || slugStatus === "invalid"
     ? "border-red-300 bg-red-50"
     : slugStatus === "available"
     ? "border-emerald-300 bg-emerald-50"
-    : "border-gray-200 bg-gray-50";
+    : "border-border bg-background";
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
@@ -120,8 +120,8 @@ export default function OnboardingClient() {
             </div>
           </div>
           <div className="text-center space-y-2">
-            <h2 className="text-xl font-bold text-gray-900">Launching your dashboard</h2>
-            <p className="text-sm text-gray-500">Setting up <strong className="text-gray-700">{form.name}</strong>…</p>
+            <h2 className="text-xl font-bold text-foreground">Launching your dashboard</h2>
+            <p className="text-sm text-muted-foreground">Setting up <strong className="text-foreground">{form.name}</strong>…</p>
           </div>
           <div className="flex gap-1.5">
             {[0, 1, 2].map((i) => (
@@ -148,8 +148,8 @@ export default function OnboardingClient() {
                 style={{ background: "linear-gradient(135deg, #4c5b3a 0%, #7f8a58 100%)", boxShadow: "0 8px 32px rgba(95,112,72,0.35)" }}>
                 <Building2 className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Set up your property</h1>
-              <p className="text-sm text-gray-500 mt-2">Get your hostel configured in under a minute.</p>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Set up your property</h1>
+              <p className="text-sm text-muted-foreground mt-2">Get your hostel configured in under a minute.</p>
             </div>
 
             {/* Progress */}
@@ -160,7 +160,7 @@ export default function OnboardingClient() {
               ))}
             </div>
 
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-6">
               Step {step} of 2 — {step === 1 ? "Property Info" : "Preferences"}
             </p>
 
@@ -183,21 +183,21 @@ export default function OnboardingClient() {
                   <div>
                     <label className={labelClass}>
                       Your URL
-                      <span className="ml-2 text-[9px] normal-case tracking-normal font-normal text-gray-400">auto-generated · editable</span>
+                      <span className="ml-2 text-[9px] normal-case tracking-normal font-normal text-muted-foreground">auto-generated · editable</span>
                     </label>
                     <div className={`flex items-center rounded-xl border overflow-hidden transition-all ${slugBorderClass}`}>
                       <div className="flex items-center gap-1 pl-3 shrink-0">
-                        <Link className="w-3 h-3 text-gray-400" />
-                        <span className="text-[11px] text-gray-400 pr-1 whitespace-nowrap">yourdomain.com/</span>
+                        <Link className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-[11px] text-muted-foreground pr-1 whitespace-nowrap">yourdomain.com/</span>
                       </div>
                       <input
                         value={form.slug}
                         onChange={set("slug")}
                         placeholder="my-hostel"
-                        className="flex-1 py-3 pr-3 text-sm bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none font-mono min-w-0"
+                        className="flex-1 py-3 pr-3 text-sm bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-mono min-w-0"
                       />
                       <div className="pr-3 shrink-0">
-                        {slugStatus === "checking" && <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400" />}
+                        {slugStatus === "checking" && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />}
                         {slugStatus === "available" && <Check className="w-3.5 h-3.5 text-emerald-500" />}
                         {(slugStatus === "taken" || slugStatus === "invalid") && <X className="w-3.5 h-3.5 text-red-500" />}
                       </div>
@@ -263,7 +263,7 @@ export default function OnboardingClient() {
 
                 <div className="flex gap-3 mt-2">
                   <button onClick={() => setStep(1)}
-                    className="flex-1 py-3.5 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-800 flex items-center justify-center gap-2 transition-colors"
+                    className="flex-1 py-3.5 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 transition-colors"
                     style={{ border: "1px solid #e5e7eb", background: "#f9fafb" }}>
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
@@ -279,7 +279,7 @@ export default function OnboardingClient() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-muted-foreground mt-6">
           HostMagSmart PMS · Secure property management
         </p>
       </div>
