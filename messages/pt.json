@@ -338,7 +338,13 @@
         "paymentSaveFailed": "Falha ao salvar o pagamento",
         "paymentSaved": "Informações de pagamento salvas",
         "paymentSaveError": "Erro ao salvar o pagamento"
-      }
+      },
+      "paymentMethod": "Método de pagamento",
+      "selectMethod": "Selecionar método",
+      "method_card": "Cartão",
+      "method_cash": "Dinheiro",
+      "method_bank_transfer": "Transferência",
+      "method_other": "Outro"
     }
   },
   "pendingCheckIns": {

@@ -1,3 +1,18 @@
+## [26ccada] - 2026-07-06
+
+feat: emails use property name + reservation email adds check-in link & QR
+
+- Emails now show the tenant property name in the body/footer instead of the app
+  name ("Hostmagsmart"). getOrgBranding(supabase, orgId) returns { logoUrl, name }
+  and all senders take a branding object (brandName = branding.name || fallback).
+- Reservation confirmation email now includes an online check-in call to action:
+  a "Start online check-in" button, a scannable QR code, and the raw link — built
+  from the reservation check_in_token (create route now selects + passes it).
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [96cd66b] - 2026-07-06
 
 feat: use tenant org logo in emails (fallback to HostMagSmart)

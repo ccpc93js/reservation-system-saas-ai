@@ -204,6 +204,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         ...errors,
         [`${side}_file`]: t("fileErrorInvalidType"),
       });
+      e.target.value = ""; // allow re-selecting the same file after fixing
       return;
     }
 
@@ -212,6 +213,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
         ...errors,
         [`${side}_file`]: t("fileErrorTooLarge"),
       });
+      e.target.value = "";
       return;
     }
 
@@ -609,7 +611,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   <input
                     ref={fileInputFrontRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp"
                     onChange={(e) => handleFileUpload(e, "front")}
                     className="hidden"
                   />
@@ -630,7 +632,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   <input
                     ref={fileInputFrontRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp"
                     onChange={(e) => handleFileUpload(e, "front")}
                     className="hidden"
                   />
@@ -679,7 +681,7 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   <input
                     ref={fileInputBackRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp"
                     onChange={(e) => handleFileUpload(e, "back")}
                     className="hidden"
                   />
@@ -700,13 +702,16 @@ export default function CheckInForm({ token }: CheckInFormProps) {
                   <input
                     ref={fileInputBackRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/webp"
                     onChange={(e) => handleFileUpload(e, "back")}
                     className="hidden"
                   />
                 </div>
               )}
             </div>
+            {errors.back_file && (
+              <p className="text-xs text-red-500 mt-2">{errors.back_file}</p>
+            )}
 
             <div className="flex justify-between gap-3 pt-4 border-t border-border">
               <button

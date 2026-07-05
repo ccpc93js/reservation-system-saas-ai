@@ -338,7 +338,13 @@
         "paymentSaveFailed": "भुगतान सहेजने में विफल",
         "paymentSaved": "भुगतान जानकारी सहेजी गई",
         "paymentSaveError": "भुगतान सहेजने में त्रुटि"
-      }
+      },
+      "paymentMethod": "भुगतान का तरीका",
+      "selectMethod": "तरीका चुनें",
+      "method_card": "कार्ड",
+      "method_cash": "नकद",
+      "method_bank_transfer": "बैंक ट्रांसफर",
+      "method_other": "अन्य"
     }
   },
   "pendingCheckIns": {

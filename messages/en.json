@@ -338,7 +338,13 @@
         "paymentSaveFailed": "Failed to save payment",
         "paymentSaved": "Payment info saved",
         "paymentSaveError": "Error saving payment"
-      }
+      },
+      "paymentMethod": "Payment Method",
+      "selectMethod": "Select method",
+      "method_card": "Card",
+      "method_cash": "Cash",
+      "method_bank_transfer": "Bank Transfer",
+      "method_other": "Other"
     }
   },
   "pendingCheckIns": {

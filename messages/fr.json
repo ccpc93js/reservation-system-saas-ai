@@ -338,7 +338,13 @@
         "paymentSaveFailed": "Échec de l'enregistrement du paiement",
         "paymentSaved": "Informations de paiement enregistrées",
         "paymentSaveError": "Erreur lors de l'enregistrement du paiement"
-      }
+      },
+      "paymentMethod": "Mode de paiement",
+      "selectMethod": "Choisir un mode",
+      "method_card": "Carte",
+      "method_cash": "Espèces",
+      "method_bank_transfer": "Virement",
+      "method_other": "Autre"
     }
   },
   "pendingCheckIns": {

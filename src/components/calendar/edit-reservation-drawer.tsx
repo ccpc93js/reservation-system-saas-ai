@@ -76,6 +76,7 @@ export default function EditReservationDrawer({
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [paidAmount, setPaidAmount] = useState("");
   const [paymentCurrency, setPaymentCurrency] = useState("EUR");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [depositAmount, setDepositAmount] = useState("");
   const [depositCurrency, setDepositCurrency] = useState("EUR");
   const [actualCheckIn, setActualCheckIn] = useState("");
@@ -160,7 +161,7 @@ export default function EditReservationDrawer({
           .select(
             `
             id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id,
-            payment_confirmed, payment_currency, deposit_amount, deposit_currency,
+            payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency,
             actual_check_in_at, actual_check_out_at,
             guests(first_name, last_name),
             reservation_items(id, price_per_night, total_price, check_in, check_out, created_at, beds(name, rooms(name)))
@@ -179,6 +180,7 @@ export default function EditReservationDrawer({
         setPaymentConfirmed((data as any).payment_confirmed ?? false);
         setPaidAmount((data as any).paid_amount != null ? String((data as any).paid_amount) : "");
         setPaymentCurrency((data as any).payment_currency || "EUR");
+        setPaymentMethod((data as any).payment_method || "");
         setDepositAmount((data as any).deposit_amount != null ? String((data as any).deposit_amount) : "");
         setDepositCurrency((data as any).deposit_currency || "EUR");
         const cin = (data as any).actual_check_in_at;
@@ -402,7 +404,7 @@ export default function EditReservationDrawer({
       const supabase = createBrowserClient();
       const { data: updated } = await supabase
         .from("reservations")
-        .select(`id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id, payment_confirmed, payment_currency, deposit_amount, deposit_currency, actual_check_in_at, actual_check_out_at, guests(first_name, last_name), reservation_items(id, price_per_night, total_price, check_in, check_out, created_at, beds(name, rooms(name)))`)
+        .select(`id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id, payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency, actual_check_in_at, actual_check_out_at, guests(first_name, last_name), reservation_items(id, price_per_night, total_price, check_in, check_out, created_at, beds(name, rooms(name)))`)
         .eq("id", reservationId!)
         .single();
       if (updated) { setReservation(updated); setSegmentRates({}); }
@@ -453,6 +455,7 @@ export default function EditReservationDrawer({
       const body: Record<string, any> = {
         payment_confirmed: paymentConfirmed,
         payment_currency: paymentCurrency || null,
+        payment_method: paymentMethod || null,
         paid_amount: paidAmount !== "" ? Number(paidAmount) : null,
         deposit_amount: depositAmount !== "" ? Number(depositAmount) : null,
         deposit_currency: depositCurrency || null,
@@ -879,18 +882,34 @@ export default function EditReservationDrawer({
                 );
               })()}
 
-              {/* Currency row */}
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("currency")}</label>
-                <select
-                  value={paymentCurrency}
-                  onChange={(e) => setPaymentCurrency(e.target.value)}
-                  className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
-                >
-                  {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
+              {/* Currency + payment method row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("currency")}</label>
+                  <select
+                    value={paymentCurrency}
+                    onChange={(e) => setPaymentCurrency(e.target.value)}
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
+                  >
+                    {["EUR", "USD", "GBP", "RSD", "CHF", "SEK", "NOK", "DKK"].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("paymentMethod")}</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="w-full rounded-lg border border-[#C5D6BC] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA378]"
+                  >
+                    <option value="">{t("selectMethod")}</option>
+                    <option value="card">{t("method_card")}</option>
+                    <option value="cash">{t("method_cash")}</option>
+                    <option value="bank_transfer">{t("method_bank_transfer")}</option>
+                    <option value="other">{t("method_other")}</option>
+                  </select>
+                </div>
               </div>
 
               {/* Confirmed toggle */}

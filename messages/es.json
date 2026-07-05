@@ -338,7 +338,13 @@
         "paymentSaveFailed": "No se pudo guardar el pago",
         "paymentSaved": "Información de pago guardada",
         "paymentSaveError": "Error al guardar el pago"
-      }
+      },
+      "paymentMethod": "Método de pago",
+      "selectMethod": "Seleccionar método",
+      "method_card": "Tarjeta",
+      "method_cash": "Efectivo",
+      "method_bank_transfer": "Transferencia",
+      "method_other": "Otro"
     }
   },
   "pendingCheckIns": {

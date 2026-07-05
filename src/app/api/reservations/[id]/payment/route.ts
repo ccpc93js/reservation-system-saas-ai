@@ -25,13 +25,13 @@ export async function PATCH(
 
     const allowed = [
       "payment_confirmed", "payment_currency", "paid_amount",
-      "deposit_amount", "deposit_currency",
+      "deposit_amount", "deposit_currency", "payment_method",
       "actual_check_in_at", "actual_check_out_at",
     ] as const;
 
     const update: TablesUpdate<"reservations"> = { updated_at: new Date().toISOString() };
     for (const key of allowed) {
-      if (key in body) update[key] = body[key];
+      if (key in body) (update as Record<string, unknown>)[key] = body[key];
     }
 
     const { error } = await supabase.from("reservations").update(update).eq("id", id);

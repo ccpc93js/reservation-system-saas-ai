@@ -338,7 +338,13 @@
         "paymentSaveFailed": "পেমেন্ট সংরক্ষণ করতে ব্যর্থ",
         "paymentSaved": "পেমেন্ট তথ্য সংরক্ষিত হয়েছে",
         "paymentSaveError": "পেমেন্ট সংরক্ষণে ত্রুটি"
-      }
+      },
+      "paymentMethod": "পেমেন্ট পদ্ধতি",
+      "selectMethod": "পদ্ধতি নির্বাচন",
+      "method_card": "কার্ড",
+      "method_cash": "নগদ",
+      "method_bank_transfer": "ব্যাংক ট্রান্সফার",
+      "method_other": "অন্যান্য"
     }
   },
   "pendingCheckIns": {

@@ -338,7 +338,13 @@
         "paymentSaveFailed": "付款保存失败",
         "paymentSaved": "付款信息已保存",
         "paymentSaveError": "保存付款时出错"
-      }
+      },
+      "paymentMethod": "付款方式",
+      "selectMethod": "选择方式",
+      "method_card": "银行卡",
+      "method_cash": "现金",
+      "method_bank_transfer": "银行转账",
+      "method_other": "其他"
     }
   },
   "pendingCheckIns": {

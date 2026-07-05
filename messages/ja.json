@@ -338,7 +338,13 @@
         "paymentSaveFailed": "支払いの保存に失敗しました",
         "paymentSaved": "支払い情報が保存されました",
         "paymentSaveError": "支払いの保存中にエラーが発生しました"
-      }
+      },
+      "paymentMethod": "支払い方法",
+      "selectMethod": "方法を選択",
+      "method_card": "カード",
+      "method_cash": "現金",
+      "method_bank_transfer": "銀行振込",
+      "method_other": "その他"
     }
   },
   "pendingCheckIns": {

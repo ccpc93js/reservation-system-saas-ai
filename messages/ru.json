@@ -338,7 +338,13 @@
         "paymentSaveFailed": "Не удалось сохранить оплату",
         "paymentSaved": "Данные об оплате сохранены",
         "paymentSaveError": "Ошибка при сохранении оплаты"
-      }
+      },
+      "paymentMethod": "Способ оплаты",
+      "selectMethod": "Выберите способ",
+      "method_card": "Карта",
+      "method_cash": "Наличные",
+      "method_bank_transfer": "Банковский перевод",
+      "method_other": "Другое"
     }
   },
   "pendingCheckIns": {

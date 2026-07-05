@@ -338,7 +338,13 @@
         "paymentSaveFailed": "فشل حفظ الدفع",
         "paymentSaved": "تم حفظ معلومات الدفع",
         "paymentSaveError": "خطأ أثناء حفظ الدفع"
-      }
+      },
+      "paymentMethod": "طريقة الدفع",
+      "selectMethod": "اختر الطريقة",
+      "method_card": "بطاقة",
+      "method_cash": "نقدًا",
+      "method_bank_transfer": "تحويل بنكي",
+      "method_other": "أخرى"
     }
   },
   "pendingCheckIns": {

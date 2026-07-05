@@ -338,7 +338,13 @@
         "paymentSaveFailed": "Neuspešno čuvanje plaćanja",
         "paymentSaved": "Podaci o plaćanju sačuvani",
         "paymentSaveError": "Greška pri čuvanju plaćanja"
-      }
+      },
+      "paymentMethod": "Način plaćanja",
+      "selectMethod": "Izaberite način",
+      "method_card": "Kartica",
+      "method_cash": "Gotovina",
+      "method_bank_transfer": "Bankovni transfer",
+      "method_other": "Ostalo"
     }
   },
   "pendingCheckIns": {
