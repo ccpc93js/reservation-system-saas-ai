@@ -1,3 +1,20 @@
+## [820772f] - 2026-07-05
+
+fix: mobile responsiveness — modals, drawers, app shell
+
+- checkout & cancel dialogs had no height cap/scroll (buttons unreachable on
+  small screens): add max-h-[90dvh] overflow-y-auto.
+- All centered dialogs vh -> dvh + side gutter w-[calc(100vw-2rem)]; wide
+  dialogs use p-4 sm:p-6.
+- Right drawers + app shell h-screen -> h-[100dvh].
+- Shell mobile bug: opening sidebar pushed main ~288px off-screen (ml-72 with
+  no breakpoint) -> lg:ml-72; main padding p-6 -> p-4 sm:p-6.
+- Calendar tape-chart max-h vh -> dvh.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [Unreleased] - 2026-07-05
 
 fix: mobile/tablet responsiveness — modals, drawers, app shell

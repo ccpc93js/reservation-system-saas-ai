@@ -191,7 +191,7 @@ export default function GuestListClient({
       {/* Table */}
       <div className="rounded-xl border border-border overflow-hidden bg-surface shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
+          <table className="w-full text-left border-collapse text-sm min-w-[720px]">
             <thead>
               <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-semibold text-[11px] uppercase tracking-wider">
                 <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("full_name")}>

@@ -161,19 +161,19 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
   const hasResults = guestResults.length > 0 || reservationResults.length > 0;
 
   return (
-    <header className="h-16 bg-surface border-b border-border px-6 lg:px-8 flex items-center justify-between shrink-0">
-      <div className="flex items-center gap-3">
+    <header className="h-16 bg-surface border-b border-border px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <button
           onClick={onMenuClick}
-          className="p-2 hover:bg-muted rounded-lg transition-colors"
+          className="p-2 hover:bg-muted rounded-lg transition-colors shrink-0"
           title={t("toggleMenu")}
         >
           <Menu className="w-5 h-5 text-muted-foreground" />
         </button>
-        <h2 className="font-serif text-xl font-semibold text-foreground">{title}</h2>
+        <h2 className="font-serif text-xl font-semibold text-foreground truncate">{title}</h2>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
         {/* Search */}
         <div className="relative hidden sm:block" ref={searchRef}>
           <form onSubmit={handleSearchSubmit}>
@@ -279,10 +279,10 @@ export default function Header({ org, user, onMenuClick }: HeaderProps) {
         <button
           onClick={() => router.push(`/${org.slug}/calendar`)}
           title={t("newBookingTooltip")}
-          className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-semibold transition-colors"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-semibold transition-colors shrink-0"
         >
           <Plus className="w-4 h-4" />
-          {t("newBooking")}
+          <span className="hidden sm:inline">{t("newBooking")}</span>
         </button>
 
         {/* User account menu */}
