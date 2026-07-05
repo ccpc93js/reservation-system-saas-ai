@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · Безопасное управление хостелом",
       "toastPasswordMin": "Пароль должен содержать не менее 8 символов",
       "toastEnterEmail": "Сначала введите вашу почту",
-      "toastAccountCreated": "Аккаунт создан!"
+      "toastAccountCreated": "Аккаунт создан!",
+      "toastEmailInUse": "Эта почта уже зарегистрирована. Войдите в аккаунт."
     },
     "resetPassword": {
       "title": "Установить новый пароль",

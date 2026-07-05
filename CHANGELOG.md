@@ -1,5 +1,93 @@
 ## [Unreleased] - 2026-07-05
 
+fix: billing checkout loop, duplicate-email signup, favicon
+
+- Billing payment-gate loop: after paying, the org's `pending_plan` is only
+  cleared by the Stripe webhook, so if the webhook was delayed/misconfigured the
+  dashboard-layout gate kept redirecting to `billing?required=true` → auto-checkout
+  → Stripe again. Added `lib/billing-reconcile.ts` (`reconcilePendingPlan`) called
+  from the tenant layout: whenever `pending_plan` is set it checks Stripe directly
+  for an active/trialing subscription and applies `plan` + clears `pending_plan`,
+  so the loop can't happen even if the webhook fails. Only runs while a plan is
+  pending.
+- Billing auto-checkout guards: the effect no longer re-fires after returning from
+  Stripe (`success`), when already on the target plan, or more than once per
+  session; the manage-billing card no longer requires `stripe_customer_id`.
+- Signup with an already-registered email now shows an error toast
+  ("This email is already registered…") instead of the "check your email" screen —
+  detects Supabase's empty `identities[]` enumeration-protection response. New
+  `auth.login.toastEmailInUse` key across 11 locales.
+- Favicon: botanical logo added as `src/app/icon.png` + `src/app/apple-icon.png`
+  (App Router auto-wires favicon + apple-touch icon).
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [606ca94] - 2026-07-05
+
+feat: per-section prototype polish (analytics, channels, rooms, housekeeping, settings)
+
+- Analytics: bar charts (sage/gold), fixed black-bar bug (real hex vs unresolved
+  var), removed occupancy chart (stat kept), Top Rooms as horizontal bars, real
+  "+X% vs prev 30d" deltas (60-day fetch, last-30 vs prior-30).
+- Guest Directory: serif title, avatar initials, uppercase headers (appearance only).
+- Channel Manager: serif title (grouped layout kept).
+- Room Inventory: serif titles, uppercase table headers, botanical Active pill.
+- Housekeeping: prototype cards grouped by room, status-pill dropdown, 5 filters.
+- Property Settings: serif headers (icons removed), rounded-2xl cards.
+- Team: serif title, avatar initials, two-line rows, botanical accents.
+- Billing: 2-col top (current plan + usage bars kept + portal card), 3-card plans
+  grid; manage-billing no longer gated on stripe_customer_id; Scale leads with
+  "All Pro features".
+- i18n: new keys across analytics/channels/housekeeping/billing/guest-book, all
+  11 locales.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [d1ab4ce] - 2026-07-05
+
+## [Unreleased] - 2026-07-05
+
+feat: Botanical Refresh — per-section prototype polish (analytics, channels, rooms, housekeeping, settings)
+
+- Analytics: booking + revenue trends switched to bar charts (sage / gold),
+  fixed bars rendering black (unresolved `var(--color-*)` → real hex), removed
+  the occupancy chart (occupancy still powers its stat card), Top Rooms shown as
+  horizontal bars, chart-header icons dropped, and Bookings/Revenue cards now
+  show real "+X% vs prev 30d" deltas (page fetches 60 days; client compares
+  last-30 vs prior-30).
+- Guest Directory: serif title, avatar initials, uppercase headers, text-sm,
+  airier rows — appearance only.
+- Channel Manager: serif title (grouped-by-bed layout kept per request).
+- Room Inventory: serif page + section titles, uppercase table headers on
+  muted header row, botanical rounded-full Active pill on beds — tables/search/
+  sort/edit/delete unchanged.
+- Housekeeping: rebuilt to prototype cards (bed-icon + name/room + status pill),
+  still grouped by room; status pill is now a dropdown to change status; 5 filter
+  pills (added Clean, Inspected); botanical status colors.
+- Property Settings: serif section headers with icons removed, rounded-2xl cards.
+- Team: serif title, avatar initials, two-line name/email/joined, rounded-2xl
+  cards, botanical pending/remove accents.
+- Billing & Plan: prototype layout — 2-column top (current-plan card with usage
+  progress bars kept + billing-portal card) and a 3-card available-plans grid
+  with CURRENT badge and per-card actions; manage-billing card no longer gated
+  on stripe_customer_id; Scale plan now leads with "All Pro features".
+- Header: dialog/modal titles and section titles carried to the serif face.
+- i18n: added analytics (statVsPrev), channels (lastSyncLabel, andMore,
+  unassigned), housekeeping (filter_clean, filter_inspected, changeStatus),
+  guest-book (recordDescriptor), pending-check-in table, and billing
+  (currentPlanHeading, currentPlanButton, renewalNote) keys, plus "All Pro
+  features" on Scale — all across 11 locales.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-05
+
 feat: Botanical Refresh — per-section prototype polish (analytics, channels, rooms, housekeeping, settings)
 
 - Analytics: booking + revenue trends switched to bar charts (sage / gold),

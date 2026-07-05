@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · নিরাপদ হোস্টেল ম্যানেজমেন্ট",
       "toastPasswordMin": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে",
       "toastEnterEmail": "প্রথমে আপনার ইমেইল দিন",
-      "toastAccountCreated": "অ্যাকাউন্ট তৈরি হয়েছে!"
+      "toastAccountCreated": "অ্যাকাউন্ট তৈরি হয়েছে!",
+      "toastEmailInUse": "এই ইমেলটি ইতিমধ্যে নিবন্ধিত। পরিবর্তে সাইন ইন করুন।"
     },
     "resetPassword": {
       "title": "নতুন পাসওয়ার্ড সেট করুন",

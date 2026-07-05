@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { getServerUser } from "@/lib/supabase/session";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
+import { reconcilePendingPlan } from "@/lib/billing-reconcile";
 
 function hexToHsl(hex: string): string {
   if (!hex || !hex.startsWith("#")) return "90 22% 36%";
@@ -37,7 +38,7 @@ export default async function TenantLayout({
 
   const { data: org } = await supabase
     .from("organizations")
-    .select("id, name, slug, logo_url, theme_color, plan, pending_plan")
+    .select("id, name, slug, logo_url, theme_color, plan, pending_plan, stripe_customer_id")
     .eq("slug", slug)
     .single();
 
@@ -59,6 +60,17 @@ export default async function TenantLayout({
     const mySlug = (myMembership as any)?.organizations?.slug;
     if (mySlug) redirect(`/${mySlug}/dashboard`);
     redirect("/onboarding");
+  }
+
+  // Safety net: if a subscription was paid but the webhook hasn't cleared
+  // pending_plan yet, reconcile straight from Stripe so the payment gate below
+  // doesn't loop the user back to checkout.
+  if ((org as any).pending_plan && (org as any).stripe_customer_id) {
+    const applied = await reconcilePendingPlan(org as any);
+    if (applied) {
+      (org as any).plan = applied;
+      (org as any).pending_plan = null;
+    }
   }
 
   const accentHsl = hexToHsl((org as any).theme_color ?? "#5f7048");

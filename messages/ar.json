@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · إدارة آمنة للنُزل",
       "toastPasswordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
       "toastEnterEmail": "أدخل بريدك الإلكتروني أولاً",
-      "toastAccountCreated": "تم إنشاء الحساب!"
+      "toastAccountCreated": "تم إنشاء الحساب!",
+      "toastEmailInUse": "هذا البريد الإلكتروني مسجل بالفعل. حاول تسجيل الدخول بدلاً من ذلك."
     },
     "resetPassword": {
       "title": "تعيين كلمة مرور جديدة",

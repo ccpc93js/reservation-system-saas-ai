@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · Secure hostel management",
       "toastPasswordMin": "Password must be at least 8 characters",
       "toastEnterEmail": "Enter your email first",
-      "toastAccountCreated": "Account created!"
+      "toastAccountCreated": "Account created!",
+      "toastEmailInUse": "This email is already registered. Try signing in instead."
     },
     "resetPassword": {
       "title": "Set new password",

@@ -12,6 +12,7 @@ interface Props {
   userRole: string;
   usage: { beds: number; users: number };
   required?: boolean;
+  success?: boolean;
 }
 
 const PLANS: { key: Plan; icon: any; color: string; highlight: boolean; priceId: string | null }[] = [
@@ -61,7 +62,7 @@ function UsageBar({ current, max, label }: { current: number; max: number; label
   );
 }
 
-export default function BillingClient({ org, userRole, usage, required }: Props) {
+export default function BillingClient({ org, userRole, usage, required, success }: Props) {
   const t = useTranslations("settings.billing");
   const router = useRouter();
   const plan = (org.plan ?? "free") as Plan;
@@ -70,11 +71,17 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
   const [loading, setLoading] = useState<string | null>(null);
   const limits = PLAN_LIMITS[plan];
 
-  // Auto-trigger checkout when arriving from plan selection on landing page
+  // Auto-trigger checkout when arriving from plan selection on landing page.
+  // Guards prevent a redirect loop: don't fire after returning from Stripe
+  // (success), if already on the target plan, or more than once per session.
   useEffect(() => {
-    if (!required || !pendingPlan || !isAdmin) return;
+    if (!required || success || !pendingPlan || !isAdmin) return;
+    if (plan === pendingPlan) return; // already subscribed to the pending plan
     const pendingPlanConfig = PLANS.find(p => p.key === pendingPlan);
     if (!pendingPlanConfig?.priceId) return;
+    const onceKey = `autocheckout:${org.id}:${pendingPlan}`;
+    if (typeof window !== "undefined" && sessionStorage.getItem(onceKey)) return;
+    if (typeof window !== "undefined") sessionStorage.setItem(onceKey, "1");
     handleUpgrade(pendingPlan, pendingPlanConfig.priceId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

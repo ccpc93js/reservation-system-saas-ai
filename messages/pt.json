@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · Gestão segura de hostels",
       "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres",
       "toastEnterEmail": "Digite seu e-mail primeiro",
-      "toastAccountCreated": "Conta criada!"
+      "toastAccountCreated": "Conta criada!",
+      "toastEmailInUse": "Este e-mail já está registado. Inicie sessão."
     },
     "resetPassword": {
       "title": "Definir nova senha",

@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · 安全的旅舍管理",
       "toastPasswordMin": "密码至少需要 8 个字符",
       "toastEnterEmail": "请先输入邮箱",
-      "toastAccountCreated": "账户创建成功！"
+      "toastAccountCreated": "账户创建成功！",
+      "toastEmailInUse": "该邮箱已注册，请直接登录。"
     },
     "resetPassword": {
       "title": "设置新密码",

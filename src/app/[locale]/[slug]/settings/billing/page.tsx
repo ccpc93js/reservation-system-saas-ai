@@ -7,7 +7,7 @@ export default async function BillingPage({
 }: {
   searchParams: Promise<{ required?: string; success?: string }>;
 }) {
-  const { required } = await searchParams;
+  const { required, success } = await searchParams;
   const { supabase, user } = await getServerUser();
 
   const { data: membership } = await supabase
@@ -31,6 +31,7 @@ export default async function BillingPage({
       userRole={(membership as any).role}
       usage={{ beds: bedCount ?? 0, users: userCount ?? 0 }}
       required={required === "true"}
+      success={success === "1"}
     />
   );
 }

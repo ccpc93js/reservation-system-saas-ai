@@ -78,6 +78,14 @@ export default function LoginPage() {
     setLoading(false);
     if (error) { toast.error(error.message); return; }
 
+    // Supabase returns a fake user (no error) with an empty identities array when
+    // the email is already registered (email-enumeration protection). Detect it
+    // and warn instead of showing the "check your email" screen.
+    if (data.user && (data.user.identities?.length ?? 0) === 0) {
+      toast.error(t("toastEmailInUse"));
+      return;
+    }
+
     if (data.session) {
       toast.success(t("toastAccountCreated"));
       nextRouter.push(pendingPlan ? `/onboarding?plan=${pendingPlan}` : "/onboarding");

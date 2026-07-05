@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · Bezbedno upravljanje hostelom",
       "toastPasswordMin": "Lozinka mora imati najmanje 8 karaktera",
       "toastEnterEmail": "Prvo unesite email",
-      "toastAccountCreated": "Nalog kreiran!"
+      "toastAccountCreated": "Nalog kreiran!",
+      "toastEmailInUse": "Ova adresa je već registrovana. Prijavite se umesto toga."
     },
     "resetPassword": {
       "title": "Postavi novu lozinku",

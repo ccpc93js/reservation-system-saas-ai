@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · 安全なホステル管理",
       "toastPasswordMin": "パスワードは8文字以上にしてください",
       "toastEnterEmail": "先にメールアドレスを入力してください",
-      "toastAccountCreated": "アカウントが作成されました！"
+      "toastAccountCreated": "アカウントが作成されました！",
+      "toastEmailInUse": "このメールは既に登録されています。ログインしてください。"
     },
     "resetPassword": {
       "title": "新しいパスワードを設定",

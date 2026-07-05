@@ -100,7 +100,8 @@
       "footer": "© {year} HostMagSmart PMS · Gestión segura de hostales",
       "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres",
       "toastEnterEmail": "Ingresa tu correo primero",
-      "toastAccountCreated": "¡Cuenta creada!"
+      "toastAccountCreated": "¡Cuenta creada!",
+      "toastEmailInUse": "Este correo ya está registrado. Inicia sesión en su lugar."
     },
     "resetPassword": {
       "title": "Establecer nueva contraseña",
