@@ -326,7 +326,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
                         ) : (
                           <div className="flex items-center gap-3">
                             <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ch.color }} />
-                            <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: platform.color + "22", color: platform.color }}>
+                            <span className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style={{ backgroundColor: platform.color + "22", color: platform.color }}>
                               {platformLabel(ch.platform)}
                             </span>
                             <div className="flex-1 min-w-0">
@@ -334,7 +334,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
                                 <span className="text-xs text-foreground font-medium truncate">{ch.name}</span>
                                 {!ch.is_active && <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground rounded-full">{t("inactive")}</span>}
                               </div>
-                              <div className="flex items-center gap-3 mt-0.5">
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
                                 <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                                   {ch.last_error ? <WifiOff className="w-3 h-3 text-red-500" /> : <Wifi className="w-3 h-3 text-emerald-500" />}
                                   {formatSynced(ch.last_synced_at)}

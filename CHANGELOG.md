@@ -1,3 +1,17 @@
+## [9e160ab] - 2026-07-05
+
+fix: mobile topbar + guests table overflow
+
+- Header: hide "New Booking" label on mobile (icon only), truncate long section
+  title, tighter paddings/gaps (px-4 sm:px-6, gap-1.5 sm:gap-4) so the topbar
+  no longer crowds on phones.
+- Guests table: add min-w-[720px] so columns scroll horizontally instead of
+  cramming on small screens.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [820772f] - 2026-07-05
 
 fix: mobile responsiveness — modals, drawers, app shell

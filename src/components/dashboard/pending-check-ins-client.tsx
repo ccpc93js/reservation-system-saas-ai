@@ -348,7 +348,7 @@ export default function PendingCheckInsClient() {
 
         {/* Bulk action bar */}
         {selectedIds.size > 0 && (
-          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between">
+          <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm font-medium text-foreground">
               {t("selectedCount", { count: selectedIds.size })}
             </p>
@@ -468,7 +468,7 @@ export default function PendingCheckInsClient() {
                 <h3 className="text-lg font-semibold text-foreground mb-4">
                   {t("guestInformation")}
                 </h3>
-                <div className="grid grid-cols-2 gap-4 bg-background p-4 rounded-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-background p-4 rounded-lg break-words">
                   {Object.entries(selectedCheckIn.self_check_in_data).map(
                     ([key, value]) => (
                       <div key={key}>

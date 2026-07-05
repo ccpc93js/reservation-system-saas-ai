@@ -78,11 +78,11 @@ export default function CalendarClient({
             {t("subtitle")}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleSyncAll}
             disabled={syncingAll}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 transition-colors whitespace-nowrap shrink-0"
             title={t("syncTooltip")}
           >
             <RefreshCw className={`w-4 h-4 ${syncingAll ? "animate-spin" : ""}`} />

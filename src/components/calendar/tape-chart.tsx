@@ -17,7 +17,6 @@ import {
 
 const DAY_WIDTH = 52;
 const ROW_HEIGHT = 56;
-const LABEL_WIDTH = 220;
 
 interface Bed {
   id: string;
@@ -113,10 +112,19 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
   const today = useMemo(() => startOfDay(new Date()), []);
   const todayStr = useMemo(() => format(today, "yyyy-MM-dd"), [today]);
   const [animateIn, setAnimateIn] = useState(false);
+  // Narrow the property/unit label column on phones so the day grid gets room.
+  const [labelWidth, setLabelWidth] = useState(220);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setAnimateIn(true));
     return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    const update = () => setLabelWidth(window.innerWidth < 640 ? 132 : 220);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   const startDate = useMemo(() => addDays(today, -5), [today]);
@@ -177,12 +185,12 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
       </div>
       {/* Scrollable Container - Content and Header inside */}
       <div className="overflow-x-auto overflow-y-auto max-h-[calc(100dvh-240px)] tape-chart-container relative">
-        <div style={{ width: LABEL_WIDTH + days.length * DAY_WIDTH, minWidth: "100%" }}>
+        <div style={{ width: labelWidth + days.length * DAY_WIDTH, minWidth: "100%" }}>
           {/* Header Row - Sticky to top, scrolls with horizontal content */}
           <div className="flex sticky top-0 z-40 bg-surface border-b border-border shadow-sm">
             <div
               className="shrink-0 bg-muted border-r border-border flex items-center px-4 sticky left-0 z-50"
-              style={{ width: LABEL_WIDTH, height: 48 }}
+              style={{ width: labelWidth, height: 48 }}
             >
               <span className="text-[11px] font-bold uppercase tracking-wider text-foreground">{t("propertyUnit")}</span>
             </div>
@@ -220,7 +228,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
             >
               <div
                 className="px-4 py-2 flex items-center gap-2 sticky left-0 z-30 bg-muted border-r border-border"
-                style={{ width: LABEL_WIDTH }}
+                style={{ width: labelWidth }}
               >
                 {type === "dorm" ? <Hotel className="w-3.5 h-3.5 text-muted-foreground" /> : <BedDouble className="w-3.5 h-3.5 text-muted-foreground" />}
                 <span className="text-xs font-bold uppercase tracking-wider text-foreground truncate">{roomName}</span>
@@ -259,7 +267,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                   {/* Bed Label */}
                   <div
                     className="shrink-0 flex items-center px-4 border-r border-border bg-surface group-hover:bg-background sticky left-0 z-20 transition-colors"
-                    style={{ width: LABEL_WIDTH }}
+                    style={{ width: labelWidth }}
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="text-xs font-medium text-foreground truncate pr-2">{bed.name}</span>

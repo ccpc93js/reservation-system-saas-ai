@@ -57,6 +57,12 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
   const router = useRouter();
   const supabase = createBrowserClient();
 
+  // On mobile the sidebar is an overlay — close it after navigating so the
+  // selected section is visible.
+  const handleNavClick = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) onClose?.();
+  };
+
   const roleLabel: Record<string, string> = {
     owner: t("role.owner"),
     manager: t("role.manager"),
@@ -127,7 +133,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto">
+      <nav className="flex-1 min-h-0 overflow-y-auto">
         {/* Main Nav */}
         <div className="px-3 py-4">
           {mainNavRoutes.map((item) => {
@@ -137,6 +143,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
               <Link
                 key={item.path}
                 href={href}
+                onClick={handleNavClick}
                 className={cn(
                   "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-1",
                   isActive
@@ -163,6 +170,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
               <Link
                 key={item.path}
                 href={href}
+                onClick={handleNavClick}
                 className={cn(
                   "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-1",
                   isActive
