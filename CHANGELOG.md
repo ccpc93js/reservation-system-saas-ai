@@ -1,5 +1,32 @@
 ## [Unreleased] - 2026-07-05
 
+fix: new orgs default to botanical moss accent, not the retired purple
+
+- create-org now sets `theme_color: "#5f7048"` explicitly on insert.
+- DB: `organizations.theme_color` column default changed `#7c3aed` → `#5f7048`,
+  and existing orgs still on the old purple were migrated to moss.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [0c17d7a] - 2026-07-05
+
+feat: botanical email redesign (app emails + Supabase confirm-signup)
+
+- Reskin shared generateEmailHTML wrapper (all 6 app emails: check-in
+  submitted/approved/rejected, reservation confirmation/cancelled, checkout
+  confirmation): cream card, moss header + logo, serif headings, moss CTA/info-box.
+- Team invite email uses the same wrapper (was a standalone blue template);
+  export generateEmailHTML for reuse.
+- Botanical rewrite of Supabase confirm-signup template (table-based, email-safe,
+  logo + serif, moss CTA, moss-tint step badges); {{ .ConfirmationURL }} kept.
+  Must be pasted into Supabase Auth email templates to take effect.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-05
+
 feat: Botanical email redesign (app emails + Supabase confirm-signup)
 
 - Reskinned the shared `generateEmailHTML` wrapper (used by all 6 app emails:

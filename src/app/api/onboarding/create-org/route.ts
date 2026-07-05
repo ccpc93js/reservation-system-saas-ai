@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
     const { data: org, error: orgError } = await service
       .from("organizations")
-      .insert({ name: name.trim(), slug, city, country, timezone: timezone || "UTC", currency: currency || "EUR", locale: "en", pending_plan: validPendingPlan })
+      .insert({ name: name.trim(), slug, city, country, timezone: timezone || "UTC", currency: currency || "EUR", locale: "en", theme_color: "#5f7048", pending_plan: validPendingPlan })
       .select()
       .single();
 
