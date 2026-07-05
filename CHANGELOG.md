@@ -1,3 +1,17 @@
+## [6af8cef] - 2026-07-06
+
+feat: SEO content — landing FAQ + FAQPage schema, page metadata, alts
+
+- Add a visible FAQ section to the landing (shared data in lib/seo-faq.ts) and
+  emit matching FAQPage JSON-LD on the home page for FAQ rich results.
+- Per-page metadata via co-located layouts: /login (sign in/up) and /demo, each
+  with keyword-rich title/description + canonical.
+- More descriptive/keyworded alt on the hero room image.
+
+tsc + production build pass.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [820d790] - 2026-07-06
 
 feat: SEO — rich metadata, robots, sitemap, manifest, OG image, JSON-LD
