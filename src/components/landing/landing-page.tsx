@@ -8,6 +8,7 @@ import {
   CheckCircle, ArrowRight, Menu, X, Star, Globe,
   BedDouble, ClipboardCheck, CreditCard
 } from "lucide-react";
+import { FAQS } from "@/lib/seo-faq";
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -110,7 +111,7 @@ export default function LandingPage() {
             <div className="absolute -top-3 -right-3 w-28 h-28 rounded-full pointer-events-none"
               style={{ background: "radial-gradient(circle, color-mix(in srgb, hsl(var(--accent)) 22%, transparent), transparent 70%)" }} />
             <div className="aspect-[4/5] rounded-3xl overflow-hidden border border-border shadow-2xl">
-              <Image src="/botanical/room-bedroom.png" alt="Warm room with plants" width={640} height={800} className="w-full h-full object-cover" priority />
+              <Image src="/botanical/room-bedroom.png" alt="Cozy hostel room managed with the HostMagSmart PMS" width={640} height={800} className="w-full h-full object-cover" priority />
             </div>
           </div>
         </div>
@@ -383,6 +384,24 @@ export default function LandingPage() {
                   style={plan.highlight ? { background: "linear-gradient(135deg, #5f7048, #7f8a58)" } : {}}>
                   {plan.cta}
                 </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="py-24">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-4xl font-semibold tracking-tight mb-4">Frequently asked questions</h2>
+            <p className="text-muted-foreground">Everything about the HostMagSmart hostel PMS.</p>
+          </div>
+          <div className="space-y-4">
+            {FAQS.map((f) => (
+              <div key={f.q} className="rounded-2xl border border-border bg-surface p-6">
+                <h3 className="font-semibold text-foreground mb-2">{f.q}</h3>
+                <p className="text-muted-foreground leading-relaxed">{f.a}</p>
               </div>
             ))}
           </div>

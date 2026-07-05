@@ -1,6 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import LandingPage from "@/components/landing/landing-page";
+import { FAQS } from "@/lib/seo-faq";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hostmagsmart.com";
 
@@ -28,6 +29,14 @@ const jsonLd = {
       description:
         "Hostel PMS with reservations, tape calendar, channel manager, guest self check-in, housekeeping and analytics.",
       offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
     },
   ],
 };

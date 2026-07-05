@@ -1,3 +1,37 @@
+## [820d790] - 2026-07-06
+
+feat: SEO — rich metadata, robots, sitemap, manifest, OG image, JSON-LD
+
+- Enrich root metadata: descriptive title/description, keywords, metadataBase,
+  canonical, OpenGraph + Twitter cards, index/follow robots directives.
+- Add app/robots.ts (allow public, disallow api/onboarding/auth/invite),
+  app/sitemap.ts (home, signup, login, demo), app/manifest.ts (PWA, botanical
+  colors + logo).
+- Add dynamic botanical opengraph-image (next/og) for social/search previews.
+- Home page: JSON-LD @graph (Organization + WebSite + SoftwareApplication).
+- Tenant [slug] layout: robots noindex (private/auth-gated app).
+
+tsc + production build pass.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [820d790] - 2026-07-06
+
+feat: SEO — rich metadata, robots, sitemap, manifest, OG image, JSON-LD
+
+- Enrich root metadata: descriptive title/description, keywords, metadataBase,
+  canonical, OpenGraph + Twitter cards, index/follow robots directives.
+- Add app/robots.ts (allow public, disallow api/onboarding/auth/invite),
+  app/sitemap.ts (home, signup, login, demo), app/manifest.ts (PWA, botanical
+  colors + logo).
+- Add dynamic botanical opengraph-image (next/og) for social/search previews.
+- Home page: JSON-LD @graph (Organization + WebSite + SoftwareApplication).
+- Tenant [slug] layout: robots noindex (private/auth-gated app).
+
+tsc + production build pass.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [9ddb7ed] - 2026-07-05
 
 fix: mobile — calendar past-day color, palette preview + property grid equality
