@@ -1,5 +1,36 @@
 ## [Unreleased] - 2026-07-05
 
+fix: mobile/tablet responsiveness — modals, drawers, app shell
+
+- Fixed modals whose buttons were unreachable on small screens: checkout and
+  cancel-reservation dialogs had no height cap/scroll — added
+  `max-h-[90dvh] overflow-y-auto`.
+- Switched all centered dialogs from `vh` to `dvh` (accounts for mobile browser
+  chrome) and gave them a side gutter (`w-[calc(100vw-2rem)]`) so they no longer
+  touch the screen edges; wide dialogs (OCR, duplicate-merge) use `p-4 sm:p-6`.
+- Right drawers (new/edit reservation) and the app shell now use `h-[100dvh]`
+  instead of `h-screen`.
+- App-shell mobile bug: opening the sidebar pushed the main content ~288px
+  off-screen (`ml-72` with no breakpoint) — now `lg:ml-72` (desktop only; the
+  sidebar is an overlay on mobile). Main padding `p-6` → `p-4 sm:p-6`.
+- Calendar tape-chart max height `vh` → `dvh`.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [75dedb6] - 2026-07-05
+
+fix: new orgs default to botanical moss accent, not the retired purple
+
+- create-org sets theme_color "#5f7048" explicitly on insert.
+- DB: organizations.theme_color column default changed #7c3aed -> #5f7048;
+  existing orgs on the old purple migrated to moss.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-05
+
 fix: new orgs default to botanical moss accent, not the retired purple
 
 - create-org now sets `theme_color: "#5f7048"` explicitly on insert.

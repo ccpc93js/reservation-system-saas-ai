@@ -447,7 +447,7 @@ export default function PendingCheckInsClient() {
       {/* Verification Modal */}
       {selectedCheckIn && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-surface rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-surface rounded-lg shadow-xl max-w-2xl w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto">
             {/* Header */}
             <div className="sticky top-0 bg-surface border-b border-border p-6 flex items-center justify-between">
               <h2 className="font-serif text-2xl font-semibold text-foreground">
@@ -711,7 +711,7 @@ export default function PendingCheckInsClient() {
       {/* Bulk Rejection Modal */}
       {bulkAction === "reject" && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-surface rounded-lg shadow-xl max-w-md w-full">
+          <div className="bg-surface rounded-lg shadow-xl max-w-md w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto">
             <div className="p-6 border-b border-border flex items-center justify-between">
               <h2 className="font-serif text-2xl font-semibold text-foreground">
                 {t("rejectNCheckIns", { count: selectedIds.size })}

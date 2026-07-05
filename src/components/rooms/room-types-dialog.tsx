@@ -158,7 +158,7 @@ export default function RoomTypeDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto z-50">
+        <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto z-50">
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="font-serif text-2xl font-semibold">
               {isEditing ? t("editTitle") : t("createTitle")}

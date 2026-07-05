@@ -176,7 +176,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
         </div>
       </div>
       {/* Scrollable Container - Content and Header inside */}
-      <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-240px)] tape-chart-container relative">
+      <div className="overflow-x-auto overflow-y-auto max-h-[calc(100dvh-240px)] tape-chart-container relative">
         <div style={{ width: LABEL_WIDTH + days.length * DAY_WIDTH, minWidth: "100%" }}>
           {/* Header Row - Sticky to top, scrolls with horizontal content */}
           <div className="flex sticky top-0 z-40 bg-surface border-b border-border shadow-sm">

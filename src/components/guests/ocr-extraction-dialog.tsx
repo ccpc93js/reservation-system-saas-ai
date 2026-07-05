@@ -166,7 +166,7 @@ export default function OCRExtractionDialog({
             // wheel works.
             e.currentTarget.scrollTop += e.deltaY;
           }}
-          className="fixed left-[50%] top-[50%] z-[10011] w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto"
+          className="fixed left-[50%] top-[50%] z-[10011] w-[calc(100vw-2rem)] max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-4 sm:p-6 shadow-lg max-h-[90dvh] overflow-y-auto"
           aria-describedby={undefined}
         >
           <div className="flex items-center justify-between mb-4">

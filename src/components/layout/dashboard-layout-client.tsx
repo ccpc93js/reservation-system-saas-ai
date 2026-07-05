@@ -32,7 +32,7 @@ export default function DashboardLayoutClient({
   }, [pendingPlan, pathname, org.slug, router]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-foreground">
+    <div className="flex h-[100dvh] overflow-hidden bg-background text-foreground">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -51,13 +51,13 @@ export default function DashboardLayoutClient({
       />
 
       {/* Main area - shifts right when sidebar is open */}
-      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${sidebarOpen ? "ml-72" : ""}`}>
+      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${sidebarOpen ? "lg:ml-72" : ""}`}>
         <Header
           org={org}
           user={user}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         />
-        <main className="flex-1 overflow-y-auto p-6 pt-0 bg-background">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 pt-0 bg-background">
           {children}
         </main>
       </div>

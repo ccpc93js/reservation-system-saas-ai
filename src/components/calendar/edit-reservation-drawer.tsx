@@ -486,7 +486,7 @@ export default function EditReservationDrawer({
           <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[9999]" />
           <Dialog.Content
             aria-describedby={undefined}
-            className="fixed right-0 top-0 z-[10000] w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-6"
+            className="fixed right-0 top-0 z-[10000] w-full max-w-md h-[100dvh] bg-surface border-l border-border shadow-2xl p-6"
           >
             <p className="text-muted-foreground">{t("loading")}</p>
           </Dialog.Content>
@@ -503,7 +503,7 @@ export default function EditReservationDrawer({
         <Dialog.Overlay className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm z-[9999]" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed right-0 top-0 z-[10000] w-full max-w-md h-screen bg-surface border-l border-border shadow-2xl p-0 overflow-y-auto transition-all duration-300 data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right"
+          className="fixed right-0 top-0 z-[10000] w-full max-w-md h-[100dvh] bg-surface border-l border-border shadow-2xl p-0 overflow-y-auto transition-all duration-300 data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right"
         >
           <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 z-10 bg-surface">
             <div>
