@@ -121,6 +121,20 @@ h1 {
   letter-spacing: -0.01em;
 }
 
+/* iOS Safari centers the value inside date / datetime-local inputs by default,
+   which looks broken next to our left-aligned text inputs. Force left align. */
+input[type="date"]::-webkit-date-and-time-value,
+input[type="datetime-local"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 /* Utility so components can force the botanical body sans back on
    an <h1> in dense/compact contexts where serif would read wrong. */
 .font-sans-force {

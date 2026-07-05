@@ -172,15 +172,15 @@ export default function AnalyticsClient({
           {topRooms.length > 0 ? (
             <div className="space-y-4">
               {topRooms.map((room) => (
-                <div key={room.room} className="flex items-center gap-4">
-                  <span className="w-40 shrink-0 text-sm font-medium text-foreground truncate">{room.room}</span>
+                <div key={room.room} className="flex items-center gap-3 sm:gap-4">
+                  <span className="w-24 sm:w-40 shrink-0 text-sm font-medium text-foreground truncate">{room.room}</span>
                   <div className="flex-1 h-3 rounded-full bg-muted/60 overflow-hidden">
                     <div
                       className="h-full rounded-full bg-primary"
                       style={{ width: `${Math.max(4, (room.revenue / maxRoomRevenue) * 100)}%` }}
                     />
                   </div>
-                  <span className="w-20 shrink-0 text-right text-sm font-semibold text-foreground">
+                  <span className="w-16 sm:w-20 shrink-0 text-right text-sm font-semibold text-foreground">
                     ${room.revenue.toLocaleString()}
                   </span>
                 </div>

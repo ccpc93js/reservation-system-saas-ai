@@ -83,7 +83,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-[55] lg:hidden"
           onClick={onClose}
         />
       )}
@@ -91,7 +91,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
       {/* Sidebar */}
       <aside className={cn(
         "w-72 bg-surface border-r border-border flex flex-col shrink-0",
-        "fixed inset-y-0 left-0 z-40",
+        "fixed inset-y-0 left-0 z-[60]",
         "transition-transform duration-300 ease-in-out",
         !isOpen && "-translate-x-full"
       )}>

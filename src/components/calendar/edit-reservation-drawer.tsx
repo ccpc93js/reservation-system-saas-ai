@@ -920,7 +920,7 @@ export default function EditReservationDrawer({
               </div>
 
               {/* Deposit */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("deposit")}</label>
                   <input
@@ -948,7 +948,7 @@ export default function EditReservationDrawer({
               </div>
 
               {/* Actual arrival / departure */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("actualArrival")}</label>
                   <input
@@ -1011,7 +1011,7 @@ export default function EditReservationDrawer({
                         {t("currentCheckOut", { date: currentCheckOut ? new Date(currentCheckOut + "T00:00:00").toLocaleDateString() : "—" })}
                       </p>
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
                           <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 text-[#4A6740]">{t("newCheckOut")}</label>
                           <input

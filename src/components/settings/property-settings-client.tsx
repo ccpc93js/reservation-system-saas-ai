@@ -186,15 +186,15 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
     {/* -m-6 cancels main's p-6 so sticky top-0 reaches the scroll container edge */}
     <div className=" flex flex-col">
       <div className="sticky top-0 z-20 bg-background border-b border-border">
-        <div className="max-w-2xl p-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">{t("subtitle")}</p>
+        <div className="max-w-2xl p-4 sm:p-6 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="font-serif text-2xl font-semibold truncate" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
+            <p className="text-sm text-muted-foreground mt-0.5 truncate">{t("subtitle")}</p>
           </div>
           {isAdmin && (
             <button onClick={handleSave} disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors">
-              <Save className="w-4 h-4" />
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium whitespace-nowrap shrink-0 hover:bg-primary/90 disabled:opacity-50 transition-colors">
+              <Save className="w-4 h-4 shrink-0" />
               {saving ? t("saving") : t("saveChanges")}
             </button>
           )}
@@ -298,7 +298,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       {/* ── BASIC INFO ── */}
       <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
         <h2 className="font-serif text-xl font-semibold text-foreground">{t("basicInformation")}</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("propertyName")}</label>
             <input value={form.name} onChange={set("name")} disabled={!isAdmin} className={inputClass} />
@@ -429,7 +429,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       {/* ── OPERATIONS ── */}
       <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
         <h2 className="font-serif text-xl font-semibold text-foreground">{t("operations")}</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("defaultCheckIn")}</label>
             <input type="time" value={form.check_in_time} onChange={set("check_in_time")} disabled={!isAdmin} className={inputClass} />

@@ -352,11 +352,11 @@ export default function PendingCheckInsClient() {
             <p className="text-sm font-medium text-foreground">
               {t("selectedCount", { count: selectedIds.size })}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
               <button
                 onClick={handleBulkApprove}
                 disabled={bulkSubmitting}
-                className="flex items-center gap-2 px-4 py-2 bg-[#4A6740] hover:bg-[#3d5636] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-[#4A6740] hover:bg-[#3d5636] text-white rounded-lg text-sm whitespace-nowrap transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {bulkSubmitting ? (
                   <Loader className="w-4 h-4 animate-spin" />
@@ -368,14 +368,14 @@ export default function PendingCheckInsClient() {
               <button
                 onClick={() => setBulkAction("reject")}
                 disabled={bulkSubmitting}
-                className="flex items-center gap-2 px-4 py-2 bg-[#9C4A37] hover:bg-[#853d2e] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-[#9C4A37] hover:bg-[#853d2e] text-white rounded-lg text-sm whitespace-nowrap transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <XCircle className="w-4 h-4" />
                 {t("rejectAll")}
               </button>
               <button
                 onClick={() => setSelectedIds(new Set())}
-                className="px-4 py-2 border border-primary/20 text-foreground rounded-lg hover:bg-primary/10 transition-colors"
+                className="px-3 sm:px-4 py-2 border border-primary/20 text-foreground rounded-lg text-sm whitespace-nowrap hover:bg-primary/10 transition-colors"
               >
                 {t("clear")}
               </button>

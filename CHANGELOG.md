@@ -1,3 +1,20 @@
+## [636b47e] - 2026-07-05
+
+fix: mobile — sidebar scroll/close, modal grids, channel + calendar
+
+- Sidebar: add min-h-0 so the nav actually scrolls (flex overflow gotcha; bottom
+  items/settings were unreachable); close the sidebar after navigating on mobile.
+- Verify Check-In modal: guest-info grid stacks to 1 col on mobile (email/phone
+  were overlapping); pending bulk-action bar wraps.
+- Channel Manager: platform row meta/actions wrap instead of overlapping the
+  edit/delete icons on narrow screens.
+- Tape Calendar: property/unit label column narrows to 132px on phones (was a
+  fixed 220px eating the viewport); Sync Channels button no longer wraps.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [9e160ab] - 2026-07-05
 
 fix: mobile topbar + guests table overflow
