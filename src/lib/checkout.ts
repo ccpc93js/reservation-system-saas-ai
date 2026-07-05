@@ -1,4 +1,4 @@
-import { sendCheckoutConfirmationEmail, getOrgLogoUrl } from "@/lib/email";
+import { sendCheckoutConfirmationEmail, getOrgBranding } from "@/lib/email";
 import type { createServerClient } from "@/lib/supabase/server";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -50,13 +50,13 @@ export async function finalizeCheckout(
         .single();
 
       if (guest?.email && reservation) {
-        const orgLogo = await getOrgLogoUrl(supabase, (reservation as any).organization_id);
+        const branding = await getOrgBranding(supabase, (reservation as any).organization_id);
         await sendCheckoutConfirmationEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
           reservationId.substring(0, 8).toUpperCase(),
           reservation.check_out,
-          orgLogo
+          branding
         ).catch((err) => console.error("Email send failed:", err));
       }
     }

@@ -1,3 +1,17 @@
+## [96cd66b] - 2026-07-06
+
+feat: use tenant org logo in emails (fallback to HostMagSmart)
+
+- generateEmailHTML accepts an optional logoUrl; header uses it, falling back to
+  the botanical logo.
+- All transactional emails now pass the org logo: reservation confirmation +
+  cancellation, check-in submitted/approved/rejected, checkout confirmation, and
+  team invite. Added getOrgLogoUrl(supabase, orgId) helper.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [6950c6c] - 2026-07-06
 
 feat: SEO — IndexNow instant indexing (Bing/Yandex)

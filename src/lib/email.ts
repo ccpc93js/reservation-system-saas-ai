@@ -1,28 +1,32 @@
 // Email notification templates and sender
 // Uses Resend for email delivery
 import { getSiteOrigin } from "./site-url";
+import { generateGuestPortalLink, generateQRCodeUrl } from "./qr-code";
+
+export type EmailBranding = { logoUrl?: string | null; name?: string | null };
 
 // For testing: use Resend's onboarding domain
 // For production: verify your domain at https://resend.com/domains
 const emailFromAddress = process.env.EMAIL_FROM || "onboarding@resend.dev";
 const hostelName = "Hostmagsmart";
 
-// Fetch a tenant org's logo so emails can be branded with it (falls back to the
-// HostMagSmart logo when the org has none). Accepts any Supabase client.
-export async function getOrgLogoUrl(
+// Fetch a tenant org's name + logo so emails can be branded with it (falls back
+// to HostMagSmart when the org has none). Accepts any Supabase client.
+export async function getOrgBranding(
   supabase: { from: (t: string) => any },
   orgId: string | null | undefined
-): Promise<string | null> {
-  if (!orgId) return null;
+): Promise<EmailBranding> {
+  if (!orgId) return {};
   try {
     const { data } = await supabase
       .from("organizations")
-      .select("logo_url")
+      .select("name, logo_url")
       .eq("id", orgId)
       .single();
-    return (data as { logo_url?: string | null } | null)?.logo_url ?? null;
+    const row = data as { name?: string | null; logo_url?: string | null } | null;
+    return { logoUrl: row?.logo_url ?? null, name: row?.name ?? null };
   } catch {
-    return null;
+    return {};
   }
 }
 
@@ -57,7 +61,7 @@ export function generateEmailHTML(title: string, content: string, footer?: strin
         <div class="wrap">
           <div class="container">
             <div class="header">
-              <img src="${logoSrc}" alt="${hostelName}" />
+              <img src="${logoSrc}" alt="Property logo" />
               <h1>${title}</h1>
             </div>
             <div class="content">
@@ -115,14 +119,15 @@ export async function sendCheckInSubmittedEmail(
   guestName: string,
   reservationNumber: string,
   checkInDate: string,
-  logoUrl?: string | null
+  branding?: EmailBranding
 ) {
   try {
+    const brandName = branding?.name || hostelName;
     const html = generateEmailHTML(
       "Check-In Received",
       `
         <p>Hi ${guestName},</p>
-        <p>Welcome to ${hostelName}! Your check-in information has been received.</p>
+        <p>Welcome to ${brandName}! Your check-in information has been received.</p>
         <div class="info-box">
           <strong>Reservation Number</strong>
           <span>${reservationNumber}</span>
@@ -137,10 +142,10 @@ export async function sendCheckInSubmittedEmail(
           })}</span>
         </div>
         <p>Our staff will verify your ID within 24 hours and send you a confirmation email.</p>
-        <p>Thank you for choosing ${hostelName}!</p>
+        <p>Thank you for choosing ${brandName}!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(
@@ -160,14 +165,15 @@ export async function sendCheckInApprovedEmail(
   reservationNumber: string,
   checkInDate: string,
   roomName?: string,
-  logoUrl?: string | null
+  branding?: EmailBranding
 ) {
   try {
+    const brandName = branding?.name || hostelName;
     const html = generateEmailHTML(
       "Check-In Approved ✓",
       `
         <p>Hi ${guestName},</p>
-        <p>Your check-in has been verified and approved! Welcome to ${hostelName}.</p>
+        <p>Your check-in has been verified and approved! Welcome to ${brandName}.</p>
         <div class="info-box">
           <strong>Reservation Number</strong>
           <span>${reservationNumber}</span>
@@ -191,10 +197,10 @@ export async function sendCheckInApprovedEmail(
         `
             : ""
         }
-        <p>We look forward to hosting you at ${hostelName}! If you have any questions before your arrival, feel free to contact us.</p>
+        <p>We look forward to hosting you at ${brandName}! If you have any questions before your arrival, feel free to contact us.</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(
@@ -213,14 +219,15 @@ export async function sendCheckInRejectedEmail(
   guestName: string,
   reservationNumber: string,
   rejectionReason: string,
-  logoUrl?: string | null
+  branding?: EmailBranding
 ) {
   try {
+    const brandName = branding?.name || hostelName;
     const html = generateEmailHTML(
       "Action Required: Re-submit Your ID",
       `
         <p>Hi ${guestName},</p>
-        <p>We need you to re-submit your ID photo to complete your check-in at ${hostelName}.</p>
+        <p>We need you to re-submit your ID photo to complete your check-in at ${brandName}.</p>
         <div class="info-box">
           <strong>Reason</strong>
           <span>${rejectionReason}</span>
@@ -232,8 +239,8 @@ export async function sendCheckInRejectedEmail(
         <p>Please use your check-in link to upload a clearer photo that meets the requirements.</p>
         <p>If you have any questions, please contact us at support@hostmagsmart.com</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(
@@ -255,14 +262,18 @@ export async function sendReservationConfirmationEmail(
   checkOutDate: string,
   roomName?: string,
   totalAmount?: number,
-  logoUrl?: string | null
+  branding?: EmailBranding,
+  checkInToken?: string | null
 ) {
   try {
+    const brandName = branding?.name || hostelName;
+    const checkInUrl = checkInToken ? generateGuestPortalLink(checkInToken) : null;
+    const qrUrl = checkInToken ? generateQRCodeUrl(checkInToken) : null;
     const html = generateEmailHTML(
       "Reservation Confirmed ✓",
       `
         <p>Hi ${guestName},</p>
-        <p>Your reservation at ${hostelName} has been confirmed!</p>
+        <p>Your reservation at ${brandName} has been confirmed!</p>
         <div class="info-box">
           <strong>Reservation Number</strong>
           <span>${reservationNumber}</span>
@@ -287,10 +298,20 @@ export async function sendReservationConfirmationEmail(
         </div>
         ${roomName ? `<div class="info-box"><strong>Room</strong><span>${roomName}</span></div>` : ""}
         ${totalAmount ? `<div class="info-box"><strong>Total Amount</strong><span>$${totalAmount}</span></div>` : ""}
-        <p>Please complete your online check-in before your arrival date. You'll receive a separate check-in link shortly.</p>
+        ${
+          checkInUrl
+            ? `
+        <p style="margin-top:20px">Save time at the front desk — complete your online check-in before you arrive:</p>
+        <p style="text-align:center;margin:18px 0"><a href="${checkInUrl}" class="cta-button">Start online check-in</a></p>
+        <p style="text-align:center;color:#7C776B;font-size:12px;margin:0 0 8px">Or scan this QR code with your phone:</p>
+        <p style="text-align:center"><img src="${qrUrl}" alt="Online check-in QR code" width="180" height="180" style="border-radius:12px;border:1px solid #E7DFCE" /></p>
+        <p style="text-align:center;color:#7C776B;font-size:11px;word-break:break-all">${checkInUrl}</p>
+        `
+            : `<p>Please complete your online check-in before your arrival date. You'll receive a separate check-in link shortly.</p>`
+        }
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(
@@ -309,14 +330,15 @@ export async function sendReservationCancelledEmail(
   guestName: string,
   reservationNumber: string,
   refundAmount?: number,
-  logoUrl?: string | null
+  branding?: EmailBranding
 ) {
   try {
+    const brandName = branding?.name || hostelName;
     const html = generateEmailHTML(
       "Reservation Cancelled",
       `
         <p>Hi ${guestName},</p>
-        <p>Your reservation at ${hostelName} has been cancelled.</p>
+        <p>Your reservation at ${brandName} has been cancelled.</p>
         <div class="info-box">
           <strong>Reservation Number</strong>
           <span>${reservationNumber}</span>
@@ -325,8 +347,8 @@ export async function sendReservationCancelledEmail(
         <p>If you have any questions about this cancellation or your refund, please contact us at support@hostmagsmart.com</p>
         <p>We hope to see you again soon!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(
@@ -345,14 +367,15 @@ export async function sendCheckoutConfirmationEmail(
   guestName: string,
   reservationNumber: string,
   checkOutDate: string,
-  logoUrl?: string | null
+  branding?: EmailBranding
 ) {
   try {
+    const brandName = branding?.name || hostelName;
     const html = generateEmailHTML(
       "Check-Out Confirmed",
       `
         <p>Hi ${guestName},</p>
-        <p>Thank you for staying at ${hostelName}! Your check-out has been confirmed.</p>
+        <p>Thank you for staying at ${brandName}! Your check-out has been confirmed.</p>
         <div class="info-box">
           <strong>Reservation Number</strong>
           <span>${reservationNumber}</span>
@@ -369,8 +392,8 @@ export async function sendCheckoutConfirmationEmail(
         <p>We hope you enjoyed your stay! Please share your feedback by replying to this email.</p>
         <p>Visit us again soon!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`,
-      logoUrl
+      `© 2026 ${brandName}. All rights reserved.`,
+      branding?.logoUrl
     );
 
     return await sendEmail(

@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-import { sendReservationCancelledEmail, getOrgLogoUrl } from "@/lib/email";
+import { sendReservationCancelledEmail, getOrgBranding } from "@/lib/email";
 import { notifyOrg } from "@/lib/notifications";
 
 type ReservationOrg = { organization_id: string };
@@ -104,13 +104,13 @@ export async function PATCH(
         .single();
 
       if (guest?.email) {
-        const orgLogo = await getOrgLogoUrl(supabase, reservation.organization_id);
+        const branding = await getOrgBranding(supabase, reservation.organization_id);
         await sendReservationCancelledEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
           id.substring(0, 8).toUpperCase(),
           undefined,
-          orgLogo
+          branding
         ).catch((err) => console.error("Email send failed:", err));
       }
 
