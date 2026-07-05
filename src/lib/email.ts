@@ -7,8 +7,28 @@ import { getSiteOrigin } from "./site-url";
 const emailFromAddress = process.env.EMAIL_FROM || "onboarding@resend.dev";
 const hostelName = "Hostmagsmart";
 
-export function generateEmailHTML(title: string, content: string, footer?: string): string {
+// Fetch a tenant org's logo so emails can be branded with it (falls back to the
+// HostMagSmart logo when the org has none). Accepts any Supabase client.
+export async function getOrgLogoUrl(
+  supabase: { from: (t: string) => any },
+  orgId: string | null | undefined
+): Promise<string | null> {
+  if (!orgId) return null;
+  try {
+    const { data } = await supabase
+      .from("organizations")
+      .select("logo_url")
+      .eq("id", orgId)
+      .single();
+    return (data as { logo_url?: string | null } | null)?.logo_url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export function generateEmailHTML(title: string, content: string, footer?: string, logoUrl?: string | null): string {
   const origin = getSiteOrigin();
+  const logoSrc = logoUrl || `${origin}/botanical/logo.png`;
   return `
     <!DOCTYPE html>
     <html>
@@ -37,7 +57,7 @@ export function generateEmailHTML(title: string, content: string, footer?: strin
         <div class="wrap">
           <div class="container">
             <div class="header">
-              <img src="${origin}/botanical/logo.png" alt="${hostelName}" />
+              <img src="${logoSrc}" alt="${hostelName}" />
               <h1>${title}</h1>
             </div>
             <div class="content">
@@ -94,7 +114,8 @@ export async function sendCheckInSubmittedEmail(
   guestEmail: string,
   guestName: string,
   reservationNumber: string,
-  checkInDate: string
+  checkInDate: string,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -118,7 +139,8 @@ export async function sendCheckInSubmittedEmail(
         <p>Our staff will verify your ID within 24 hours and send you a confirmation email.</p>
         <p>Thank you for choosing ${hostelName}!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(
@@ -137,7 +159,8 @@ export async function sendCheckInApprovedEmail(
   guestName: string,
   reservationNumber: string,
   checkInDate: string,
-  roomName?: string
+  roomName?: string,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -170,7 +193,8 @@ export async function sendCheckInApprovedEmail(
         }
         <p>We look forward to hosting you at ${hostelName}! If you have any questions before your arrival, feel free to contact us.</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(
@@ -188,7 +212,8 @@ export async function sendCheckInRejectedEmail(
   guestEmail: string,
   guestName: string,
   reservationNumber: string,
-  rejectionReason: string
+  rejectionReason: string,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -207,7 +232,8 @@ export async function sendCheckInRejectedEmail(
         <p>Please use your check-in link to upload a clearer photo that meets the requirements.</p>
         <p>If you have any questions, please contact us at support@hostmagsmart.com</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(
@@ -228,7 +254,8 @@ export async function sendReservationConfirmationEmail(
   checkInDate: string,
   checkOutDate: string,
   roomName?: string,
-  totalAmount?: number
+  totalAmount?: number,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -262,7 +289,8 @@ export async function sendReservationConfirmationEmail(
         ${totalAmount ? `<div class="info-box"><strong>Total Amount</strong><span>$${totalAmount}</span></div>` : ""}
         <p>Please complete your online check-in before your arrival date. You'll receive a separate check-in link shortly.</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(
@@ -280,7 +308,8 @@ export async function sendReservationCancelledEmail(
   guestEmail: string,
   guestName: string,
   reservationNumber: string,
-  refundAmount?: number
+  refundAmount?: number,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -296,7 +325,8 @@ export async function sendReservationCancelledEmail(
         <p>If you have any questions about this cancellation or your refund, please contact us at support@hostmagsmart.com</p>
         <p>We hope to see you again soon!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(
@@ -314,7 +344,8 @@ export async function sendCheckoutConfirmationEmail(
   guestEmail: string,
   guestName: string,
   reservationNumber: string,
-  checkOutDate: string
+  checkOutDate: string,
+  logoUrl?: string | null
 ) {
   try {
     const html = generateEmailHTML(
@@ -338,7 +369,8 @@ export async function sendCheckoutConfirmationEmail(
         <p>We hope you enjoyed your stay! Please share your feedback by replying to this email.</p>
         <p>Visit us again soon!</p>
       `,
-      `© 2026 ${hostelName}. All rights reserved.`
+      `© 2026 ${hostelName}. All rights reserved.`,
+      logoUrl
     );
 
     return await sendEmail(

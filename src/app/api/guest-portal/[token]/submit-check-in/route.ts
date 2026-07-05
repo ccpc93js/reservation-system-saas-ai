@@ -1,5 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/server";
-import { sendCheckInSubmittedEmail } from "@/lib/email";
+import { sendCheckInSubmittedEmail, getOrgLogoUrl } from "@/lib/email";
 import { notifyOrg } from "@/lib/notifications";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -214,11 +214,13 @@ export async function POST(
     }
 
     // Send confirmation email
+    const orgLogo = await getOrgLogoUrl(supabase, reservation.organization_id);
     await sendCheckInSubmittedEmail(
       email,
       firstName,
       (reservation as any).reservation_number || "RES-XX-XXXX",
-      reservation.check_in
+      reservation.check_in,
+      orgLogo
     ).catch((err) => console.error("Email send failed:", err));
 
     // Notify staff

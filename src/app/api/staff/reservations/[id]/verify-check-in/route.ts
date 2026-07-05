@@ -2,6 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import {
   sendCheckInApprovedEmail,
   sendCheckInRejectedEmail,
+  getOrgLogoUrl,
 } from "@/lib/email";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -83,11 +84,14 @@ export async function PATCH(
         .single();
 
       if (guest?.email) {
+        const orgLogo = await getOrgLogoUrl(supabase, reservation.organization_id);
         await sendCheckInApprovedEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
           (reservation as any).reservation_number || "RES-XX-XXXX",
-          (reservation as any).check_in
+          (reservation as any).check_in,
+          undefined,
+          orgLogo
         ).catch((err) => console.error("Email send failed:", err));
       }
 
@@ -144,11 +148,13 @@ export async function PATCH(
         .single();
 
       if (guest?.email) {
+        const orgLogoR = await getOrgLogoUrl(supabase, reservation.organization_id);
         await sendCheckInRejectedEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
           (reservation as any).reservation_number || "RES-XX-XXXX",
-          rejection_reason
+          rejection_reason,
+          orgLogoR
         ).catch((err) => console.error("Email send failed:", err));
       }
 

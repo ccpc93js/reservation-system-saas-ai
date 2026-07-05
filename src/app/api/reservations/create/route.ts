@@ -1,7 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { createReservationSchema } from "@/lib/validations/reservation";
 import { differenceInDays } from "date-fns";
-import { sendReservationConfirmationEmail } from "@/lib/email";
+import { sendReservationConfirmationEmail, getOrgLogoUrl } from "@/lib/email";
 import { notifyOrg } from "@/lib/notifications";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -207,6 +207,7 @@ export async function POST(request: Request) {
 
     // Send confirmation email
     if (guest?.email) {
+      const orgLogo = await getOrgLogoUrl(supabase, data.org_id);
       await sendReservationConfirmationEmail(
         guest.email,
         `${data.first_name} ${data.last_name}`,
@@ -214,7 +215,8 @@ export async function POST(request: Request) {
         data.check_in,
         data.check_out,
         room?.beds?.rooms?.name,
-        totalPrice
+        totalPrice,
+        orgLogo
       ).catch((err) => console.error("Email send failed:", err));
     }
 

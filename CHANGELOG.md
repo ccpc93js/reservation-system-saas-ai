@@ -1,3 +1,27 @@
+## [6950c6c] - 2026-07-06
+
+feat: SEO — IndexNow instant indexing (Bing/Yandex)
+
+- Add IndexNow key file (public/<key>.txt) and lib/indexnow.ts helper.
+- Add GET /api/indexnow?key=<key> route that submits the public URLs to
+  IndexNow; hit it after a deploy (or wire to a deploy hook).
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [6950c6c] - 2026-07-06
+
+feat: SEO — IndexNow instant indexing (Bing/Yandex)
+
+- Add IndexNow key file (public/<key>.txt) and lib/indexnow.ts helper.
+- Add GET /api/indexnow?key=<key> route that submits the public URLs to
+  IndexNow; hit it after a deploy (or wire to a deploy hook).
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [6af8cef] - 2026-07-06
 
 feat: SEO content — landing FAQ + FAQPage schema, page metadata, alts

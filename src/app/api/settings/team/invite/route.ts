@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     // Get org name for email
     const { data: org } = await service
       .from("organizations")
-      .select("name")
+      .select("name, logo_url")
       .eq("id", orgId)
       .single();
 
@@ -102,7 +102,9 @@ export async function POST(request: Request) {
             <p>Click the button below to accept the invitation. This link expires in 7 days.</p>
             <a href="${inviteUrl}" class="cta-button">Accept Invitation</a>
             <p style="color:#7C776B;font-size:12px">Or copy this link: <a href="${inviteUrl}">${inviteUrl}</a></p>
-          `
+          `,
+          undefined,
+          (org as any)?.logo_url ?? null
         ),
       }),
     }).catch(() => null); // non-blocking — invite still created even if email fails
