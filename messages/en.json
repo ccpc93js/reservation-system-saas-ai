@@ -769,13 +769,17 @@
           "Custom branding"
         ],
         "scale": [
+          "All Pro features",
           "Unlimited beds",
           "Unlimited team members",
           "Multi-property",
           "Priority support",
           "API access"
         ]
-      }
+      },
+      "currentPlanHeading": "Current Plan",
+      "currentPlanButton": "Current plan",
+      "renewalNote": "Your {plan} renews monthly. Manage payment method and invoices in the billing portal."
     },
     "property": {
       "errorLoading": "Error loading settings",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "Last 30 days",
     "statAvg30d": "Avg over 30 days",
-    "statAvgDailyRate": "Avg daily rate"
+    "statAvgDailyRate": "Avg daily rate",
+    "statVsPrev": "vs prev 30d"
   },
   "checkinHistory": {
     "title": "Guest Book",
@@ -1302,6 +1307,9 @@
     "status_dirty": "Dirty",
     "status_inspected": "Inspected",
     "status_out_of_order": "Out of Order",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "filter_clean": "Clean",
+    "filter_inspected": "Inspected",
+    "changeStatus": "Change status"
   }
 }

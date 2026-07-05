@@ -769,13 +769,17 @@
           "علامة تجارية مخصصة"
         ],
         "scale": [
+          "جميع ميزات Pro",
           "أسرّة غير محدودة",
           "أعضاء فريق غير محدودين",
           "عقارات متعددة",
           "دعم ذو أولوية",
           "الوصول إلى API"
         ]
-      }
+      },
+      "currentPlanHeading": "الخطة الحالية",
+      "currentPlanButton": "الخطة الحالية",
+      "renewalNote": "يتم تجديد {plan} شهريًا. أدر طريقة الدفع والفواتير في بوابة الفوترة."
     },
     "property": {
       "errorLoading": "خطأ في تحميل الإعدادات",
@@ -974,7 +978,8 @@
     "statAdr": "متوسط السعر اليومي",
     "statLast30d": "آخر 30 يومًا",
     "statAvg30d": "متوسط 30 يومًا",
-    "statAvgDailyRate": "متوسط السعر اليومي"
+    "statAvgDailyRate": "متوسط السعر اليومي",
+    "statVsPrev": "مقارنة بـ 30 يومًا السابقة"
   },
   "checkinHistory": {
     "title": "سجل النزلاء",
@@ -1302,6 +1307,9 @@
     "status_dirty": "غير نظيف",
     "status_inspected": "تم الفحص",
     "status_out_of_order": "خارج الخدمة",
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "filter_clean": "نظيفة",
+    "filter_inspected": "تم فحصها",
+    "changeStatus": "تغيير الحالة"
   }
 }

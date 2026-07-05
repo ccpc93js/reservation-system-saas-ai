@@ -1,3 +1,86 @@
+## [Unreleased] - 2026-07-05
+
+feat: Botanical Refresh — per-section prototype polish (analytics, channels, rooms, housekeeping, settings)
+
+- Analytics: booking + revenue trends switched to bar charts (sage / gold),
+  fixed bars rendering black (unresolved `var(--color-*)` → real hex), removed
+  the occupancy chart (occupancy still powers its stat card), Top Rooms shown as
+  horizontal bars, chart-header icons dropped, and Bookings/Revenue cards now
+  show real "+X% vs prev 30d" deltas (page fetches 60 days; client compares
+  last-30 vs prior-30).
+- Guest Directory: serif title, avatar initials, uppercase headers, text-sm,
+  airier rows — appearance only.
+- Channel Manager: serif title (grouped-by-bed layout kept per request).
+- Room Inventory: serif page + section titles, uppercase table headers on
+  muted header row, botanical rounded-full Active pill on beds — tables/search/
+  sort/edit/delete unchanged.
+- Housekeeping: rebuilt to prototype cards (bed-icon + name/room + status pill),
+  still grouped by room; status pill is now a dropdown to change status; 5 filter
+  pills (added Clean, Inspected); botanical status colors.
+- Property Settings: serif section headers with icons removed, rounded-2xl cards.
+- Team: serif title, avatar initials, two-line name/email/joined, rounded-2xl
+  cards, botanical pending/remove accents.
+- Billing & Plan: prototype layout — 2-column top (current-plan card with usage
+  progress bars kept + billing-portal card) and a 3-card available-plans grid
+  with CURRENT badge and per-card actions; manage-billing card no longer gated
+  on stripe_customer_id; Scale plan now leads with "All Pro features".
+- Header: dialog/modal titles and section titles carried to the serif face.
+- i18n: added analytics (statVsPrev), channels (lastSyncLabel, andMore,
+  unassigned), housekeeping (filter_clean, filter_inspected, changeStatus),
+  guest-book (recordDescriptor), pending-check-in table, and billing
+  (currentPlanHeading, currentPlanButton, renewalNote) keys, plus "All Pro
+  features" on Scale — all across 11 locales.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [a762f1b] - 2026-07-05
+
+perf: faster section navigation + per-section loading skeletons
+
+- Add per-section loading.tsx skeletons (dashboard, analytics, calendar,
+  reservations, check-in-pending, guest book, guests, rooms, channels,
+  housekeeping) on shared primitives in components/loading/skeletons.tsx,
+  plus a generic [slug] fallback. Sections stream a shape-matched skeleton
+  instantly on nav instead of blocking on the full server render.
+- Add lib/supabase/session.ts: React cache()-wrapped getServerUser/getServerClient;
+  refactor tenant layout + 7 pages to share one auth validation + client init
+  per request (drops a Supabase Auth round-trip per navigation).
+- Middleware skips the Supabase session refresh for router prefetch requests,
+  so hover-prefetch no longer fires an auth network call per link.
+- Lazy-load country-state-city in property settings: the ~2MB country/city
+  dataset becomes an async chunk, cutting first-load JS 2.37 MB -> ~201 kB.
+- Guest Book placeholder JMBG -> Passport (11 locales); serif applied to every
+  remaining dialog/modal title.
+
+tsc clean, production build passes.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [a762f1b] - 2026-07-05
+
+perf: faster section navigation + per-section loading skeletons
+
+- Add per-section loading.tsx skeletons (dashboard, analytics, calendar,
+  reservations, check-in-pending, guest book, guests, rooms, channels,
+  housekeeping) on shared primitives in components/loading/skeletons.tsx,
+  plus a generic [slug] fallback. Sections stream a shape-matched skeleton
+  instantly on nav instead of blocking on the full server render.
+- Add lib/supabase/session.ts: React cache()-wrapped getServerUser/getServerClient;
+  refactor tenant layout + 7 pages to share one auth validation + client init
+  per request (drops a Supabase Auth round-trip per navigation).
+- Middleware skips the Supabase session refresh for router prefetch requests,
+  so hover-prefetch no longer fires an auth network call per link.
+- Lazy-load country-state-city in property settings: the ~2MB country/city
+  dataset becomes an async chunk, cutting first-load JS 2.37 MB -> ~201 kB.
+- Guest Book placeholder JMBG -> Passport (11 locales); serif applied to every
+  remaining dialog/modal title.
+
+tsc clean, production build passes.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [01fd346] - 2026-07-05
 
 @

@@ -156,17 +156,17 @@ export default function RoomsListClient({
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full">
-          <thead className="bg-background border-b">
+          <thead className="bg-muted/40 border-b border-border">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
                 {t("colName")} <SortIndicator column="name" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("floor")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("floor")}>
                 {t("colFloor")} <SortIndicator column="floor" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colRoomType")}</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colBeds")}</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colRoomType")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colBeds")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>

@@ -152,7 +152,7 @@ export default function GuestListClient({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
+          <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-sm mt-0.5 text-muted-foreground">
             {t("subtitle")}
           </p>
@@ -191,25 +191,25 @@ export default function GuestListClient({
       {/* Table */}
       <div className="rounded-xl border border-border overflow-hidden bg-surface shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <table className="w-full text-left border-collapse text-sm">
             <thead>
-              <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-medium">
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("full_name")}>
+              <tr className="bg-muted/50 border-b border-border/70 text-muted-foreground font-semibold text-[11px] uppercase tracking-wider">
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("full_name")}>
                   {t("colName")} <SortIndicator column="full_name" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("email")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("email")}>
                   {t("colEmail")} <SortIndicator column="email" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("phone")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("phone")}>
                   {t("colPhone")} <SortIndicator column="phone" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("nationality")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("nationality")}>
                   {t("colNationality")} <SortIndicator column="nationality" />
                 </th>
-                <th className="p-3 cursor-pointer hover:text-foreground" onClick={() => handleSort("created_at")}>
+                <th className="px-4 py-3.5 cursor-pointer hover:text-foreground" onClick={() => handleSort("created_at")}>
                   {t("colCreated")} <SortIndicator column="created_at" />
                 </th>
-                <th className="p-3 text-right">{t("colActions")}</th>
+                <th className="px-4 py-3.5 text-right">{t("colActions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/70 text-foreground/85">
@@ -245,16 +245,21 @@ export default function GuestListClient({
               ) : (
                 sortedGuests.map((guest) => (
                   <tr key={guest.id} className="hover:bg-muted/40">
-                    <td className="p-3 font-medium text-foreground">
-                      {guest.first_name} {guest.last_name}
+                    <td className="px-4 py-3.5 font-medium text-foreground">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-semibold text-muted-foreground shrink-0">
+                          {`${guest.first_name?.charAt(0) ?? ""}${guest.last_name?.charAt(0) ?? ""}`.toUpperCase() || "G"}
+                        </div>
+                        <span className="whitespace-nowrap">{guest.first_name} {guest.last_name}</span>
+                      </div>
                     </td>
-                    <td className="p-3 text-foreground/85">{guest.email || "—"}</td>
-                    <td className="p-3 text-foreground/85">{guest.phone || "—"}</td>
-                    <td className="p-3 text-foreground/85">{guest.nationality || "—"}</td>
-                    <td className="p-3 text-muted-foreground">
+                    <td className="px-4 py-3.5 text-foreground/85">{guest.email || "—"}</td>
+                    <td className="px-4 py-3.5 text-foreground/85">{guest.phone || "—"}</td>
+                    <td className="px-4 py-3.5 text-foreground/85">{guest.nationality || "—"}</td>
+                    <td className="px-4 py-3.5 text-muted-foreground">
                       {new Date(guest.created_at).toLocaleDateString()}
                     </td>
-                    <td className="p-3 text-right">
+                    <td className="px-4 py-3.5 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleOpenEdit(guest.id)}

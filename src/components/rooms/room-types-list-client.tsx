@@ -156,22 +156,22 @@ export default function RoomTypesListClient({
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full">
-          <thead className="bg-background border-b">
+          <thead className="bg-muted/40 border-b border-border">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
                 {t("colName")} <SortIndicator column="name" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("type")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("type")}>
                 {t("colType")} <SortIndicator column="type" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("capacity")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("capacity")}>
                 {t("colCapacity")} <SortIndicator column="capacity" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("base_price")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("base_price")}>
                 {t("colBasePrice")} <SortIndicator column="base_price" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colRooms")}</th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colRooms")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>

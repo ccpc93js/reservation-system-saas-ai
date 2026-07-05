@@ -769,13 +769,17 @@
           "कस्टम ब्रांडिंग"
         ],
         "scale": [
+          "सभी Pro सुविधाएँ",
           "असीमित बिस्तर",
           "असीमित टीम सदस्य",
           "मल्टी-प्रॉपर्टी",
           "प्राथमिकता समर्थन",
           "API एक्सेस"
         ]
-      }
+      },
+      "currentPlanHeading": "वर्तमान योजना",
+      "currentPlanButton": "वर्तमान योजना",
+      "renewalNote": "आपका {plan} मासिक रूप से नवीनीकृत होता है। बिलिंग पोर्टल में भुगतान विधि और चालान प्रबंधित करें।"
     },
     "property": {
       "errorLoading": "सेटिंग्स लोड करने में त्रुटि",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "पिछले 30 दिन",
     "statAvg30d": "30 दिनों का औसत",
-    "statAvgDailyRate": "औसत दैनिक दर"
+    "statAvgDailyRate": "औसत दैनिक दर",
+    "statVsPrev": "पिछले 30 दिनों बनाम"
   },
   "checkinHistory": {
     "title": "गेस्ट बुक",
@@ -1302,6 +1307,9 @@
     "status_dirty": "गंदा",
     "status_inspected": "निरीक्षित",
     "status_out_of_order": "उपयोग से बाहर",
-    "refresh": "रीफ़्रेश करें"
+    "refresh": "रीफ़्रेश करें",
+    "filter_clean": "साफ",
+    "filter_inspected": "निरीक्षित",
+    "changeStatus": "स्थिति बदलें"
   }
 }

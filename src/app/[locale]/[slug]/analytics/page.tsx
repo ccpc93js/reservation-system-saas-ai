@@ -37,8 +37,8 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ slug
 
   // Fetch analytics data
   const [bookingTrends, revenueTrends, topRooms, occupancyTimeline] = await Promise.all([
-    getBookingTrends(orgId, 30),
-    getRevenueTrends(orgId, 30),
+    getBookingTrends(orgId, 60),
+    getRevenueTrends(orgId, 60),
     getTopRoomsByRevenue(orgId, 5),
     getOccupancyTimeline(orgId, 30),
   ]);

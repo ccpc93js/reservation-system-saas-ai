@@ -222,7 +222,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("title")}</h1>
+          <h1 className="font-serif text-3xl font-semibold" style={{ color: "hsl(var(--text))" }}>{t("title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             {t("connectionsAcrossBeds", { connections: channels.length, beds: bedsWithChannels.length })}
           </p>

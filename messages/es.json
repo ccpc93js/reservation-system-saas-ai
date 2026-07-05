@@ -769,13 +769,17 @@
           "Marca personalizada"
         ],
         "scale": [
+          "Todas las funciones de Pro",
           "Camas ilimitadas",
           "Miembros del equipo ilimitados",
           "Multipropiedad",
           "Soporte prioritario",
           "Acceso a la API"
         ]
-      }
+      },
+      "currentPlanHeading": "Plan actual",
+      "currentPlanButton": "Plan actual",
+      "renewalNote": "Tu {plan} se renueva mensualmente. Gestiona el método de pago y las facturas en el portal de facturación."
     },
     "property": {
       "errorLoading": "Error al cargar la configuración",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "Últimos 30 días",
     "statAvg30d": "Promedio de 30 días",
-    "statAvgDailyRate": "Tarifa diaria promedio"
+    "statAvgDailyRate": "Tarifa diaria promedio",
+    "statVsPrev": "vs 30d anteriores"
   },
   "checkinHistory": {
     "title": "Libro de huéspedes",
@@ -1302,6 +1307,9 @@
     "status_dirty": "Sucia",
     "status_inspected": "Inspeccionada",
     "status_out_of_order": "Fuera de servicio",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "filter_clean": "Limpia",
+    "filter_inspected": "Inspeccionada",
+    "changeStatus": "Cambiar estado"
   }
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { Building2, Globe, Clock, Save, Palette, Upload, X, ImageIcon, ChevronDown } from "lucide-react";
+import { Save, Upload, X, ImageIcon, ChevronDown } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import LogoCropModal from "./logo-crop-modal";
 
@@ -204,11 +204,8 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
     <div className="max-w-2xl px-6 py-6 space-y-8">
 
       {/* ── BRANDING ── */}
-      <section className="rounded-xl border border-border bg-surface p-5 space-y-5">
-        <div className="flex items-center gap-2">
-          <Palette className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">{t("branding")}</h2>
-        </div>
+      <section className="rounded-2xl border border-border bg-surface p-6 space-y-5">
+        <h2 className="font-serif text-xl font-semibold text-foreground">{t("branding")}</h2>
 
         {/* Logo upload */}
         <div>
@@ -299,11 +296,8 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       </section>
 
       {/* ── BASIC INFO ── */}
-      <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
-        <div className="flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">{t("basicInformation")}</h2>
-        </div>
+      <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
+        <h2 className="font-serif text-xl font-semibold text-foreground">{t("basicInformation")}</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("propertyName")}</label>
@@ -423,11 +417,8 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       </section>
 
       {/* ── ONLINE ── */}
-      <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
-        <div className="flex items-center gap-2">
-          <Globe className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">{t("onlinePresence")}</h2>
-        </div>
+      <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
+        <h2 className="font-serif text-xl font-semibold text-foreground">{t("onlinePresence")}</h2>
         <div>
           <label className="block text-xs font-medium text-muted-foreground mb-1">{t("website")}</label>
           <input type="url" value={form.website} onChange={set("website")} disabled={!isAdmin}
@@ -436,11 +427,8 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       </section>
 
       {/* ── OPERATIONS ── */}
-      <section className="rounded-xl border border-border bg-surface p-5 space-y-4">
-        <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">{t("operations")}</h2>
-        </div>
+      <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
+        <h2 className="font-serif text-xl font-semibold text-foreground">{t("operations")}</h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("defaultCheckIn")}</label>

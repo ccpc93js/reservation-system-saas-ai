@@ -769,13 +769,17 @@
           "Image de marque personnalisée"
         ],
         "scale": [
+          "Toutes les fonctionnalités Pro",
           "Lits illimités",
           "Membres de l'équipe illimités",
           "Multi-établissements",
           "Support prioritaire",
           "Accès API"
         ]
-      }
+      },
+      "currentPlanHeading": "Forfait actuel",
+      "currentPlanButton": "Forfait actuel",
+      "renewalNote": "Votre {plan} se renouvelle chaque mois. Gérez le mode de paiement et les factures dans le portail de facturation."
     },
     "property": {
       "errorLoading": "Erreur lors du chargement des paramètres",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "30 derniers jours",
     "statAvg30d": "Moyenne sur 30 jours",
-    "statAvgDailyRate": "Tarif journalier moyen"
+    "statAvgDailyRate": "Tarif journalier moyen",
+    "statVsPrev": "vs 30j préc."
   },
   "checkinHistory": {
     "title": "Registre des clients",
@@ -1302,6 +1307,9 @@
     "status_dirty": "Sale",
     "status_inspected": "Inspecté",
     "status_out_of_order": "Hors service",
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "filter_clean": "Propre",
+    "filter_inspected": "Inspectée",
+    "changeStatus": "Changer le statut"
   }
 }

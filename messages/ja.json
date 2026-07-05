@@ -769,13 +769,17 @@
           "カスタムブランディング"
         ],
         "scale": [
+          "Proのすべての機能",
           "ベッド数無制限",
           "チームメンバー無制限",
           "複数施設対応",
           "優先サポート",
           "APIアクセス"
         ]
-      }
+      },
+      "currentPlanHeading": "現在のプラン",
+      "currentPlanButton": "現在のプラン",
+      "renewalNote": "{plan}は毎月更新されます。請求ポータルで支払い方法と請求書を管理できます。"
     },
     "property": {
       "errorLoading": "設定の読み込みエラー",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "過去30日間",
     "statAvg30d": "30日間の平均",
-    "statAvgDailyRate": "平均日次料金"
+    "statAvgDailyRate": "平均日次料金",
+    "statVsPrev": "前30日比"
   },
   "checkinHistory": {
     "title": "ゲストブック",
@@ -1302,6 +1307,9 @@
     "status_dirty": "清掃待ち",
     "status_inspected": "点検済み",
     "status_out_of_order": "使用不可",
-    "refresh": "更新"
+    "refresh": "更新",
+    "filter_clean": "清掃済み",
+    "filter_inspected": "検査済み",
+    "changeStatus": "状態を変更"
   }
 }

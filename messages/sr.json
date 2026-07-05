@@ -769,13 +769,17 @@
           "Prilagođeni brend"
         ],
         "scale": [
+          "Sve Pro funkcije",
           "Neograničeno kreveta",
           "Neograničeno članova tima",
           "Više objekata",
           "Prioritetna podrška",
           "API pristup"
         ]
-      }
+      },
+      "currentPlanHeading": "Trenutni plan",
+      "currentPlanButton": "Trenutni plan",
+      "renewalNote": "Vaš {plan} se obnavlja mesečno. Upravljajte načinom plaćanja i fakturama na portalu za naplatu."
     },
     "property": {
       "errorLoading": "Greška pri učitavanju podešavanja",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "Poslednjih 30 dana",
     "statAvg30d": "Prosek za 30 dana",
-    "statAvgDailyRate": "Prosečna dnevna cena"
+    "statAvgDailyRate": "Prosečna dnevna cena",
+    "statVsPrev": "u odnosu na prethodnih 30 dana"
   },
   "checkinHistory": {
     "title": "Knjiga gostiju",
@@ -1302,6 +1307,9 @@
     "status_dirty": "Prljav",
     "status_inspected": "Pregledan",
     "status_out_of_order": "Van upotrebe",
-    "refresh": "Osveži"
+    "refresh": "Osveži",
+    "filter_clean": "Čisto",
+    "filter_inspected": "Pregledano",
+    "changeStatus": "Promeni status"
   }
 }

@@ -56,7 +56,7 @@ export default async function RoomsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
+        <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
         <p className="text-sm mt-0.5 text-muted-foreground">
           {t("subtitle")}
         </p>
@@ -66,7 +66,7 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">{t("roomTypesHeading")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("roomTypesHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               {t("roomTypesCount", { count: roomTypesCount })}
             </p>
@@ -85,7 +85,7 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">{t("roomsHeading")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("roomsHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               {t("roomsCount", { count: roomsCount })}
             </p>
@@ -104,7 +104,7 @@ export default async function RoomsPage() {
       <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
         <button className="w-full flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border/70">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">{t("bedsHeading")}</h2>
+            <h2 className="font-serif text-xl font-semibold text-foreground">{t("bedsHeading")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               {t("bedsCount", { count: bedsCount })}
             </p>

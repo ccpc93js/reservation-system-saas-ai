@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { UserPlus, Trash2, Shield, User, Mail, Clock, X } from "lucide-react";
+import { UserPlus, Trash2, Mail, Clock, X } from "lucide-react";
 
 interface Member {
   id: string;
@@ -39,6 +39,8 @@ export default function TeamSettingsClient({ userRole }: Props) {
   const t = useTranslations("settings.team");
   const isAdmin = ["owner", "manager", "admin"].includes(userRole);
   const isDemo = typeof window !== "undefined" && window.location.pathname.startsWith("/demo-hostel");
+  const initials = (email: string) => email.split("@")[0].slice(0, 2).toUpperCase();
+  const monthYear = (d: string) => new Date(d).toLocaleDateString(undefined, { month: "short", year: "numeric" });
   const [members, setMembers] = useState<Member[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,10 +121,10 @@ export default function TeamSettingsClient({ userRole }: Props) {
   };
 
   return (
-    <div className="p-6 max-w-2xl space-y-6">
+    <div className="p-8 max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("title")}</h1>
+          <h1 className="font-serif text-3xl font-semibold" style={{ color: "hsl(var(--text))" }}>{t("title")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             {t("memberCount", { count: members.length })}
             {invitations.length > 0 && ` · ${t("pendingInviteCount", { count: invitations.length })}`}
@@ -146,7 +148,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
 
       {/* Invite form */}
       {showInvite && (
-        <div className="rounded-xl border border-border bg-surface p-4 space-y-3">
+        <div className="rounded-2xl border border-border bg-surface p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">{t("inviteFormTitle")}</h3>
             <button onClick={() => setShowInvite(false)} className="p-1 hover:bg-muted rounded">
@@ -182,7 +184,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
       )}
 
       {/* Members list */}
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
+      <div className="rounded-2xl border border-border bg-surface overflow-hidden">
         <div className="px-4 py-3 border-b border-border bg-muted/30">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("membersHeading")}</p>
         </div>
@@ -193,17 +195,17 @@ export default function TeamSettingsClient({ userRole }: Props) {
         ) : (
           <div className="divide-y divide-border">
             {members.map((m) => (
-              <div key={m.id} className="flex items-center gap-3 px-4 py-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <User className="w-4 h-4 text-primary" />
+              <div key={m.id} className="flex items-center gap-3 px-4 py-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-xs font-semibold text-primary">
+                  {initials(m.email)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground truncate">{m.email}</span>
+                    <span className="text-sm font-semibold text-foreground truncate">{m.email.split("@")[0]}</span>
                     {m.is_self && <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground rounded-full">You</span>}
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {t("joined", { date: new Date(m.created_at).toLocaleDateString() })}
+                  <span className="text-xs text-muted-foreground truncate block">
+                    {m.email} · {t("joined", { date: monthYear(m.created_at) })}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -224,10 +226,10 @@ export default function TeamSettingsClient({ userRole }: Props) {
                     <button
                       onClick={() => handleRemove(m.user_id, m.email)}
                       disabled={removingId === m.user_id}
-                      className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                      className="p-1.5 rounded-lg hover:bg-[#EEDCD5] transition-colors disabled:opacity-50"
                       title={t("removeMemberTitle")}
                     >
-                      <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                      <Trash2 className="w-3.5 h-3.5 text-[#9C4A37]" />
                     </button>
                   )}
                 </div>
@@ -239,15 +241,15 @@ export default function TeamSettingsClient({ userRole }: Props) {
 
       {/* Pending invitations */}
       {invitations.length > 0 && (
-        <div className="rounded-xl border border-border bg-surface overflow-hidden">
+        <div className="rounded-2xl border border-border bg-surface overflow-hidden">
           <div className="px-4 py-3 border-b border-border bg-muted/30">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t("pendingInvitationsHeading")}</p>
           </div>
           <div className="divide-y divide-border">
             {invitations.map((inv) => (
               <div key={inv.id} className="flex items-center gap-3 px-4 py-3">
-                <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                  <Mail className="w-4 h-4 text-amber-500" />
+                <div className="w-10 h-10 rounded-full bg-[#F0E6CD] flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-[#8A6A16]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium text-foreground">{inv.email}</span>

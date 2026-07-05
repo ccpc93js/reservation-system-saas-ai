@@ -769,13 +769,17 @@
           "自定义品牌"
         ],
         "scale": [
+          "包含所有 Pro 功能",
           "无限床位",
           "无限团队成员",
           "多物业管理",
           "优先支持",
           "API 访问"
         ]
-      }
+      },
+      "currentPlanHeading": "当前套餐",
+      "currentPlanButton": "当前套餐",
+      "renewalNote": "您的 {plan} 按月续订。在计费门户中管理付款方式和发票。"
     },
     "property": {
       "errorLoading": "加载设置时出错",
@@ -974,7 +978,8 @@
     "statAdr": "平均房价",
     "statLast30d": "最近30天",
     "statAvg30d": "30天平均",
-    "statAvgDailyRate": "平均每日房价"
+    "statAvgDailyRate": "平均每日房价",
+    "statVsPrev": "对比前30天"
   },
   "checkinHistory": {
     "title": "住客登记簿",
@@ -1302,6 +1307,9 @@
     "status_dirty": "待清洁",
     "status_inspected": "已检查",
     "status_out_of_order": "停用",
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "filter_clean": "干净",
+    "filter_inspected": "已检查",
+    "changeStatus": "更改状态"
   }
 }

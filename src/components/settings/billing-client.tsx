@@ -117,17 +117,19 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
     }
   };
 
+  const PLAN_ORDER = ["free", "pro", "scale"];
+
   return (
-    <div className="p-6 max-w-2xl space-y-8">
+    <div className="p-8 max-w-5xl space-y-8">
       {/* Payment gate banner */}
       {required && pendingPlan && (
-        <div className="rounded-xl border-2 border-amber-400 bg-amber-50 p-5 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-400 flex items-center justify-center shrink-0">
+        <div className="rounded-2xl border-2 border-[#C9A24B] bg-[#F0E6CD] p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-[#C9A24B] flex items-center justify-center shrink-0">
             <CreditCard className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-amber-900 text-sm">{t("paymentRequiredTitle")}</p>
-            <p className="text-xs text-amber-700 mt-1">
+            <p className="font-bold text-[#7A5B12] text-sm">{t("paymentRequiredTitle")}</p>
+            <p className="text-xs text-[#8A6A16] mt-1">
               {t.rich("paymentRequiredDesc", {
                 strong: (chunks) => <strong>{chunks}</strong>,
                 plan: PLAN_NAMES[pendingPlan],
@@ -140,88 +142,107 @@ export default function BillingClient({ org, userRole, usage, required }: Props)
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">{t("subtitle")}</p>
+        <h1 className="font-serif text-3xl font-semibold" style={{ color: "hsl(var(--text))" }}>{t("heading")}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
       </div>
 
-      {/* Current plan card */}
-      <div className="rounded-xl border border-border bg-surface p-5 space-y-4">
-        <div className="flex items-center justify-between">
+      {/* Top row: current plan + billing portal */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Current plan card with usage bars */}
+        <div className="rounded-2xl border border-border bg-surface p-6 space-y-5">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-foreground">{t("planLabel", { name: PLAN_NAMES[plan] })}</span>
-              <span className="text-xs px-2 py-0.5 rounded-full font-semibold text-white"
-                style={{ backgroundColor: PLANS.find(p => p.key === plan)?.color }}>
-                {plan.toUpperCase()}
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{t("currentPlanHeading")}</p>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="font-serif text-3xl font-semibold text-foreground">{PLAN_NAMES[plan]}</span>
+              <span className="text-sm text-muted-foreground">
+                {plan === "free" ? t("freeForever") : PLAN_PRICES[plan]}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {plan === "free" ? t("freeForever") : PLAN_PRICES[plan]}
-              {org.plan_expires_at && ` · ${t("cancelsOn", { date: new Date(org.plan_expires_at).toLocaleDateString() })}`}
-            </p>
+            {org.plan_expires_at && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {t("cancelsOn", { date: new Date(org.plan_expires_at).toLocaleDateString() })}
+              </p>
+            )}
           </div>
-          {plan !== "free" && org.stripe_customer_id && isAdmin && (
-            <button onClick={handleManageBilling} disabled={loading === "portal"}
-              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground border border-border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors disabled:opacity-50">
-              <CreditCard className="w-3.5 h-3.5" />
-              {loading === "portal" ? t("opening") : t("manageBilling")}
-            </button>
-          )}
+          {/* Usage progress bars — kept */}
+          <div className="space-y-3 pt-4 border-t border-border">
+            <UsageBar current={usage.beds} max={limits.beds} label={t("bedsLabel")} />
+            <UsageBar current={usage.users} max={limits.users} label={t("teamMembersLabel")} />
+          </div>
         </div>
 
-        {/* Usage bars */}
-        <div className="space-y-3 pt-2 border-t border-border">
-          <UsageBar current={usage.beds} max={limits.beds} label={t("bedsLabel")} />
-          <UsageBar current={usage.users} max={limits.users} label={t("teamMembersLabel")} />
+        {/* Billing portal card */}
+        <div className="rounded-2xl border border-border bg-surface p-6 flex flex-col justify-center gap-4">
+          {plan !== "free" && isAdmin ? (
+            <>
+              <p className="text-sm text-foreground leading-relaxed">
+                {t("renewalNote", { plan: PLAN_NAMES[plan] })}
+              </p>
+              <button
+                onClick={handleManageBilling}
+                disabled={loading === "portal"}
+                className="self-start flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-border bg-surface text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+              >
+                <CreditCard className="w-4 h-4" />
+                {loading === "portal" ? t("opening") : t("manageBilling")}
+              </button>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground leading-relaxed">{t("subtitle")}</p>
+          )}
         </div>
       </div>
 
-      {/* Plans */}
-      <div className="space-y-3">
+      {/* Available plans */}
+      <div className="space-y-4">
         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("availablePlans")}</p>
-        {PLANS.map((p) => {
-          const isCurrent = p.key === plan;
-          const PLAN_ORDER = ["free", "pro", "scale"];
-          const isUpgrade = PLAN_ORDER.indexOf(p.key) > PLAN_ORDER.indexOf(plan);
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {PLANS.map((p) => {
+            const isCurrent = p.key === plan;
+            const isUpgrade = PLAN_ORDER.indexOf(p.key) > PLAN_ORDER.indexOf(plan);
+            const isPending = required && p.key === pendingPlan;
 
-          return (
-            <div key={p.key}
-              className={`rounded-xl border p-5 transition-all ${
-                isCurrent ? "border-primary/40 bg-primary/5" :
-                (required && p.key === pendingPlan) ? "border-amber-400 bg-amber-50/50 ring-2 ring-amber-300" :
-                "border-border bg-surface"
-              }`}>
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm font-bold text-foreground">{PLAN_NAMES[p.key]}</span>
-                    {isCurrent && <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{t("current")}</span>}
-                  </div>
-                  <p className="font-serif text-3xl font-semibold text-foreground mb-3">{PLAN_PRICES[p.key]}</p>
-                  <div className="grid grid-cols-2 gap-1">
-                    {(t.raw(`features.${p.key}`) as string[]).map((f) => (
-                      <div key={f} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <CheckCircle className="w-3 h-3 text-emerald-500 shrink-0" />
-                        {f}
-                      </div>
-                    ))}
-                  </div>
+            return (
+              <div key={p.key}
+                className={`rounded-2xl border bg-surface p-6 flex flex-col transition-all ${
+                  isCurrent ? "border-2 border-primary" :
+                  isPending ? "border-2 border-[#C9A24B] ring-2 ring-[#E0D0A8]" :
+                  "border-border"
+                }`}>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-serif text-2xl font-semibold text-foreground">{PLAN_NAMES[p.key]}</span>
+                  {isCurrent && (
+                    <span className="text-[10px] font-bold text-primary-foreground bg-primary px-2 py-0.5 rounded-full uppercase tracking-wider">{t("current")}</span>
+                  )}
+                </div>
+                <p className="font-serif text-3xl font-semibold text-foreground mb-4">{PLAN_PRICES[p.key]}</p>
+                <div className="space-y-2 flex-1 mb-5">
+                  {(t.raw(`features.${p.key}`) as string[]).map((f) => (
+                    <div key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <CheckCircle className="w-4 h-4 text-[#4A6740] shrink-0" />
+                      {f}
+                    </div>
+                  ))}
                 </div>
 
-                {!isCurrent && p.priceId && isAdmin && (
+                {isCurrent ? (
+                  <button disabled className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold bg-muted text-muted-foreground cursor-default">
+                    {t("currentPlanButton")}
+                  </button>
+                ) : p.priceId && isAdmin ? (
                   <button
                     onClick={() => handleUpgrade(p.key, p.priceId!)}
                     disabled={!!loading}
-                    className="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
+                    className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-50 transition-all"
                     style={{ background: `linear-gradient(135deg, ${p.color}, ${p.color}cc)`, boxShadow: `0 4px 14px ${p.color}40` }}
                   >
                     {loading === p.key ? t("loadingEllipsis") : isUpgrade ? t("upgrade") : t("downgrade")}
                   </button>
-                )}
+                ) : null}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {!isAdmin && (

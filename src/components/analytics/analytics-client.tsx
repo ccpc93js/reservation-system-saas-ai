@@ -3,28 +3,26 @@
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
-import { TrendingUp, DollarSign, Calendar, Home, RefreshCw, PieChart } from "lucide-react";
+import { TrendingUp, DollarSign, Calendar, RefreshCw, PieChart } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 
 interface AnalyticsClientProps {
+  // booking/revenue trends carry 60 days so we can compare last-30 vs prev-30
   bookingTrends: Array<{ date: string; bookings: number }>;
   revenueTrends: Array<{ date: string; revenue: number }>;
   topRooms: Array<{ room: string; revenue: number }>;
   occupancyTimeline: Array<{ date: string; occupancy: number }>;
 }
+
+const SAGE = "#A3B18A";
+const GOLD = "#D0A94A";
 
 export default function AnalyticsClient({
   bookingTrends,
@@ -42,9 +40,26 @@ export default function AnalyticsClient({
     });
   };
 
-  // Summary stats computed from 30-day trend arrays
-  const totalBookings = bookingTrends.reduce((s, d) => s + d.bookings, 0);
-  const totalRevenue = revenueTrends.reduce((s, d) => s + d.revenue, 0);
+  // Split the 60-day trend arrays into current 30 vs previous 30 for deltas.
+  const half = (arr: any[]) => {
+    const n = arr.length;
+    const cut = n > 30 ? n - 30 : Math.floor(n / 2);
+    return { prev: arr.slice(0, cut), curr: arr.slice(cut) };
+  };
+  const sum = (arr: any[], key: string) => arr.reduce((s, d) => s + (d[key] || 0), 0);
+  const pctDelta = (curr: number, prev: number) =>
+    prev > 0 ? Math.round(((curr - prev) / prev) * 100) : curr > 0 ? 100 : 0;
+  const fmtDelta = (d: number) => `${d >= 0 ? "+" : ""}${d}% ${t("statVsPrev")}`;
+
+  const bk = half(bookingTrends);
+  const rv = half(revenueTrends);
+  const bookingChart = bk.curr;
+  const revenueChart = rv.curr;
+
+  const totalBookings = sum(bk.curr, "bookings");
+  const prevBookings = sum(bk.prev, "bookings");
+  const totalRevenue = sum(rv.curr, "revenue");
+  const prevRevenue = sum(rv.prev, "revenue");
   const avgOccupancy = occupancyTimeline.length
     ? Math.round(occupancyTimeline.reduce((s, d) => s + d.occupancy, 0) / occupancyTimeline.length)
     : 0;
@@ -53,12 +68,19 @@ export default function AnalyticsClient({
   const fmtMoney = (n: number) =>
     n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n.toLocaleString()}`;
 
+  const maxRoomRevenue = topRooms.reduce((m, r) => Math.max(m, r.revenue), 0) || 1;
+
   const stats = [
-    { label: t("statTotalBookings"), value: totalBookings.toLocaleString(), detail: t("statLast30d"), icon: Calendar },
-    { label: t("statRevenue"), value: fmtMoney(totalRevenue), detail: t("statLast30d"), icon: DollarSign },
+    { label: t("statTotalBookings"), value: totalBookings.toLocaleString(), detail: fmtDelta(pctDelta(totalBookings, prevBookings)), icon: Calendar },
+    { label: t("statRevenue"), value: fmtMoney(totalRevenue), detail: fmtDelta(pctDelta(totalRevenue, prevRevenue)), icon: DollarSign },
     { label: t("statOccupancy"), value: `${avgOccupancy}%`, detail: t("statAvg30d"), icon: PieChart },
     { label: t("statAdr"), value: `$${adr}`, detail: t("statAvgDailyRate"), icon: TrendingUp },
   ];
+
+  const tooltipStyle = {
+    contentStyle: { background: "hsl(var(--surface))", border: "1px solid hsl(var(--border))", borderRadius: 8 },
+    labelStyle: { color: "hsl(var(--text))" },
+  };
 
   return (
     <div className="w-full space-y-8 p-6">
@@ -107,100 +129,60 @@ export default function AnalyticsClient({
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Booking Trends */}
-        <div className="rounded-lg border border-border bg-surface p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Calendar className="w-5 h-5 text-primary" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">{t("bookingTrends")}</h2>
-          </div>
-          {bookingTrends.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={bookingTrends}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="date" stroke="var(--color-muted-foreground)" />
-                <YAxis stroke="var(--color-muted-foreground)" />
-                <Tooltip
-                  contentStyle={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
-                  labelStyle={{ color: "var(--color-foreground)" }}
-                />
-                <Line type="monotone" dataKey="bookings" stroke="var(--color-primary)" dot={{ fill: "var(--color-primary)" }} />
-              </LineChart>
+        <div className="rounded-2xl border border-border bg-surface p-6">
+          <h2 className="font-serif text-xl font-semibold text-foreground mb-4">{t("bookingTrends")}</h2>
+          {bookingChart.length > 0 ? (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={bookingChart} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                <XAxis dataKey="date" hide />
+                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                <Tooltip cursor={{ fill: "hsl(var(--muted) / 0.4)" }} {...tooltipStyle} />
+                <Bar dataKey="bookings" fill={SAGE} radius={[6, 6, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+            <div className="h-[280px] flex items-center justify-center text-muted-foreground">
               {t("noBookingData")}
             </div>
           )}
         </div>
 
         {/* Revenue Trends */}
-        <div className="rounded-lg border border-border bg-surface p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <DollarSign className="w-5 h-5 text-emerald-600" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">{t("revenueTrends")}</h2>
-          </div>
-          {revenueTrends.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={revenueTrends}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="date" stroke="var(--color-muted-foreground)" />
-                <YAxis stroke="var(--color-muted-foreground)" />
-                <Tooltip
-                  contentStyle={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
-                  labelStyle={{ color: "var(--color-foreground)" }}
-                />
-                <Bar dataKey="revenue" fill="var(--color-emerald-600)" />
+        <div className="rounded-2xl border border-border bg-surface p-6">
+          <h2 className="font-serif text-xl font-semibold text-foreground mb-4">{t("revenueTrends")}</h2>
+          {revenueChart.length > 0 ? (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={revenueChart} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
+                <XAxis dataKey="date" hide />
+                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ fill: "hsl(var(--muted) / 0.4)" }} {...tooltipStyle} />
+                <Bar dataKey="revenue" fill={GOLD} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+            <div className="h-[280px] flex items-center justify-center text-muted-foreground">
               {t("noRevenueData")}
             </div>
           )}
         </div>
 
-        {/* Occupancy Timeline */}
-        <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-[#3A5F82]" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">{t("occupancyTimeline")}</h2>
-          </div>
-          {occupancyTimeline.length > 0 ? (
-            <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={occupancyTimeline}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="date" stroke="var(--color-muted-foreground)" />
-                <YAxis stroke="var(--color-muted-foreground)" />
-                <Tooltip
-                  contentStyle={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
-                  labelStyle={{ color: "var(--color-foreground)" }}
-                />
-                <Area type="monotone" dataKey="occupancy" fill="#3A5F82" stroke="#3A5F82" />
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="h-[250px] flex items-center justify-center text-muted-foreground">
-              {t("noOccupancyData")}
-            </div>
-          )}
-        </div>
-
-        {/* Top Rooms */}
-        <div className="rounded-lg border border-border bg-surface p-6 lg:col-span-2">
-          <div className="flex items-center gap-2 mb-4">
-            <Home className="w-5 h-5 text-amber-600" />
-            <h2 className="font-serif text-xl font-semibold text-foreground">{t("topRoomsByRevenue")}</h2>
-          </div>
+        {/* Top Rooms — horizontal bars */}
+        <div className="rounded-2xl border border-border bg-surface p-6 lg:col-span-2">
+          <h2 className="font-serif text-xl font-semibold text-foreground mb-4">{t("topRoomsByRevenue")}</h2>
           {topRooms.length > 0 ? (
-            <div className="space-y-3">
-              {topRooms.map((room, idx) => (
-                <div key={room.room} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-sm font-semibold text-amber-700">
-                      #{idx + 1}
-                    </div>
-                    <span className="font-medium text-foreground">{room.room}</span>
+            <div className="space-y-4">
+              {topRooms.map((room) => (
+                <div key={room.room} className="flex items-center gap-4">
+                  <span className="w-40 shrink-0 text-sm font-medium text-foreground truncate">{room.room}</span>
+                  <div className="flex-1 h-3 rounded-full bg-muted/60 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${Math.max(4, (room.revenue / maxRoomRevenue) * 100)}%` }}
+                    />
                   </div>
-                  <span className="text-sm font-semibold text-emerald-600">${room.revenue.toLocaleString()}</span>
+                  <span className="w-20 shrink-0 text-right text-sm font-semibold text-foreground">
+                    ${room.revenue.toLocaleString()}
+                  </span>
                 </div>
               ))}
             </div>

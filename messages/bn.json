@@ -769,13 +769,17 @@
           "কাস্টম ব্র্যান্ডিং"
         ],
         "scale": [
+          "সমস্ত Pro ফিচার",
           "সীমাহীন বিছানা",
           "সীমাহীন টিম সদস্য",
           "মাল্টি-প্রপার্টি",
           "অগ্রাধিকার সহায়তা",
           "API অ্যাক্সেস"
         ]
-      }
+      },
+      "currentPlanHeading": "বর্তমান প্ল্যান",
+      "currentPlanButton": "বর্তমান প্ল্যান",
+      "renewalNote": "আপনার {plan} মাসিক নবায়ন হয়। বিলিং পোর্টালে পেমেন্ট পদ্ধতি ও ইনভয়েস পরিচালনা করুন।"
     },
     "property": {
       "errorLoading": "সেটিংস লোড করতে ত্রুটি",
@@ -974,7 +978,8 @@
     "statAdr": "ADR",
     "statLast30d": "গত ৩০ দিন",
     "statAvg30d": "৩০ দিনের গড়",
-    "statAvgDailyRate": "গড় দৈনিক হার"
+    "statAvgDailyRate": "গড় দৈনিক হার",
+    "statVsPrev": "পূর্ববর্তী ৩০ দিনের তুলনায়"
   },
   "checkinHistory": {
     "title": "গেস্ট বুক",
@@ -1302,6 +1307,9 @@
     "status_dirty": "নোংরা",
     "status_inspected": "পরিদর্শিত",
     "status_out_of_order": "ব্যবহারের বাইরে",
-    "refresh": "রিফ্রেশ"
+    "refresh": "রিফ্রেশ",
+    "filter_clean": "পরিষ্কার",
+    "filter_inspected": "পরিদর্শিত",
+    "changeStatus": "স্ট্যাটাস পরিবর্তন"
   }
 }

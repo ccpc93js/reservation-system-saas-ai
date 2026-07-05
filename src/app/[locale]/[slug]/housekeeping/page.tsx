@@ -23,7 +23,7 @@ export default async function HousekeepingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
+        <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
         <p className="text-sm mt-0.5 text-muted-foreground">{t("subtitle")}</p>
       </div>
       <HousekeepingClient orgId={membership.organization_id} />

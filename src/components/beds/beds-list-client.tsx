@@ -156,19 +156,19 @@ export default function BedsListClient({
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full">
-          <thead className="bg-background border-b">
+          <thead className="bg-muted/40 border-b border-border">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("name")}>
                 {t("colName")} <SortIndicator column="name" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("room_id")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("room_id")}>
                 {t("colRoom")} <SortIndicator column="room_id" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colType")}</th>
-              <th className="px-4 py-3 text-left font-medium text-sm cursor-pointer hover:bg-muted" onClick={() => handleSort("is_active")}>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colType")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground cursor-pointer hover:bg-muted" onClick={() => handleSort("is_active")}>
                 {t("colStatus")} <SortIndicator column="is_active" />
               </th>
-              <th className="px-4 py-3 text-left font-medium text-sm">{t("colActions")}</th>
+              <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -189,10 +189,10 @@ export default function BedsListClient({
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span
-                      className={`px-2 py-1 text-xs rounded ${
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-full ${
                         bed.is_active
-                          ? "bg-green-100 text-green-800"
-                          : "bg-muted text-foreground"
+                          ? "bg-[#E0EADB] text-[#4A6740]"
+                          : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {bed.is_active ? t("active") : t("inactive")}
