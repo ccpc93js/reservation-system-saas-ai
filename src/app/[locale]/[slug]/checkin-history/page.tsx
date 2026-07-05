@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
 import CheckinHistoryClient from "./checkin-history-client";
 
@@ -8,10 +8,7 @@ export default async function CheckinHistoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createServerClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const { supabase, user } = await getServerUser();
 
   const { data: orgRaw } = await supabase
     .from("organizations")

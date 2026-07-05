@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import PendingCheckInsClient from "@/components/dashboard/pending-check-ins-client";
 
 export const metadata = {
@@ -8,10 +8,7 @@ export const metadata = {
 };
 
 export default async function CheckInPendingPage() {
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const { supabase, user } = await getServerUser();
 
   // Get org
   const { data: membership } = await supabase

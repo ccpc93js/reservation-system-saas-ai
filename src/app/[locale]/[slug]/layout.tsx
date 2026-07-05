@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
 
@@ -32,11 +32,8 @@ export default async function TenantLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createServerClient();
+  const { supabase, user } = await getServerUser();
   const t = await getTranslations("demoBanner");
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
 
   const { data: org } = await supabase
     .from("organizations")

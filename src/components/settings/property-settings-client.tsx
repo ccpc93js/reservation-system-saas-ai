@@ -5,11 +5,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { Building2, Globe, Clock, Save, Palette, Upload, X, ImageIcon, ChevronDown } from "lucide-react";
-import { Country, City } from "country-state-city";
 import { createBrowserClient } from "@/lib/supabase/client";
 import LogoCropModal from "./logo-crop-modal";
 
-const ALL_COUNTRIES = Country.getAllCountries();
+// country-state-city bundles a ~2MB worldwide country+city dataset. Import it
+// lazily so it becomes an async chunk fetched after mount instead of bloating
+// this page's initial JS payload.
+type CountryRec = { name: string; isoCode: string };
+type CityRec = { name: string; latitude?: string | null; longitude?: string | null };
 
 const CURRENCIES = ["EUR", "USD", "GBP", "RSD", "HRK", "CHF", "CZK", "PLN", "HUF"];
 const TIMEZONES = [
@@ -71,9 +74,25 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
   const [citySearch, setCitySearch] = useState("");
   const cityRef = useRef<HTMLDivElement>(null);
 
-  const selectedCountry = ALL_COUNTRIES.find((c) => c.name === form.country);
-  const cities = selectedCountry ? City.getCitiesOfCountry(selectedCountry.isoCode) ?? [] : [];
-  const filteredCountries = ALL_COUNTRIES.filter((c) =>
+  const [allCountries, setAllCountries] = useState<CountryRec[]>([]);
+  const cscRef = useRef<typeof import("country-state-city") | null>(null);
+
+  // Load the country/city dataset on mount (async chunk, non-blocking).
+  useEffect(() => {
+    let active = true;
+    import("country-state-city").then((m) => {
+      if (!active) return;
+      cscRef.current = m;
+      setAllCountries(m.Country.getAllCountries());
+    });
+    return () => { active = false; };
+  }, []);
+
+  const selectedCountry = allCountries.find((c) => c.name === form.country);
+  const cities: CityRec[] = selectedCountry && cscRef.current
+    ? cscRef.current.City.getCitiesOfCountry(selectedCountry.isoCode) ?? []
+    : [];
+  const filteredCountries = allCountries.filter((c) =>
     c.name.toLowerCase().includes(countrySearch.toLowerCase())
   );
   const filteredCities = cities.filter((c) =>

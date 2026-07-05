@@ -50,6 +50,13 @@ async function refreshSupabaseSession(request: NextRequest, response: NextRespon
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Prefetch requests (router hover-prefetch) only warm the RSC cache — no need to
+  // hit Supabase Auth (a network round-trip) for each one. The real navigation that
+  // follows still runs the full session refresh + auth gate below.
+  const isPrefetch =
+    request.headers.get("next-router-prefetch") === "1" ||
+    request.headers.get("purpose") === "prefetch";
+
   // API routes handle auth/authorization themselves, must return JSON, and are never locale-prefixed.
   if (pathname.startsWith("/api/")) {
     const apiResponse = NextResponse.next({ request });
@@ -64,6 +71,7 @@ export async function middleware(request: NextRequest) {
 
   if (isUnlocalized) {
     const response = NextResponse.next({ request });
+    if (isPrefetch) return response;
     const user = await refreshSupabaseSession(request, response);
 
     const isPublic =
@@ -79,6 +87,7 @@ export async function middleware(request: NextRequest) {
   // Locale-managed routes: [locale]/[slug]/* (org dashboard), [locale]/guest-portal/*,
   // and [locale]/{login,signup,reset-password}
   const intlResponse = handleI18nRouting(request);
+  if (isPrefetch) return intlResponse;
   const user = await refreshSupabaseSession(request, intlResponse);
 
   const segments = pathname.split("/").filter(Boolean);

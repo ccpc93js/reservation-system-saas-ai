@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import RoomTypesListClient from "@/components/rooms/room-types-list-client";
 import RoomsListClient from "@/components/rooms/rooms-list-client";
 import BedsListClient from "@/components/beds/beds-list-client";
@@ -8,18 +8,10 @@ import { ChevronDown } from "lucide-react";
 type Membership = { organization_id: string };
 
 export default async function RoomsPage() {
-  const supabase = await createServerClient();
+  const { supabase, user } = await getServerUser();
   const t = await getTranslations("rooms");
 
   // Get current user's organization
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    return <div className="text-sm text-muted-foreground">{t("unauthorized")}</div>;
-  }
 
   const { data: membershipRaw } = await supabase
     .from("memberships")

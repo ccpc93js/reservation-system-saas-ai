@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
 import BillingClient from "@/components/settings/billing-client";
 
@@ -8,9 +8,7 @@ export default async function BillingPage({
   searchParams: Promise<{ required?: string; success?: string }>;
 }) {
   const { required } = await searchParams;
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const { supabase, user } = await getServerUser();
 
   const { data: membership } = await supabase
     .from("memberships")

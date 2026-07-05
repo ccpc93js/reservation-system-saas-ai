@@ -1,3 +1,113 @@
+## [01fd346] - 2026-07-05
+
+@
+perf: faster section navigation + per-section loading skeletons
+
+- Add per-section loading.tsx skeletons (dashboard, analytics, calendar,
+  reservations, check-in-pending, guest book, guests, rooms, channels,
+  housekeeping) on shared primitives in components/loading/skeletons.tsx,
+  plus a generic [slug] fallback. Sections stream a shape-matched skeleton
+  instantly on nav instead of blocking on the full server render.
+- Add lib/supabase/session.ts: React cache()-wrapped getServerUser/getServerClient;
+  refactor tenant layout + 7 pages to share one auth validation + client init
+  per request (drops a Supabase Auth round-trip per navigation).
+- Middleware skips the Supabase session refresh for router prefetch requests,
+  so hover-prefetch no longer fires an auth network call per link.
+- Lazy-load country-state-city in property settings: the ~2MB country/city
+  dataset becomes an async chunk, cutting first-load JS 2.37 MB -> ~201 kB.
+- Guest Book placeholder JMBG -> Passport (11 locales); serif applied to every
+  remaining dialog/modal title.
+
+tsc clean, production build passes.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+@
+
+## [Unreleased] - 2026-07-05
+
+perf: faster section navigation + per-section skeletons; UI polish
+
+Navigation performance
+- Added per-section `loading.tsx` skeletons (dashboard, analytics, calendar,
+  reservations, check-in-pending, guest book, guests, rooms, channels,
+  housekeeping) built on shared primitives in `components/loading/skeletons.tsx`,
+  plus a generic `[slug]/loading.tsx` fallback. Sections now stream a
+  shape-matched skeleton instantly on navigation instead of blocking on the full
+  server render.
+- Added `lib/supabase/session.ts` with React `cache()`-wrapped `getServerUser()` /
+  `getServerClient()`; refactored the tenant layout + 7 pages to share a single
+  auth validation + client init per request (was ~2 each) — drops a Supabase Auth
+  round-trip per navigation.
+- Middleware now skips the Supabase session refresh for router prefetch requests,
+  so hover-prefetch no longer fires an auth network call per link.
+- Lazy-loaded `country-state-city` in property settings — the ~2MB worldwide
+  country/city dataset is now an async chunk, cutting that page's first-load JS
+  from 2.37 MB to ~201 kB.
+
+UI polish
+- Guest Book search placeholder: "JMBG" → "Passport" (all 11 locales); search
+  input on near-white surface.
+- Serif (Cormorant) applied to every remaining dialog/modal title across the app.
+
+tsc clean, production build passes.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [a73a3f4] - 2026-07-05
+
+design pulishment over all app
+
+## [a73a3f4] - 2026-07-05
+
+design pulishment over all app
+
+## [a73a3f4] - 2026-07-05
+
+design pulishment over all app
+
+Botanical Refresh — Stage 3 (in-app surfaces, dialogs, OCR, validation).
+
+- Dashboard: stat cards restyled to the botanical card (p-6, no heavy shadow,
+  moss-tinted rounded-square icons instead of big circles); "Today's Overview"
+  and stat numbers set in the serif face.
+- Analytics: added the 4 summary stat tiles (Total Bookings, Revenue 30d,
+  Occupancy, ADR) computed from the trend arrays, moss-tint icon squares and
+  serif values; page + section headings set in serif.
+- Tape Calendar: serif page title, off-palette emerald "PRIVATE" chip and
+  legend dots remapped to botanical moss/gold, and the room-section header made
+  a solid sticky-left block (was translucent + backdrop-blur) so the room name
+  and type chip stay pinned instead of smearing over the grid on horizontal
+  scroll.
+- Edit Reservation drawer: full botanical remap — Payment & Folio panel, folio
+  ledger, Check Out / Save Payment / Confirm Extension buttons, the
+  payment-confirmed toggle and input focus rings all moved from emerald/red/blue
+  to the moss + status palette; serif title, moss Ref line.
+- Reservations list: serif title, uppercase tracking table headers, rounded-full
+  status pills, botanical paid-column colors, airier rows.
+- Pending Check-Ins: rebuilt from the card list into a proper table (guest
+  avatar, columns, moss Review button), "N guests waiting" pill, outlined
+  Refresh, relative "submitted" time, botanical approve/reject colors;
+  bulk-select retained.
+- Guest Book: serif title with "Serbian police-registration record" descriptor,
+  Export CSV/Excel moved into the header, cleaner rounded-2xl table (uppercase
+  headers, no zebra, moss reservation #), near-white search input, and the
+  search placeholder switched from "JMBG" to "Passport".
+- Dialogs: every modal/dialog title across the app set in the serif face
+  (new-reservation, beds, checkout, cancel-reservation, room-types, rooms,
+  guest, OCR, duplicate-merge, paywall, demo-welcome, logo-crop, pending-checkin
+  modals). Header section title also serif.
+- OCR: gated to Pro/Scale plans (free plan warned + blocked), auth fixed to use
+  the session-bound server client, model set to claude-sonnet-5, and the
+  extraction dialog freeze/scroll fixed (non-modal Radix + manual wheel scroll).
+- Validation: room floor/bed position accept empty (coerce NaN/empty → null),
+  guest notes and document_issued_date made nullable; added the `ocr` plan flag.
+- i18n: added analytics stat, pending-check-in table, guest-book descriptor and
+  placeholder keys across all 11 locales.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [b9e7c89] - 2026-07-04
 
 feat: Botanical Refresh — Stage 2 (login split-panel, landing hero, auth surfaces)

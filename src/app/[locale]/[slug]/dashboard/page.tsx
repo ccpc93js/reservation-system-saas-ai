@@ -2,7 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { getServerUser } from "@/lib/supabase/session";
 import {
   PieChart,
   LogIn,
@@ -21,10 +21,7 @@ const colorMap: Record<string, { bg: string; text: string }> = {
 
 export default async function DashboardPage() {
   const t = await getTranslations("dashboard");
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login");
+  const { supabase, user } = await getServerUser();
 
   // Get org
   const { data: membership } = await supabase
