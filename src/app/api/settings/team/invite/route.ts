@@ -1,6 +1,7 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { canAddUser, getUserLimit } from "@/lib/plan";
 import { getSiteOrigin } from "@/lib/site-url";
+import { generateEmailHTML } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -93,17 +94,16 @@ export async function POST(request: Request) {
         from: process.env.EMAIL_FROM || "noreply@resend.dev",
         to: email,
         subject: `You're invited to join ${org?.name ?? "a property"} on HostMagSmart`,
-        html: `
-          <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        html: generateEmailHTML(
+          "You're invited!",
+          `
             <h2>You've been invited!</h2>
             <p>You've been invited to join <strong>${org?.name ?? "a property"}</strong> as <strong>${role}</strong>.</p>
             <p>Click the button below to accept the invitation. This link expires in 7 days.</p>
-            <a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#3b82f6;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;margin:16px 0">
-              Accept Invitation
-            </a>
-            <p style="color:#666;font-size:12px">Or copy this link: ${inviteUrl}</p>
-          </div>
-        `,
+            <a href="${inviteUrl}" class="cta-button">Accept Invitation</a>
+            <p style="color:#7C776B;font-size:12px">Or copy this link: <a href="${inviteUrl}">${inviteUrl}</a></p>
+          `
+        ),
       }),
     }).catch(() => null); // non-blocking — invite still created even if email fails
 

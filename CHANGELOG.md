@@ -1,5 +1,39 @@
 ## [Unreleased] - 2026-07-05
 
+feat: Botanical email redesign (app emails + Supabase confirm-signup)
+
+- Reskinned the shared `generateEmailHTML` wrapper (used by all 6 app emails:
+  check-in submitted/approved/rejected, reservation confirmation/cancelled,
+  checkout confirmation) to the botanical system — cream card, moss header with
+  logo, serif headings (Georgia), moss info-box accents and CTA button.
+- Team invite email now uses the same wrapper (was a standalone blue-button
+  template); exported `generateEmailHTML` for reuse.
+- Botanical rewrite of the Supabase confirm-signup template
+  (`supabase/email-templates/confirm-signup.html`) — table-based/email-safe,
+  logo + serif heading, moss CTA, moss-tint step badges; `{{ .ConfirmationURL }}`
+  preserved. (Must be pasted into Supabase → Auth → Email Templates to take effect.)
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [9dc5cb9] - 2026-07-05
+
+fix: Stripe webhook applies plan reliably on newer API versions
+
+- invoice.payment_succeeded no longer no-ops on Stripe API 2024+ (invoice.subscription
+  removed): resolves sub id from parent.subscription_details / lines[], writes
+  stripe_subscription_id and clears pending_plan.
+- Handle customer.subscription.created (was only updated/deleted).
+- Never downgrade a paid org to free on an unmapped price: fall back to
+  subscription metadata.plan, skip if unresolved.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-05
+
 fix: Stripe webhook — apply plan reliably on newer API versions
 
 - `invoice.payment_succeeded` no longer no-ops on recent Stripe API versions

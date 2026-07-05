@@ -7,34 +7,43 @@ import { getSiteOrigin } from "./site-url";
 const emailFromAddress = process.env.EMAIL_FROM || "onboarding@resend.dev";
 const hostelName = "Hostmagsmart";
 
-function generateEmailHTML(title: string, content: string, footer?: string): string {
+export function generateEmailHTML(title: string, content: string, footer?: string): string {
+  const origin = getSiteOrigin();
   return `
     <!DOCTYPE html>
     <html>
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2d5a3d; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .header h1 { margin: 0; font-size: 24px; }
-          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
-          .content h2 { color: #2d5a3d; margin-top: 0; }
-          .info-box { background: white; padding: 15px; border-left: 4px solid #2d5a3d; margin: 15px 0; }
-          .info-box strong { display: block; color: #2d5a3d; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-          .info-box span { display: block; font-size: 16px; margin-top: 5px; }
-          .cta-button { display: inline-block; background: #2d5a3d; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; margin: 15px 0; }
-          .footer { text-align: center; color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }
+          body { margin: 0; padding: 0; background: #F3EEE2; font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; color: #2A2823; }
+          .wrap { padding: 32px 16px; }
+          .container { max-width: 600px; margin: 0 auto; background: #FBF8F1; border: 1px solid #E7DFCE; border-radius: 16px; overflow: hidden; }
+          .header { background: #5F7048; padding: 28px 32px; text-align: center; }
+          .header img { height: 40px; width: auto; margin-bottom: 10px; display: inline-block; }
+          .header h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-weight: 600; font-size: 24px; color: #F3EEE2; letter-spacing: -0.01em; }
+          .content { padding: 32px; }
+          .content h2 { font-family: Georgia, 'Times New Roman', serif; color: #2A2823; margin-top: 0; font-weight: 600; font-size: 20px; }
+          .content p { color: #3f3b33; }
+          .info-box { background: #F3EEE2; padding: 16px 18px; border-left: 3px solid #5F7048; border-radius: 8px; margin: 16px 0; }
+          .info-box strong { display: block; color: #5F7048; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; }
+          .info-box span { display: block; font-size: 16px; margin-top: 4px; color: #2A2823; }
+          .cta-button { display: inline-block; background: #5F7048; color: #ffffff !important; padding: 12px 28px; text-decoration: none; border-radius: 10px; font-weight: 600; margin: 16px 0; }
+          .footer { text-align: center; color: #7C776B; font-size: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #E7DFCE; }
+          a { color: #4C5B3A; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>${title}</h1>
-          </div>
-          <div class="content">
-            ${content}
-            ${footer ? `<div class="footer">${footer}</div>` : ""}
+        <div class="wrap">
+          <div class="container">
+            <div class="header">
+              <img src="${origin}/botanical/logo.png" alt="${hostelName}" />
+              <h1>${title}</h1>
+            </div>
+            <div class="content">
+              ${content}
+              ${footer ? `<div class="footer">${footer}</div>` : ""}
+            </div>
           </div>
         </div>
       </body>
