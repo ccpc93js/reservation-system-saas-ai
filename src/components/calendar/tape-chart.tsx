@@ -179,7 +179,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
       <div className="px-4 py-2.5 border-b border-border bg-muted/30 flex items-center justify-between gap-3">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("availabilityTimeline")}</p>
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-200 border border-border" aria-hidden="true" />
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#D8D2C4] border border-border" aria-hidden="true" />
           <span>{t("pastDatesLocked")}</span>
         </div>
       </div>
@@ -303,7 +303,7 @@ export default function TapeChart({ beds, reservations, onEmptyCell, onExistingB
                             hasReservation
                               ? ""
                               : isPastDate
-                                ? "bg-background/40 cursor-not-allowed"
+                                ? "bg-[#D8D2C4] cursor-not-allowed"
                                 : "cursor-pointer hover:bg-[#DDE7F0]/40"
                           )}
                           style={{ width: DAY_WIDTH }}

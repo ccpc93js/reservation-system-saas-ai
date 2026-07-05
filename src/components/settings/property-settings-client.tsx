@@ -283,11 +283,11 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
             <span className="text-xs font-mono text-muted-foreground">{form.theme_color}</span>
           </div>
           {/* Live preview */}
-          <div className="mt-3 flex items-center gap-3">
-            <div className="h-8 px-4 rounded-lg text-white text-xs font-medium flex items-center" style={{ backgroundColor: form.theme_color }}>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <div className="h-8 px-4 rounded-lg text-white text-xs font-medium flex items-center whitespace-nowrap shrink-0" style={{ backgroundColor: form.theme_color }}>
               {t("buttonPreview")}
             </div>
-            <div className="text-xs px-2 py-1 rounded-full font-medium" style={{ backgroundColor: form.theme_color + "20", color: form.theme_color }}>
+            <div className="text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap shrink-0" style={{ backgroundColor: form.theme_color + "20", color: form.theme_color }}>
               {t("badgePreview")}
             </div>
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: form.theme_color }} />
@@ -299,7 +299,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
       <section className="rounded-2xl border border-border bg-surface p-6 space-y-4">
         <h2 className="font-serif text-xl font-semibold text-foreground">{t("basicInformation")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("propertyName")}</label>
             <input value={form.name} onChange={set("name")} disabled={!isAdmin} className={inputClass} />
           </div>
@@ -311,7 +311,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("phone")}</label>
             <input value={form.phone} onChange={set("phone")} disabled={!isAdmin} className={inputClass} />
           </div>
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("address")}</label>
             <input value={form.address} onChange={set("address")} disabled={!isAdmin} className={inputClass} />
           </div>
@@ -408,7 +408,7 @@ export default function PropertySettingsClient({ org, userRole }: Props) {
               </div>
             )}
           </div>
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted-foreground mb-1">{t("description")}</label>
             <textarea value={form.description} onChange={set("description")} disabled={!isAdmin} rows={3}
               className={inputClass + " resize-none"} />

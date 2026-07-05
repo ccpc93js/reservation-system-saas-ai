@@ -1,3 +1,26 @@
+## [628ebd2] - 2026-07-05
+
+fix: mobile round 2 — date inputs, calendar z-index, cramped controls
+
+- iOS date/datetime/time inputs no longer center their value (global
+  ::-webkit-date-and-time-value left-align) — fixes DOB, drawer actual
+  arrival/departure, reservation filters, guest-book date fields.
+- Calendar sticky header no longer renders over the open sidebar: sidebar
+  z-[60] / overlays z-[55] (were below the tape-chart z-50 sticky cells).
+- Pending bulk bar: Approve/Reject/Clear wrap and fit (flex-wrap, full width
+  on mobile, whitespace-nowrap) instead of clipping.
+- Property Settings: Save button no longer wraps (whitespace-nowrap, title
+  truncates); Basic Info + Operations field grids stack on mobile so the
+  timezone/currency selects arent cut.
+- Edit Reservation drawer: payment 2-col grids (deposit, actual arrival/
+  departure, extend) stack on mobile.
+- Analytics Top Rooms: responsive label/value widths so the bars are visible
+  on phones.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [636b47e] - 2026-07-05
 
 fix: mobile — sidebar scroll/close, modal grids, channel + calendar
