@@ -2,6 +2,36 @@ import { createServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import LandingPage from "@/components/landing/landing-page";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hostmagsmart.com";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "HostMagSmart",
+      url: siteUrl,
+      logo: `${siteUrl}/botanical/logo.png`,
+      description: "Smart property-management software for independent hostels.",
+    },
+    {
+      "@type": "WebSite",
+      name: "HostMagSmart",
+      url: siteUrl,
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "HostMagSmart",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: siteUrl,
+      description:
+        "Hostel PMS with reservations, tape calendar, channel manager, guest self check-in, housekeeping and analytics.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    },
+  ],
+};
+
 export default async function RootPage() {
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -16,5 +46,13 @@ export default async function RootPage() {
     redirect(slug ? `/${slug}/dashboard` : "/onboarding");
   }
 
-  return <LandingPage />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LandingPage />
+    </>
+  );
 }

@@ -4,6 +4,10 @@ import { getServerUser } from "@/lib/supabase/session";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
 import { reconcilePendingPlan } from "@/lib/billing-reconcile";
+import type { Metadata } from "next";
+
+// Tenant app is private/auth-gated — keep it out of search indexes.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 function hexToHsl(hex: string): string {
   if (!hex || !hex.startsWith("#")) return "90 22% 36%";

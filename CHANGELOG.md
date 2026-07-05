@@ -1,3 +1,19 @@
+## [9ddb7ed] - 2026-07-05
+
+fix: mobile — calendar past-day color, palette preview + property grid equality
+
+- Tape calendar: past (locked) day cells use a warm gray #D8D2C4 so they read
+  as non-selectable; legend swatch matches.
+- Property Settings: accent Button/Badge preview chips no longer wrap
+  (whitespace-nowrap, row wraps).
+- Property Settings Basic Info: full-width fields use sm:col-span-2 so on
+  mobile (1-col grid) they no longer create an implicit auto column that made
+  email/phone and city/country unequal — fields now stack full-width equally.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [628ebd2] - 2026-07-05
 
 fix: mobile round 2 — date inputs, calendar z-index, cramped controls

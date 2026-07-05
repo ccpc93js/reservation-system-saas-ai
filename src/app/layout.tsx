@@ -19,12 +19,60 @@ const sans = Hanken_Grotesk({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hostmagsmart.com";
+const siteName = "HostMagSmart";
+const siteDescription =
+  "HostMagSmart is smart property-management software for independent hostels — reservations, tape calendar, channel manager, guest self check-in, housekeeping and analytics in one place.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "HostMagSmart",
+    default: "HostMagSmart — Hostel Management Software (PMS)",
     template: "%s | HostMagSmart",
   },
-  description: "Smart reservation management for independent hostels",
+  description: siteDescription,
+  applicationName: siteName,
+  keywords: [
+    "HostMagSmart",
+    "hostel management software",
+    "hostel PMS",
+    "property management system",
+    "hostel reservation system",
+    "channel manager",
+    "hostel booking software",
+    "guest check-in",
+    "hostel front desk software",
+    "tape calendar",
+  ],
+  authors: [{ name: siteName }],
+  creator: siteName,
+  publisher: siteName,
+  alternates: { canonical: "/" },
+  category: "business software",
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: "HostMagSmart — Hostel Management Software (PMS)",
+    description: siteDescription,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HostMagSmart — Hostel Management Software (PMS)",
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default async function RootLayout({
