@@ -1,5 +1,42 @@
 ## [Unreleased] - 2026-07-05
 
+fix: Stripe webhook — apply plan reliably on newer API versions
+
+- `invoice.payment_succeeded` no longer no-ops on recent Stripe API versions
+  (2024+ removed `invoice.subscription`); resolves the subscription id from the
+  newer `parent.subscription_details.subscription` / `lines[].subscription`
+  locations too, and also writes `stripe_subscription_id` + clears `pending_plan`.
+- Handle `customer.subscription.created` (was only `.updated` / `.deleted`).
+- Never downgrade a paid org to `free` on an unmapped price id — fall back to the
+  plan stored in subscription `metadata.plan` and skip the update if none resolves.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [e1af003] - 2026-07-05
+
+fix: billing checkout loop, duplicate-email signup, favicon
+
+- Billing gate loop: pending_plan was only cleared by the Stripe webhook, so a
+  delayed/misconfigured webhook trapped users in
+  dashboard-gate → billing?required=true → auto-checkout → Stripe. Add
+  lib/billing-reconcile.ts, called from the tenant layout: when pending_plan is
+  set, reconcile straight from Stripe (active/trialing sub → apply plan, clear
+  pending_plan). Resilient to webhook failure; only runs while pending.
+- Billing auto-checkout guards: skip after Stripe return (success), when already
+  on the target plan, and after the first run per session; manage-billing card no
+  longer gated on stripe_customer_id.
+- Signup with an already-registered email now warns (empty identities[] detection)
+  instead of showing the confirmation screen; new auth.login.toastEmailInUse x11.
+- Favicon: botanical logo as src/app/icon.png + apple-icon.png.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [Unreleased] - 2026-07-05
+
 fix: billing checkout loop, duplicate-email signup, favicon
 
 - Billing payment-gate loop: after paying, the org's `pending_plan` is only

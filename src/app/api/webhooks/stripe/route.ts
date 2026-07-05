@@ -45,18 +45,29 @@ export async function POST(request: Request) {
 
       case "invoice.payment_succeeded": {
         const invoice = event.data.object as Stripe.Invoice;
-        const subId = (invoice as any).subscription as string;
+        // `invoice.subscription` was removed in recent API versions — fall back
+        // to the newer locations before giving up.
+        const subId =
+          (invoice as any).subscription ??
+          (invoice as any).parent?.subscription_details?.subscription ??
+          (invoice as any).lines?.data?.[0]?.subscription ??
+          (invoice as any).lines?.data?.[0]?.parent?.subscription_item_details?.subscription ??
+          null;
         if (!subId) break;
 
         const subscription = await stripe.subscriptions.retrieve(subId);
         const orgId = subscription.metadata?.org_id;
-        const priceId = subscription.items.data[0]?.price.id;
-        const plan = PRICE_TO_PLAN[priceId] ?? "free";
+        const priceId = subscription.items.data[0]?.price.id ?? "";
+        // Never downgrade to free on an unmapped price — prefer the plan stored
+        // in metadata, and skip entirely if we can't resolve one.
+        const plan = PRICE_TO_PLAN[priceId] ?? (subscription.metadata?.plan as string) ?? null;
 
-        if (!orgId) break;
+        if (!orgId || !plan) break;
 
         await service.from("organizations").update({
           plan,
+          stripe_subscription_id: subscription.id,
+          pending_plan: null,
           plan_expires_at: null,
           plan_updated_at: new Date().toISOString(),
         }).eq("id", orgId);
@@ -65,13 +76,15 @@ export async function POST(request: Request) {
         break;
       }
 
+      case "customer.subscription.created":
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
         const orgId = subscription.metadata?.org_id;
         if (!orgId) break;
 
-        const priceId = subscription.items.data[0]?.price.id;
-        const plan = PRICE_TO_PLAN[priceId] ?? "free";
+        const priceId = subscription.items.data[0]?.price.id ?? "";
+        const plan = PRICE_TO_PLAN[priceId] ?? (subscription.metadata?.plan as string) ?? null;
+        if (!plan) break; // don't wipe a paid plan to free on an unmapped price
         const cancelAt = subscription.cancel_at
           ? new Date(subscription.cancel_at * 1000).toISOString()
           : null;
@@ -79,11 +92,12 @@ export async function POST(request: Request) {
         await service.from("organizations").update({
           plan,
           stripe_subscription_id: subscription.id,
+          pending_plan: null,
           plan_expires_at: cancelAt,
           plan_updated_at: new Date().toISOString(),
         }).eq("id", orgId);
 
-        console.log(`[stripe] subscription.updated — org ${orgId} → ${plan}, expires: ${cancelAt}`);
+        console.log(`[stripe] ${event.type} — org ${orgId} → ${plan}, expires: ${cancelAt}`);
         break;
       }
 
