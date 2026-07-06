@@ -46,7 +46,8 @@
       "settingsProperty": "Property Settings",
       "settingsTeam": "Team",
       "settingsBilling": "Billing & Plan",
-      "housekeeping": "Housekeeping"
+      "housekeeping": "Housekeeping",
+      "help": "Help"
     },
     "role": {
       "owner": "Owner",
@@ -1366,5 +1367,13 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "confirmTitle": "Are you sure?"
+  },
+  "help": {
+    "title": "Help Center",
+    "subtitle": "Guides and answers for every section of the app.",
+    "searchPlaceholder": "Search help articles… (e.g. \"connect Airbnb\", \"overbooking\")",
+    "allCategories": "All",
+    "noResults": "No articles match your search.",
+    "backToHelp": "Back to Help Center"
   }
 }

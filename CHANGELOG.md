@@ -1,5 +1,46 @@
 ## [unreleased] - 2026-07-07
 
+feat: in-app Help Center with search + OTA channel manager guide
+
+New Help section (sidebar → Help) with client-side search across article
+titles, summaries, keywords and body text, category filters, and a typed
+article registry (src/lib/help/articles.ts) ready to grow to every app
+section. First category shipped: Channel Manager (5 articles — overview,
+private room setup, pooled dorm setup, allotment, troubleshooting).
+Articles in English; page chrome translated in all 11 locales. Companion
+markdown guide at docs/guides/ota-channel-manager.md.
+
+## [b014167] - 2026-07-07
+
+feat: Phase B - room-type channel manager (pooled beds, auto-assign)
+
+Channels can now map to a ROOM TYPE (pool of beds) instead of one fixed
+bed, matching how real channel managers sell dorms.
+
+- Schema: channels.mapping_mode (bed|room_type), room_type_id,
+  allotment; free_beds(room_type, dates) SQL primitive
+- Ingestion: create_ota_reservation_room_type RPC auto-assigns a free
+  bed, serialized per room type via advisory lock; returns null when
+  full and the sync then notifies OVERBOOKING instead of silently
+  dropping; OTA date changes reassign the bed if the old one clashes
+- Export: room-type channels export BLOCKED date ranges when no
+  sellable bed remains (sellable = free minus held-back via allotment),
+  180-day horizon, consecutive days merged
+- Both OTA RPCs now record the primary guest in reservation_guests
+- UI: Channels page gains a "Room types (pooled beds)" section with
+  per-room-type OTA connect + optional allotment; inline allotment edit
+- Regenerated DB types from live schema (was stale: missing
+  reservation_guests, is_primary, channel fields, new RPCs)
+- RPC verified in prod: assigned bed 101, free_beds 6->5->6 after
+  cleanup; i18n for all 11 locales
+
+Still open (needs OTA API/aggregator, impossible over iCal): multi-unit
+bookings in one event and numeric availability push. Design doc updated.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [unreleased] - 2026-07-07
+
 feat: Phase B — room-type channel manager (pooled beds, auto-assign)
 
 Channels can now map to a ROOM TYPE (pool of beds) instead of one fixed

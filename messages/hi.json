@@ -46,7 +46,8 @@
       "settingsProperty": "प्रॉपर्टी सेटिंग्स",
       "settingsTeam": "टीम",
       "settingsBilling": "बिलिंग और प्लान",
-      "housekeeping": "हाउसकीपिंग"
+      "housekeeping": "हाउसकीपिंग",
+      "help": "सहायता"
     },
     "role": {
       "owner": "मालिक",
@@ -1366,5 +1367,13 @@
     "cancel": "रद्द करें",
     "delete": "हटाएं",
     "confirmTitle": "क्या आप निश्चित हैं?"
+  },
+  "help": {
+    "title": "सहायता केंद्र",
+    "subtitle": "ऐप के हर भाग के लिए गाइड और उत्तर।",
+    "searchPlaceholder": "लेख खोजें… (जैसे \"Airbnb कनेक्ट करें\")",
+    "allCategories": "सभी",
+    "noResults": "आपकी खोज से कोई लेख मेल नहीं खाता।",
+    "backToHelp": "सहायता केंद्र पर वापस जाएँ"
   }
 }

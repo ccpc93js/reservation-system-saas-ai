@@ -46,7 +46,8 @@
       "settingsProperty": "Paramètres de l'établissement",
       "settingsTeam": "Équipe",
       "settingsBilling": "Facturation et forfait",
-      "housekeeping": "Ménage"
+      "housekeeping": "Ménage",
+      "help": "Aide"
     },
     "role": {
       "owner": "Propriétaire",
@@ -1366,5 +1367,13 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "confirmTitle": "Êtes-vous sûr ?"
+  },
+  "help": {
+    "title": "Centre d'aide",
+    "subtitle": "Guides et réponses pour chaque section de l'application.",
+    "searchPlaceholder": "Rechercher des articles… (ex. « connecter Airbnb »)",
+    "allCategories": "Tous",
+    "noResults": "Aucun article ne correspond à votre recherche.",
+    "backToHelp": "Retour au centre d'aide"
   }
 }

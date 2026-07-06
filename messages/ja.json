@@ -46,7 +46,8 @@
       "settingsProperty": "施設設定",
       "settingsTeam": "チーム",
       "settingsBilling": "請求とプラン",
-      "housekeeping": "ハウスキーピング"
+      "housekeeping": "ハウスキーピング",
+      "help": "ヘルプ"
     },
     "role": {
       "owner": "オーナー",
@@ -1366,5 +1367,13 @@
     "cancel": "キャンセル",
     "delete": "削除",
     "confirmTitle": "よろしいですか？"
+  },
+  "help": {
+    "title": "ヘルプセンター",
+    "subtitle": "アプリの各セクションのガイドと回答。",
+    "searchPlaceholder": "記事を検索…（例：「Airbnb 接続」）",
+    "allCategories": "すべて",
+    "noResults": "検索に一致する記事がありません。",
+    "backToHelp": "ヘルプセンターに戻る"
   }
 }

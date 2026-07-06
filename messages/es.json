@@ -46,7 +46,8 @@
       "settingsProperty": "Configuración del alojamiento",
       "settingsTeam": "Equipo",
       "settingsBilling": "Facturación y plan",
-      "housekeeping": "Limpieza"
+      "housekeeping": "Limpieza",
+      "help": "Ayuda"
     },
     "role": {
       "owner": "Propietario",
@@ -1366,5 +1367,13 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "confirmTitle": "¿Estás seguro?"
+  },
+  "help": {
+    "title": "Centro de ayuda",
+    "subtitle": "Guías y respuestas para cada sección de la app.",
+    "searchPlaceholder": "Buscar artículos… (ej. \"conectar Airbnb\", \"overbooking\")",
+    "allCategories": "Todos",
+    "noResults": "Ningún artículo coincide con tu búsqueda.",
+    "backToHelp": "Volver al centro de ayuda"
   }
 }

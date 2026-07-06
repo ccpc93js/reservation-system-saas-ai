@@ -46,7 +46,8 @@
       "settingsProperty": "প্রপার্টি সেটিংস",
       "settingsTeam": "টিম",
       "settingsBilling": "বিলিং ও প্ল্যান",
-      "housekeeping": "হাউসকিপিং"
+      "housekeeping": "হাউসকিপিং",
+      "help": "সহায়তা"
     },
     "role": {
       "owner": "মালিক",
@@ -1366,5 +1367,13 @@
     "cancel": "বাতিল",
     "delete": "মুছুন",
     "confirmTitle": "আপনি কি নিশ্চিত?"
+  },
+  "help": {
+    "title": "সহায়তা কেন্দ্র",
+    "subtitle": "অ্যাপের প্রতিটি বিভাগের জন্য গাইড ও উত্তর।",
+    "searchPlaceholder": "নিবন্ধ খুঁজুন… (যেমন \"Airbnb সংযোগ\")",
+    "allCategories": "সব",
+    "noResults": "আপনার অনুসন্ধানের সাথে কোনো নিবন্ধ মেলে না।",
+    "backToHelp": "সহায়তা কেন্দ্রে ফিরে যান"
   }
 }

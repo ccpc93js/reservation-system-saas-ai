@@ -46,7 +46,8 @@
       "settingsProperty": "Podešavanja objekta",
       "settingsTeam": "Tim",
       "settingsBilling": "Naplata i plan",
-      "housekeeping": "Domaćinstvo"
+      "housekeeping": "Domaćinstvo",
+      "help": "Pomoć"
     },
     "role": {
       "owner": "Vlasnik",
@@ -1366,5 +1367,13 @@
     "cancel": "Otkaži",
     "delete": "Obriši",
     "confirmTitle": "Da li ste sigurni?"
+  },
+  "help": {
+    "title": "Centar za pomoć",
+    "subtitle": "Vodiči i odgovori za svaki deo aplikacije.",
+    "searchPlaceholder": "Pretraži članke… (npr. \"poveži Airbnb\")",
+    "allCategories": "Sve",
+    "noResults": "Nijedan članak ne odgovara pretrazi.",
+    "backToHelp": "Nazad u centar za pomoć"
   }
 }

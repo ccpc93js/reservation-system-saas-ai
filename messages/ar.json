@@ -46,7 +46,8 @@
       "settingsProperty": "إعدادات العقار",
       "settingsTeam": "الفريق",
       "settingsBilling": "الفوترة والخطة",
-      "housekeeping": "التدبير المنزلي"
+      "housekeeping": "التدبير المنزلي",
+      "help": "مساعدة"
     },
     "role": {
       "owner": "المالك",
@@ -1366,5 +1367,13 @@
     "cancel": "إلغاء",
     "delete": "حذف",
     "confirmTitle": "هل أنت متأكد؟"
+  },
+  "help": {
+    "title": "مركز المساعدة",
+    "subtitle": "أدلة وإجابات لكل قسم في التطبيق.",
+    "searchPlaceholder": "ابحث في المقالات… (مثل \"ربط Airbnb\")",
+    "allCategories": "الكل",
+    "noResults": "لا توجد مقالات مطابقة لبحثك.",
+    "backToHelp": "العودة إلى مركز المساعدة"
   }
 }

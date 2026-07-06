@@ -46,7 +46,8 @@
       "settingsProperty": "物业设置",
       "settingsTeam": "团队",
       "settingsBilling": "账单与套餐",
-      "housekeeping": "客房清洁"
+      "housekeeping": "客房清洁",
+      "help": "帮助"
     },
     "role": {
       "owner": "所有者",
@@ -1366,5 +1367,13 @@
     "cancel": "取消",
     "delete": "删除",
     "confirmTitle": "确定吗？"
+  },
+  "help": {
+    "title": "帮助中心",
+    "subtitle": "应用各部分的指南和解答。",
+    "searchPlaceholder": "搜索帮助文章…（如\"连接 Airbnb\"）",
+    "allCategories": "全部",
+    "noResults": "没有匹配的文章。",
+    "backToHelp": "返回帮助中心"
   }
 }

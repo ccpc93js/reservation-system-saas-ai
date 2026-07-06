@@ -46,7 +46,8 @@
       "settingsProperty": "Настройки объекта",
       "settingsTeam": "Команда",
       "settingsBilling": "Оплата и тариф",
-      "housekeeping": "Уборка номеров"
+      "housekeeping": "Уборка номеров",
+      "help": "Помощь"
     },
     "role": {
       "owner": "Владелец",
@@ -1366,5 +1367,13 @@
     "cancel": "Отмена",
     "delete": "Удалить",
     "confirmTitle": "Вы уверены?"
+  },
+  "help": {
+    "title": "Центр помощи",
+    "subtitle": "Руководства и ответы по каждому разделу приложения.",
+    "searchPlaceholder": "Поиск статей… (напр. «подключить Airbnb»)",
+    "allCategories": "Все",
+    "noResults": "Нет статей по вашему запросу.",
+    "backToHelp": "Назад в центр помощи"
   }
 }

@@ -18,6 +18,7 @@ import {
   CreditCard,
   History,
   Sparkles,
+  HelpCircle,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
@@ -41,6 +42,7 @@ const settingsNavRoutes = [
   { path: "settings/property", labelKey: "settingsProperty", icon: Settings },
   { path: "settings/team", labelKey: "settingsTeam", icon: UsersRound },
   { path: "settings/billing", labelKey: "settingsBilling", icon: CreditCard },
+  { path: "help", labelKey: "help", icon: HelpCircle },
 ] as const;
 
 interface SidebarProps {

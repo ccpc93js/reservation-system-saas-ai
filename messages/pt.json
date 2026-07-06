@@ -46,7 +46,8 @@
       "settingsProperty": "Configurações da propriedade",
       "settingsTeam": "Equipe",
       "settingsBilling": "Faturamento e plano",
-      "housekeeping": "Limpeza"
+      "housekeeping": "Limpeza",
+      "help": "Ajuda"
     },
     "role": {
       "owner": "Proprietário",
@@ -1366,5 +1367,13 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "confirmTitle": "Tem certeza?"
+  },
+  "help": {
+    "title": "Central de ajuda",
+    "subtitle": "Guias e respostas para cada seção do app.",
+    "searchPlaceholder": "Pesquisar artigos… (ex. \"conectar Airbnb\")",
+    "allCategories": "Todos",
+    "noResults": "Nenhum artigo corresponde à sua pesquisa.",
+    "backToHelp": "Voltar à central de ajuda"
   }
 }
