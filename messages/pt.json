@@ -1318,5 +1318,11 @@
     "filter_clean": "Limpa",
     "filter_inspected": "Inspecionada",
     "changeStatus": "Alterar estado"
+  },
+  "common": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "confirmTitle": "Tem certeza?"
   }
 }

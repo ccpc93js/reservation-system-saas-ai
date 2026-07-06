@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import Sidebar from "./sidebar";
 import Header from "./header";
+import { ConfirmDialogHost } from "@/components/ui/confirm-dialog";
 
 interface DashboardLayoutClientProps {
   org: { id: string; name: string; slug: string };
@@ -61,6 +62,7 @@ export default function DashboardLayoutClient({
           {children}
         </main>
       </div>
+      <ConfirmDialogHost />
     </div>
   );
 }

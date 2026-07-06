@@ -1318,5 +1318,11 @@
     "filter_clean": "साफ",
     "filter_inspected": "निरीक्षित",
     "changeStatus": "स्थिति बदलें"
+  },
+  "common": {
+    "confirm": "पुष्टि करें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "confirmTitle": "क्या आप निश्चित हैं?"
   }
 }

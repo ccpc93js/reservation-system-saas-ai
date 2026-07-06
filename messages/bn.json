@@ -1318,5 +1318,11 @@
     "filter_clean": "পরিষ্কার",
     "filter_inspected": "পরিদর্শিত",
     "changeStatus": "স্ট্যাটাস পরিবর্তন"
+  },
+  "common": {
+    "confirm": "নিশ্চিত করুন",
+    "cancel": "বাতিল",
+    "delete": "মুছুন",
+    "confirmTitle": "আপনি কি নিশ্চিত?"
   }
 }

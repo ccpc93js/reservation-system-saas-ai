@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { createPortal } from "react-dom";
 import { isSerbia } from "@/lib/hooks/use-org-country";
 import { useRouter } from "next/navigation";
@@ -260,7 +261,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
   };
 
   const handleRemove = async (id: string) => {
-    if (!confirm(t("confirmRemove"))) return;
+    if (!(await confirmDialog(t("confirmRemove")))) return;
     setRemoving(id);
     try {
       const res = await fetch(`/api/checkin-registry/${id}`, { method: "DELETE" });

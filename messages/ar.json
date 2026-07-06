@@ -1318,5 +1318,11 @@
     "filter_clean": "نظيفة",
     "filter_inspected": "تم فحصها",
     "changeStatus": "تغيير الحالة"
+  },
+  "common": {
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "confirmTitle": "هل أنت متأكد؟"
   }
 }

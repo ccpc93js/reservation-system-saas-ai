@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { Plus, RefreshCw, Trash2, Edit, Copy, Check, ExternalLink, Wifi, WifiOff, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
@@ -184,7 +185,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t("confirmDelete"))) return;
+    if (!(await confirmDialog(t("confirmDelete")))) return;
     setDeletingId(id);
     try {
       const res = await fetch(`/api/channels/${id}`, { method: "DELETE" });

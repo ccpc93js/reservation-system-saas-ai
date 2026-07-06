@@ -1318,5 +1318,11 @@
     "filter_clean": "Propre",
     "filter_inspected": "Inspectée",
     "changeStatus": "Changer le statut"
+  },
+  "common": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "confirmTitle": "Êtes-vous sûr ?"
   }
 }

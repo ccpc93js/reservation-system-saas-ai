@@ -1318,5 +1318,11 @@
     "filter_clean": "Čisto",
     "filter_inspected": "Pregledano",
     "changeStatus": "Promeni status"
+  },
+  "common": {
+    "confirm": "Potvrdi",
+    "cancel": "Otkaži",
+    "delete": "Obriši",
+    "confirmTitle": "Da li ste sigurni?"
   }
 }

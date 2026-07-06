@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -146,7 +147,7 @@ export default function BedsDialog({
   };
 
   const handleDelete = async () => {
-    if (!confirm(t("confirmDelete"))) return;
+    if (!(await confirmDialog(t("confirmDelete")))) return;
 
     setIsDeleting(true);
     try {

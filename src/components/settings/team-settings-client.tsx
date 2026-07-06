@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { UserPlus, Trash2, Mail, Clock, X } from "lucide-react";
@@ -105,7 +106,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
   };
 
   const handleRemove = async (userId: string, email: string) => {
-    if (!confirm(t("confirmRemove", { email }))) return;
+    if (!(await confirmDialog(t("confirmRemove", { email })))) return;
     setRemovingId(userId);
     try {
       const res = await fetch(`/api/settings/team/${userId}`, { method: "DELETE" });

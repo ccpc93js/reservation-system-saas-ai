@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -84,7 +85,7 @@ export default function GuestListClient({
   };
 
   const handleDelete = async (guestId: string) => {
-    if (!confirm(t("confirmDelete"))) return;
+    if (!(await confirmDialog(t("confirmDelete")))) return;
 
     try {
       const res = await fetch(`/api/guests/${guestId}`, {

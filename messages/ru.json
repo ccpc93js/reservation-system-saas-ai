@@ -1318,5 +1318,11 @@
     "filter_clean": "Чисто",
     "filter_inspected": "Проверено",
     "changeStatus": "Изменить статус"
+  },
+  "common": {
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "confirmTitle": "Вы уверены?"
   }
 }

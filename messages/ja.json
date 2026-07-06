@@ -1318,5 +1318,11 @@
     "filter_clean": "清掃済み",
     "filter_inspected": "検査済み",
     "changeStatus": "状態を変更"
+  },
+  "common": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "confirmTitle": "よろしいですか？"
   }
 }

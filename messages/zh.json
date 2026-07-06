@@ -1318,5 +1318,11 @@
     "filter_clean": "干净",
     "filter_inspected": "已检查",
     "changeStatus": "更改状态"
+  },
+  "common": {
+    "confirm": "确认",
+    "cancel": "取消",
+    "delete": "删除",
+    "confirmTitle": "确定吗？"
   }
 }

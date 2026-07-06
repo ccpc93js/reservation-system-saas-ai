@@ -1,3 +1,13 @@
+## [c287945] - 2026-07-06
+
+fix: add missing beds.updated_at column
+
+The beds PATCH route sets updated_at but the column did not exist, so editing a
+bed failed with "Could not find the updated_at column of beds in the schema
+cache". Add the column + reload PostgREST schema. Migration file included.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [3fa0fee] - 2026-07-06
 
 fix: drop strict yup uuid() on room_type_id/room_id (rejected seed ids)

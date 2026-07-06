@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -236,7 +237,7 @@ export default function GuestDialog({
   };
 
   const handleDelete = async () => {
-    if (!guestId || !confirm(t("confirmDelete"))) {
+    if (!guestId || !(await confirmDialog(t("confirmDelete")))) {
       return;
     }
 

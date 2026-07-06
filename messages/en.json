@@ -1318,5 +1318,11 @@
     "filter_clean": "Clean",
     "filter_inspected": "Inspected",
     "changeStatus": "Change status"
+  },
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmTitle": "Are you sure?"
   }
 }

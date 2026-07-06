@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -319,7 +320,7 @@ export default function EditReservationDrawer({
   };
 
   const handleDelete = async () => {
-    if (!reservationId || !confirm(t("toasts.confirmDelete"))) {
+    if (!reservationId || !(await confirmDialog(t("toasts.confirmDelete")))) {
       return;
     }
 

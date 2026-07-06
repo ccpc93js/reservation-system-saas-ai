@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, DoorOpen, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
@@ -69,7 +70,7 @@ export default function RoomsListClient({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t("confirmDelete"))) return;
+    if (!(await confirmDialog(t("confirmDelete")))) return;
 
     try {
       const res = await fetch(`/api/rooms/${id}`, {
