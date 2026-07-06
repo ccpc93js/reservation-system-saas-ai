@@ -12,7 +12,7 @@ export default async function CheckinHistoryPage({
 
   const { data: orgRaw } = await supabase
     .from("organizations")
-    .select("id, name, currency, plan")
+    .select("id, name, currency, plan, country")
     .eq("slug", slug)
     .single();
   const org = orgRaw as any;
@@ -39,6 +39,7 @@ export default async function CheckinHistoryPage({
       orgCurrency={org.currency ?? "EUR"}
       orgId={org.id}
       orgPlan={org.plan ?? "free"}
+      orgCountry={org.country ?? null}
     />
   );
 }

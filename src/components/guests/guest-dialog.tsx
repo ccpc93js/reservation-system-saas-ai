@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { COUNTRIES } from "@/lib/countries";
 import { createGuestSchema, updateGuestSchema, type CreateGuestInput } from "@/lib/validations/guest";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { useOrgCountry, isSerbia } from "@/lib/hooks/use-org-country";
 import DocumentUpload from "./document-upload";
 import DuplicateMergeDialog from "./duplicate-merge-dialog";
 
@@ -34,6 +35,7 @@ export default function GuestDialog({
   onGuestUpdated,
 }: GuestDialogProps) {
   const t = useTranslations("guests.dialog");
+  const isSerbian = isSerbia(useOrgCountry(orgId));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [guest, setGuest] = useState<any>(null);
@@ -918,6 +920,7 @@ export default function GuestDialog({
                       <p className="text-xs text-red-500 mt-1">{String(errors.country_of_residence?.message ?? "")}</p>
                     )}
                   </div>
+                  {isSerbian && (
                   <div>
                     <label className="block text-sm font-medium mb-1" style={{ color: "hsl(var(--text))" }}>
                       {t("jmbg")}
@@ -936,6 +939,7 @@ export default function GuestDialog({
                       <p className="text-xs text-red-500 mt-1">{String(errors.jmbg?.message ?? "")}</p>
                     )}
                   </div>
+                  )}
                 </div>
               )}
             </div>

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { useOrgCountry, isSerbia } from "@/lib/hooks/use-org-country";
 
 interface DuplicateMergeDialogProps {
   newGuestData: any;
@@ -47,6 +48,7 @@ export default function DuplicateMergeDialog({
   onCancel,
 }: DuplicateMergeDialogProps) {
   const t = useTranslations("duplicateMergeDialog");
+  const isSerbian = isSerbia(useOrgCountry(orgId));
   const [selections, setSelections] = useState<Record<string, SelectionType>>({});
   const [isMerging, setIsMerging] = useState(false);
   const [fullExistingGuest, setFullExistingGuest] = useState<any>(existingGuest);
@@ -179,7 +181,7 @@ export default function DuplicateMergeDialog({
 
           {/* Fields Grid */}
           <div className="space-y-4 mb-6">
-            {GUEST_FIELDS.map((field) => (
+            {GUEST_FIELDS.filter((f) => isSerbian || (f.key !== "jmbg" && f.key !== "unique_master_citizen")).map((field) => (
               <div
                 key={field.key}
                 className="rounded-lg border p-4"

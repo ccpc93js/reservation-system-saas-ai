@@ -1,3 +1,29 @@
+## [1a44ff8] - 2026-07-06
+
+fix: emails show real reservation_number (RES-26-XXXX) not the UUID prefix
+
+Reservation confirmation, cancellation and checkout emails used
+id.substring(0,8) instead of the reservation_number column. Now select and
+pass reservation_number (fallback to the id prefix if absent). The cancellation
+notification uses it too.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [1a44ff8] - 2026-07-06
+
+fix: emails show real reservation_number (RES-26-XXXX) not the UUID prefix
+
+Reservation confirmation, cancellation and checkout emails used
+id.substring(0,8) instead of the reservation_number column. Now select and
+pass reservation_number (fallback to the id prefix if absent). The cancellation
+notification uses it too.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [32b0272] - 2026-07-06
 
 feat: email from-name = property; validate reservation checkout >= check-in

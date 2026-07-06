@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { isSerbia } from "@/lib/hooks/use-org-country";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Download, Search, History, RefreshCw, Trash2, Pencil, X, ChevronDown, AlertTriangle } from "lucide-react";
@@ -99,6 +100,7 @@ interface Props {
   orgCurrency: string;
   orgId: string;
   orgPlan: string;
+  orgCountry?: string | null;
 }
 
 type EditForm = {
@@ -135,7 +137,8 @@ function recordToForm(r: any): EditForm {
   };
 }
 
-export default function CheckinHistoryClient({ records, orgName, orgCurrency, orgId, orgPlan }: Props) {
+export default function CheckinHistoryClient({ records, orgName, orgCurrency, orgId, orgPlan, orgCountry }: Props) {
+  const isSerbian = isSerbia(orgCountry);
   const t = useTranslations("checkinHistory");
   const docTypeLabel = (v: string) => DOC_TYPE_VALUES.includes(v as any) ? t(`docType_${v}`) : v;
   const serviceTypeLabel = (v: string) => SERVICE_TYPE_VALUES.includes(v as any) ? t(`serviceType_${v}`) : v;
@@ -296,7 +299,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
         <div>
           <h1 className="font-serif text-3xl font-semibold text-foreground">{t("title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {t("guestsRegistered", { count: filtered.length })} · {t("recordDescriptor")}
+            {t("guestsRegistered", { count: filtered.length })}{isSerbian ? ` · ${t("recordDescriptor")}` : ""}
             {guestBookLimit !== -1 && (
               <span className={`ml-2 font-medium ${localRecords.length >= guestBookLimit ? "text-red-500" : localRecords.length >= guestBookLimit * 0.8 ? "text-amber-500" : ""}`}>
                 · {localRecords.length}/{guestBookLimit} ({planName})
@@ -357,7 +360,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                 <tr className="bg-muted/40 border-b border-border">
                   {[t("colReservationNumber"), t("colName"), t("colBirthDate"), t("colCitizenship"), t("colCountryOfBirth"),
                     t("colIdType"), t("colIdNumber"), t("colIssueDate"), t("colExpiryDate"),
-                    t("colJmbg"), t("colService"), t("colRoomBed"), t("colArrival"), t("colDeparture"), ""].map((h, i) => (
+                    ...(isSerbian ? [t("colJmbg"), t("colService")] : []), t("colRoomBed"), t("colArrival"), t("colDeparture"), ""].map((h, i) => (
                     <th key={i} className="px-4 py-3 text-left font-semibold text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -376,8 +379,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                       <td className="px-4 py-3.5 font-mono text-foreground whitespace-nowrap">{r.document_number || "—"}</td>
                       <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_issued_date)}</td>
                       <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{fmtDate(r.document_expiry)}</td>
-                      <td className="px-4 py-3.5 font-mono text-foreground whitespace-nowrap">{r.jmbg || "—"}</td>
-                      <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.service_type ? serviceTypeLabel(r.service_type) : "—"}</td>
+                      {isSerbian && (
+                        <>
+                          <td className="px-4 py-3.5 font-mono text-foreground whitespace-nowrap">{r.jmbg || "—"}</td>
+                          <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{r.service_type ? serviceTypeLabel(r.service_type) : "—"}</td>
+                        </>
+                      )}
                       <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">{bedRoom}</td>
                       <td className="px-4 py-3.5 text-muted-foreground whitespace-nowrap">
                         {r.actual_check_in_at ? fmtDateTime(r.actual_check_in_at) : fmtDate(r.check_in)}
@@ -499,10 +506,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                     <label className={labelCls}>{t("expiryDate")}</label>
                     <input type="date" className={inputCls} value={editForm.document_expiry} onChange={(e) => set("document_expiry", e.target.value)} />
                   </div>
+                  {isSerbian && (
                   <div>
                     <label className={labelCls}>{t("jmbg")}</label>
                     <input className={inputCls} value={editForm.jmbg} onChange={(e) => set("jmbg", e.target.value)} />
                   </div>
+                  )}
                 </div>
               </div>
 
@@ -510,6 +519,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
               <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-4">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("stayDetails")}</p>
                 <div className="grid grid-cols-2 gap-4">
+                  {isSerbian && (
                   <div>
                     <label className={labelCls}>{t("serviceType")}</label>
                     <select className={inputCls} value={editForm.service_type} onChange={(e) => set("service_type", e.target.value)}>
@@ -519,6 +529,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                       ))}
                     </select>
                   </div>
+                  )}
                   <div>
                     <label className={labelCls}>{t("room")}</label>
                     <input className={inputCls} value={editForm.room_name} onChange={(e) => set("room_name", e.target.value)} />
