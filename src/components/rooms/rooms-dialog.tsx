@@ -49,14 +49,18 @@ export default function RoomsDialog({
   });
 
   useEffect(() => {
-    if (open) {
-      fetchRoomTypes();
+    if (!open) return;
+    // Load the room-type options BEFORE resetting the form, otherwise the
+    // native <select> has no matching <option> yet and drops the value —
+    // which then fails the "valid ID" validation on save.
+    (async () => {
+      await fetchRoomTypes();
       if (isEditing) {
-        fetchRoom();
+        await fetchRoom();
       } else {
         reset();
       }
-    }
+    })();
   }, [open, isEditing]);
 
   const fetchRoomTypes = async () => {
@@ -196,7 +200,8 @@ export default function RoomsDialog({
             <div>
               <label className="block text-sm font-medium mb-1">{t("roomTypeLabel")}</label>
               <select
-                {...register("room_type_id")}
+                value={watch("room_type_id") || ""}
+                onChange={(e) => setValue("room_type_id", e.target.value, { shouldValidate: true })}
                 className={`w-full px-3 py-2 border rounded-lg ${
                   errors.room_type_id ? "border-red-500" : "border-border"
                 } disabled:opacity-50`}

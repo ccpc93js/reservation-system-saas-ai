@@ -49,14 +49,15 @@ export default function BedsDialog({
   });
 
   useEffect(() => {
-    if (open) {
-      fetchRooms();
+    if (!open) return;
+    (async () => {
+      await fetchRooms();
       if (isEditing) {
-        fetchBed();
+        await fetchBed();
       } else {
         reset();
       }
-    }
+    })();
   }, [open, isEditing]);
 
   const fetchRooms = async () => {
@@ -196,7 +197,8 @@ export default function BedsDialog({
             <div>
               <label className="block text-sm font-medium mb-1">{t("roomLabel")}</label>
               <select
-                {...register("room_id")}
+                value={watch("room_id") || ""}
+                onChange={(e) => setValue("room_id", e.target.value, { shouldValidate: true })}
                 className={`w-full px-3 py-2 border rounded-lg ${
                   errors.room_id ? "border-red-500" : "border-border"
                 } disabled:opacity-50`}

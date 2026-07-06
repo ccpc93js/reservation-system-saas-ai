@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     // Build query
     let query = supabase
       .from("room_types")
-      .select("*", { count: "exact" })
+      .select("*, rooms(count)", { count: "exact" })
       .eq("organization_id", (membership as any).organization_id);
 
     if (search) {
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
     }
 
     return Response.json({
-      room_types: roomTypes || [],
+      room_types: (roomTypes || []).map((rt: any) => ({ ...rt, room_count: rt.rooms?.[0]?.count ?? 0 })),
       total: count || 0,
       page,
       page_size: limit,

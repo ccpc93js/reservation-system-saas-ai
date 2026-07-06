@@ -1,3 +1,16 @@
+## [f59a9f4] - 2026-07-06
+
+fix: prevent duplicate reservation numbers (atomic per-org counter)
+
+generate_reservation_number used count(*)+1 of existing rows, which duplicates
+on delete and under concurrent inserts (22 rows had only 12 distinct numbers).
+Replace with an atomic reservation_number_counters table (upsert ... RETURNING,
+SECURITY DEFINER), seed it from current max, renumber existing duplicates, and
+add a UNIQUE (organization_id, reservation_number) backstop. DB-only change;
+the insert trigger keeps generating the number. Migration file added for record.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [9f49e1c] - 2026-07-06
 
 feat: searchable country/city selector on onboarding

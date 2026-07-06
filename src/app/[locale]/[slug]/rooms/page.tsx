@@ -28,7 +28,7 @@ export default async function RoomsPage() {
   // Fetch room types
   const { data: roomTypes = [], count: roomTypesTotal = 0 } = await supabase
     .from("room_types")
-    .select("*", { count: "exact" })
+    .select("*, rooms(count)", { count: "exact" })
     .eq("organization_id", membership.organization_id)
     .order("created_at", { ascending: false })
     .limit(25);
@@ -36,7 +36,7 @@ export default async function RoomsPage() {
   // Fetch rooms
   const { data: rooms = [], count: roomsTotal = 0 } = await supabase
     .from("rooms")
-    .select("*, room_types(id, name, type, capacity, base_price)", { count: "exact" })
+    .select("*, room_types(id, name, type, capacity, base_price), beds(count)", { count: "exact" })
     .eq("organization_id", membership.organization_id)
     .order("created_at", { ascending: false })
     .limit(25);
@@ -52,6 +52,10 @@ export default async function RoomsPage() {
   const roomTypesCount = roomTypesTotal ?? 0;
   const roomsCount = roomsTotal ?? 0;
   const bedsCount = bedsTotal ?? 0;
+
+  // Supabase returns embedded aggregates as `[{ count: N }]` — flatten to a field.
+  const roomTypesWithCount = (roomTypes ?? []).map((rt: any) => ({ ...rt, room_count: rt.rooms?.[0]?.count ?? 0 }));
+  const roomsWithCount = (rooms ?? []).map((r: any) => ({ ...r, bed_count: r.beds?.[0]?.count ?? 0 }));
 
   return (
     <div className="space-y-6">
@@ -75,7 +79,7 @@ export default async function RoomsPage() {
         </button>
         <div className="px-4 py-4">
           <RoomTypesListClient
-            initialRoomTypes={roomTypes as any}
+            initialRoomTypes={roomTypesWithCount as any}
             initialTotal={roomTypesCount}
           />
         </div>
@@ -94,7 +98,7 @@ export default async function RoomsPage() {
         </button>
         <div className="px-4 py-4">
           <RoomsListClient
-            initialRooms={rooms as any}
+            initialRooms={roomsWithCount as any}
             initialTotal={roomsCount}
           />
         </div>
