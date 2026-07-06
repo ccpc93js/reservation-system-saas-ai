@@ -1134,53 +1134,44 @@ export default function EditReservationDrawer({
             <div className="rounded-xl border border-[#C5D6BC] bg-[#E0EADB]/30 p-4 space-y-3">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#4A6740] mb-1">{t("paymentFolio")}</p>
 
-              {/* Folio ledger — segments by creation batch */}
+              {/* Folio ledger — one segment per date range. Adding a bed to the
+                  same dates joins the existing line (rate × nights × beds);
+                  only a different date range (a real extension) gets its own. */}
               {(() => {
                 const items: any[] = reservation?.reservation_items ?? [];
                 const paid = Number(paidAmount) || 0;
                 const deposit = Number(depositAmount) || 0;
                 const fmt = (d: string) => d ? new Date(d + "T00:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "";
 
-                // Group items into creation-batch segments (30s threshold)
-                type FolioGroup = { label: string; items: any[]; nights: number; rate: number; subtotal: number; from: string; to: string };
-                const sorted = [...items].sort((a, b) => new Date(a.check_in).getTime() - new Date(b.check_in).getTime());
-                const groups: FolioGroup[] = [];
-                let extCount = 0;
-
+                type FolioGroup = { label: string; items: any[]; nights: number; beds: number; rate: number; from: string; to: string };
+                const sorted = [...items].sort((a, b) =>
+                  new Date(a.check_in).getTime() - new Date(b.check_in).getTime() ||
+                  new Date(a.created_at ?? 0).getTime() - new Date(b.created_at ?? 0).getTime()
+                );
+                const byRange = new Map<string, FolioGroup>();
                 for (const item of sorted) {
-                  const itemTs = new Date(item.created_at ?? 0).getTime();
-                  const lastGroup = groups[groups.length - 1];
-                  const lastTs = lastGroup ? new Date(lastGroup.items[lastGroup.items.length - 1].created_at ?? 0).getTime() : 0;
-                  const sameBatch = lastGroup && Math.abs(itemTs - lastTs) < 30000;
-
-                  if (sameBatch) {
-                    const nights = item.check_in && item.check_out
-                      ? Math.round((new Date(item.check_out).getTime() - new Date(item.check_in).getTime()) / 86400000) : 1;
-                    lastGroup.items.push(item);
-                    lastGroup.nights += nights;
-                    lastGroup.subtotal += Number(item.total_price ?? Number(item.price_per_night));
-                    lastGroup.to = item.check_out;
-                    // rate = dominant rate in group
-                    lastGroup.rate = Number(item.price_per_night);
+                  const key = `${item.check_in}|${item.check_out}`;
+                  const nights = item.check_in && item.check_out
+                    ? Math.max(1, Math.round((new Date(item.check_out).getTime() - new Date(item.check_in).getTime()) / 86400000)) : 1;
+                  const g = byRange.get(key);
+                  if (g) {
+                    g.items.push(item);
+                    g.beds += 1;
+                    g.rate = Number(item.price_per_night);
                   } else {
-                    extCount = groups.length === 0 ? 0 : extCount + 1;
-                    const nights = item.check_in && item.check_out
-                      ? Math.round((new Date(item.check_out).getTime() - new Date(item.check_in).getTime()) / 86400000) : 1;
-                    groups.push({
-                      label: groups.length === 0 ? t("originalStay") : t("extensionN", { n: extCount }),
-                      items: [item],
-                      nights,
+                    byRange.set(key, {
+                      label: "", items: [item], nights, beds: 1,
                       rate: Number(item.price_per_night),
-                      subtotal: Number(item.total_price ?? Number(item.price_per_night)),
-                      from: item.check_in,
-                      to: item.check_out,
+                      from: item.check_in, to: item.check_out,
                     });
                   }
                 }
+                const groups = Array.from(byRange.values());
+                groups.forEach((g, gi) => { g.label = gi === 0 ? t("originalStay") : t("extensionN", { n: gi }); });
 
                 // Total derived from current edited rates (live, not from DB)
                 const totalCharged = groups.length > 0
-                  ? groups.reduce((sum, g, gi) => sum + (Number(segmentRates[gi] ?? g.rate) || 0) * g.nights, 0)
+                  ? groups.reduce((sum, g, gi) => sum + (Number(segmentRates[gi] ?? g.rate) || 0) * g.nights * g.beds, 0)
                   : Number(reservation?.total_amount ?? 0);
                 const balance = totalCharged - paid;
 
@@ -1189,7 +1180,7 @@ export default function EditReservationDrawer({
                     {groups.map((group, gi) => {
                       const itemIds = group.items.map((i: any) => i.id);
                       const editedRate = segmentRates[gi] ?? String(group.rate);
-                      const previewSubtotal = (Number(editedRate) || 0) * group.nights;
+                      const previewSubtotal = (Number(editedRate) || 0) * group.nights * group.beds;
                       const isSaving = savingSegment === gi;
                       const isExtension = gi > 0;
 
@@ -1207,7 +1198,9 @@ export default function EditReservationDrawer({
                             {/* Date range + nights */}
                             <span className="text-muted-foreground flex-1 whitespace-nowrap">
                               {fmt(group.from)} → {fmt(group.to)}
-                              <span className="ml-1 text-foreground font-medium">({group.nights}n)</span>
+                              <span className="ml-1 text-foreground font-medium">
+                                ({group.nights}n{group.beds > 1 ? ` × ${t("bedsTimes", { count: group.beds })}` : ""})
+                              </span>
                             </span>
                             {/* Editable rate */}
                             <div className="flex items-center gap-1">

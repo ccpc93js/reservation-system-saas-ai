@@ -376,7 +376,8 @@
       "addBedHint": "Free beds in this room",
       "noFreeBeds": "No free beds in this room for these dates",
       "bedTaken": "Taken",
-      "removeBed": "Remove bed"
+      "removeBed": "Remove bed",
+      "bedsTimes": "{count} beds"
     }
   },
   "pendingCheckIns": {

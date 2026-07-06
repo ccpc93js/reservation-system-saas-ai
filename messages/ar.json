@@ -376,7 +376,8 @@
       "addBedHint": "الأسرّة المتاحة في هذه الغرفة",
       "noFreeBeds": "لا توجد أسرّة متاحة في هذه الغرفة لهذه التواريخ",
       "bedTaken": "محجوز",
-      "removeBed": "إزالة السرير"
+      "removeBed": "إزالة السرير",
+      "bedsTimes": "{count} أسرّة"
     }
   },
   "pendingCheckIns": {

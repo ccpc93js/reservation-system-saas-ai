@@ -376,7 +376,8 @@
       "addBedHint": "此房间的空床位",
       "noFreeBeds": "该房间在这些日期没有空床位",
       "bedTaken": "已占用",
-      "removeBed": "移除床位"
+      "removeBed": "移除床位",
+      "bedsTimes": "{count} 个床位"
     }
   },
   "pendingCheckIns": {

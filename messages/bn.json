@@ -376,7 +376,8 @@
       "addBedHint": "এই রুমের খালি বেড",
       "noFreeBeds": "এই তারিখগুলির জন্য এই রুমে কোনো খালি বেড নেই",
       "bedTaken": "বুক করা",
-      "removeBed": "বেড সরান"
+      "removeBed": "বেড সরান",
+      "bedsTimes": "{count}টি বেড"
     }
   },
   "pendingCheckIns": {

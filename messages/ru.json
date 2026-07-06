@@ -376,7 +376,8 @@
       "addBedHint": "Свободные кровати в этой комнате",
       "noFreeBeds": "Нет свободных кроватей в этой комнате на эти даты",
       "bedTaken": "Занята",
-      "removeBed": "Убрать кровать"
+      "removeBed": "Убрать кровать",
+      "bedsTimes": "{count} кроватей"
     }
   },
   "pendingCheckIns": {

@@ -376,7 +376,8 @@
       "addBedHint": "Camas libres en esta habitación",
       "noFreeBeds": "No hay camas libres en esta habitación para estas fechas",
       "bedTaken": "Ocupada",
-      "removeBed": "Quitar cama"
+      "removeBed": "Quitar cama",
+      "bedsTimes": "{count} camas"
     }
   },
   "pendingCheckIns": {

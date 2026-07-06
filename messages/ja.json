@@ -376,7 +376,8 @@
       "addBedHint": "この部屋の空きベッド",
       "noFreeBeds": "この日程ではこの部屋に空きベッドがありません",
       "bedTaken": "予約済み",
-      "removeBed": "ベッドを削除"
+      "removeBed": "ベッドを削除",
+      "bedsTimes": "{count}床"
     }
   },
   "pendingCheckIns": {

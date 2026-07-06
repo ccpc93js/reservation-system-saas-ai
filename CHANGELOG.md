@@ -1,3 +1,21 @@
+## [39b4a33] - 2026-07-06
+
+feat: add/remove beds on an existing reservation from the drawer
+
+An existing reservation can grow or shrink beds without rebooking.
+
+- New API POST/DELETE /api/reservations/[id]/items: add beds (same room
+  as the booking, conflict-checked, rate/dates inherited) or remove a
+  bed. Keeps at least one bed and never drops beds below guest count.
+  Recomputes total_amount.
+- Edit drawer: Beds section listing booked beds with remove, plus an
+  Add bed picker showing free beds in the same room for the dates.
+- i18n for all 11 locales.
+
+Decision: managed from the drawer only (unambiguous), same-room only.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [unreleased] - 2026-07-06
 
 feat: add/remove beds on an existing reservation from the drawer
