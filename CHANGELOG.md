@@ -1,3 +1,19 @@
+## [e942c97] - 2026-07-06
+
+feat: replace native confirm() with a styled confirm dialog
+
+- Add promise-based confirmDialog() + ConfirmDialogHost (Radix, botanical,
+  destructive styling, i18n common namespace), mounted once in the dashboard
+  layout.
+- Replace all 12 window.confirm() delete/remove prompts (rooms, room-types,
+  beds, guests, channels, team, guest book, reservation drawer) with
+  await confirmDialog(...).
+- Add common.{confirm,cancel,delete,confirmTitle} keys across 11 locales.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [c287945] - 2026-07-06
 
 fix: add missing beds.updated_at column
