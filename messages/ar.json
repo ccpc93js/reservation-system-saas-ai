@@ -364,7 +364,8 @@
       "removeGuest": "إزالة الضيف",
       "noAdditionalGuests": "لا يوجد ضيوف إضافيون بعد.",
       "editGuest": "تعديل الضيف",
-      "createNewGuest": "إنشاء ضيف جديد"
+      "createNewGuest": "إنشاء ضيف جديد",
+      "guestsFull": "الحجز ممتلئ ({count} أسرّة). احجز المزيد من الأسرّة لإضافة ضيوف."
     }
   },
   "pendingCheckIns": {

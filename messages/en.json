@@ -364,7 +364,8 @@
       "removeGuest": "Remove guest",
       "noAdditionalGuests": "No additional guests yet.",
       "editGuest": "Edit guest",
-      "createNewGuest": "Create new guest"
+      "createNewGuest": "Create new guest",
+      "guestsFull": "Reservation is full ({count} beds). Book more beds to add guests."
     }
   },
   "pendingCheckIns": {

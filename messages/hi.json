@@ -364,7 +364,8 @@
       "removeGuest": "अतिथि हटाएँ",
       "noAdditionalGuests": "अभी तक कोई अतिरिक्त अतिथि नहीं।",
       "editGuest": "अतिथि संपादित करें",
-      "createNewGuest": "नया अतिथि बनाएँ"
+      "createNewGuest": "नया अतिथि बनाएँ",
+      "guestsFull": "आरक्षण भरा है ({count} बेड)। और अतिथि जोड़ने के लिए और बेड बुक करें।"
     }
   },
   "pendingCheckIns": {

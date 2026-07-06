@@ -364,7 +364,8 @@
       "removeGuest": "Ukloni gosta",
       "noAdditionalGuests": "Još nema dodatnih gostiju.",
       "editGuest": "Izmeni gosta",
-      "createNewGuest": "Napravi novog gosta"
+      "createNewGuest": "Napravi novog gosta",
+      "guestsFull": "Rezervacija je puna ({count} kreveta). Rezervišite još kreveta za dodavanje gostiju."
     }
   },
   "pendingCheckIns": {

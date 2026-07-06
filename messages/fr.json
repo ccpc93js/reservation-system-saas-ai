@@ -364,7 +364,8 @@
       "removeGuest": "Retirer l'invité",
       "noAdditionalGuests": "Aucun invité supplémentaire pour le moment.",
       "editGuest": "Modifier l'invité",
-      "createNewGuest": "Créer un nouvel invité"
+      "createNewGuest": "Créer un nouvel invité",
+      "guestsFull": "Réservation complète ({count} lits). Réservez plus de lits pour ajouter des invités."
     }
   },
   "pendingCheckIns": {

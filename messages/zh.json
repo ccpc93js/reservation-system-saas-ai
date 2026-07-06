@@ -364,7 +364,8 @@
       "removeGuest": "移除入住人",
       "noAdditionalGuests": "暂无其他入住人。",
       "editGuest": "编辑入住人",
-      "createNewGuest": "新建入住人"
+      "createNewGuest": "新建入住人",
+      "guestsFull": "预订已满（{count} 个床位）。预订更多床位以添加入住人。"
     }
   },
   "pendingCheckIns": {

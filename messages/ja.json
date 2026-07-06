@@ -364,7 +364,8 @@
       "removeGuest": "ゲストを削除",
       "noAdditionalGuests": "追加のゲストはまだいません。",
       "editGuest": "ゲストを編集",
-      "createNewGuest": "新しいゲストを作成"
+      "createNewGuest": "新しいゲストを作成",
+      "guestsFull": "予約は満室です（{count}床）。ゲストを追加するにはベッドを追加予約してください。"
     }
   },
   "pendingCheckIns": {

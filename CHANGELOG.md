@@ -1,3 +1,28 @@
+## [ca309a2] - 2026-07-06
+
+fix: raise duplicate-merge dialog above the reservation drawer
+
+The merge-duplicate dialog used z-50, so when triggered from the guest
+dialog opened over the reservation drawer (z-[10000]) it rendered behind
+it. Bumped overlay/content to z-[10051]/z-[10052].
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [4dfd1c3] - 2026-07-06
+
+feat: edit and create companion guests from the reservation drawer
+
+Additional guests can now be edited in place (a pencil opens their full
+guest form) and a new guest can be created and attached directly, for
+when the companion is not already in the system.
+
+- GuestDialog onGuestCreated now passes the new guest id
+- companion rows get an edit action; the add flow gets Create new guest
+- new guest is linked as a companion on save; edits refresh the list
+- i18n for all 11 locales
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [unreleased] - 2026-07-06
 
 feat: edit and create companion guests from the reservation drawer

@@ -74,6 +74,19 @@ export async function POST(
       return Response.json({ error: "Guest not found" }, { status: 404 });
     }
 
+    // Capacity: total guests (primary + companions) cannot exceed the number
+    // of beds booked (one reservation_item per bed).
+    const [{ count: bedCount }, { count: guestCount }] = await Promise.all([
+      (supabase as any).from("reservation_items").select("id", { count: "exact", head: true }).eq("reservation_id", id),
+      (supabase as any).from("reservation_guests").select("id", { count: "exact", head: true }).eq("reservation_id", id),
+    ]);
+    if ((guestCount ?? 0) >= (bedCount ?? 0)) {
+      return Response.json(
+        { error: `Reservation is full — it has ${bedCount ?? 0} bed(s). Book more beds to add more guests.`, code: "reservation_full" },
+        { status: 409 }
+      );
+    }
+
     const { data, error } = await (supabase as any)
       .from("reservation_guests")
       .insert({

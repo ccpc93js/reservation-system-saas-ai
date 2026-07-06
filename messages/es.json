@@ -364,7 +364,8 @@
       "removeGuest": "Eliminar huésped",
       "noAdditionalGuests": "Aún no hay huéspedes adicionales.",
       "editGuest": "Editar huésped",
-      "createNewGuest": "Crear nuevo huésped"
+      "createNewGuest": "Crear nuevo huésped",
+      "guestsFull": "Reserva llena ({count} camas). Reserva más camas para agregar huéspedes."
     }
   },
   "pendingCheckIns": {

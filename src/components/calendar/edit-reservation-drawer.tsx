@@ -120,6 +120,9 @@ export default function EditReservationDrawer({
   });
 
   const status = watch("status");
+  // Capacity = one guest per booked bed. Primary counts as one.
+  const bedCount = reservation?.reservation_items?.length ?? 0;
+  const guestsFull = bedCount > 0 && companions.length + 1 >= bedCount;
   const checkInDate = reservation?.check_in ? new Date(reservation.check_in) : null;
   const checkOutDate = reservation?.check_out ? new Date(reservation.check_out) : null;
   const nights =
@@ -459,8 +462,7 @@ export default function EditReservationDrawer({
       });
       const json = await parseApiResponse(res);
       if (!res.ok) {
-        // 409 = already on the reservation; treat as harmless.
-        if (res.status !== 409) toast.error(json.error || t("toasts.companionAddFailed"));
+        toast.error(json.error || t("toasts.companionAddFailed"));
         return;
       }
       await loadCompanions(reservationId);
@@ -823,11 +825,11 @@ export default function EditReservationDrawer({
                   <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                     <Users className="w-3.5 h-3.5" />
                     {t("additionalGuests")}
-                    {companions.length > 0 && (
-                      <span className="text-muted-foreground/70">({companions.length})</span>
+                    {bedCount > 0 && (
+                      <span className="text-muted-foreground/70">({companions.length + 1}/{bedCount})</span>
                     )}
                   </label>
-                  {!addingCompanion && (
+                  {!addingCompanion && !guestsFull && (
                     <button
                       type="button"
                       onClick={() => setAddingCompanion(true)}
@@ -922,8 +924,11 @@ export default function EditReservationDrawer({
                   </div>
                 )}
 
-                {companions.length === 0 && !addingCompanion && (
+                {companions.length === 0 && !addingCompanion && !guestsFull && (
                   <p className="text-xs text-muted-foreground px-1">{t("noAdditionalGuests")}</p>
+                )}
+                {guestsFull && (
+                  <p className="text-xs text-muted-foreground px-1">{t("guestsFull", { count: bedCount })}</p>
                 )}
               </div>
             )}
