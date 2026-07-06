@@ -1530,6 +1530,7 @@ export default function EditReservationDrawer({
               orgId={reservation.organization_id}
               onGuestUpdated={() => setReservation((prev: any) => ({ ...prev }))}
               onGuestCreated={() => setShowGuestDialog(false)}
+              shiftLeft
             />
           )}
 
@@ -1542,6 +1543,7 @@ export default function EditReservationDrawer({
               orgId={reservation.organization_id}
               onGuestUpdated={() => { loadCompanions(reservationId); }}
               onGuestCreated={(id) => { setCreatingCompanion(false); if (id) addCompanionById(id); }}
+              shiftLeft
             />
           )}
 

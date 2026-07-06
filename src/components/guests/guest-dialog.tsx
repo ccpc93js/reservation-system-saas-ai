@@ -22,6 +22,8 @@ interface GuestDialogProps {
   orgId: string;
   onGuestCreated?: (guestId?: string) => void;
   onGuestUpdated?: () => void;
+  /** Shift left on lg screens so the dialog centers in the area not covered by a right-side drawer. */
+  shiftLeft?: boolean;
 }
 
 const DOCUMENT_TYPES = ["passport", "national_id", "drivers_license"] as const;
@@ -34,6 +36,7 @@ export default function GuestDialog({
   orgId,
   onGuestCreated,
   onGuestUpdated,
+  shiftLeft = false,
 }: GuestDialogProps) {
   const t = useTranslations("guests.dialog");
   const isSerbian = isSerbia(useOrgCountry(orgId));
@@ -302,7 +305,7 @@ export default function GuestDialog({
           <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[10001]" />
           <Dialog.Content
             aria-describedby={undefined}
-            className="fixed left-[50%] top-[50%] z-[10002] w-[calc(100vw-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[85dvh] overflow-y-auto"
+            className={`fixed left-[50%] ${shiftLeft ? "lg:left-[calc(50%-16rem)]" : ""} top-[50%] z-[10002] w-[calc(100vw-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[85dvh] overflow-y-auto`}
           >
             <Dialog.Title className="sr-only">{guestId ? t("editTitle") : t("newTitle")}</Dialog.Title>
             <p className="text-muted-foreground">{t("loading")}</p>
@@ -335,7 +338,7 @@ export default function GuestDialog({
         <Dialog.Content
           ref={scrollContainerRef}
           aria-describedby={undefined}
-          className="fixed left-[50%] top-[50%] z-[10002] w-[calc(100vw-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[85dvh] overflow-y-auto"
+          className={`fixed left-[50%] ${shiftLeft ? "lg:left-[calc(50%-16rem)]" : ""} top-[50%] z-[10002] w-[calc(100vw-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-6 shadow-lg max-h-[85dvh] overflow-y-auto`}
         >
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="font-serif text-2xl font-semibold text-foreground">
