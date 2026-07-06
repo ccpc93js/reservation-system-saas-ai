@@ -1,3 +1,16 @@
+## [9f49e1c] - 2026-07-06
+
+feat: searchable country/city selector on onboarding
+
+Replace the free-text city/country inputs with a searchable country -> city
+selector (country-state-city, lazy-loaded) in a reusable
+components/ui/country-city-select.tsx. Produces canonical country/city names,
+which also makes the Serbia feature-gating reliable.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [7775ee4] - 2026-07-06
 
 feat: gate Serbia-only fields (JMBG, service type, police-registration) by property country
