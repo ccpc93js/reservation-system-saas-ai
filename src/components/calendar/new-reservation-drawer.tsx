@@ -90,6 +90,20 @@ export default function NewReservationDrawer({
     },
   });
 
+  // Reset the form when the drawer closes so a reopen starts clean
+  // (check-out, guest, bed selection, conflict all cleared).
+  useEffect(() => {
+    if (!open) {
+      reset();
+      setConflict(null);
+      setRoomBeds([]);
+      setSelectedBedIds([]);
+      setGuestMode("new");
+      setSelectedGuest(null);
+      setGuestSearch("");
+    }
+  }, [open, reset]);
+
   // Update check_in when checkInDate prop changes
   React.useEffect(() => {
     if (checkInDate) {
