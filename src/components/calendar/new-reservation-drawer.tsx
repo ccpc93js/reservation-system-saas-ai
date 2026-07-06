@@ -29,12 +29,17 @@ export default function NewReservationDrawer({
 }: NewReservationDrawerProps) {
   const t = useTranslations("calendar.newReservation");
   const locale = useLocale();
-  // Locale-aware date display (dd/mm/yyyy in most non-US locales). Parse with an
-  // explicit local time so a "YYYY-MM-DD" string never shifts a day by timezone.
-  const fmtDate = (s?: string) =>
-    s
-      ? new Intl.DateTimeFormat(locale, { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(`${s}T00:00:00`))
-      : "";
+  // European dd/mm/yyyy display with a localized weekday. Parse with an explicit
+  // local time so a "YYYY-MM-DD" string never shifts a day by timezone, and build
+  // the numeric part by hand so the order stays dd/mm regardless of locale.
+  const fmtDate = (s?: string) => {
+    if (!s) return "";
+    const d = new Date(`${s}T00:00:00`);
+    const weekday = new Intl.DateTimeFormat(locale, { weekday: "short" }).format(d);
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    return `${weekday}, ${dd}/${mm}/${d.getFullYear()}`;
+  };
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [guestMode, setGuestMode] = useState<"select" | "new">("new");
   const [conflict, setConflict] = useState<{ reservation_number: string; guest: string; check_in: string; check_out: string } | null>(null);
@@ -416,6 +421,11 @@ export default function NewReservationDrawer({
                   type="date"
                   lang={locale}
                   min={checkIn}
+                  onClick={(e) => {
+                    // Open the native picker from anywhere in the field, not
+                    // just the tiny calendar indicator.
+                    try { (e.currentTarget as HTMLInputElement).showPicker(); } catch { /* older browsers */ }
+                  }}
                   onChange={(e) => {
                     register("check_out").onChange(e);
                     if (e.target.value && checkIn) checkAvailability(checkIn, e.target.value);
