@@ -1,3 +1,31 @@
+## [unreleased] - 2026-07-06
+
+feat: add/remove beds on an existing reservation from the drawer
+
+An existing reservation can grow or shrink beds without rebooking. The
+drawer gains a Beds section listing the booked beds; "Add bed" offers the
+free beds in the same room for the reservation's dates, and each bed can
+be removed. Totals recompute automatically.
+
+- New API: POST/DELETE /api/reservations/[id]/items (same-room only,
+  conflict-checked, keeps >=1 bed, never drops beds below guest count)
+- Drawer Beds section (list, add, remove) with live total
+- i18n for all 11 locales
+
+## [0fed17e] - 2026-07-06
+
+fix: cap reservation guests at the number of booked beds
+
+Additional guests could exceed the reservation capacity. Total guests
+(primary + companions) is now limited to one per booked bed.
+
+- Server rejects adding a guest when the reservation is full (409)
+- Drawer shows a live count (n/beds), hides the add actions and shows a
+  hint once capacity is reached
+- i18n for all 11 locales
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [ca309a2] - 2026-07-06
 
 fix: raise duplicate-merge dialog above the reservation drawer

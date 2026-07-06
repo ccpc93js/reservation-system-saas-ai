@@ -5,7 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, LogOut, AlertTriangle, User, UserPlus, Users, Trash2, Pencil } from "lucide-react";
+import { X, LogOut, AlertTriangle, User, UserPlus, Users, Trash2, Pencil, BedDouble, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
@@ -103,6 +103,10 @@ export default function EditReservationDrawer({
   const [savingCompanion, setSavingCompanion] = useState(false);
   const [companionEditId, setCompanionEditId] = useState<string | null>(null);
   const [creatingCompanion, setCreatingCompanion] = useState(false);
+  // Beds on the reservation
+  const [addingBed, setAddingBed] = useState(false);
+  const [bedOptions, setBedOptions] = useState<{ id: string; name: string; available: boolean; is_active: boolean }[]>([]);
+  const [savingBed, setSavingBed] = useState(false);
 
   const {
     register,
@@ -158,6 +162,81 @@ export default function EditReservationDrawer({
     }
   };
 
+  // Re-fetch the reservation (items + total) after a bed change.
+  const reloadReservation = async () => {
+    if (!reservationId) return;
+    const supabase = createBrowserClient();
+    const { data } = await supabase
+      .from("reservations")
+      .select(
+        `
+        id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id,
+        payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency,
+        actual_check_in_at, actual_check_out_at,
+        guests(first_name, last_name),
+        reservation_items(id, bed_id, price_per_night, total_price, check_in, check_out, created_at, beds(id, name, room_id, rooms(name)))
+      `
+      )
+      .eq("id", reservationId)
+      .single();
+    if (data) setReservation(data);
+  };
+
+  // Available beds in the reservation's room(s), excluding beds already on it.
+  const loadBedOptions = async () => {
+    if (!reservation) return;
+    const items: any[] = reservation.reservation_items ?? [];
+    const roomId = items[0]?.beds?.room_id;
+    if (!roomId) { setBedOptions([]); return; }
+    const onReservation = new Set(items.map((it) => it.bed_id));
+    try {
+      const res = await fetch(
+        `/api/reservations/availability?room_id=${roomId}&check_in=${reservation.check_in}&check_out=${reservation.check_out}&exclude_id=${reservationId}`
+      );
+      const data = await res.json();
+      const beds = (data.beds ?? []).filter((b: any) => !onReservation.has(b.id));
+      setBedOptions(beds);
+    } catch {
+      setBedOptions([]);
+    }
+  };
+
+  const handleAddBed = async (bedId: string, name: string) => {
+    setSavingBed(true);
+    try {
+      const res = await fetch(`/api/reservations/${reservationId}/items`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bed_ids: [bedId] }),
+      });
+      const json = await parseApiResponse(res);
+      if (!res.ok) { toast.error(json.error || t("toasts.bedAddFailed")); return; }
+      await reloadReservation();
+      setAddingBed(false);
+      setBedOptions([]);
+      toast.success(t("toasts.bedAdded", { name }));
+      onReservationUpdated?.();
+    } catch {
+      toast.error(t("toasts.bedAddFailed"));
+    } finally {
+      setSavingBed(false);
+    }
+  };
+
+  const handleRemoveBed = async (bedId: string, name: string) => {
+    if (!(await confirmDialog(t("toasts.bedRemoveConfirm", { name })))) return;
+    try {
+      const res = await fetch(`/api/reservations/${reservationId}/items?bed_id=${bedId}`, { method: "DELETE" });
+      const json = await parseApiResponse(res);
+      if (!res.ok) { toast.error(json.error || t("toasts.bedRemoveFailed")); return; }
+      await reloadReservation();
+      toast.success(t("toasts.bedRemoved", { name }));
+      onReservationUpdated?.();
+    } catch {
+      toast.error(t("toasts.bedRemoveFailed"));
+    }
+  };
+
   const refreshInBook = async () => {
     if (!reservationId) return;
     const supabase = createBrowserClient();
@@ -189,7 +268,7 @@ export default function EditReservationDrawer({
             payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency,
             actual_check_in_at, actual_check_out_at,
             guests(first_name, last_name),
-            reservation_items(id, price_per_night, total_price, check_in, check_out, created_at, beds(name, rooms(name)))
+            reservation_items(id, bed_id, price_per_night, total_price, check_in, check_out, created_at, beds(id, name, room_id, rooms(name)))
           `
           )
           .eq("id", reservationId)
@@ -505,7 +584,7 @@ export default function EditReservationDrawer({
       const supabase = createBrowserClient();
       const { data: updated } = await supabase
         .from("reservations")
-        .select(`id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id, payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency, actual_check_in_at, actual_check_out_at, guests(first_name, last_name), reservation_items(id, price_per_night, total_price, check_in, check_out, created_at, beds(name, rooms(name)))`)
+        .select(`id, reservation_number, status, check_in, check_out, notes, total_amount, paid_amount, check_in_token, guest_id, organization_id, payment_confirmed, payment_currency, payment_method, deposit_amount, deposit_currency, actual_check_in_at, actual_check_out_at, guests(first_name, last_name), reservation_items(id, bed_id, price_per_night, total_price, check_in, check_out, created_at, beds(id, name, room_id, rooms(name)))`)
         .eq("id", reservationId!)
         .single();
       if (updated) { setReservation(updated); setSegmentRates({}); }
@@ -817,6 +896,86 @@ export default function EditReservationDrawer({
                 </div>
               )}
             </div>
+
+            {/* Beds */}
+            {(reservation?.reservation_items?.length ?? 0) > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <BedDouble className="w-3.5 h-3.5" />
+                    {t("bedsLabel")}
+                    <span className="text-muted-foreground/70">({reservation.reservation_items.length})</span>
+                  </label>
+                  {!addingBed && (
+                    <button
+                      type="button"
+                      onClick={() => { setAddingBed(true); loadBedOptions(); }}
+                      className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> {t("addBed")}
+                    </button>
+                  )}
+                </div>
+
+                <div className="rounded-lg border border-border bg-background divide-y divide-border overflow-hidden">
+                  {reservation.reservation_items.map((it: any) => (
+                    <div key={it.id} className="flex items-center gap-2 px-3 py-2">
+                      <BedDouble className="w-4 h-4 text-muted-foreground shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm text-foreground truncate block">{it.beds?.name}</span>
+                        {it.beds?.rooms?.name && (
+                          <span className="text-xs text-muted-foreground truncate block">{it.beds.rooms.name}</span>
+                        )}
+                      </div>
+                      {reservation.reservation_items.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveBed(it.bed_id, it.beds?.name)}
+                          className="p-1.5 rounded-lg hover:bg-[#EEDCD5] transition-colors shrink-0"
+                          title={t("removeBed")}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-[#9C4A37]" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {addingBed && (
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-xs text-muted-foreground">{t("addBedHint")}</span>
+                      <button
+                        type="button"
+                        onClick={() => { setAddingBed(false); setBedOptions([]); }}
+                        className="p-1 rounded hover:bg-muted"
+                      >
+                        <X className="w-3.5 h-3.5 text-muted-foreground" />
+                      </button>
+                    </div>
+                    {bedOptions.length === 0 ? (
+                      <p className="text-xs text-muted-foreground px-1">{t("noFreeBeds")}</p>
+                    ) : (
+                      <div className="rounded-lg border border-border bg-background divide-y divide-border overflow-hidden">
+                        {bedOptions.map((b) => (
+                          <button
+                            key={b.id}
+                            type="button"
+                            disabled={!b.available || savingBed}
+                            onClick={() => handleAddBed(b.id, b.name)}
+                            className="w-full flex items-center gap-2 text-left px-3 py-2 text-sm hover:bg-muted transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                          >
+                            <BedDouble className="w-4 h-4 text-muted-foreground shrink-0" />
+                            <span className="flex-1 text-foreground">{b.name}</span>
+                            {!b.available && <span className="text-[10px] text-[#9C4A37]">{t("bedTaken")}</span>}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Additional guests */}
             {reservation?.guest_id && (

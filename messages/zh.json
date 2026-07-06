@@ -351,7 +351,12 @@
         "companionAddFailed": "添加入住人失败",
         "companionRemoveConfirm": "从此预订中移除 {name}？",
         "companionRemoved": "入住人已移除",
-        "companionRemoveFailed": "移除入住人失败"
+        "companionRemoveFailed": "移除入住人失败",
+        "bedAdded": "已添加床位 {name}",
+        "bedAddFailed": "添加床位失败",
+        "bedRemoveConfirm": "从此预订中移除床位 {name}？",
+        "bedRemoved": "已移除床位 {name}",
+        "bedRemoveFailed": "移除床位失败"
       },
       "paymentMethod": "付款方式",
       "selectMethod": "选择方式",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "暂无其他入住人。",
       "editGuest": "编辑入住人",
       "createNewGuest": "新建入住人",
-      "guestsFull": "预订已满（{count} 个床位）。预订更多床位以添加入住人。"
+      "guestsFull": "预订已满（{count} 个床位）。预订更多床位以添加入住人。",
+      "bedsLabel": "床位",
+      "addBed": "添加床位",
+      "addBedHint": "此房间的空床位",
+      "noFreeBeds": "该房间在这些日期没有空床位",
+      "bedTaken": "已占用",
+      "removeBed": "移除床位"
     }
   },
   "pendingCheckIns": {

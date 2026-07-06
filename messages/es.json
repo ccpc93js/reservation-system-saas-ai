@@ -351,7 +351,12 @@
         "companionAddFailed": "No se pudo añadir el huésped",
         "companionRemoveConfirm": "¿Eliminar a {name} de esta reserva?",
         "companionRemoved": "Huésped eliminado",
-        "companionRemoveFailed": "No se pudo eliminar el huésped"
+        "companionRemoveFailed": "No se pudo eliminar el huésped",
+        "bedAdded": "Cama {name} agregada",
+        "bedAddFailed": "No se pudo agregar la cama",
+        "bedRemoveConfirm": "¿Quitar la cama {name} de esta reserva?",
+        "bedRemoved": "Cama {name} quitada",
+        "bedRemoveFailed": "No se pudo quitar la cama"
       },
       "paymentMethod": "Método de pago",
       "selectMethod": "Seleccionar método",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "Aún no hay huéspedes adicionales.",
       "editGuest": "Editar huésped",
       "createNewGuest": "Crear nuevo huésped",
-      "guestsFull": "Reserva llena ({count} camas). Reserva más camas para agregar huéspedes."
+      "guestsFull": "Reserva llena ({count} camas). Reserva más camas para agregar huéspedes.",
+      "bedsLabel": "Camas",
+      "addBed": "Agregar cama",
+      "addBedHint": "Camas libres en esta habitación",
+      "noFreeBeds": "No hay camas libres en esta habitación para estas fechas",
+      "bedTaken": "Ocupada",
+      "removeBed": "Quitar cama"
     }
   },
   "pendingCheckIns": {

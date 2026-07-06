@@ -351,7 +351,12 @@
         "companionAddFailed": "Не удалось добавить гостя",
         "companionRemoveConfirm": "Удалить {name} из этого бронирования?",
         "companionRemoved": "Гость удалён",
-        "companionRemoveFailed": "Не удалось удалить гостя"
+        "companionRemoveFailed": "Не удалось удалить гостя",
+        "bedAdded": "Кровать {name} добавлена",
+        "bedAddFailed": "Не удалось добавить кровать",
+        "bedRemoveConfirm": "Убрать кровать {name} из этого бронирования?",
+        "bedRemoved": "Кровать {name} убрана",
+        "bedRemoveFailed": "Не удалось убрать кровать"
       },
       "paymentMethod": "Способ оплаты",
       "selectMethod": "Выберите способ",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "Пока нет дополнительных гостей.",
       "editGuest": "Редактировать гостя",
       "createNewGuest": "Создать нового гостя",
-      "guestsFull": "Бронирование заполнено ({count} кроватей). Забронируйте больше кроватей, чтобы добавить гостей."
+      "guestsFull": "Бронирование заполнено ({count} кроватей). Забронируйте больше кроватей, чтобы добавить гостей.",
+      "bedsLabel": "Кровати",
+      "addBed": "Добавить кровать",
+      "addBedHint": "Свободные кровати в этой комнате",
+      "noFreeBeds": "Нет свободных кроватей в этой комнате на эти даты",
+      "bedTaken": "Занята",
+      "removeBed": "Убрать кровать"
     }
   },
   "pendingCheckIns": {

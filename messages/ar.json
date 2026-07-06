@@ -351,7 +351,12 @@
         "companionAddFailed": "فشل في إضافة الضيف",
         "companionRemoveConfirm": "إزالة {name} من هذا الحجز؟",
         "companionRemoved": "تمت إزالة الضيف",
-        "companionRemoveFailed": "فشل في إزالة الضيف"
+        "companionRemoveFailed": "فشل في إزالة الضيف",
+        "bedAdded": "تمت إضافة السرير {name}",
+        "bedAddFailed": "فشل في إضافة السرير",
+        "bedRemoveConfirm": "إزالة السرير {name} من هذا الحجز؟",
+        "bedRemoved": "تمت إزالة السرير {name}",
+        "bedRemoveFailed": "فشل في إزالة السرير"
       },
       "paymentMethod": "طريقة الدفع",
       "selectMethod": "اختر الطريقة",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "لا يوجد ضيوف إضافيون بعد.",
       "editGuest": "تعديل الضيف",
       "createNewGuest": "إنشاء ضيف جديد",
-      "guestsFull": "الحجز ممتلئ ({count} أسرّة). احجز المزيد من الأسرّة لإضافة ضيوف."
+      "guestsFull": "الحجز ممتلئ ({count} أسرّة). احجز المزيد من الأسرّة لإضافة ضيوف.",
+      "bedsLabel": "الأسرّة",
+      "addBed": "إضافة سرير",
+      "addBedHint": "الأسرّة المتاحة في هذه الغرفة",
+      "noFreeBeds": "لا توجد أسرّة متاحة في هذه الغرفة لهذه التواريخ",
+      "bedTaken": "محجوز",
+      "removeBed": "إزالة السرير"
     }
   },
   "pendingCheckIns": {

@@ -351,7 +351,12 @@
         "companionAddFailed": "Dodavanje gosta nije uspelo",
         "companionRemoveConfirm": "Ukloniti {name} iz ove rezervacije?",
         "companionRemoved": "Gost uklonjen",
-        "companionRemoveFailed": "Uklanjanje gosta nije uspelo"
+        "companionRemoveFailed": "Uklanjanje gosta nije uspelo",
+        "bedAdded": "Krevet {name} dodat",
+        "bedAddFailed": "Dodavanje kreveta nije uspelo",
+        "bedRemoveConfirm": "Ukloniti krevet {name} iz ove rezervacije?",
+        "bedRemoved": "Krevet {name} uklonjen",
+        "bedRemoveFailed": "Uklanjanje kreveta nije uspelo"
       },
       "paymentMethod": "Način plaćanja",
       "selectMethod": "Izaberite način",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "Još nema dodatnih gostiju.",
       "editGuest": "Izmeni gosta",
       "createNewGuest": "Napravi novog gosta",
-      "guestsFull": "Rezervacija je puna ({count} kreveta). Rezervišite još kreveta za dodavanje gostiju."
+      "guestsFull": "Rezervacija je puna ({count} kreveta). Rezervišite još kreveta za dodavanje gostiju.",
+      "bedsLabel": "Kreveti",
+      "addBed": "Dodaj krevet",
+      "addBedHint": "Slobodni kreveti u ovoj sobi",
+      "noFreeBeds": "Nema slobodnih kreveta u ovoj sobi za ove datume",
+      "bedTaken": "Zauzet",
+      "removeBed": "Ukloni krevet"
     }
   },
   "pendingCheckIns": {

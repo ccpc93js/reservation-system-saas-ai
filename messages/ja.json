@@ -351,7 +351,12 @@
         "companionAddFailed": "ゲストの追加に失敗しました",
         "companionRemoveConfirm": "{name} をこの予約から削除しますか？",
         "companionRemoved": "ゲストを削除しました",
-        "companionRemoveFailed": "ゲストの削除に失敗しました"
+        "companionRemoveFailed": "ゲストの削除に失敗しました",
+        "bedAdded": "ベッド {name} を追加しました",
+        "bedAddFailed": "ベッドの追加に失敗しました",
+        "bedRemoveConfirm": "この予約からベッド {name} を削除しますか？",
+        "bedRemoved": "ベッド {name} を削除しました",
+        "bedRemoveFailed": "ベッドの削除に失敗しました"
       },
       "paymentMethod": "支払い方法",
       "selectMethod": "方法を選択",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "追加のゲストはまだいません。",
       "editGuest": "ゲストを編集",
       "createNewGuest": "新しいゲストを作成",
-      "guestsFull": "予約は満室です（{count}床）。ゲストを追加するにはベッドを追加予約してください。"
+      "guestsFull": "予約は満室です（{count}床）。ゲストを追加するにはベッドを追加予約してください。",
+      "bedsLabel": "ベッド",
+      "addBed": "ベッドを追加",
+      "addBedHint": "この部屋の空きベッド",
+      "noFreeBeds": "この日程ではこの部屋に空きベッドがありません",
+      "bedTaken": "予約済み",
+      "removeBed": "ベッドを削除"
     }
   },
   "pendingCheckIns": {

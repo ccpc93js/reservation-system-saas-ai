@@ -351,7 +351,12 @@
         "companionAddFailed": "अतिथि जोड़ने में विफल",
         "companionRemoveConfirm": "क्या {name} को इस आरक्षण से हटाएँ?",
         "companionRemoved": "अतिथि हटाया गया",
-        "companionRemoveFailed": "अतिथि हटाने में विफल"
+        "companionRemoveFailed": "अतिथि हटाने में विफल",
+        "bedAdded": "बेड {name} जोड़ा गया",
+        "bedAddFailed": "बेड जोड़ने में विफल",
+        "bedRemoveConfirm": "क्या इस आरक्षण से बेड {name} हटाएँ?",
+        "bedRemoved": "बेड {name} हटाया गया",
+        "bedRemoveFailed": "बेड हटाने में विफल"
       },
       "paymentMethod": "भुगतान का तरीका",
       "selectMethod": "तरीका चुनें",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "अभी तक कोई अतिरिक्त अतिथि नहीं।",
       "editGuest": "अतिथि संपादित करें",
       "createNewGuest": "नया अतिथि बनाएँ",
-      "guestsFull": "आरक्षण भरा है ({count} बेड)। और अतिथि जोड़ने के लिए और बेड बुक करें।"
+      "guestsFull": "आरक्षण भरा है ({count} बेड)। और अतिथि जोड़ने के लिए और बेड बुक करें।",
+      "bedsLabel": "बेड",
+      "addBed": "बेड जोड़ें",
+      "addBedHint": "इस कमरे में खाली बेड",
+      "noFreeBeds": "इन तिथियों के लिए इस कमरे में कोई खाली बेड नहीं",
+      "bedTaken": "बुक",
+      "removeBed": "बेड हटाएँ"
     }
   },
   "pendingCheckIns": {

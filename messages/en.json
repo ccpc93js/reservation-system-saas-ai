@@ -351,7 +351,12 @@
         "companionAddFailed": "Failed to add guest",
         "companionRemoveConfirm": "Remove {name} from this reservation?",
         "companionRemoved": "Guest removed",
-        "companionRemoveFailed": "Failed to remove guest"
+        "companionRemoveFailed": "Failed to remove guest",
+        "bedAdded": "Bed {name} added",
+        "bedAddFailed": "Failed to add bed",
+        "bedRemoveConfirm": "Remove bed {name} from this reservation?",
+        "bedRemoved": "Bed {name} removed",
+        "bedRemoveFailed": "Failed to remove bed"
       },
       "paymentMethod": "Payment Method",
       "selectMethod": "Select method",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "No additional guests yet.",
       "editGuest": "Edit guest",
       "createNewGuest": "Create new guest",
-      "guestsFull": "Reservation is full ({count} beds). Book more beds to add guests."
+      "guestsFull": "Reservation is full ({count} beds). Book more beds to add guests.",
+      "bedsLabel": "Beds",
+      "addBed": "Add bed",
+      "addBedHint": "Free beds in this room",
+      "noFreeBeds": "No free beds in this room for these dates",
+      "bedTaken": "Taken",
+      "removeBed": "Remove bed"
     }
   },
   "pendingCheckIns": {

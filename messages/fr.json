@@ -351,7 +351,12 @@
         "companionAddFailed": "Échec de l'ajout de l'invité",
         "companionRemoveConfirm": "Retirer {name} de cette réservation ?",
         "companionRemoved": "Invité retiré",
-        "companionRemoveFailed": "Échec du retrait de l'invité"
+        "companionRemoveFailed": "Échec du retrait de l'invité",
+        "bedAdded": "Lit {name} ajouté",
+        "bedAddFailed": "Échec de l'ajout du lit",
+        "bedRemoveConfirm": "Retirer le lit {name} de cette réservation ?",
+        "bedRemoved": "Lit {name} retiré",
+        "bedRemoveFailed": "Échec du retrait du lit"
       },
       "paymentMethod": "Mode de paiement",
       "selectMethod": "Choisir un mode",
@@ -365,7 +370,13 @@
       "noAdditionalGuests": "Aucun invité supplémentaire pour le moment.",
       "editGuest": "Modifier l'invité",
       "createNewGuest": "Créer un nouvel invité",
-      "guestsFull": "Réservation complète ({count} lits). Réservez plus de lits pour ajouter des invités."
+      "guestsFull": "Réservation complète ({count} lits). Réservez plus de lits pour ajouter des invités.",
+      "bedsLabel": "Lits",
+      "addBed": "Ajouter un lit",
+      "addBedHint": "Lits libres dans cette chambre",
+      "noFreeBeds": "Aucun lit libre dans cette chambre pour ces dates",
+      "bedTaken": "Occupé",
+      "removeBed": "Retirer le lit"
     }
   },
   "pendingCheckIns": {
