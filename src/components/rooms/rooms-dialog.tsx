@@ -62,7 +62,7 @@ export default function RoomsDialog({
         if (isEditing) {
           await fetchRoom();
         } else {
-          reset();
+          reset({ room_type_id: "", name: "", floor: undefined, notes: "" });
         }
       } finally {
         setLoadingData(false);

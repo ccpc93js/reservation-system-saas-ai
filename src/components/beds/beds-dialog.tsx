@@ -59,7 +59,7 @@ export default function BedsDialog({
         if (isEditing) {
           await fetchBed();
         } else {
-          reset();
+          reset({ room_id: "", name: "", position: undefined, is_active: true });
         }
       } finally {
         setLoadingData(false);

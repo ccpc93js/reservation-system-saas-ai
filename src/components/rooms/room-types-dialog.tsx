@@ -58,7 +58,17 @@ export default function RoomTypeDialog({
     if (open && isEditing) {
       fetchRoomType();
     } else if (open) {
-      reset();
+      // Explicit empty defaults — a prior edit's reset(values) overwrites the
+      // form's internal defaultValues, so a bare reset() would restore the
+      // last-edited data instead of a blank form.
+      reset({
+        name: "",
+        type: "dorm",
+        gender: "",
+        capacity: 1,
+        base_price: 0,
+        description: "",
+      });
     }
   }, [open, isEditing]);
 
