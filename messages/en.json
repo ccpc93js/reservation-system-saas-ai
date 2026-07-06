@@ -225,7 +225,14 @@
       "toastBedIdMissing": "Bed ID is missing",
       "toastCreateFailed": "Failed to create reservation",
       "toastCreateSuccess": "Reservation created!",
-      "toastCreateError": "Error creating reservation"
+      "toastCreateError": "Error creating reservation",
+      "beds": "Beds",
+      "bedsSummary": "{selected} of {free} free selected",
+      "wholeRoom": "Whole room",
+      "bedBooked": "Booked",
+      "bedInactive": "Inactive",
+      "bedsCount": "{count} beds",
+      "selectAtLeastOneBed": "Select at least one bed"
     },
     "editReservation": {
       "loading": "Loading...",

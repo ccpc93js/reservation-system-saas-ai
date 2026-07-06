@@ -225,7 +225,14 @@
       "toastBedIdMissing": "缺少床位 ID",
       "toastCreateFailed": "预订创建失败",
       "toastCreateSuccess": "预订创建成功！",
-      "toastCreateError": "创建预订时出错"
+      "toastCreateError": "创建预订时出错",
+      "beds": "床位",
+      "bedsSummary": "已选 {selected}/{free} 个空床",
+      "wholeRoom": "整间房",
+      "bedBooked": "已占用",
+      "bedInactive": "停用",
+      "bedsCount": "{count} 个床位",
+      "selectAtLeastOneBed": "请至少选择一个床位"
     },
     "editReservation": {
       "loading": "加载中...",

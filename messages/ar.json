@@ -225,7 +225,14 @@
       "toastBedIdMissing": "معرّف السرير مفقود",
       "toastCreateFailed": "فشل إنشاء الحجز",
       "toastCreateSuccess": "تم إنشاء الحجز!",
-      "toastCreateError": "خطأ أثناء إنشاء الحجز"
+      "toastCreateError": "خطأ أثناء إنشاء الحجز",
+      "beds": "الأسرّة",
+      "bedsSummary": "تم اختيار {selected} من {free} متاحة",
+      "wholeRoom": "الغرفة كاملة",
+      "bedBooked": "محجوز",
+      "bedInactive": "غير نشط",
+      "bedsCount": "{count} أسرّة",
+      "selectAtLeastOneBed": "اختر سريرًا واحدًا على الأقل"
     },
     "editReservation": {
       "loading": "جارٍ التحميل...",

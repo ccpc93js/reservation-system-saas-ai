@@ -225,7 +225,14 @@
       "toastBedIdMissing": "Отсутствует ID кровати",
       "toastCreateFailed": "Не удалось создать бронирование",
       "toastCreateSuccess": "Бронирование создано!",
-      "toastCreateError": "Ошибка при создании бронирования"
+      "toastCreateError": "Ошибка при создании бронирования",
+      "beds": "Кровати",
+      "bedsSummary": "Выбрано {selected} из {free} свободных",
+      "wholeRoom": "Вся комната",
+      "bedBooked": "Занята",
+      "bedInactive": "Неактивна",
+      "bedsCount": "{count} кроватей",
+      "selectAtLeastOneBed": "Выберите хотя бы одну кровать"
     },
     "editReservation": {
       "loading": "Загрузка...",

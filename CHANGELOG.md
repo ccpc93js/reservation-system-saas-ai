@@ -1,5 +1,50 @@
 ## [unreleased] - 2026-07-06
 
+feat: multi-bed reservations (book several beds in one reservation)
+
+One reservation can now span multiple beds — e.g. 6 beds in a dorm as a
+single booking. The data model already supported this (reservation_items is
+per-bed); this wires the direct booking flow end-to-end.
+
+- Create API accepts bed_ids[] (bed_id kept as anchor/fallback for OTA
+  imports); conflict-checks every bed, inserts one item per bed, total =
+  nights × rate × beds
+- Availability endpoint gains room-level mode (?room_id=) returning per-bed
+  availability + free/total counts
+- New-booking drawer: quantity stepper (auto-assign N free beds) + explicit
+  bed checkboxes + "Whole room"; price shows nights × beds
+- Confirmation email / notification show "Room · N beds"
+- i18n for all 11 locales
+- Design doc for Phase B (room-type channel manager / OTA dorm sync):
+  docs/plans/2026-07-06-multibed-and-channel-manager.md
+
+Channel manager stays per-bed iCal for now; true dorm OTA sync (room-type
+allotment) is designed in the doc but not yet built.
+
+## [b11584b] - 2026-07-06
+
+feat: multiple guests per reservation (primary + companions)
+
+Add a reservation_guests join table so several guests can be attached to
+one reservation. The booker remains the primary/lead guest (kept in sync
+with reservations.guest_id, which existing email/list code relies on);
+additional companion guests are added/removed from the reservation drawer.
+Each companion is a full guest record, so their ID and documents are
+captured for check-in.
+
+- Migration: reservation_guests table + RLS (select/insert/delete) +
+  backfill of existing primary guests
+- API: GET/POST/DELETE /api/reservations/[id]/guests
+- Sync primary row on reservation create and on primary-guest change
+- Reservation drawer: Additional guests section (search, add, remove)
+- i18n keys for all 11 locales
+
+No per-bed assignment: guests are listed at the reservation level.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [unreleased] - 2026-07-06
+
 feat: multiple guests per reservation (primary + companions)
 
 New reservation_guests join table links several guests to one reservation.

@@ -225,7 +225,14 @@
       "toastBedIdMissing": "Falta el ID de la cama",
       "toastCreateFailed": "No se pudo crear la reserva",
       "toastCreateSuccess": "¡Reserva creada!",
-      "toastCreateError": "Error al crear la reserva"
+      "toastCreateError": "Error al crear la reserva",
+      "beds": "Camas",
+      "bedsSummary": "{selected} de {free} libres seleccionadas",
+      "wholeRoom": "Habitación completa",
+      "bedBooked": "Ocupada",
+      "bedInactive": "Inactiva",
+      "bedsCount": "{count} camas",
+      "selectAtLeastOneBed": "Selecciona al menos una cama"
     },
     "editReservation": {
       "loading": "Cargando...",

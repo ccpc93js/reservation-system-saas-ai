@@ -225,7 +225,14 @@
       "toastBedIdMissing": "बेड आईडी गायब है",
       "toastCreateFailed": "आरक्षण बनाने में विफल",
       "toastCreateSuccess": "आरक्षण बन गया!",
-      "toastCreateError": "आरक्षण बनाने में त्रुटि"
+      "toastCreateError": "आरक्षण बनाने में त्रुटि",
+      "beds": "बेड",
+      "bedsSummary": "{free} में से {selected} खाली चयनित",
+      "wholeRoom": "पूरा कमरा",
+      "bedBooked": "बुक",
+      "bedInactive": "निष्क्रिय",
+      "bedsCount": "{count} बेड",
+      "selectAtLeastOneBed": "कम से कम एक बेड चुनें"
     },
     "editReservation": {
       "loading": "लोड हो रहा है...",

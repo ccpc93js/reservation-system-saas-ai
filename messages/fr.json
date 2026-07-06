@@ -225,7 +225,14 @@
       "toastBedIdMissing": "L'identifiant du lit est manquant",
       "toastCreateFailed": "Échec de la création de la réservation",
       "toastCreateSuccess": "Réservation créée !",
-      "toastCreateError": "Erreur lors de la création de la réservation"
+      "toastCreateError": "Erreur lors de la création de la réservation",
+      "beds": "Lits",
+      "bedsSummary": "{selected} sur {free} libres sélectionnés",
+      "wholeRoom": "Chambre entière",
+      "bedBooked": "Occupé",
+      "bedInactive": "Inactif",
+      "bedsCount": "{count} lits",
+      "selectAtLeastOneBed": "Sélectionnez au moins un lit"
     },
     "editReservation": {
       "loading": "Chargement...",

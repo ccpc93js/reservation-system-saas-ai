@@ -64,6 +64,11 @@ export const createReservationSchema = yup.object().shape({
     .test('valid-uuid', 'Invalid bed ID', function(value) {
       return uuidRegex.test(value);
     }),
+  // Optional multi-bed selection. When present, the server books every bed
+  // in this list (bed_id is treated as the anchor / fallback).
+  bed_ids: yup.array()
+    .of(yup.string().test('valid-uuid', 'Invalid bed ID', (v) => !v || uuidRegex.test(v)))
+    .optional(),
   org_id: yup.string()
     .required('Organization ID is required')
     .test('valid-uuid', 'Invalid organization ID', function(value) {

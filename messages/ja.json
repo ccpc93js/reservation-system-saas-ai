@@ -225,7 +225,14 @@
       "toastBedIdMissing": "ベッドIDがありません",
       "toastCreateFailed": "予約の作成に失敗しました",
       "toastCreateSuccess": "予約が作成されました！",
-      "toastCreateError": "予約作成時にエラーが発生しました"
+      "toastCreateError": "予約作成時にエラーが発生しました",
+      "beds": "ベッド",
+      "bedsSummary": "{free}床中{selected}床を選択",
+      "wholeRoom": "部屋全体",
+      "bedBooked": "予約済み",
+      "bedInactive": "無効",
+      "bedsCount": "{count}床",
+      "selectAtLeastOneBed": "少なくとも1つのベッドを選択してください"
     },
     "editReservation": {
       "loading": "読み込み中...",

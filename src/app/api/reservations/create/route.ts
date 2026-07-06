@@ -146,34 +146,50 @@ export async function POST(request: Request) {
       return fail("nights.compute", "Check-out date must be after check-in date", 400);
     }
 
-    // Conflict check: reject if bed already booked for these dates
+    // Resolve the beds to book. Supports multi-bed (bed_ids[]) with a
+    // single-bed fallback (bed_id) for older callers and OTA imports.
+    const bedIds: string[] = Array.isArray(data.bed_ids) && data.bed_ids.length > 0
+      ? Array.from(new Set((data.bed_ids as string[]).filter(Boolean)))
+      : (data.bed_id ? [data.bed_id] : []);
+
+    if (bedIds.length === 0) {
+      await (supabase.from("reservations") as any).delete().eq("id", reservation.id);
+      return fail("beds.resolve", "At least one bed is required", 400);
+    }
+
+    // Conflict check across every requested bed for these dates.
     const { data: conflicts } = await (supabase
       .from("reservation_items") as any)
-      .select("id, reservations!inner(status)")
-      .eq("bed_id", data.bed_id)
+      .select("bed_id, beds(name), reservations!inner(status)")
+      .in("bed_id", bedIds)
       .lt("check_in", data.check_out)
       .gt("check_out", data.check_in)
       .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
 
     if (conflicts && conflicts.length > 0) {
       await (supabase.from("reservations") as any).delete().eq("id", reservation.id);
-      return fail("conflict.check", "This bed is already booked for the selected dates", 409);
+      const names = Array.from(new Set(conflicts.map((c: any) => c.beds?.name).filter(Boolean)));
+      const detail = names.length ? ` (${names.join(", ")})` : "";
+      return fail("conflict.check", `One or more selected beds are already booked for these dates${detail}`, 409);
     }
 
-    const totalPrice = nights * data.price_per_night;
+    const perBedTotal = nights * data.price_per_night;
+    const totalPrice = perBedTotal * bedIds.length;
 
-    // One item per reservation (full stay) — not per night
+    // One item per bed (full stay) — not per night.
+    const itemsPayload = bedIds.map((bid) => ({
+      organization_id: data.org_id,
+      reservation_id: reservation.id,
+      bed_id: bid,
+      check_in: data.check_in,
+      check_out: data.check_out,
+      price_per_night: data.price_per_night,
+      total_price: perBedTotal,
+    }));
+
     const { error: itemsError } = await (supabase
       .from("reservation_items") as any)
-      .insert({
-        organization_id: data.org_id,
-        reservation_id: reservation.id,
-        bed_id: data.bed_id,
-        check_in: data.check_in,
-        check_out: data.check_out,
-        price_per_night: data.price_per_night,
-        total_price: totalPrice,
-      });
+      .insert(itemsPayload);
 
     if (itemsError) {
       console.error("[reservations/create] reservation_items.insert", itemsError);
@@ -214,11 +230,17 @@ export async function POST(request: Request) {
       .eq("id", guestId)
       .single();
 
-    const { data: room } = await (supabase
+    const { data: items } = await (supabase
       .from("reservation_items") as any)
-      .select("beds(rooms(name))")
-      .eq("reservation_id", reservation.id)
-      .single();
+      .select("beds(name, rooms(name))")
+      .eq("reservation_id", reservation.id);
+
+    const roomName = items?.[0]?.beds?.rooms?.name;
+    const bedCount = items?.length ?? bedIds.length;
+    // e.g. "Yellow Dorm · 6 beds" when more than one bed is booked.
+    const roomSummary = roomName
+      ? (bedCount > 1 ? `${roomName} · ${bedCount} beds` : roomName)
+      : undefined;
 
     // Send confirmation email
     if (guest?.email) {
@@ -229,7 +251,7 @@ export async function POST(request: Request) {
         (reservation as any).reservation_number || reservation.id.substring(0, 8).toUpperCase(),
         data.check_in,
         data.check_out,
-        room?.beds?.rooms?.name,
+        roomSummary,
         totalPrice,
         branding,
         (reservation as any).check_in_token
@@ -243,7 +265,7 @@ export async function POST(request: Request) {
       {
         guestName: `${data.first_name} ${data.last_name}`,
         reservationNumber: reservation.id.substring(0, 8).toUpperCase(),
-        roomName: room?.beds?.rooms?.name ?? null,
+        roomName: roomSummary ?? null,
       },
       "/reservations",
       user.id

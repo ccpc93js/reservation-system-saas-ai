@@ -225,7 +225,14 @@
       "toastBedIdMissing": "বেড আইডি অনুপস্থিত",
       "toastCreateFailed": "রিজার্ভেশন তৈরি করতে ব্যর্থ",
       "toastCreateSuccess": "রিজার্ভেশন তৈরি হয়েছে!",
-      "toastCreateError": "রিজার্ভেশন তৈরিতে ত্রুটি"
+      "toastCreateError": "রিজার্ভেশন তৈরিতে ত্রুটি",
+      "beds": "বেড",
+      "bedsSummary": "{free}টির মধ্যে {selected}টি খালি নির্বাচিত",
+      "wholeRoom": "পুরো রুম",
+      "bedBooked": "বুক করা",
+      "bedInactive": "নিষ্ক্রিয়",
+      "bedsCount": "{count}টি বেড",
+      "selectAtLeastOneBed": "অন্তত একটি বেড নির্বাচন করুন"
     },
     "editReservation": {
       "loading": "লোড হচ্ছে...",

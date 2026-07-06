@@ -225,7 +225,14 @@
       "toastBedIdMissing": "Nedostaje ID kreveta",
       "toastCreateFailed": "Neuspešno kreiranje rezervacije",
       "toastCreateSuccess": "Rezervacija kreirana!",
-      "toastCreateError": "Greška pri kreiranju rezervacije"
+      "toastCreateError": "Greška pri kreiranju rezervacije",
+      "beds": "Kreveti",
+      "bedsSummary": "Izabrano {selected} od {free} slobodnih",
+      "wholeRoom": "Cela soba",
+      "bedBooked": "Zauzet",
+      "bedInactive": "Neaktivan",
+      "bedsCount": "{count} kreveta",
+      "selectAtLeastOneBed": "Izaberite bar jedan krevet"
     },
     "editReservation": {
       "loading": "Učitavanje...",

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Search, CheckCircle2 } from "lucide-react";
+import { X, Search, CheckCircle2, BedDouble } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
@@ -39,6 +39,10 @@ export default function NewReservationDrawer({
   const [selectedGuest, setSelectedGuest] = useState<any>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  // Multi-bed selection
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [roomBeds, setRoomBeds] = useState<{ id: string; name: string; available: boolean; is_active: boolean }[]>([]);
+  const [selectedBedIds, setSelectedBedIds] = useState<string[]>(bedId ? [bedId] : []);
 
   const getTodayLocalDateStr = () => {
     const now = new Date();
@@ -165,6 +169,66 @@ export default function NewReservationDrawer({
   const pricePerNight = watch("price_per_night");
   const checkIn = watch("check_in");
 
+  // Resolve the anchor bed's room so we can offer the other beds in it.
+  useEffect(() => {
+    if (!open || !bedId) return;
+    setSelectedBedIds([bedId]);
+    setRoomBeds([]);
+    (async () => {
+      const supabase = createBrowserClient();
+      const { data: bed } = await (supabase as any)
+        .from("beds").select("room_id").eq("id", bedId).single();
+      setRoomId(bed?.room_id ?? null);
+    })();
+  }, [open, bedId]);
+
+  // Load per-bed availability for the room once dates are chosen.
+  useEffect(() => {
+    if (!open || !roomId || !checkIn || !checkOut) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(
+          `/api/reservations/availability?room_id=${roomId}&check_in=${checkIn}&check_out=${checkOut}`
+        );
+        const data = await res.json();
+        if (cancelled) return;
+        const beds = data.beds ?? [];
+        setRoomBeds(beds);
+        // Drop selections that are no longer free; keep the anchor if it is.
+        setSelectedBedIds((prev) => {
+          const avail = new Set(beds.filter((b: any) => b.available).map((b: any) => b.id));
+          let next = prev.filter((id) => avail.has(id));
+          if (next.length === 0 && bedId && avail.has(bedId)) next = [bedId];
+          return next;
+        });
+      } catch {
+        /* server re-validates on submit */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [open, roomId, checkIn, checkOut, bedId]);
+
+  const availableBeds = roomBeds.filter((b) => b.available);
+  const freeCount = availableBeds.length;
+  const selectedCount = selectedBedIds.length || 1;
+
+  const toggleBed = (id: string) => {
+    setSelectedBedIds((prev) =>
+      prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
+    );
+  };
+
+  // Auto-assign: pick the first N free beds, anchor bed prioritised.
+  const setQuantity = (n: number) => {
+    const clamped = Math.max(0, Math.min(n, freeCount));
+    const ordered = [
+      ...(bedId && availableBeds.some((b) => b.id === bedId) ? [bedId] : []),
+      ...availableBeds.map((b) => b.id).filter((id) => id !== bedId),
+    ];
+    setSelectedBedIds(ordered.slice(0, clamped));
+  };
+
   const checkAvailability = async (checkInDate: string, checkOutDate: string) => {
     if (!bedId || !checkInDate || !checkOutDate) return;
     setCheckingAvailability(true);
@@ -192,7 +256,7 @@ export default function NewReservationDrawer({
   };
 
   const nights = calculateNights();
-  const totalPrice = nights * pricePerNight;
+  const totalPrice = nights * pricePerNight * selectedCount;
 
   const onSubmit = async (data: CreateReservationInput) => {
     if (!bedId) {
@@ -200,7 +264,12 @@ export default function NewReservationDrawer({
       return;
     }
 
-    console.log("Submitting reservation:", { ...data, bed_id: bedId, org_id: orgId });
+    // Beds to book: explicit selection, or the anchor bed for single-bed rooms.
+    const bedIds = selectedBedIds.length > 0 ? selectedBedIds : [bedId];
+    if (roomBeds.length > 1 && bedIds.length === 0) {
+      toast.error(t("selectAtLeastOneBed"));
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -210,6 +279,7 @@ export default function NewReservationDrawer({
         body: JSON.stringify({
           ...data,
           bed_id: bedId,
+          bed_ids: bedIds,
           org_id: orgId,
         }),
       });
@@ -318,6 +388,81 @@ export default function NewReservationDrawer({
                 </p>
               )}
             </div>
+
+            {/* Beds (multi-bed rooms only) */}
+            {roomBeds.length > 1 && (
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <BedDouble className="w-3.5 h-3.5" /> {t("beds")}
+                  </label>
+                  <span className="text-[11px] text-muted-foreground">
+                    {t("bedsSummary", { selected: selectedBedIds.length, free: freeCount })}
+                  </span>
+                </div>
+
+                {/* Quantity quick-pick (auto-assign N free beds) */}
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(selectedBedIds.length - 1)}
+                    disabled={selectedBedIds.length <= 0}
+                    className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[2rem] text-center text-sm font-semibold text-foreground">
+                    {selectedBedIds.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(selectedBedIds.length + 1)}
+                    disabled={selectedBedIds.length >= freeCount}
+                    className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(freeCount)}
+                    disabled={freeCount === 0}
+                    className="ml-auto text-xs font-medium text-primary hover:text-primary/80 disabled:opacity-40"
+                  >
+                    {t("wholeRoom")}
+                  </button>
+                </div>
+
+                {/* Explicit bed list */}
+                <div className="rounded-lg border border-border divide-y divide-border max-h-44 overflow-y-auto">
+                  {roomBeds.map((b) => {
+                    const checked = selectedBedIds.includes(b.id);
+                    const disabled = !b.available;
+                    return (
+                      <label
+                        key={b.id}
+                        className={`flex items-center gap-2 px-3 py-2 text-sm ${
+                          disabled ? "opacity-50" : "cursor-pointer hover:bg-muted"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          disabled={disabled}
+                          onChange={() => toggleBed(b.id)}
+                          className="rounded"
+                        />
+                        <span className="flex-1 text-foreground">{b.name}</span>
+                        {!b.is_active ? (
+                          <span className="text-[10px] text-muted-foreground">{t("bedInactive")}</span>
+                        ) : disabled ? (
+                          <span className="text-[10px] text-[#9C4A37]">{t("bedBooked")}</span>
+                        ) : null}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Guest selection */}
             <div>
@@ -475,7 +620,10 @@ export default function NewReservationDrawer({
               <div className="p-3 rounded-lg border border-primary/25 bg-primary/5 transition-colors duration-200 hover:bg-primary/10">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-primary/80 mb-1.5">{t("estimatedTotal")}</p>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>{t("nights", { count: nights })}</span>
+                  <span>
+                    {t("nights", { count: nights })}
+                    {selectedCount > 1 && ` × ${t("bedsCount", { count: selectedCount })}`}
+                  </span>
                   <span className="font-semibold text-foreground">€{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
