@@ -1,5 +1,50 @@
 ## [unreleased] - 2026-07-07
 
+feat: per-occupant Guest Book entries (Serbian registry compliance)
+
+The check-in registry now writes ONE row per guest on the reservation
+(primary + companions), each with their own identity/document data — as
+required by the Serbian knjiga gostiju / eTurista, which register every
+occupant individually.
+
+- Migration: dropped UNIQUE(reservation_id), added is_primary, partial
+  unique on (reservation_id, guest_id)
+- "Add to Guest Book" inserts a row per occupant, idempotent per guest:
+  adding a companion later re-enables the button and registers only the
+  missing person
+- Financials recorded only on the primary row (no double-counting)
+- Plan limit now counts per person (each occupant is a legal entry)
+- Legacy single-row snapshots (null guest_id) treated as the primary
+
+## [d9e7859] - 2026-07-07
+
+fix: multi-bed audit - date edits and extensions now cover every bed
+
+Audit found two pre-existing flows still assuming one bed per
+reservation:
+
+- update-dates used only the FIRST bed and rebuilt items per-night, so
+  editing dates on a multi-bed reservation silently dropped the other
+  beds, exploded the folio into per-night segments, counted cancelled
+  stays as conflicts (no status filter) and rejected back-to-back dates
+  (gte overlap). Now rebuilds one item per bed spanning the new stay
+  with each bed rate kept, and conflict-checks every bed with the
+  standard status filter and strict overlap. Trade-off: collapses prior
+  extension segments into a single stay line.
+- extend only extended the first bed (other beds were released mid-stay
+  for the extension nights) and created per-night items. Now extends
+  every bed with one item per bed for the extension range; conflict
+  message names the blocking beds.
+
+Also from the audit:
+- reservations list shows "101 +3" for multi-bed bookings
+- Guest Book snapshots record all bed names ("101, 102, 103")
+- checkout already marked all beds dirty (verified, no change)
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [unreleased] - 2026-07-07
+
 fix: multi-bed audit — date edits and extensions now cover every bed
 
 Audit of the multi-bed implementation found two pre-existing flows still

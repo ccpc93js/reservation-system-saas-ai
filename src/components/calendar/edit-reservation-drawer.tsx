@@ -237,15 +237,30 @@ export default function EditReservationDrawer({
     }
   };
 
+  // "In book" only when EVERY occupant (primary + companions) has a registry
+  // row, so adding a companion later re-enables the button to register them.
   const refreshInBook = async () => {
     if (!reservationId) return;
     const supabase = createBrowserClient();
-    const { data: regRow } = await (supabase as any)
-      .from("checkin_registry")
-      .select("id")
-      .eq("reservation_id", reservationId)
-      .maybeSingle();
-    setInBook(!!regRow);
+    const [{ data: regRows }, { data: occRows }] = await Promise.all([
+      (supabase as any)
+        .from("checkin_registry")
+        .select("guest_id")
+        .eq("reservation_id", reservationId),
+      (supabase as any)
+        .from("reservation_guests")
+        .select("guest_id")
+        .eq("reservation_id", reservationId),
+    ]);
+    const registered = new Set((regRows ?? []).map((r: any) => r.guest_id).filter(Boolean));
+    const hasLegacyRow = (regRows ?? []).some((r: any) => !r.guest_id);
+    const occupants: string[] = (occRows ?? []).map((r: any) => r.guest_id);
+    if (occupants.length === 0) {
+      // Pre-companion data: any row counts as registered.
+      setInBook((regRows ?? []).length > 0);
+      return;
+    }
+    setInBook(occupants.every((gid) => registered.has(gid)) || (hasLegacyRow && occupants.length === 1));
   };
 
   // Fetch reservation data
@@ -523,6 +538,7 @@ export default function EditReservationDrawer({
       setCompanionSearch("");
       setCompanionResults([]);
       setAddingCompanion(false);
+      await refreshInBook();
       toast.success(t("toasts.companionAdded", { name: `${guest.first_name} ${guest.last_name}` }));
     } catch {
       toast.error(t("toasts.companionAddFailed"));
@@ -545,6 +561,7 @@ export default function EditReservationDrawer({
         return;
       }
       await loadCompanions(reservationId);
+      await refreshInBook();
       const g = json.guest?.guests;
       toast.success(t("toasts.companionAdded", { name: g ? `${g.first_name} ${g.last_name}` : "" }));
     } catch {
@@ -559,6 +576,7 @@ export default function EditReservationDrawer({
       const json = await parseApiResponse(res);
       if (!res.ok) { toast.error(json.error || t("toasts.companionRemoveFailed")); return; }
       setCompanions((prev) => prev.filter((c) => c.guest_id !== guestId));
+      await refreshInBook();
       toast.success(t("toasts.companionRemoved"));
     } catch {
       toast.error(t("toasts.companionRemoveFailed"));
