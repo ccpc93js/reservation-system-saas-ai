@@ -232,7 +232,8 @@
       "bedBooked": "Zauzet",
       "bedInactive": "Neaktivan",
       "bedsCount": "{count} kreveta",
-      "selectAtLeastOneBed": "Izaberite bar jedan krevet"
+      "selectAtLeastOneBed": "Izaberite bar jedan krevet",
+      "pickCheckoutToChooseBeds": "Izaberite datum odjave da biste izabrali krevete"
     },
     "editReservation": {
       "loading": "Učitavanje...",

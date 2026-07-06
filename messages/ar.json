@@ -232,7 +232,8 @@
       "bedBooked": "محجوز",
       "bedInactive": "غير نشط",
       "bedsCount": "{count} أسرّة",
-      "selectAtLeastOneBed": "اختر سريرًا واحدًا على الأقل"
+      "selectAtLeastOneBed": "اختر سريرًا واحدًا على الأقل",
+      "pickCheckoutToChooseBeds": "اختر تاريخ المغادرة لاختيار الأسرّة"
     },
     "editReservation": {
       "loading": "جارٍ التحميل...",

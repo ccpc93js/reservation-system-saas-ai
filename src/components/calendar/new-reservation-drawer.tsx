@@ -203,14 +203,17 @@ export default function NewReservationDrawer({
         .eq("room_id", rid)
         .order("position", { ascending: true })
         .order("name", { ascending: true });
-      // Provisional: assume active beds are free until dates narrow it down.
-      setRoomBeds((beds ?? []).map((b: any) => ({ ...b, available: b.is_active })));
+      // Listed but not selectable yet — availability is unknown until the
+      // guest picks a check-out date, so mark every bed unavailable for now.
+      setRoomBeds((beds ?? []).map((b: any) => ({ ...b, available: false })));
     })();
   }, [open, bedId]);
 
-  // Load per-bed availability for the room once dates are chosen.
+  // Load per-bed availability for the room once valid dates are chosen.
   useEffect(() => {
     if (!open || !roomId || !checkIn || !checkOut) return;
+    // Need a positive stay length before availability is meaningful.
+    if (new Date(checkOut) <= new Date(checkIn)) return;
     let cancelled = false;
     (async () => {
       try {
@@ -283,6 +286,8 @@ export default function NewReservationDrawer({
 
   const nights = calculateNights();
   const totalPrice = nights * pricePerNight * selectedCount;
+  // Bed selection is only meaningful once a valid stay is chosen.
+  const datesReady = !!checkIn && !!checkOut && nights > 0;
 
   const onSubmit = async (data: CreateReservationInput) => {
     if (!bedId) {
@@ -290,9 +295,12 @@ export default function NewReservationDrawer({
       return;
     }
 
-    // Beds to book: explicit selection, or the anchor bed for single-bed rooms.
-    const bedIds = selectedBedIds.length > 0 ? selectedBedIds : [bedId];
-    if (roomBeds.length > 1 && bedIds.length === 0) {
+    // Multi-bed rooms require an explicit, still-available selection (no
+    // fallback to the anchor, which may itself be booked). Single-bed rooms
+    // fall back to the anchor bed.
+    const isMultiBed = roomBeds.length > 1;
+    const bedIds = isMultiBed ? selectedBedIds : (selectedBedIds.length > 0 ? selectedBedIds : [bedId]);
+    if (isMultiBed && bedIds.length === 0) {
       toast.error(t("selectAtLeastOneBed"));
       return;
     }
@@ -422,28 +430,37 @@ export default function NewReservationDrawer({
                   <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                     <BedDouble className="w-3.5 h-3.5" /> {t("beds")}
                   </label>
-                  <span className="text-[11px] text-muted-foreground">
-                    {t("bedsSummary", { selected: selectedBedIds.length, free: freeCount })}
-                  </span>
+                  {datesReady && (
+                    <span className="text-[11px] text-muted-foreground">
+                      {t("bedsSummary", { selected: selectedBedIds.length, free: freeCount })}
+                    </span>
+                  )}
                 </div>
+
+                {/* Must pick a check-out date before choosing beds */}
+                {!datesReady && (
+                  <div className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2.5 mb-2">
+                    <p className="text-xs text-muted-foreground">{t("pickCheckoutToChooseBeds")}</p>
+                  </div>
+                )}
 
                 {/* Quantity quick-pick (auto-assign N free beds) */}
                 <div className="flex items-center gap-2 mb-2">
                   <button
                     type="button"
                     onClick={() => setQuantity(selectedBedIds.length - 1)}
-                    disabled={selectedBedIds.length <= 0}
+                    disabled={!datesReady || selectedBedIds.length <= 0}
                     className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
                   >
                     −
                   </button>
                   <span className="min-w-[2rem] text-center text-sm font-semibold text-foreground">
-                    {selectedBedIds.length}
+                    {datesReady ? selectedBedIds.length : 0}
                   </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(selectedBedIds.length + 1)}
-                    disabled={selectedBedIds.length >= freeCount}
+                    disabled={!datesReady || selectedBedIds.length >= freeCount}
                     className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
                   >
                     +
@@ -451,7 +468,7 @@ export default function NewReservationDrawer({
                   <button
                     type="button"
                     onClick={() => setQuantity(freeCount)}
-                    disabled={freeCount === 0}
+                    disabled={!datesReady || freeCount === 0}
                     className="ml-auto text-xs font-medium text-primary hover:text-primary/80 disabled:opacity-40"
                   >
                     {t("wholeRoom")}
@@ -462,7 +479,8 @@ export default function NewReservationDrawer({
                 <div className="rounded-lg border border-border divide-y divide-border max-h-44 overflow-y-auto">
                   {roomBeds.map((b) => {
                     const checked = selectedBedIds.includes(b.id);
-                    const disabled = !b.available;
+                    // Disabled until dates are set, then only if the bed is taken/inactive.
+                    const disabled = !datesReady || !b.available;
                     return (
                       <label
                         key={b.id}
@@ -472,7 +490,7 @@ export default function NewReservationDrawer({
                       >
                         <input
                           type="checkbox"
-                          checked={checked}
+                          checked={datesReady && checked}
                           disabled={disabled}
                           onChange={() => toggleBed(b.id)}
                           className="rounded"
@@ -480,7 +498,7 @@ export default function NewReservationDrawer({
                         <span className="flex-1 text-foreground">{b.name}</span>
                         {!b.is_active ? (
                           <span className="text-[10px] text-muted-foreground">{t("bedInactive")}</span>
-                        ) : disabled ? (
+                        ) : datesReady && !b.available ? (
                           <span className="text-[10px] text-[#9C4A37]">{t("bedBooked")}</span>
                         ) : null}
                       </label>

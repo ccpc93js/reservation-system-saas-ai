@@ -1,3 +1,48 @@
+## [68873a3] - 2026-07-06
+
+fix: clear booking drawer form when it closes
+
+The form only reset after a successful save, so closing via Cancel/X and
+reopening kept the previous check-out date, guest and bed selection. Reset
+on close so every reopen starts clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [d7f42bc] - 2026-07-06
+
+fix: show multi-bed selector as soon as booking drawer opens on a dorm
+
+The bed selector was hidden until a check-out date was picked (it waited
+on the availability call). Now the room beds are listed immediately on
+open; availability is refined once dates are chosen.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [2fe4f34] - 2026-07-06
+
+feat: multi-bed reservations (book several beds in one reservation)
+
+A single reservation can now span multiple beds (e.g. 6 beds in a dorm).
+The schema already supported it via reservation_items; this wires the
+direct booking flow end-to-end.
+
+- Create API accepts bed_ids[] (bed_id kept as anchor/fallback for OTA
+  imports); conflict-checks every bed, one item per bed, total =
+  nights x rate x beds
+- Availability endpoint gains room-level mode (?room_id=) returning
+  per-bed availability + free/total counts
+- New-booking drawer: quantity stepper (auto-assign N free beds) +
+  explicit bed checkboxes + Whole room; price shows nights x beds
+- Confirmation email / notification show Room . N beds
+- i18n for all 11 locales
+- Phase B design doc for the room-type channel manager / OTA dorm sync
+  (docs/plans/2026-07-06-multibed-and-channel-manager.md)
+
+Channel manager stays per-bed iCal for now; true dorm OTA sync via
+room-type allotment is designed but not yet built.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [unreleased] - 2026-07-06
 
 feat: multi-bed reservations (book several beds in one reservation)

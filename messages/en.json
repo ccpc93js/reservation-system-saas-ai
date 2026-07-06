@@ -232,7 +232,8 @@
       "bedBooked": "Booked",
       "bedInactive": "Inactive",
       "bedsCount": "{count} beds",
-      "selectAtLeastOneBed": "Select at least one bed"
+      "selectAtLeastOneBed": "Select at least one bed",
+      "pickCheckoutToChooseBeds": "Select a check-out date to choose beds"
     },
     "editReservation": {
       "loading": "Loading...",
