@@ -1,3 +1,19 @@
+## [32b0272] - 2026-07-06
+
+feat: email from-name = property; validate reservation checkout >= check-in
+
+- Emails now send as "<Property Name> <noreply@hostmagsmart.com>" (stable
+  address, sanitized display name) with Reply-To set to the property email when
+  available; getOrgBranding also returns the org email. Team invite gets the
+  same display name.
+- Edit reservation drawer: checkout date input now has min={check-in} so earlier
+  dates cannot be selected (mobile included); existing <= validation stays as a
+  backstop.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [52150a0] - 2026-07-06
 
 feat: payment method (card/cash) in reservation Payment & Folio

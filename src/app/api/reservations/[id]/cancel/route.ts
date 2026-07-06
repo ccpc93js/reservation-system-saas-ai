@@ -92,7 +92,7 @@ export async function PATCH(
     // Send cancellation email
     const { data: resData } = await supabase
       .from("reservations")
-      .select("guest_id, id")
+      .select("guest_id, id, reservation_number")
       .eq("id", id)
       .single();
 
@@ -108,7 +108,7 @@ export async function PATCH(
         await sendReservationCancelledEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
-          id.substring(0, 8).toUpperCase(),
+          (resData as any).reservation_number || id.substring(0, 8).toUpperCase(),
           undefined,
           branding
         ).catch((err) => console.error("Email send failed:", err));
@@ -119,7 +119,7 @@ export async function PATCH(
         "reservation_cancelled",
         {
           guestName: guest ? `${guest.first_name} ${guest.last_name}` : null,
-          reservationNumber: id.substring(0, 8).toUpperCase(),
+          reservationNumber: (resData as any).reservation_number || id.substring(0, 8).toUpperCase(),
         },
         "/reservations",
         user.id

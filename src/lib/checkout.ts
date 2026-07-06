@@ -37,7 +37,7 @@ export async function finalizeCheckout(
   try {
     const { data: reservation } = await supabase
       .from("reservations")
-      .select("guest_id, check_out, organization_id")
+      .select("guest_id, check_out, organization_id, reservation_number")
       .eq("id", reservationId)
       .single();
 
@@ -54,7 +54,7 @@ export async function finalizeCheckout(
         await sendCheckoutConfirmationEmail(
           guest.email,
           `${guest.first_name} ${guest.last_name}`,
-          reservationId.substring(0, 8).toUpperCase(),
+          (reservation as any).reservation_number || reservationId.substring(0, 8).toUpperCase(),
           reservation.check_out,
           branding
         ).catch((err) => console.error("Email send failed:", err));

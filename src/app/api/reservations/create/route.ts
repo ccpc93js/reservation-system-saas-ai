@@ -130,7 +130,7 @@ export async function POST(request: Request) {
         notes: data.notes || null,
         created_by: user.id,
       })
-      .select("id, check_in_token")
+      .select("id, check_in_token, reservation_number")
       .single();
 
     if (resError) {
@@ -211,7 +211,7 @@ export async function POST(request: Request) {
       await sendReservationConfirmationEmail(
         guest.email,
         `${data.first_name} ${data.last_name}`,
-        reservation.id.substring(0, 8).toUpperCase(),
+        (reservation as any).reservation_number || reservation.id.substring(0, 8).toUpperCase(),
         data.check_in,
         data.check_out,
         room?.beds?.rooms?.name,
