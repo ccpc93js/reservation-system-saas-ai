@@ -1,3 +1,35 @@
+## [23f7fc0] - 2026-07-06
+
+fix: force European dd/mm dates and open check-out picker on full-field click
+
+- Dates always render dd/mm/yyyy (localized weekday) regardless of the
+  active locale, so en no longer shows US mm/dd
+- Clicking anywhere in the check-out field opens the native date picker
+  via showPicker(), not only the small calendar indicator
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [23f7fc0] - 2026-07-06
+
+fix: force European dd/mm dates and open check-out picker on full-field click
+
+- Dates always render dd/mm/yyyy (localized weekday) regardless of the
+  active locale, so en no longer shows US mm/dd
+- Clicking anywhere in the check-out field opens the native date picker
+  via showPicker(), not only the small calendar indicator
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [771b227] - 2026-07-06
+
+feat: uniform locale date display for check-out in booking drawer
+
+Check-out now reads as dd/mm/yyyy like check-in: a locale-formatted
+display with a transparent native date input overlaid, so it stays
+fully editable via the browser date picker. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [7f3dc12] - 2026-07-06
 
 fix: show booking dates in locale (European dd/mm) format

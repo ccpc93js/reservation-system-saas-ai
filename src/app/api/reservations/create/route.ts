@@ -164,7 +164,7 @@ export async function POST(request: Request) {
       .in("bed_id", bedIds)
       .lt("check_in", data.check_out)
       .gt("check_out", data.check_in)
-      .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
+      .not("reservations.status", "in", '("cancelled","no_show")');
 
     if (conflicts && conflicts.length > 0) {
       await (supabase.from("reservations") as any).delete().eq("id", reservation.id);

@@ -34,7 +34,7 @@ export async function GET(request: Request) {
           .in("bed_id", bedIdList)
           .lt("check_in", checkOut)
           .gt("check_out", checkIn)
-          .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
+          .not("reservations.status", "in", '("cancelled","no_show")');
         if (excludeId) bq = bq.neq("reservations.id", excludeId);
         const { data } = await bq;
         booked = data || [];
@@ -61,7 +61,7 @@ export async function GET(request: Request) {
       .eq("bed_id", bedId)
       .lt("check_in", checkOut)
       .gt("check_out", checkIn)
-      .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
+      .not("reservations.status", "in", '("cancelled","no_show")');
 
     if (excludeId) {
       query = query.neq("reservations.id", excludeId);

@@ -51,7 +51,7 @@ export async function POST(
       .not("reservation_id", "eq", id)
       .lt("check_in", new_check_out)
       .gt("check_out", res.check_out)
-      .not("reservations.status", "in", '("cancelled","checked_out","no_show")');
+      .not("reservations.status", "in", '("cancelled","no_show")');
 
     if (conflicts && conflicts.length > 0) {
       return Response.json({ error: "Extension dates conflict with an existing reservation on this bed" }, { status: 409 });
