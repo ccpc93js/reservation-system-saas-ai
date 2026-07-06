@@ -5,7 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { createRoomSchema, updateRoomSchema } from "@/lib/validations/room";
@@ -30,6 +30,7 @@ export default function RoomsDialog({
   const isEditing = !!roomId;
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
 
   const {
@@ -55,11 +56,16 @@ export default function RoomsDialog({
     // native <select> has no matching <option> yet and drops the value —
     // which then fails the "valid ID" validation on save.
     (async () => {
-      await fetchRoomTypes();
-      if (isEditing) {
-        await fetchRoom();
-      } else {
-        reset();
+      setLoadingData(true);
+      try {
+        await fetchRoomTypes();
+        if (isEditing) {
+          await fetchRoom();
+        } else {
+          reset();
+        }
+      } finally {
+        setLoadingData(false);
       }
     })();
   }, [open, isEditing]);
@@ -185,6 +191,11 @@ export default function RoomsDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto z-50">
+          {loadingData && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-surface/80 rounded-lg">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            </div>
+          )}
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="font-serif text-2xl font-semibold">
               {isEditing ? t("editTitle") : t("createTitle")}

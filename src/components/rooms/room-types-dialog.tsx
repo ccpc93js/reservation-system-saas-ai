@@ -5,7 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { createRoomTypeSchema, updateRoomTypeSchema } from "@/lib/validations/room";
@@ -33,6 +33,7 @@ export default function RoomTypeDialog({
   const isEditing = !!roomTypeId;
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   const {
     register,
@@ -62,6 +63,7 @@ export default function RoomTypeDialog({
   }, [open, isEditing]);
 
   const fetchRoomType = async () => {
+    setLoadingData(true);
     try {
       const res = await fetch(`/api/room-types/${roomTypeId}`);
       const roomType = await res.json();
@@ -82,6 +84,8 @@ export default function RoomTypeDialog({
     } catch (error) {
       toast.error(t("toastLoadFailed"));
       console.error(error);
+    } finally {
+      setLoadingData(false);
     }
   };
 
@@ -160,6 +164,11 @@ export default function RoomTypeDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-surface border border-border rounded-lg shadow-lg p-6 max-w-md w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto z-50">
+          {loadingData && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-surface/80 rounded-lg">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            </div>
+          )}
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="font-serif text-2xl font-semibold">
               {isEditing ? t("editTitle") : t("createTitle")}
