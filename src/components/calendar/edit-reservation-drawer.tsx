@@ -5,7 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, LogOut, AlertTriangle, User, UserPlus, Users, Trash2 } from "lucide-react";
+import { X, LogOut, AlertTriangle, User, UserPlus, Users, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
@@ -101,6 +101,8 @@ export default function EditReservationDrawer({
   const [companionResults, setCompanionResults] = useState<any[]>([]);
   const [companionSearching, setCompanionSearching] = useState(false);
   const [savingCompanion, setSavingCompanion] = useState(false);
+  const [companionEditId, setCompanionEditId] = useState<string | null>(null);
+  const [creatingCompanion, setCreatingCompanion] = useState(false);
 
   const {
     register,
@@ -444,6 +446,28 @@ export default function EditReservationDrawer({
       toast.error(t("toasts.companionAddFailed"));
     } finally {
       setSavingCompanion(false);
+    }
+  };
+
+  // Link a just-created guest (from the guest dialog) as a companion.
+  const addCompanionById = async (guestId: string) => {
+    try {
+      const res = await fetch(`/api/reservations/${reservationId}/guests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guest_id: guestId }),
+      });
+      const json = await parseApiResponse(res);
+      if (!res.ok) {
+        // 409 = already on the reservation; treat as harmless.
+        if (res.status !== 409) toast.error(json.error || t("toasts.companionAddFailed"));
+        return;
+      }
+      await loadCompanions(reservationId);
+      const g = json.guest?.guests;
+      toast.success(t("toasts.companionAdded", { name: g ? `${g.first_name} ${g.last_name}` : "" }));
+    } catch {
+      toast.error(t("toasts.companionAddFailed"));
     }
   };
 
@@ -829,6 +853,14 @@ export default function EditReservationDrawer({
                         </div>
                         <button
                           type="button"
+                          onClick={() => setCompanionEditId(c.guest_id)}
+                          className="p-1.5 rounded-lg hover:bg-muted transition-colors shrink-0"
+                          title={t("editGuest")}
+                        >
+                          <Pencil className="w-3.5 h-3.5 text-muted-foreground" />
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => handleRemoveCompanion(c.guest_id, `${c.guests?.first_name} ${c.guests?.last_name}`)}
                           className="p-1.5 rounded-lg hover:bg-[#EEDCD5] transition-colors shrink-0"
                           title={t("removeGuest")}
@@ -880,6 +912,13 @@ export default function EditReservationDrawer({
                     {companionSearch.length >= 2 && !companionSearching && companionResults.length === 0 && (
                       <p className="text-xs text-muted-foreground px-1">{t("noGuestsFound")}</p>
                     )}
+                    <button
+                      type="button"
+                      onClick={() => { setAddingCompanion(false); setCompanionSearch(""); setCompanionResults([]); setCreatingCompanion(true); }}
+                      className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 px-1 pt-1"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" /> {t("createNewGuest")}
+                    </button>
                   </div>
                 )}
 
@@ -1324,14 +1363,27 @@ export default function EditReservationDrawer({
             />
           )}
 
-          {/* Guest Dialog */}
+          {/* Guest Dialog (primary guest) */}
           {showGuestDialog && (
             <GuestDialog
               open={showGuestDialog}
               onOpenChange={setShowGuestDialog}
               guestId={reservation.guest_id}
               orgId={reservation.organization_id}
+              onGuestUpdated={() => setReservation((prev: any) => ({ ...prev }))}
               onGuestCreated={() => setShowGuestDialog(false)}
+            />
+          )}
+
+          {/* Guest Dialog (companion: edit existing or create new to add) */}
+          {(companionEditId || creatingCompanion) && (
+            <GuestDialog
+              open={!!companionEditId || creatingCompanion}
+              onOpenChange={(o) => { if (!o) { setCompanionEditId(null); setCreatingCompanion(false); } }}
+              guestId={companionEditId ?? undefined}
+              orgId={reservation.organization_id}
+              onGuestUpdated={() => { loadCompanions(reservationId); }}
+              onGuestCreated={(id) => { setCreatingCompanion(false); if (id) addCompanionById(id); }}
             />
           )}
 

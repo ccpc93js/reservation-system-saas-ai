@@ -20,7 +20,7 @@ interface GuestDialogProps {
   onOpenChange: (open: boolean) => void;
   guestId?: string;
   orgId: string;
-  onGuestCreated?: () => void;
+  onGuestCreated?: (guestId?: string) => void;
   onGuestUpdated?: () => void;
 }
 
@@ -344,7 +344,7 @@ export default function GuestDialog({
             <Dialog.Close
               onClick={() => {
                 if (newlyCreatedGuestId) {
-                  onGuestCreated?.();
+                  onGuestCreated?.(newlyCreatedGuestId);
                   setNewlyCreatedGuestId(null);
                 }
               }}
@@ -1016,9 +1016,10 @@ export default function GuestDialog({
                   <button
                     type="button"
                     onClick={() => {
+                      const createdId = newlyCreatedGuestId;
                       onOpenChange(false);
                       setNewlyCreatedGuestId(null);
-                      onGuestCreated?.();
+                      onGuestCreated?.(createdId ?? undefined);
                     }}
                     className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
                   >

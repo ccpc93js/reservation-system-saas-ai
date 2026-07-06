@@ -362,7 +362,9 @@
       "additionalGuests": "Additional guests",
       "addGuest": "Add guest",
       "removeGuest": "Remove guest",
-      "noAdditionalGuests": "No additional guests yet."
+      "noAdditionalGuests": "No additional guests yet.",
+      "editGuest": "Edit guest",
+      "createNewGuest": "Create new guest"
     }
   },
   "pendingCheckIns": {

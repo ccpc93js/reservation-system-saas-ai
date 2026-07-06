@@ -362,7 +362,9 @@
       "additionalGuests": "Dodatni gosti",
       "addGuest": "Dodaj gosta",
       "removeGuest": "Ukloni gosta",
-      "noAdditionalGuests": "Još nema dodatnih gostiju."
+      "noAdditionalGuests": "Još nema dodatnih gostiju.",
+      "editGuest": "Izmeni gosta",
+      "createNewGuest": "Napravi novog gosta"
     }
   },
   "pendingCheckIns": {

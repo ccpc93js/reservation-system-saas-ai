@@ -362,7 +362,9 @@
       "additionalGuests": "Дополнительные гости",
       "addGuest": "Добавить гостя",
       "removeGuest": "Удалить гостя",
-      "noAdditionalGuests": "Пока нет дополнительных гостей."
+      "noAdditionalGuests": "Пока нет дополнительных гостей.",
+      "editGuest": "Редактировать гостя",
+      "createNewGuest": "Создать нового гостя"
     }
   },
   "pendingCheckIns": {

@@ -362,7 +362,9 @@
       "additionalGuests": "Huéspedes adicionales",
       "addGuest": "Añadir huésped",
       "removeGuest": "Eliminar huésped",
-      "noAdditionalGuests": "Aún no hay huéspedes adicionales."
+      "noAdditionalGuests": "Aún no hay huéspedes adicionales.",
+      "editGuest": "Editar huésped",
+      "createNewGuest": "Crear nuevo huésped"
     }
   },
   "pendingCheckIns": {

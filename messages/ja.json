@@ -362,7 +362,9 @@
       "additionalGuests": "追加のゲスト",
       "addGuest": "ゲストを追加",
       "removeGuest": "ゲストを削除",
-      "noAdditionalGuests": "追加のゲストはまだいません。"
+      "noAdditionalGuests": "追加のゲストはまだいません。",
+      "editGuest": "ゲストを編集",
+      "createNewGuest": "新しいゲストを作成"
     }
   },
   "pendingCheckIns": {

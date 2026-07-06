@@ -362,7 +362,9 @@
       "additionalGuests": "অতিরিক্ত অতিথি",
       "addGuest": "অতিথি যোগ করুন",
       "removeGuest": "অতিথি সরান",
-      "noAdditionalGuests": "এখনও কোনো অতিরিক্ত অতিথি নেই।"
+      "noAdditionalGuests": "এখনও কোনো অতিরিক্ত অতিথি নেই।",
+      "editGuest": "অতিথি সম্পাদনা",
+      "createNewGuest": "নতুন অতিথি তৈরি করুন"
     }
   },
   "pendingCheckIns": {

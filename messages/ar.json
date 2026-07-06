@@ -362,7 +362,9 @@
       "additionalGuests": "ضيوف إضافيون",
       "addGuest": "إضافة ضيف",
       "removeGuest": "إزالة الضيف",
-      "noAdditionalGuests": "لا يوجد ضيوف إضافيون بعد."
+      "noAdditionalGuests": "لا يوجد ضيوف إضافيون بعد.",
+      "editGuest": "تعديل الضيف",
+      "createNewGuest": "إنشاء ضيف جديد"
     }
   },
   "pendingCheckIns": {

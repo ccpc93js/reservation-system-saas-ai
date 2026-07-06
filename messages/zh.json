@@ -362,7 +362,9 @@
       "additionalGuests": "其他入住人",
       "addGuest": "添加入住人",
       "removeGuest": "移除入住人",
-      "noAdditionalGuests": "暂无其他入住人。"
+      "noAdditionalGuests": "暂无其他入住人。",
+      "editGuest": "编辑入住人",
+      "createNewGuest": "新建入住人"
     }
   },
   "pendingCheckIns": {

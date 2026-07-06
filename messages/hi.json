@@ -362,7 +362,9 @@
       "additionalGuests": "अतिरिक्त अतिथि",
       "addGuest": "अतिथि जोड़ें",
       "removeGuest": "अतिथि हटाएँ",
-      "noAdditionalGuests": "अभी तक कोई अतिरिक्त अतिथि नहीं।"
+      "noAdditionalGuests": "अभी तक कोई अतिरिक्त अतिथि नहीं।",
+      "editGuest": "अतिथि संपादित करें",
+      "createNewGuest": "नया अतिथि बनाएँ"
     }
   },
   "pendingCheckIns": {

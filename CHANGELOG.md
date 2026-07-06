@@ -1,3 +1,40 @@
+## [unreleased] - 2026-07-06
+
+feat: edit and create companion guests from the reservation drawer
+
+Additional guests can now be edited in place (pencil opens their full
+guest form) and a brand-new guest can be created and attached without
+leaving the reservation — useful when the companion is not already in the
+system. GuestDialog now reports the created guest's id so it can be linked
+as a companion. i18n for all 11 locales.
+
+## [97509d7] - 2026-07-06
+
+fix: refill check-in when reopening the booking drawer on the same cell
+
+The check-in effect only ran when the checkInDate prop changed, so
+closing the drawer (which resets the form) and reopening the SAME calendar
+cell left check-in blank. It now also depends on open, refilling the date
+every time the drawer opens.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [52a888c] - 2026-07-06
+
+fix: treat checked_out reservations as occupying their nights
+
+Availability and conflict checks excluded checked_out, so a bed with a
+checkout-status stay on given nights showed as free and could be double-
+booked (the tape chart, which only hides cancelled/no_show, still drew
+the block, so calendar and drawer disagreed).
+
+You cannot sell the same bed-night twice, and checkout is an exclusive
+end date so back-to-back turnover still works. Now availability, the
+create conflict check and the extend conflict check exclude only
+cancelled and no_show, matching the calendar.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [23f7fc0] - 2026-07-06
 
 fix: force European dd/mm dates and open check-out picker on full-field click
