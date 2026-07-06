@@ -1,3 +1,17 @@
+## [3fa0fee] - 2026-07-06
+
+fix: drop strict yup uuid() on room_type_id/room_id (rejected seed ids)
+
+yup .uuid() requires a v1-5 UUID; seed/demo ids like
+b1000000-0000-0000-0000-000000000000 are valid Postgres uuids but not v1-5, so
+creating/editing rooms or beds failed with "must be a valid ID". The value comes
+from a <select> of real ids and the DB FK enforces validity, so require a
+non-empty string instead.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [43244cd] - 2026-07-06
 
 fix: room/bed counts in tables + editable room-type/room selects
