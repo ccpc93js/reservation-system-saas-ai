@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, Search, CheckCircle2, BedDouble } from "lucide-react";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { createReservationSchema, type CreateReservationInput } from "@/lib/validations/reservation";
 
@@ -28,6 +28,13 @@ export default function NewReservationDrawer({
   onReservationCreated,
 }: NewReservationDrawerProps) {
   const t = useTranslations("calendar.newReservation");
+  const locale = useLocale();
+  // Locale-aware date display (dd/mm/yyyy in most non-US locales). Parse with an
+  // explicit local time so a "YYYY-MM-DD" string never shifts a day by timezone.
+  const fmtDate = (s?: string) =>
+    s
+      ? new Intl.DateTimeFormat(locale, { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(`${s}T00:00:00`))
+      : "";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [guestMode, setGuestMode] = useState<"select" | "new">("new");
   const [conflict, setConflict] = useState<{ reservation_number: string; guest: string; check_in: string; check_out: string } | null>(null);
@@ -366,7 +373,7 @@ export default function NewReservationDrawer({
             <div className="rounded-xl border border-border bg-muted/30 p-3 transition-colors duration-200 hover:bg-muted/40">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("bookingContext")}</p>
               <p className="text-sm font-semibold text-foreground mt-1">{t("bookingContextDesc")}</p>
-              {checkIn && <p className="text-xs text-muted-foreground mt-1">{t("startDate", { date: checkIn })}</p>}
+              {checkIn && <p className="text-xs text-muted-foreground mt-1">{t("startDate", { date: fmtDate(checkIn) })}</p>}
             </div>
 
             {/* Check-in date (readonly) */}
@@ -374,12 +381,12 @@ export default function NewReservationDrawer({
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                 {t("checkIn")}
               </label>
-              <input
-                {...register("check_in")}
-                type="date"
-                disabled
-                className="w-full rounded-lg border border-border px-3 py-2 text-sm bg-muted text-foreground opacity-60"
-              />
+              {/* Read-only: shown formatted (locale) so the date is unambiguous;
+                  the real value is kept in a hidden input for the form. */}
+              <input {...register("check_in")} type="hidden" />
+              <div className="w-full rounded-lg border border-border px-3 py-2 text-sm bg-muted text-foreground/80">
+                {checkIn ? fmtDate(checkIn) : "—"}
+              </div>
               {errors.check_in && (
                 <p className="text-xs text-red-500 mt-1">{errors.check_in.message}</p>
               )}
@@ -393,6 +400,7 @@ export default function NewReservationDrawer({
               <input
                 {...register("check_out")}
                 type="date"
+                lang={locale}
                 min={checkIn}
                 onChange={(e) => {
                   register("check_out").onChange(e);
@@ -418,7 +426,7 @@ export default function NewReservationDrawer({
               )}
               {!errors.check_out && !conflict && checkIn && checkOut && (
                 <p className="text-xs mt-1 text-muted-foreground">
-                  {t("nights", { count: nights })}
+                  {fmtDate(checkOut)} · {t("nights", { count: nights })}
                 </p>
               )}
             </div>
