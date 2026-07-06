@@ -5,11 +5,12 @@ interface EmailRequest {
   subject: string;
   html: string;
   from?: string;
+  replyTo?: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { to, subject, html, from } = (await req.json()) as EmailRequest;
+    const { to, subject, html, from, replyTo } = (await req.json()) as EmailRequest;
 
     // Validate required fields
     if (!to || !subject || !html) {
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
         to,
         subject,
         html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
       }),
     });
 

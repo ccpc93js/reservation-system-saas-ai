@@ -3,7 +3,7 @@
 import { getSiteOrigin } from "./site-url";
 import { generateGuestPortalLink, generateQRCodeUrl } from "./qr-code";
 
-export type EmailBranding = { logoUrl?: string | null; name?: string | null };
+export type EmailBranding = { logoUrl?: string | null; name?: string | null; email?: string | null };
 
 // For testing: use Resend's onboarding domain
 // For production: verify your domain at https://resend.com/domains
@@ -20,11 +20,11 @@ export async function getOrgBranding(
   try {
     const { data } = await supabase
       .from("organizations")
-      .select("name, logo_url")
+      .select("name, logo_url, email")
       .eq("id", orgId)
       .single();
-    const row = data as { name?: string | null; logo_url?: string | null } | null;
-    return { logoUrl: row?.logo_url ?? null, name: row?.name ?? null };
+    const row = data as { name?: string | null; logo_url?: string | null; email?: string | null } | null;
+    return { logoUrl: row?.logo_url ?? null, name: row?.name ?? null, email: row?.email ?? null };
   } catch {
     return {};
   }
@@ -78,11 +78,19 @@ export function generateEmailHTML(title: string, content: string, footer?: strin
 async function sendEmail(
   to: string,
   subject: string,
-  html: string
+  html: string,
+  opts?: { fromName?: string | null; replyTo?: string | null }
 ): Promise<boolean> {
   try {
     const origin = getSiteOrigin();
     const apiUrl = `${origin}/api/email/send`;
+
+    // Property name as the friendly display name over a stable sending address,
+    // e.g. `Hostel Downtown Inn <noreply@hostmagsmart.com>`. Sanitize the name so
+    // it can't break the header.
+    const cleanName = (opts?.fromName || "").replace(/["<>\r\n,]/g, "").trim();
+    const from = cleanName ? `${cleanName} <${emailFromAddress}>` : emailFromAddress;
+    const replyTo = opts?.replyTo && /.+@.+\..+/.test(opts.replyTo) ? opts.replyTo : undefined;
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -91,7 +99,8 @@ async function sendEmail(
         to,
         subject,
         html,
-        from: emailFromAddress,
+        from,
+        replyTo,
       }),
     });
 
@@ -151,7 +160,8 @@ export async function sendCheckInSubmittedEmail(
     return await sendEmail(
       guestEmail,
       `Check-In Submitted - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send check-in submitted email:", error);
@@ -206,7 +216,8 @@ export async function sendCheckInApprovedEmail(
     return await sendEmail(
       guestEmail,
       `Welcome! Check-In Approved - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send check-in approved email:", error);
@@ -246,7 +257,8 @@ export async function sendCheckInRejectedEmail(
     return await sendEmail(
       guestEmail,
       `Action Required: Re-submit ID - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send check-in rejected email:", error);
@@ -317,7 +329,8 @@ export async function sendReservationConfirmationEmail(
     return await sendEmail(
       guestEmail,
       `Reservation Confirmed - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send reservation confirmation email:", error);
@@ -354,7 +367,8 @@ export async function sendReservationCancelledEmail(
     return await sendEmail(
       guestEmail,
       `Reservation Cancelled - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send reservation cancelled email:", error);
@@ -399,7 +413,8 @@ export async function sendCheckoutConfirmationEmail(
     return await sendEmail(
       guestEmail,
       `Check-Out Confirmed - ${reservationNumber}`,
-      html
+      html,
+      { fromName: brandName, replyTo: branding?.email }
     );
   } catch (error) {
     console.error("Failed to send checkout confirmation email:", error);

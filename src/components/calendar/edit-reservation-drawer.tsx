@@ -595,6 +595,7 @@ export default function EditReservationDrawer({
                   <input
                     type="date"
                     value={newCheckOut}
+                    min={newCheckIn || undefined}
                     onChange={(e) => setNewCheckOut(e.target.value)}
                     className="w-full rounded-lg border border-[#C2D2E2] bg-surface text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3A5F82]"
                   />

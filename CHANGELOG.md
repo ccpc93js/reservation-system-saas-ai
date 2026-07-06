@@ -1,3 +1,22 @@
+## [52150a0] - 2026-07-06
+
+feat: payment method (card/cash) in reservation Payment & Folio
+
+- DB: add reservations.payment_method (card/cash/bank_transfer/other, checked,
+  nullable).
+- Payment API: allow payment_method in the update allowlist.
+- Edit reservation drawer: Payment Method select next to Currency; loaded from
+  the reservation, saved via Save Payment Info.
+- i18n: payment method labels x11.
+
+Also fix guest check-in form: render the back ID photo validation error (was
+only shown for the front), tighten accept to jpeg/png/webp, reset the input
+after a rejected file.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [26ccada] - 2026-07-06
 
 feat: emails use property name + reservation email adds check-in link & QR

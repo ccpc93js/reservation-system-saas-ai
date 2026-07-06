@@ -91,7 +91,11 @@ export async function POST(request: Request) {
         "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: process.env.EMAIL_FROM || "noreply@resend.dev",
+        from: (() => {
+          const addr = process.env.EMAIL_FROM || "noreply@resend.dev";
+          const name = (org?.name || "").replace(/["<>\r\n,]/g, "").trim();
+          return name ? `${name} <${addr}>` : addr;
+        })(),
         to: email,
         subject: `You're invited to join ${org?.name ?? "a property"} on HostMagSmart`,
         html: generateEmailHTML(
