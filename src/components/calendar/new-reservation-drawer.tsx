@@ -116,9 +116,11 @@ export default function NewReservationDrawer({
     }
   }, [open, reset]);
 
-  // Update check_in when checkInDate prop changes
+  // Populate check_in whenever the drawer opens (also depends on `open`, so
+  // reopening the SAME cell — where checkInDate is unchanged — still refills
+  // the value that reset-on-close cleared).
   React.useEffect(() => {
-    if (checkInDate) {
+    if (open && checkInDate) {
       const todayStr = getTodayLocalDateStr();
       const safeCheckInDate = checkInDate < todayStr ? todayStr : checkInDate;
 
@@ -126,7 +128,7 @@ export default function NewReservationDrawer({
       setValue("bed_id", bedId || "");
       setValue("org_id", orgId || "");
     }
-  }, [checkInDate, bedId, orgId, setValue]);
+  }, [open, checkInDate, bedId, orgId, setValue]);
 
   // Debounced guest search
   useEffect(() => {
