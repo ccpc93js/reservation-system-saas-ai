@@ -5,7 +5,6 @@
 // channels, invitations, plan/stripe fields on organizations, etc.) — that
 // staleness is what caused ~250 "Property X does not exist on type never"
 // TypeScript build errors across the app.
-
 export type Json =
   | string
   | number
@@ -78,6 +77,7 @@ export type Database = {
           organization_id: string
           position: number | null
           room_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -90,6 +90,7 @@ export type Database = {
           organization_id: string
           position?: number | null
           room_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -102,6 +103,7 @@ export type Database = {
           organization_id?: string
           position?: number | null
           room_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -122,6 +124,7 @@ export type Database = {
       }
       channels: {
         Row: {
+          allotment: number | null
           bed_id: string | null
           color: string
           created_at: string
@@ -131,13 +134,16 @@ export type Database = {
           is_active: boolean
           last_error: string | null
           last_synced_at: string | null
+          mapping_mode: string
           name: string
           organization_id: string
           platform: string
+          room_type_id: string | null
           sync_count: number
           updated_at: string
         }
         Insert: {
+          allotment?: number | null
           bed_id?: string | null
           color?: string
           created_at?: string
@@ -147,13 +153,16 @@ export type Database = {
           is_active?: boolean
           last_error?: string | null
           last_synced_at?: string | null
+          mapping_mode?: string
           name: string
           organization_id: string
           platform: string
+          room_type_id?: string | null
           sync_count?: number
           updated_at?: string
         }
         Update: {
+          allotment?: number | null
           bed_id?: string | null
           color?: string
           created_at?: string
@@ -163,9 +172,11 @@ export type Database = {
           is_active?: boolean
           last_error?: string | null
           last_synced_at?: string | null
+          mapping_mode?: string
           name?: string
           organization_id?: string
           platform?: string
+          room_type_id?: string | null
           sync_count?: number
           updated_at?: string
         }
@@ -182,6 +193,13 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channels_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "room_types"
             referencedColumns: ["id"]
           },
         ]
@@ -204,6 +222,7 @@ export type Database = {
           first_name: string | null
           guest_id: string | null
           id: string
+          is_primary: boolean
           jmbg: string | null
           last_name: string | null
           nationality: string | null
@@ -234,6 +253,7 @@ export type Database = {
           first_name?: string | null
           guest_id?: string | null
           id?: string
+          is_primary?: boolean
           jmbg?: string | null
           last_name?: string | null
           nationality?: string | null
@@ -264,6 +284,7 @@ export type Database = {
           first_name?: string | null
           guest_id?: string | null
           id?: string
+          is_primary?: boolean
           jmbg?: string | null
           last_name?: string | null
           nationality?: string | null
@@ -288,7 +309,7 @@ export type Database = {
           {
             foreignKeyName: "checkin_registry_reservation_id_fkey"
             columns: ["reservation_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "reservations"
             referencedColumns: ["id"]
           },
@@ -587,6 +608,55 @@ export type Database = {
         }
         Relationships: []
       }
+      reservation_guests: {
+        Row: {
+          created_at: string
+          guest_id: string
+          id: string
+          is_primary: boolean
+          organization_id: string
+          reservation_id: string
+        }
+        Insert: {
+          created_at?: string
+          guest_id: string
+          id?: string
+          is_primary?: boolean
+          organization_id: string
+          reservation_id: string
+        }
+        Update: {
+          created_at?: string
+          guest_id?: string
+          id?: string
+          is_primary?: boolean
+          organization_id?: string
+          reservation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservation_guests_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservation_guests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservation_guests_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reservation_items: {
         Row: {
           bed_id: string
@@ -645,6 +715,24 @@ export type Database = {
           },
         ]
       }
+      reservation_number_counters: {
+        Row: {
+          last_number: number
+          organization_id: string
+          year: number
+        }
+        Insert: {
+          last_number?: number
+          organization_id: string
+          year: number
+        }
+        Update: {
+          last_number?: number
+          organization_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
           actual_check_in_at: string | null
@@ -681,6 +769,7 @@ export type Database = {
           paid_amount: number
           payment_confirmed: boolean
           payment_currency: string | null
+          payment_method: string | null
           reservation_number: string
           self_check_in_data: Json | null
           self_check_in_submitted_at: string | null
@@ -726,6 +815,7 @@ export type Database = {
           paid_amount?: number
           payment_confirmed?: boolean
           payment_currency?: string | null
+          payment_method?: string | null
           reservation_number: string
           self_check_in_data?: Json | null
           self_check_in_submitted_at?: string | null
@@ -771,6 +861,7 @@ export type Database = {
           paid_amount?: number
           payment_confirmed?: boolean
           payment_currency?: string | null
+          payment_method?: string | null
           reservation_number?: string
           self_check_in_data?: Json | null
           self_check_in_submitted_at?: string | null
@@ -816,6 +907,7 @@ export type Database = {
           name: string
           organization_id: string
           type: string
+          updated_at: string
         }
         Insert: {
           base_price?: number
@@ -827,6 +919,7 @@ export type Database = {
           name: string
           organization_id: string
           type: string
+          updated_at?: string
         }
         Update: {
           base_price?: number
@@ -838,6 +931,7 @@ export type Database = {
           name?: string
           organization_id?: string
           type?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -858,6 +952,7 @@ export type Database = {
           notes: string | null
           organization_id: string
           room_type_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -867,6 +962,7 @@ export type Database = {
           notes?: string | null
           organization_id: string
           room_type_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -876,6 +972,7 @@ export type Database = {
           notes?: string | null
           organization_id?: string
           room_type_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -959,6 +1056,28 @@ export type Database = {
           p_organization_id: string
         }
         Returns: string
+      }
+      create_ota_reservation_room_type: {
+        Args: {
+          p_channel_id: string
+          p_channel_source: string
+          p_check_in: string
+          p_check_out: string
+          p_external_id: string
+          p_guest_id: string
+          p_notes: string
+          p_organization_id: string
+          p_room_type_id: string
+        }
+        Returns: string
+      }
+      free_beds: {
+        Args: {
+          p_check_in: string
+          p_check_out: string
+          p_room_type_id: string
+        }
+        Returns: number
       }
       generate_reservation_number: { Args: { org_id: string }; Returns: string }
       get_user_org_ids: { Args: never; Returns: string[] }
@@ -1096,6 +1215,7 @@ export const Constants = {
   },
 } as const
 
+
 // ─── Convenience row-type aliases (kept for existing imports elsewhere) ──────
 // These now derive from the real schema above instead of being hand-maintained,
 // so they can't drift out of sync with the database again.
@@ -1107,6 +1227,7 @@ export type Bed = Tables<"beds">
 export type Guest = Tables<"guests">
 export type Reservation = Tables<"reservations">
 export type ReservationItem = Tables<"reservation_items">
+export type ReservationGuest = Tables<"reservation_guests">
 export type ScanSession = Tables<"scan_sessions">
 export type Channel = Tables<"channels">
 export type Invitation = Tables<"invitations">

@@ -89,10 +89,13 @@ export async function POST(
       return Response.json({ error: "Failed to fetch iCal feed" }, { status: 422 });
     }
 
-    // Use the bed directly linked to this channel
+    // Mapping: legacy per-bed channels book one fixed bed; room-type channels
+    // auto-assign any free bed from the room type's pool (like real CMs).
+    const roomTypeId: string | null = channel.mapping_mode === "room_type" ? channel.room_type_id : null;
+    const isRoomType = roomTypeId !== null;
     const syncBedId: string | null = channel.bed_id || null;
-    if (!syncBedId) {
-      return Response.json({ error: "No bed assigned to this channel. Edit the channel and select a bed first." }, { status: 400 });
+    if (!isRoomType && !syncBedId) {
+      return Response.json({ error: "No bed assigned to this channel. Edit the channel and select a bed (or map it to a room type) first." }, { status: 400 });
     }
 
     const MAX_EVENTS = 500;
@@ -159,6 +162,65 @@ export async function POST(
       }
 
       if (existing) {
+        // Room-type channels: if the OTA moved the dates, the assigned bed may
+        // now clash with another booking — reassign to a free bed in the pool.
+        if (isRoomType) {
+          const { data: curItem } = await serviceClient
+            .from("reservation_items")
+            .select("id, bed_id")
+            .eq("reservation_id", existing.id)
+            .limit(1)
+            .single();
+
+          if (curItem) {
+            const { data: clash } = await serviceClient
+              .from("reservation_items")
+              .select("id, reservations!inner(status)")
+              .eq("bed_id", curItem.bed_id)
+              .neq("reservation_id", existing.id)
+              .lt("check_in", checkOut)
+              .gt("check_out", checkIn)
+              .not("reservations.status", "in", '("cancelled","no_show")')
+              .limit(1);
+
+            if (clash && clash.length > 0) {
+              // Find another free bed in the room type for the new dates.
+              const { data: freeBeds } = await serviceClient
+                .from("beds")
+                .select("id, name, is_active, rooms!inner(room_type_id)")
+                .eq("rooms.room_type_id", roomTypeId)
+                .eq("is_active", true);
+              let newBedId: string | null = null;
+              for (const b of freeBeds ?? []) {
+                const { data: busy } = await serviceClient
+                  .from("reservation_items")
+                  .select("id, reservations!inner(status)")
+                  .eq("bed_id", b.id)
+                  .neq("reservation_id", existing.id)
+                  .lt("check_in", checkOut)
+                  .gt("check_out", checkIn)
+                  .not("reservations.status", "in", '("cancelled","no_show")')
+                  .limit(1);
+                if (!busy || busy.length === 0) { newBedId = b.id; break; }
+              }
+              if (!newBedId) {
+                results.errors++;
+                await notifyOrg(
+                  orgId,
+                  "channel_sync_failed",
+                  { channelName: channel.name, reason: `OVERBOOKING on date change: no free bed for ${summary} (${checkIn} → ${checkOut})` },
+                  "/channels"
+                );
+                continue; // keep the old dates rather than double-booking
+              }
+              await serviceClient
+                .from("reservation_items")
+                .update({ bed_id: newBedId })
+                .eq("id", curItem.id);
+            }
+          }
+        }
+
         await serviceClient
           .from("reservations")
           .update({ check_in: checkIn, check_out: checkOut, external_sync_at: new Date().toISOString(), updated_at: new Date().toISOString() })
@@ -171,6 +233,36 @@ export async function POST(
       } else if (!guestId) {
         console.error("Skipping OTA reservation: failed to create guest for", externalId);
         results.errors++;
+      } else if (isRoomType) {
+        // Room-type channel: auto-assign a free bed from the pool (atomic,
+        // serialized per room type). Null result = no bed free → overbooking.
+        const { data: newResId, error: rpcError } = await serviceClient.rpc("create_ota_reservation_room_type", {
+          p_organization_id: orgId,
+          p_guest_id: guestId,
+          p_channel_id: id,
+          p_channel_source: channel.platform,
+          p_external_id: externalId,
+          p_check_in: checkIn,
+          p_check_out: checkOut,
+          p_notes: `${channel.name}: ${summary}`,
+          p_room_type_id: roomTypeId,
+        });
+
+        if (rpcError) {
+          console.error("RPC insert error:", rpcError);
+          results.errors++;
+        } else if (!newResId) {
+          // Overbooking: surface it loudly instead of silently dropping.
+          results.errors++;
+          await notifyOrg(
+            orgId,
+            "channel_sync_failed",
+            { channelName: channel.name, reason: `OVERBOOKING: no free bed for ${summary} (${checkIn} → ${checkOut})` },
+            "/channels"
+          );
+        } else {
+          results.created++;
+        }
       } else {
         // Atomic: create reservation + reservation_item in one transaction via RPC
         const { error: rpcError } = await serviceClient.rpc("create_ota_reservation", {
@@ -182,7 +274,8 @@ export async function POST(
           p_check_in: checkIn,
           p_check_out: checkOut,
           p_notes: `${channel.name}: ${summary}`,
-          p_bed_id: syncBedId,
+          // Guarded above: non-room-type channels always have a bed.
+          p_bed_id: syncBedId as string,
         });
 
         if (rpcError) {

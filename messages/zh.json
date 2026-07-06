@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "全部同步失败",
     "toastChannelDeleted": "渠道已删除",
     "toastDeleteFailed": "删除渠道失败",
-    "toastExportUrlCopied": "导出链接已复制"
+    "toastExportUrlCopied": "导出链接已复制",
+    "roomTypeChannelsHeading": "房型（床位池）",
+    "bedChannelsHeading": "单个床位",
+    "allotmentLabel": "配额",
+    "allotmentAll": "全部床位",
+    "allotmentPlaceholder": "配额",
+    "allotmentHint": "此渠道最多可售床位数（留空 = 全部）",
+    "allotmentBadge": "配额 {count} 个床位",
+    "wholeRoomTypeBadge": "全部床位",
+    "roomTypeChannelHint": "来自此渠道的预订会自动分配该房型的空闲床位。导出 URL 会在无可售床位的日期显示已满。"
   },
   "demoBanner": {
     "message": "🎭 演示模式 — 每次新的演示会话都会重置数据。所有功能均可正常使用。",

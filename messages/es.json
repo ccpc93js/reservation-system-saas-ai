@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "Error al sincronizar todo",
     "toastChannelDeleted": "Canal eliminado",
     "toastDeleteFailed": "Error al eliminar el canal",
-    "toastExportUrlCopied": "URL de exportación copiada"
+    "toastExportUrlCopied": "URL de exportación copiada",
+    "roomTypeChannelsHeading": "Tipos de habitación (pool de camas)",
+    "bedChannelsHeading": "Camas individuales",
+    "allotmentLabel": "Cupo",
+    "allotmentAll": "Todas las camas",
+    "allotmentPlaceholder": "Cupo",
+    "allotmentHint": "Máx. de camas que este canal puede vender (vacío = todas)",
+    "allotmentBadge": "{count} camas de cupo",
+    "wholeRoomTypeBadge": "Todas las camas",
+    "roomTypeChannelHint": "Las reservas de este canal asignan automáticamente una cama libre del tipo de habitación. La URL de export bloquea fechas sin camas vendibles."
   },
   "demoBanner": {
     "message": "🎭 Modo demo — los datos se reinician en cada nueva sesión de demo. Todas las funciones están activas.",

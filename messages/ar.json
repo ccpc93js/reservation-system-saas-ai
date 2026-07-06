@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "فشلت مزامنة الكل",
     "toastChannelDeleted": "تم حذف القناة",
     "toastDeleteFailed": "فشل حذف القناة",
-    "toastExportUrlCopied": "تم نسخ رابط التصدير"
+    "toastExportUrlCopied": "تم نسخ رابط التصدير",
+    "roomTypeChannelsHeading": "أنواع الغرف (مجموعة أسرّة)",
+    "bedChannelsHeading": "أسرّة فردية",
+    "allotmentLabel": "الحصة",
+    "allotmentAll": "كل الأسرّة",
+    "allotmentPlaceholder": "الحصة",
+    "allotmentHint": "أقصى عدد أسرّة يمكن لهذه القناة بيعها (فارغ = الكل)",
+    "allotmentBadge": "حصة {count} أسرّة",
+    "wholeRoomTypeBadge": "كل الأسرّة",
+    "roomTypeChannelHint": "حجوزات هذه القناة تُسنَد تلقائيًا إلى سرير متاح من نوع الغرفة. رابط التصدير يحجب التواريخ بلا أسرّة متاحة للبيع."
   },
   "demoBanner": {
     "message": "🎭 وضع تجريبي — يتم إعادة تعيين البيانات في كل جلسة تجريبية جديدة. جميع الميزات فعّالة.",

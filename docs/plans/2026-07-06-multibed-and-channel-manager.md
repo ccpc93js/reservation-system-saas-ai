@@ -1,7 +1,11 @@
 # Multi-bed reservations & room-type channel manager
 
 Date: 2026-07-06
-Status: Phase A shipped · Phase B designed (not built)
+Status: Phase A shipped 2026-07-06 · Phase B (iCal-scope) shipped 2026-07-07 —
+B1 schema + free_beds, B3 ingestion auto-assign (single-unit iCal events),
+B2 export as blocked-date ranges, B4 overbooking notifications, B5 UI.
+Still open: true multi-unit ingestion + numeric availability push (needs an
+OTA API / aggregator, not possible over iCal).
 
 ## Problem
 

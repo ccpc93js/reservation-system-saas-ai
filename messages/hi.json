@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "सभी सिंक विफल",
     "toastChannelDeleted": "चैनल हटाया गया",
     "toastDeleteFailed": "चैनल हटाने में विफल",
-    "toastExportUrlCopied": "निर्यात URL कॉपी हुआ"
+    "toastExportUrlCopied": "निर्यात URL कॉपी हुआ",
+    "roomTypeChannelsHeading": "कमरा प्रकार (बेड पूल)",
+    "bedChannelsHeading": "अलग-अलग बेड",
+    "allotmentLabel": "आवंटन",
+    "allotmentAll": "सभी बेड",
+    "allotmentPlaceholder": "आवंटन",
+    "allotmentHint": "इस चैनल से बेचे जा सकने वाले अधिकतम बेड (खाली = सभी)",
+    "allotmentBadge": "{count} बेड आवंटित",
+    "wholeRoomTypeBadge": "सभी बेड",
+    "roomTypeChannelHint": "इस चैनल की बुकिंग कमरा प्रकार का कोई खाली बेड स्वतः असाइन करती है। एक्सपोर्ट URL बिना बिक्री योग्य बेड वाली तिथियाँ ब्लॉक करता है।"
   },
   "demoBanner": {
     "message": "🎭 डेमो मोड — प्रत्येक नए डेमो सत्र में डेटा रीसेट होता है। सभी सुविधाएँ चालू हैं।",

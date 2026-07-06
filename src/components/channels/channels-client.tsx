@@ -34,6 +34,10 @@ interface Channel {
   sync_count: number;
   bed_id: string | null;
   beds: { id: string; name: string; rooms: { id: string; name: string } | null } | null;
+  mapping_mode?: string;
+  room_type_id?: string | null;
+  allotment?: number | null;
+  room_types?: { id: string; name: string } | null;
 }
 
 interface Bed {
@@ -42,15 +46,22 @@ interface Bed {
   rooms: { id: string; name: string } | null;
 }
 
+interface RoomType {
+  id: string;
+  name: string;
+  type?: string;
+}
+
 interface Props {
   initialChannels: Channel[];
   beds: Bed[];
+  roomTypes?: RoomType[];
   orgId: string;
 }
 
-const emptyPlatformForm = { platform: "booking_com", ical_url: "", name: "" };
+const emptyPlatformForm = { platform: "booking_com", ical_url: "", name: "", allotment: "" };
 
-export default function ChannelsClient({ initialChannels, beds, orgId }: Props) {
+export default function ChannelsClient({ initialChannels, beds, roomTypes = [], orgId }: Props) {
   const t = useTranslations("channels");
   const platformLabel = (value: string) =>
     value === "direct" ? t("platformDirect") : value === "other" ? t("platformOther") : getPlatform(value).label;
@@ -62,6 +73,8 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
   const [editingChannel, setEditingChannel] = useState<Channel | null>(null);
   // addingToBed: bedId that has the inline add form open
   const [addingToBed, setAddingToBed] = useState<string | null>(null);
+  // addingToRoomType: roomTypeId that has the inline add form open
+  const [addingToRoomType, setAddingToRoomType] = useState<string | null>(null);
   const [platformForm, setPlatformForm] = useState(emptyPlatformForm);
   const [isSaving, setIsSaving] = useState(false);
   const [collapsedBeds, setCollapsedBeds] = useState<Set<string>>(new Set());
@@ -119,6 +132,40 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
     }
   };
 
+  const handleAddRoomTypeChannel = async (roomTypeId: string) => {
+    if (!platformForm.ical_url) { toast.error(t("toastIcalRequired")); return; }
+    const rt = roomTypes.find((r) => r.id === roomTypeId);
+    const platform = getPlatform(platformForm.platform);
+    const name = platformForm.name || `${rt?.name} – ${platformLabel(platformForm.platform)}`;
+
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/channels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          platform: platformForm.platform,
+          ical_url: platformForm.ical_url,
+          mapping_mode: "room_type",
+          room_type_id: roomTypeId,
+          allotment: platformForm.allotment !== "" ? Number(platformForm.allotment) : null,
+          color: platform.color,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setChannels((prev) => [{ ...data.channel, room_types: rt ? { id: rt.id, name: rt.name } : null }, ...prev]);
+      setAddingToRoomType(null);
+      setPlatformForm(emptyPlatformForm);
+      toast.success(t("toastChannelAdded"));
+    } catch (err: any) {
+      toast.error(err.message || t("toastAddFailed"));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleUpdateChannel = async () => {
     if (!editingChannel) return;
     setIsSaving(true);
@@ -130,6 +177,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
           name: editingChannel.name,
           ical_url: editingChannel.ical_url,
           is_active: editingChannel.is_active,
+          ...(editingChannel.mapping_mode === "room_type" && { allotment: editingChannel.allotment ?? null }),
         }),
       });
       const data = await res.json();
@@ -206,17 +254,179 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
     toast.success(t("toastExportUrlCopied"));
   };
 
-  // Group channels by bed_id
-  const channelsByBed = channels.reduce<Record<string, Channel[]>>((acc, ch) => {
+  // Split by mapping mode
+  const roomTypeChannels = channels.filter((ch) => ch.mapping_mode === "room_type");
+  const bedChannelsAll = channels.filter((ch) => ch.mapping_mode !== "room_type");
+
+  // Group bed channels by bed_id
+  const channelsByBed = bedChannelsAll.reduce<Record<string, Channel[]>>((acc, ch) => {
     const key = ch.bed_id || "unassigned";
     if (!acc[key]) acc[key] = [];
     acc[key].push(ch);
     return acc;
   }, {});
 
+  // Group room-type channels by room_type_id
+  const channelsByRoomType = roomTypeChannels.reduce<Record<string, Channel[]>>((acc, ch) => {
+    const key = ch.room_type_id || "unassigned";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(ch);
+    return acc;
+  }, {});
+  const roomTypesWithChannels = roomTypes.filter((rt) => channelsByRoomType[rt.id]);
+  const roomTypesWithout = roomTypes.filter((rt) => !channelsByRoomType[rt.id]);
+
   // Beds that have channels + unassigned
   const bedsWithChannels = beds.filter((b) => channelsByBed[b.id]);
   const bedsWithout = beds.filter((b) => !channelsByBed[b.id]);
+
+  // Shared row for one channel (used by both the bed and room-type sections)
+  const renderChannelRow = (ch: Channel) => {
+    const platform = getPlatform(ch.platform);
+    const isSyncing = syncingId === ch.id;
+    const isEditing = editingChannel?.id === ch.id;
+
+    return (
+      <div key={ch.id} className="px-4 py-3 bg-background/50">
+        {isEditing && editingChannel ? (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                value={editingChannel.name}
+                onChange={(e) => setEditingChannel({ ...editingChannel, name: e.target.value })}
+                placeholder={t("channelNamePlaceholder")}
+                className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+              />
+              <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={editingChannel.is_active}
+                  onChange={(e) => setEditingChannel({ ...editingChannel, is_active: e.target.checked })}
+                />
+                {t("active")}
+              </label>
+            </div>
+            <input
+              value={editingChannel.ical_url || ""}
+              onChange={(e) => setEditingChannel({ ...editingChannel, ical_url: e.target.value })}
+              placeholder={t("icalUrlPlaceholder")}
+              className="w-full rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+            />
+            {editingChannel.mapping_mode === "room_type" && (
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-muted-foreground">{t("allotmentLabel")}</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={editingChannel.allotment ?? ""}
+                  onChange={(e) => setEditingChannel({ ...editingChannel, allotment: e.target.value === "" ? null : Number(e.target.value) })}
+                  placeholder={t("allotmentAll")}
+                  className="w-24 rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+                />
+              </div>
+            )}
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setEditingChannel(null)} className="px-3 py-1.5 text-xs border border-border rounded-lg text-muted-foreground hover:bg-muted">{t("cancel")}</button>
+              <button onClick={handleUpdateChannel} disabled={isSaving} className="px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50">
+                {isSaving ? t("savingEllipsis") : t("save")}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ch.color }} />
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style={{ backgroundColor: platform.color + "22", color: platform.color }}>
+              {platformLabel(ch.platform)}
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-foreground font-medium truncate">{ch.name}</span>
+                {ch.mapping_mode === "room_type" && (
+                  <span className="text-[10px] px-1.5 py-0.5 bg-[#E0EADB] text-[#4A6740] rounded-full shrink-0">
+                    {ch.allotment != null ? t("allotmentBadge", { count: ch.allotment }) : t("wholeRoomTypeBadge")}
+                  </span>
+                )}
+                {!ch.is_active && <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground rounded-full">{t("inactive")}</span>}
+              </div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
+                <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                  {ch.last_error ? <WifiOff className="w-3 h-3 text-red-500" /> : <Wifi className="w-3 h-3 text-emerald-500" />}
+                  {formatSynced(ch.last_synced_at)}
+                  {ch.sync_count > 0 && ` (${ch.sync_count}×)`}
+                </span>
+                {ch.ical_url && (
+                  <a href={ch.ical_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5">
+                    <ExternalLink className="w-2.5 h-2.5" /> {t("feed")}
+                  </a>
+                )}
+                <button onClick={() => copyExportUrl(ch)} className="text-[10px] text-muted-foreground hover:text-foreground flex items-center gap-0.5 transition-colors">
+                  {copiedId === ch.id ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
+                  {t("exportUrl")}
+                </button>
+              </div>
+              {ch.last_error && <p className="text-[10px] text-red-500 mt-0.5 truncate">{ch.last_error}</p>}
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              {ch.ical_url && (
+                <button onClick={() => handleSync(ch.id)} disabled={isSyncing} title={t("sync")} className="p-1.5 rounded-lg hover:bg-muted disabled:opacity-50 transition-colors">
+                  <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
+                </button>
+              )}
+              <button onClick={() => setEditingChannel(ch)} title={t("edit")} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
+                <Edit className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+              <button onClick={() => handleDelete(ch.id)} disabled={deletingId === ch.id} title={t("delete")} className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50">
+                <Trash2 className="w-3.5 h-3.5 text-red-500" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Inline add form shared by the room-type section
+  const renderRoomTypeAddForm = (roomTypeId: string) => (
+    <div className="px-4 py-3 bg-muted/20 space-y-2">
+      <div className="flex gap-2">
+        <select
+          value={platformForm.platform}
+          onChange={(e) => setPlatformForm((f) => ({ ...f, platform: e.target.value }))}
+          className="rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+        >
+          {PLATFORMS.map((p) => <option key={p.value} value={p.value}>{platformLabel(p.value)}</option>)}
+        </select>
+        <input
+          value={platformForm.name}
+          onChange={(e) => setPlatformForm((f) => ({ ...f, name: e.target.value }))}
+          placeholder={t("namePlaceholderOptional")}
+          className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+        />
+        <input
+          type="number"
+          min="0"
+          value={platformForm.allotment}
+          onChange={(e) => setPlatformForm((f) => ({ ...f, allotment: e.target.value }))}
+          placeholder={t("allotmentPlaceholder")}
+          title={t("allotmentHint")}
+          className="w-28 rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+        />
+      </div>
+      <input
+        value={platformForm.ical_url}
+        onChange={(e) => setPlatformForm((f) => ({ ...f, ical_url: e.target.value }))}
+        placeholder={t("icalUrlRequired")}
+        className="w-full rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
+      />
+      <p className="text-[10px] text-muted-foreground">{t("roomTypeChannelHint")}</p>
+      <div className="flex gap-2 justify-end">
+        <button onClick={() => { setAddingToRoomType(null); setPlatformForm(emptyPlatformForm); }} className="px-3 py-1.5 text-xs border border-border rounded-lg text-muted-foreground hover:bg-muted">{t("cancel")}</button>
+        <button onClick={() => handleAddRoomTypeChannel(roomTypeId)} disabled={isSaving} className="px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50">
+          {isSaving ? t("addingEllipsis") : t("add")}
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="p-6 space-y-6">
@@ -247,6 +457,75 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
         </div>
       )}
 
+      {/* Room-type channels: sell a pool of beds; incoming bookings auto-assign a free bed */}
+      {roomTypes.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-1">{t("roomTypeChannelsHeading")}</p>
+          <div className="space-y-3">
+            {roomTypesWithChannels.map((rt) => {
+              const rtChannels = channelsByRoomType[rt.id] || [];
+              return (
+                <div key={rt.id} className="rounded-xl border border-border bg-surface overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold" style={{ color: "hsl(var(--text))" }}>{rt.name}</span>
+                      <div className="flex gap-1 mt-1 flex-wrap">
+                        {rtChannels.map((ch) => {
+                          const p = getPlatform(ch.platform);
+                          return (
+                            <span key={ch.id} className="text-[10px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: p.color + "22", color: p.color }}>
+                              {platformLabel(ch.platform)}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <span className="text-xs text-muted-foreground">{t("platformCount", { count: rtChannels.length })}</span>
+                  </div>
+                  <div className="border-t border-border divide-y divide-border">
+                    {rtChannels.map((ch) => renderChannelRow(ch))}
+                    {addingToRoomType === rt.id ? (
+                      renderRoomTypeAddForm(rt.id)
+                    ) : (
+                      <button
+                        onClick={() => { setAddingToRoomType(rt.id); setAddingToBed(null); setPlatformForm(emptyPlatformForm); }}
+                        className="w-full px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors flex items-center gap-1.5"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> {t("addPlatform")}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {roomTypesWithout.length > 0 && (
+              <div className="space-y-2">
+                {roomTypesWithout.map((rt) => (
+                  <div key={rt.id} className="rounded-xl border border-dashed border-border bg-surface/50 overflow-hidden">
+                    <div className="px-4 py-3 flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">{rt.name}</span>
+                      {addingToRoomType !== rt.id && (
+                        <button
+                          onClick={() => { setAddingToRoomType(rt.id); setAddingToBed(null); setPlatformForm(emptyPlatformForm); }}
+                          className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-medium transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> {t("connectOta")}
+                        </button>
+                      )}
+                    </div>
+                    {addingToRoomType === rt.id && (
+                      <div className="border-t border-border">{renderRoomTypeAddForm(rt.id)}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-1">{t("bedChannelsHeading")}</p>
       <div className="space-y-3">
         {/* Connected beds */}
         {bedsWithChannels.map((bed) => {
@@ -286,91 +565,7 @@ export default function ChannelsClient({ initialChannels, beds, orgId }: Props) 
               {!collapsed && (
                 <div className="border-t border-border divide-y divide-border">
                   {/* Platform rows */}
-                  {bedChannels.map((ch) => {
-                    const platform = getPlatform(ch.platform);
-                    const isSyncing = syncingId === ch.id;
-                    const isEditing = editingChannel?.id === ch.id;
-
-                    return (
-                      <div key={ch.id} className="px-4 py-3 bg-background/50">
-                        {isEditing ? (
-                          <div className="space-y-2">
-                            <div className="flex gap-2">
-                              <input
-                                value={editingChannel.name}
-                                onChange={(e) => setEditingChannel({ ...editingChannel, name: e.target.value })}
-                                placeholder={t("channelNamePlaceholder")}
-                                className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
-                              />
-                              <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
-                                <input
-                                  type="checkbox"
-                                  checked={editingChannel.is_active}
-                                  onChange={(e) => setEditingChannel({ ...editingChannel, is_active: e.target.checked })}
-                                />
-                                {t("active")}
-                              </label>
-                            </div>
-                            <input
-                              value={editingChannel.ical_url || ""}
-                              onChange={(e) => setEditingChannel({ ...editingChannel, ical_url: e.target.value })}
-                              placeholder={t("icalUrlPlaceholder")}
-                              className="w-full rounded-lg border border-border bg-background text-foreground px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
-                            />
-                            <div className="flex gap-2 justify-end">
-                              <button onClick={() => setEditingChannel(null)} className="px-3 py-1.5 text-xs border border-border rounded-lg text-muted-foreground hover:bg-muted">{t("cancel")}</button>
-                              <button onClick={handleUpdateChannel} disabled={isSaving} className="px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50">
-                                {isSaving ? t("savingEllipsis") : t("save")}
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ch.color }} />
-                            <span className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style={{ backgroundColor: platform.color + "22", color: platform.color }}>
-                              {platformLabel(ch.platform)}
-                            </span>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-foreground font-medium truncate">{ch.name}</span>
-                                {!ch.is_active && <span className="text-[10px] px-1.5 py-0.5 bg-muted text-muted-foreground rounded-full">{t("inactive")}</span>}
-                              </div>
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
-                                <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                                  {ch.last_error ? <WifiOff className="w-3 h-3 text-red-500" /> : <Wifi className="w-3 h-3 text-emerald-500" />}
-                                  {formatSynced(ch.last_synced_at)}
-                                  {ch.sync_count > 0 && ` (${ch.sync_count}×)`}
-                                </span>
-                                {ch.ical_url && (
-                                  <a href={ch.ical_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5">
-                                    <ExternalLink className="w-2.5 h-2.5" /> {t("feed")}
-                                  </a>
-                                )}
-                                <button onClick={() => copyExportUrl(ch)} className="text-[10px] text-muted-foreground hover:text-foreground flex items-center gap-0.5 transition-colors">
-                                  {copiedId === ch.id ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
-                                  {t("exportUrl")}
-                                </button>
-                              </div>
-                              {ch.last_error && <p className="text-[10px] text-red-500 mt-0.5 truncate">{ch.last_error}</p>}
-                            </div>
-                            <div className="flex items-center gap-1 shrink-0">
-                              {ch.ical_url && (
-                                <button onClick={() => handleSync(ch.id)} disabled={isSyncing} title={t("sync")} className="p-1.5 rounded-lg hover:bg-muted disabled:opacity-50 transition-colors">
-                                  <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
-                                </button>
-                              )}
-                              <button onClick={() => setEditingChannel(ch)} title={t("edit")} className="p-1.5 rounded-lg hover:bg-muted transition-colors">
-                                <Edit className="w-3.5 h-3.5 text-muted-foreground" />
-                              </button>
-                              <button onClick={() => handleDelete(ch.id)} disabled={deletingId === ch.id} title={t("delete")} className="p-1.5 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50">
-                                <Trash2 className="w-3.5 h-3.5 text-red-500" />
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {bedChannels.map((ch) => renderChannelRow(ch))}
 
                   {/* Add platform to this bed */}
                   {addingToBed === bed.id ? (

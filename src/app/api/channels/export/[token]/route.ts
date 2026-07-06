@@ -34,13 +34,84 @@ export async function GET(
 
     const { data: channel, error: channelError } = await supabase
       .from("channels")
-      .select("id, name, organization_id, bed_id")
+      .select("id, name, organization_id, bed_id, mapping_mode, room_type_id, allotment")
       .eq("export_token", token)
       .eq("is_active", true)
       .single();
 
     if (channelError || !channel) {
       return new Response("Not found", { status: 404 });
+    }
+
+    // Room-type channels: iCal can't express counts, so export BLOCKED ranges
+    // for the days where the room type has no sellable bed left.
+    // sellable(day) = free beds − held-back beds (total − allotment).
+    if ((channel as any).mapping_mode === "room_type" && (channel as any).room_type_id) {
+      const roomTypeId = (channel as any).room_type_id;
+      const HORIZON_DAYS = 180;
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+      const horizonEnd = new Date(today);
+      horizonEnd.setUTCDate(horizonEnd.getUTCDate() + HORIZON_DAYS);
+      const dstr = (d: Date) => d.toISOString().split("T")[0];
+
+      const { data: bedsRaw } = await supabase
+        .from("beds")
+        .select("id, is_active, rooms!inner(room_type_id)")
+        .eq("rooms.room_type_id", roomTypeId)
+        .eq("organization_id", channel.organization_id)
+        .eq("is_active", true);
+      const totalBeds = (bedsRaw ?? []).length;
+      const bedIds = (bedsRaw ?? []).map((b: any) => b.id);
+      const allotment = (channel as any).allotment;
+      const heldBack = allotment != null && allotment >= 0 ? Math.max(0, totalBeds - allotment) : 0;
+
+      // All occupying items overlapping the horizon, in one query.
+      let occupied: any[] = [];
+      if (bedIds.length > 0) {
+        const { data } = await supabase
+          .from("reservation_items")
+          .select("bed_id, check_in, check_out, reservations!inner(status)")
+          .in("bed_id", bedIds)
+          .lt("check_in", dstr(horizonEnd))
+          .gt("check_out", dstr(today))
+          .not("reservations.status", "in", '("cancelled","no_show")');
+        occupied = data ?? [];
+      }
+
+      // Per-day busy count → blocked when free − heldBack < 1.
+      const cal = ical({ name: channel.name, timezone: "UTC" });
+      let blockStart: Date | null = null;
+      for (let i = 0; i <= HORIZON_DAYS; i++) {
+        const day = new Date(today);
+        day.setUTCDate(day.getUTCDate() + i);
+        const ds = dstr(day);
+        const busy = occupied.filter((it) => it.check_in <= ds && it.check_out > ds).length;
+        const sellable = totalBeds - busy - heldBack;
+        const blocked = i < HORIZON_DAYS && sellable < 1;
+
+        if (blocked && !blockStart) blockStart = new Date(day);
+        if (!blocked && blockStart) {
+          cal.createEvent({
+            id: `${channel.id}-${dstr(blockStart)}`,
+            start: new Date(`${dstr(blockStart)}T12:00:00Z`),
+            end: new Date(`${ds}T12:00:00Z`),
+            allDay: true,
+            summary: "BLOCKED - No availability",
+            description: `${channel.name}: room type fully booked`,
+          });
+          blockStart = null;
+        }
+      }
+
+      return new Response(cal.toString(), {
+        status: 200,
+        headers: {
+          "Content-Type": "text/calendar; charset=utf-8",
+          "Content-Disposition": `attachment; filename="${channel.name.replace(/\s+/g, "-")}.ics"`,
+          "Cache-Control": "no-cache",
+        },
+      });
     }
 
     // Get reservation IDs scoped to this channel's bed (if set)

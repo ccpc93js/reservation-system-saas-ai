@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "Échec de la synchronisation globale",
     "toastChannelDeleted": "Canal supprimé",
     "toastDeleteFailed": "Échec de la suppression du canal",
-    "toastExportUrlCopied": "URL d'export copiée"
+    "toastExportUrlCopied": "URL d'export copiée",
+    "roomTypeChannelsHeading": "Types de chambre (lits en pool)",
+    "bedChannelsHeading": "Lits individuels",
+    "allotmentLabel": "Allotement",
+    "allotmentAll": "Tous les lits",
+    "allotmentPlaceholder": "Allotement",
+    "allotmentHint": "Nombre max de lits vendables par ce canal (vide = tous)",
+    "allotmentBadge": "{count} lits alloués",
+    "wholeRoomTypeBadge": "Tous les lits",
+    "roomTypeChannelHint": "Les réservations de ce canal assignent automatiquement un lit libre du type de chambre. L'URL d'export bloque les dates sans lit vendable."
   },
   "demoBanner": {
     "message": "🎭 Mode démo — les données sont réinitialisées à chaque nouvelle session de démo. Toutes les fonctionnalités sont actives.",

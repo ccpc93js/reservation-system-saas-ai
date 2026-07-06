@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
     const { data: channels, error } = await supabase
       .from("channels")
-      .select("*, beds(id, name, rooms(id, name))")
+      .select("*, beds(id, name, rooms(id, name)), room_types(id, name)")
       .eq("organization_id", membership.organization_id)
       .order("created_at", { ascending: false });
 
@@ -40,10 +40,14 @@ export async function POST(request: Request) {
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
 
     const body = await request.json();
-    const { name, platform, ical_url, bed_id, color } = body;
+    const { name, platform, ical_url, bed_id, color, mapping_mode, room_type_id, allotment } = body;
 
     if (!name || !platform) {
       return Response.json({ error: "name and platform are required" }, { status: 400 });
+    }
+    const isRoomType = mapping_mode === "room_type";
+    if (isRoomType && !room_type_id) {
+      return Response.json({ error: "room_type_id is required for room-type channels" }, { status: 400 });
     }
 
     const { data: channel, error } = await supabase
@@ -53,7 +57,10 @@ export async function POST(request: Request) {
         name,
         platform,
         ical_url: ical_url || null,
-        bed_id: bed_id || null,
+        mapping_mode: isRoomType ? "room_type" : "bed",
+        bed_id: isRoomType ? null : (bed_id || null),
+        room_type_id: isRoomType ? room_type_id : null,
+        allotment: isRoomType && allotment != null && allotment !== "" ? Number(allotment) : null,
         color: color || "#6366f1",
       })
       .select()

@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "Sync all failed",
     "toastChannelDeleted": "Channel deleted",
     "toastDeleteFailed": "Failed to delete channel",
-    "toastExportUrlCopied": "Export URL copied"
+    "toastExportUrlCopied": "Export URL copied",
+    "roomTypeChannelsHeading": "Room types (pooled beds)",
+    "bedChannelsHeading": "Individual beds",
+    "allotmentLabel": "Allotment",
+    "allotmentAll": "All beds",
+    "allotmentPlaceholder": "Allotment",
+    "allotmentHint": "Max beds this channel may sell (empty = all)",
+    "allotmentBadge": "{count} beds allotted",
+    "wholeRoomTypeBadge": "All beds",
+    "roomTypeChannelHint": "Bookings from this channel auto-assign any free bed in the room type. The export URL blocks dates when no sellable bed remains."
   },
   "demoBanner": {
     "message": "🎭 Demo Mode — data resets on each new demo session. All features are live.",

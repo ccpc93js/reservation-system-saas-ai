@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "Не удалось синхронизировать всё",
     "toastChannelDeleted": "Канал удалён",
     "toastDeleteFailed": "Не удалось удалить канал",
-    "toastExportUrlCopied": "URL экспорта скопирован"
+    "toastExportUrlCopied": "URL экспорта скопирован",
+    "roomTypeChannelsHeading": "Типы комнат (пул кроватей)",
+    "bedChannelsHeading": "Отдельные кровати",
+    "allotmentLabel": "Квота",
+    "allotmentAll": "Все кровати",
+    "allotmentPlaceholder": "Квота",
+    "allotmentHint": "Макс. кроватей для продажи через этот канал (пусто = все)",
+    "allotmentBadge": "Квота: {count} кроватей",
+    "wholeRoomTypeBadge": "Все кровати",
+    "roomTypeChannelHint": "Бронирования из этого канала автоматически получают свободную кровать типа комнаты. URL экспорта блокирует даты без доступных кроватей."
   },
   "demoBanner": {
     "message": "🎭 Демо-режим — данные сбрасываются при каждой новой демо-сессии. Все функции активны.",

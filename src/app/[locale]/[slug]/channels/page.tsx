@@ -30,15 +30,20 @@ export default async function ChannelsPage({ params }: { params: Promise<{ slug:
     );
   }
 
-  const [{ data: channels }, { data: beds }] = await Promise.all([
+  const [{ data: channels }, { data: beds }, { data: roomTypes }] = await Promise.all([
     supabase
       .from("channels")
-      .select("*, bed_id, beds(id, name, rooms(id, name))")
+      .select("*, bed_id, beds(id, name, rooms(id, name)), room_types(id, name)")
       .eq("organization_id", orgId)
       .order("created_at", { ascending: false }),
     supabase
       .from("beds")
       .select("id, name, rooms(id, name)")
+      .eq("organization_id", orgId)
+      .order("name"),
+    supabase
+      .from("room_types")
+      .select("id, name, type")
       .eq("organization_id", orgId)
       .order("name"),
   ]);
@@ -47,6 +52,7 @@ export default async function ChannelsPage({ params }: { params: Promise<{ slug:
     <ChannelsClient
       initialChannels={channels ?? []}
       beds={beds ?? []}
+      roomTypes={(roomTypes as any) ?? []}
       orgId={orgId}
     />
   );

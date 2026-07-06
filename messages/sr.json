@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "Sinhronizacija svega nije uspela",
     "toastChannelDeleted": "Kanal je obrisan",
     "toastDeleteFailed": "Brisanje kanala nije uspelo",
-    "toastExportUrlCopied": "URL za izvoz je kopiran"
+    "toastExportUrlCopied": "URL za izvoz je kopiran",
+    "roomTypeChannelsHeading": "Tipovi soba (grupa kreveta)",
+    "bedChannelsHeading": "Pojedinačni kreveti",
+    "allotmentLabel": "Kvota",
+    "allotmentAll": "Svi kreveti",
+    "allotmentPlaceholder": "Kvota",
+    "allotmentHint": "Maks. kreveta koje ovaj kanal može prodati (prazno = svi)",
+    "allotmentBadge": "Kvota: {count} kreveta",
+    "wholeRoomTypeBadge": "Svi kreveti",
+    "roomTypeChannelHint": "Rezervacije sa ovog kanala automatski dobijaju slobodan krevet iz tipa sobe. Export URL blokira datume bez dostupnih kreveta."
   },
   "demoBanner": {
     "message": "🎭 Demo režim — podaci se resetuju na svakoj novoj demo sesiji. Sve funkcije su aktivne.",

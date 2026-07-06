@@ -1,20 +1,49 @@
 ## [unreleased] - 2026-07-07
 
+feat: Phase B — room-type channel manager (pooled beds, auto-assign)
+
+Channels can now map to a ROOM TYPE (pool of beds) instead of one fixed
+bed — how real channel managers sell dorms.
+
+- Schema: channels.mapping_mode ('bed'|'room_type'), room_type_id,
+  allotment; free_beds(room_type, dates) SQL primitive
+- Ingestion: create_ota_reservation_room_type RPC auto-assigns a free
+  bed (advisory-lock serialized per room type); returns null when full →
+  sync notifies OVERBOOKING instead of silently dropping; date changes
+  reassign the bed if the old one now clashes
+- Export: room-type channels export BLOCKED date ranges when no sellable
+  bed remains (sellable = free − held-back via allotment), 180-day horizon
+- Both OTA RPCs now record the primary guest in reservation_guests
+- UI: Channels page gains a Room types (pooled beds) section — connect
+  OTA per room type with optional allotment; edit allotment inline
+- Regenerated DB types; RPC verified in prod (assign, free-count, cleanup)
+- i18n for all 11 locales
+
+iCal limits remain: one event = one bed. True multi-unit bookings and
+numeric availability push need an OTA API/aggregator (doc updated).
+
+## [d8a1f90] - 2026-07-07
+
 feat: per-occupant Guest Book entries (Serbian registry compliance)
 
 The check-in registry now writes ONE row per guest on the reservation
-(primary + companions), each with their own identity/document data — as
-required by the Serbian knjiga gostiju / eTurista, which register every
-occupant individually.
+(primary + companions), each with their own identity and document data,
+as required by the Serbian knjiga gostiju / eTurista which register
+every occupant individually.
 
-- Migration: dropped UNIQUE(reservation_id), added is_primary, partial
-  unique on (reservation_id, guest_id)
-- "Add to Guest Book" inserts a row per occupant, idempotent per guest:
-  adding a companion later re-enables the button and registers only the
-  missing person
-- Financials recorded only on the primary row (no double-counting)
-- Plan limit now counts per person (each occupant is a legal entry)
+- Migration: drop UNIQUE(reservation_id), add is_primary, partial
+  unique index on (reservation_id, guest_id)
+- Registry POST inserts a row per occupant and is idempotent per guest;
+  adding a companion later re-enables Add to Guest Book and registers
+  only the missing person (409 only when everyone is registered)
+- Financials recorded only on the primary row so reports do not
+  double-count; plan limit now counts per person
+- Drawer "in book" state = every occupant registered; refreshes on
+  companion add/remove
 - Legacy single-row snapshots (null guest_id) treated as the primary
+- Unique constraint verified in DB (multi-row OK, duplicate rejected)
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 
 ## [d9e7859] - 2026-07-07
 

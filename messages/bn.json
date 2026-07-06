@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "সব সিঙ্ক ব্যর্থ",
     "toastChannelDeleted": "চ্যানেল মুছে ফেলা হয়েছে",
     "toastDeleteFailed": "চ্যানেল মুছতে ব্যর্থ",
-    "toastExportUrlCopied": "এক্সপোর্ট URL কপি হয়েছে"
+    "toastExportUrlCopied": "এক্সপোর্ট URL কপি হয়েছে",
+    "roomTypeChannelsHeading": "রুমের ধরন (বেড পুল)",
+    "bedChannelsHeading": "আলাদা বেড",
+    "allotmentLabel": "বরাদ্দ",
+    "allotmentAll": "সব বেড",
+    "allotmentPlaceholder": "বরাদ্দ",
+    "allotmentHint": "এই চ্যানেল সর্বোচ্চ যত বেড বিক্রি করতে পারে (খালি = সব)",
+    "allotmentBadge": "{count}টি বেড বরাদ্দ",
+    "wholeRoomTypeBadge": "সব বেড",
+    "roomTypeChannelHint": "এই চ্যানেলের বুকিং রুমের ধরনের একটি খালি বেড স্বয়ংক্রিয়ভাবে বরাদ্দ করে। বিক্রয়যোগ্য বেড না থাকলে এক্সপোর্ট URL তারিখ ব্লক করে।"
   },
   "demoBanner": {
     "message": "🎭 ডেমো মোড — প্রতিটি নতুন ডেমো সেশনে ডেটা রিসেট হয়। সমস্ত বৈশিষ্ট্য সচল।",

@@ -33,10 +33,16 @@ export async function PATCH(
     if (!access) return Response.json({ error: "Not found" }, { status: 404 });
 
     const body = await request.json();
-    const allowed = ["name", "platform", "ical_url", "bed_id", "color", "is_active"] as const;
+    const allowed = ["name", "platform", "ical_url", "bed_id", "color", "is_active", "mapping_mode", "room_type_id", "allotment"] as const;
     const update: TablesUpdate<"channels"> = { updated_at: new Date().toISOString() };
     for (const key of allowed) {
-      if (key in body) update[key] = body[key];
+      if (key in body) (update as any)[key] = body[key];
+    }
+    // Keep mapping consistent: a room-type channel has no fixed bed and vice versa.
+    if ((update as any).mapping_mode === "room_type") (update as any).bed_id = null;
+    if ((update as any).mapping_mode === "bed") {
+      (update as any).room_type_id = null;
+      (update as any).allotment = null;
     }
 
     const { data: channel, error } = await supabase

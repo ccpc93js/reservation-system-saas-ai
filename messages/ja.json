@@ -1137,7 +1137,16 @@
     "toastSyncAllFailed": "全体の同期に失敗しました",
     "toastChannelDeleted": "チャネルを削除しました",
     "toastDeleteFailed": "チャネルの削除に失敗しました",
-    "toastExportUrlCopied": "エクスポートURLをコピーしました"
+    "toastExportUrlCopied": "エクスポートURLをコピーしました",
+    "roomTypeChannelsHeading": "部屋タイプ（ベッドプール）",
+    "bedChannelsHeading": "個別ベッド",
+    "allotmentLabel": "アロットメント",
+    "allotmentAll": "全ベッド",
+    "allotmentPlaceholder": "アロットメント",
+    "allotmentHint": "このチャネルで販売できる最大ベッド数（空欄 = 全て）",
+    "allotmentBadge": "{count}床割当",
+    "wholeRoomTypeBadge": "全ベッド",
+    "roomTypeChannelHint": "このチャネルからの予約は部屋タイプの空きベッドを自動割当します。販売可能なベッドがない日はエクスポートURLでブロックされます。"
   },
   "demoBanner": {
     "message": "🎭 デモモード — 新しいデモセッションごとにデータがリセットされます。すべての機能が利用可能です。",
