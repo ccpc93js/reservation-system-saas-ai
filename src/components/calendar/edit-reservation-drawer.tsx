@@ -1193,10 +1193,11 @@ export default function EditReservationDrawer({
                             </span>
                             {isSaving && <span className="text-[10px] text-muted-foreground italic">{t("savingSegment")}</span>}
                           </div>
-                          {/* Segment detail row */}
-                          <div className="flex items-center gap-2 px-3 pb-2">
+                          {/* Segment detail row — wraps on narrow screens:
+                              dates on their own line, rate + subtotal below. */}
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 pb-2">
                             {/* Date range + nights */}
-                            <span className="text-muted-foreground flex-1 whitespace-nowrap">
+                            <span className="text-muted-foreground basis-full sm:basis-0 sm:flex-1 whitespace-nowrap">
                               {fmt(group.from)} → {fmt(group.to)}
                               <span className="ml-1 text-foreground font-medium">
                                 ({group.nights}n{group.beds > 1 ? ` × ${t("bedsTimes", { count: group.beds })}` : ""})
@@ -1218,7 +1219,7 @@ export default function EditReservationDrawer({
                               <span className="text-muted-foreground">/n</span>
                             </div>
                             {/* Subtotal */}
-                            <span className="font-semibold text-foreground w-16 text-right">
+                            <span className="font-semibold text-foreground ml-auto text-right whitespace-nowrap">
                               {paymentCurrency} {previewSubtotal.toFixed(2)}
                             </span>
                           </div>
