@@ -169,7 +169,9 @@ export default function NewReservationDrawer({
   const pricePerNight = watch("price_per_night");
   const checkIn = watch("check_in");
 
-  // Resolve the anchor bed's room so we can offer the other beds in it.
+  // Resolve the anchor bed's room and list its beds immediately, so the
+  // multi-bed selector shows as soon as the drawer opens. Availability is
+  // refined once check-out is chosen (see the next effect).
   useEffect(() => {
     if (!open || !bedId) return;
     setSelectedBedIds([bedId]);
@@ -178,7 +180,17 @@ export default function NewReservationDrawer({
       const supabase = createBrowserClient();
       const { data: bed } = await (supabase as any)
         .from("beds").select("room_id").eq("id", bedId).single();
-      setRoomId(bed?.room_id ?? null);
+      const rid = bed?.room_id ?? null;
+      setRoomId(rid);
+      if (!rid) return;
+      const { data: beds } = await (supabase as any)
+        .from("beds")
+        .select("id, name, is_active")
+        .eq("room_id", rid)
+        .order("position", { ascending: true })
+        .order("name", { ascending: true });
+      // Provisional: assume active beds are free until dates narrow it down.
+      setRoomBeds((beds ?? []).map((b: any) => ({ ...b, available: b.is_active })));
     })();
   }, [open, bedId]);
 
