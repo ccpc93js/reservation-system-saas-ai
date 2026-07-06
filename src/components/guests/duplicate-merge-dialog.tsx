@@ -158,9 +158,9 @@ export default function DuplicateMergeDialog({
   return (
     <Dialog.Root open={true}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-[10051]" />
         <Dialog.Content
-          className="fixed left-[50%] top-[50%] z-50 w-[calc(100vw-2rem)] max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-4 sm:p-6 shadow-lg max-h-[90dvh] overflow-y-auto"
+          className="fixed left-[50%] top-[50%] z-[10052] w-[calc(100vw-2rem)] max-w-4xl translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-surface p-4 sm:p-6 shadow-lg max-h-[90dvh] overflow-y-auto"
           aria-describedby={undefined}
         >
           <div className="flex items-center justify-between mb-4">
