@@ -233,7 +233,8 @@
       "bedInactive": "Inactif",
       "bedsCount": "{count} lits",
       "selectAtLeastOneBed": "Sélectionnez au moins un lit",
-      "pickCheckoutToChooseBeds": "Sélectionnez une date de départ pour choisir les lits"
+      "pickCheckoutToChooseBeds": "Sélectionnez une date de départ pour choisir les lits",
+      "selectDatePlaceholder": "Sélectionnez une date"
     },
     "editReservation": {
       "loading": "Chargement...",

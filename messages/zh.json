@@ -233,7 +233,8 @@
       "bedInactive": "停用",
       "bedsCount": "{count} 个床位",
       "selectAtLeastOneBed": "请至少选择一个床位",
-      "pickCheckoutToChooseBeds": "请选择退房日期以选择床位"
+      "pickCheckoutToChooseBeds": "请选择退房日期以选择床位",
+      "selectDatePlaceholder": "选择日期"
     },
     "editReservation": {
       "loading": "加载中...",

@@ -1,3 +1,35 @@
+## [7f3dc12] - 2026-07-06
+
+fix: show booking dates in locale (European dd/mm) format
+
+The drawer showed dates via native date inputs, which render in the
+browser locale (US mm/dd), making the check-in easy to misread. Check-in
+is now a read-only, locale-formatted display (weekday + dd/mm/yyyy) with
+the real value in a hidden field; check-out keeps the native picker but
+gains a lang hint and a formatted preview line. Dates parse with an
+explicit local time so a YYYY-MM-DD string never shifts a day by timezone.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [ebecfad] - 2026-07-06
+
+fix: block bed selection until a valid check-out date is chosen
+
+The booking drawer listed dorm beds as selectable before dates were set,
+using a provisional all-free state. That let staff pick (or Whole-room
+select) beds that were actually booked, and only the server rejected it.
+
+Now:
+- beds are shown but disabled until check-out gives a positive stay
+- a visible hint tells the user to pick a check-out date first
+- once dates are set, availability is fetched and booked/inactive beds
+  stay disabled and labelled, free beds become selectable
+- multi-bed rooms require an explicit still-available selection (no
+  fallback to a possibly-booked anchor bed)
+- i18n for all 11 locales
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [68873a3] - 2026-07-06
 
 fix: clear booking drawer form when it closes

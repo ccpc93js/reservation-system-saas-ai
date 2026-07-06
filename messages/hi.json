@@ -233,7 +233,8 @@
       "bedInactive": "निष्क्रिय",
       "bedsCount": "{count} बेड",
       "selectAtLeastOneBed": "कम से कम एक बेड चुनें",
-      "pickCheckoutToChooseBeds": "बेड चुनने के लिए चेक-आउट तिथि चुनें"
+      "pickCheckoutToChooseBeds": "बेड चुनने के लिए चेक-आउट तिथि चुनें",
+      "selectDatePlaceholder": "तारीख चुनें"
     },
     "editReservation": {
       "loading": "लोड हो रहा है...",

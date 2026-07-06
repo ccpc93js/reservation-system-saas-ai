@@ -233,7 +233,8 @@
       "bedInactive": "নিষ্ক্রিয়",
       "bedsCount": "{count}টি বেড",
       "selectAtLeastOneBed": "অন্তত একটি বেড নির্বাচন করুন",
-      "pickCheckoutToChooseBeds": "বেড নির্বাচন করতে চেক-আউট তারিখ বেছে নিন"
+      "pickCheckoutToChooseBeds": "বেড নির্বাচন করতে চেক-আউট তারিখ বেছে নিন",
+      "selectDatePlaceholder": "একটি তারিখ নির্বাচন করুন"
     },
     "editReservation": {
       "loading": "লোড হচ্ছে...",

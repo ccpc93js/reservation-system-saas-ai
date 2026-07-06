@@ -233,7 +233,8 @@
       "bedInactive": "無効",
       "bedsCount": "{count}床",
       "selectAtLeastOneBed": "少なくとも1つのベッドを選択してください",
-      "pickCheckoutToChooseBeds": "ベッドを選ぶにはチェックアウト日を選択してください"
+      "pickCheckoutToChooseBeds": "ベッドを選ぶにはチェックアウト日を選択してください",
+      "selectDatePlaceholder": "日付を選択"
     },
     "editReservation": {
       "loading": "読み込み中...",

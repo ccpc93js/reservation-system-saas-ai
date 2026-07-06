@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Search, CheckCircle2, BedDouble } from "lucide-react";
+import { X, Search, CheckCircle2, BedDouble, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations, useLocale } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
@@ -397,19 +397,32 @@ export default function NewReservationDrawer({
               <label className="block text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
                 {t("checkOut")} {errors.check_out && <span className="text-red-500">*</span>}
               </label>
-              <input
-                {...register("check_out")}
-                type="date"
-                lang={locale}
-                min={checkIn}
-                onChange={(e) => {
-                  register("check_out").onChange(e);
-                  if (e.target.value && checkIn) checkAvailability(checkIn, e.target.value);
-                }}
-                className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20 transition-all ${
-                  errors.check_out || conflict ? "border-red-500" : "border-border"
-                }`}
-              />
+              {/* Transparent native date input over a locale-formatted display,
+                  so check-out reads as dd/mm/yyyy (matching check-in) yet stays
+                  fully editable via the browser's own date picker. */}
+              <div className="relative">
+                <div
+                  className={`w-full rounded-lg border px-3 py-2 text-sm bg-surface flex items-center justify-between pointer-events-none ${
+                    errors.check_out || conflict ? "border-red-500" : "border-border"
+                  }`}
+                >
+                  <span className={checkOut ? "text-foreground" : "text-muted-foreground"}>
+                    {checkOut ? fmtDate(checkOut) : t("selectDatePlaceholder")}
+                  </span>
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <input
+                  {...register("check_out")}
+                  type="date"
+                  lang={locale}
+                  min={checkIn}
+                  onChange={(e) => {
+                    register("check_out").onChange(e);
+                    if (e.target.value && checkIn) checkAvailability(checkIn, e.target.value);
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </div>
               {checkingAvailability && (
                 <p className="text-xs mt-1 text-muted-foreground">{t("checkingAvailability")}</p>
               )}

@@ -233,7 +233,8 @@
       "bedInactive": "Неактивна",
       "bedsCount": "{count} кроватей",
       "selectAtLeastOneBed": "Выберите хотя бы одну кровать",
-      "pickCheckoutToChooseBeds": "Выберите дату выезда, чтобы выбрать кровати"
+      "pickCheckoutToChooseBeds": "Выберите дату выезда, чтобы выбрать кровати",
+      "selectDatePlaceholder": "Выберите дату"
     },
     "editReservation": {
       "loading": "Загрузка...",
