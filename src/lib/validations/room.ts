@@ -30,26 +30,28 @@ export const updateRoomTypeSchema = createRoomTypeSchema.shape({
 
 // Room Schemas
 export const createRoomSchema = yup.object().shape({
-  room_type_id: yup.string().uuid("Room type must be a valid ID").required("Room type is required"),
+  // Value comes from a <select> of real room-type ids; the DB FK enforces
+  // validity. Avoid yup's strict uuid() which rejects non-v1-5 ids (e.g. seed data).
+  room_type_id: yup.string().required("Room type is required"),
   name: yup.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters").required("Room name is required"),
   floor: optionalNumber(),
   notes: yup.string().max(500, "Notes must be at most 500 characters").nullable().optional(),
 });
 
 export const updateRoomSchema = createRoomSchema.shape({
-  room_type_id: yup.string().uuid("Room type must be a valid ID").optional(),
+  room_type_id: yup.string().optional(),
   name: yup.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters").optional(),
 });
 
 // Bed Schemas
 export const createBedSchema = yup.object().shape({
-  room_id: yup.string().uuid("Room must be a valid ID").required("Room is required"),
+  room_id: yup.string().required("Room is required"),
   name: yup.string().min(1, "Bed name is required").max(100, "Name must be at most 100 characters").required("Bed name is required"),
   position: optionalNumber(),
   is_active: yup.boolean().optional(),
 });
 
 export const updateBedSchema = createBedSchema.shape({
-  room_id: yup.string().uuid("Room must be a valid ID").optional(),
+  room_id: yup.string().optional(),
   name: yup.string().min(1, "Bed name is required").max(100, "Name must be at most 100 characters").optional(),
 });

@@ -1,3 +1,20 @@
+## [43244cd] - 2026-07-06
+
+fix: room/bed counts in tables + editable room-type/room selects
+
+- Room Types table now shows the room count and Rooms table the bed count:
+  add Supabase embedded aggregates (rooms(count) / beds(count)) in the rooms
+  page and the /api/room-types + /api/rooms routes (clients refetch on mount),
+  flattened to room_count / bed_count.
+- Fix "Room type must be a valid ID" when editing a room: the native select
+  dropped the value because it was reset before the options loaded. Make the
+  room-type select (rooms-dialog) and room select (beds-dialog) controlled
+  (value + setValue) and load options before reset.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [f59a9f4] - 2026-07-06
 
 fix: prevent duplicate reservation numbers (atomic per-org counter)
