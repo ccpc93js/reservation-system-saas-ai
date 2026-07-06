@@ -337,14 +337,23 @@
         "rateUpdateError": "料金の更新中にエラーが発生しました",
         "paymentSaveFailed": "支払いの保存に失敗しました",
         "paymentSaved": "支払い情報が保存されました",
-        "paymentSaveError": "支払いの保存中にエラーが発生しました"
+        "paymentSaveError": "支払いの保存中にエラーが発生しました",
+        "companionAdded": "{name} を予約に追加しました",
+        "companionAddFailed": "ゲストの追加に失敗しました",
+        "companionRemoveConfirm": "{name} をこの予約から削除しますか？",
+        "companionRemoved": "ゲストを削除しました",
+        "companionRemoveFailed": "ゲストの削除に失敗しました"
       },
       "paymentMethod": "支払い方法",
       "selectMethod": "方法を選択",
       "method_card": "カード",
       "method_cash": "現金",
       "method_bank_transfer": "銀行振込",
-      "method_other": "その他"
+      "method_other": "その他",
+      "additionalGuests": "追加のゲスト",
+      "addGuest": "ゲストを追加",
+      "removeGuest": "ゲストを削除",
+      "noAdditionalGuests": "追加のゲストはまだいません。"
     }
   },
   "pendingCheckIns": {

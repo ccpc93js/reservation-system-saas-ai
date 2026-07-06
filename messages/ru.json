@@ -337,14 +337,23 @@
         "rateUpdateError": "Ошибка при обновлении тарифа",
         "paymentSaveFailed": "Не удалось сохранить оплату",
         "paymentSaved": "Данные об оплате сохранены",
-        "paymentSaveError": "Ошибка при сохранении оплаты"
+        "paymentSaveError": "Ошибка при сохранении оплаты",
+        "companionAdded": "{name} добавлен в бронирование",
+        "companionAddFailed": "Не удалось добавить гостя",
+        "companionRemoveConfirm": "Удалить {name} из этого бронирования?",
+        "companionRemoved": "Гость удалён",
+        "companionRemoveFailed": "Не удалось удалить гостя"
       },
       "paymentMethod": "Способ оплаты",
       "selectMethod": "Выберите способ",
       "method_card": "Карта",
       "method_cash": "Наличные",
       "method_bank_transfer": "Банковский перевод",
-      "method_other": "Другое"
+      "method_other": "Другое",
+      "additionalGuests": "Дополнительные гости",
+      "addGuest": "Добавить гостя",
+      "removeGuest": "Удалить гостя",
+      "noAdditionalGuests": "Пока нет дополнительных гостей."
     }
   },
   "pendingCheckIns": {

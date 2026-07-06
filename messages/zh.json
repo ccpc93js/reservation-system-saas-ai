@@ -337,14 +337,23 @@
         "rateUpdateError": "更新价格时出错",
         "paymentSaveFailed": "付款保存失败",
         "paymentSaved": "付款信息已保存",
-        "paymentSaveError": "保存付款时出错"
+        "paymentSaveError": "保存付款时出错",
+        "companionAdded": "已将 {name} 添加到预订",
+        "companionAddFailed": "添加入住人失败",
+        "companionRemoveConfirm": "从此预订中移除 {name}？",
+        "companionRemoved": "入住人已移除",
+        "companionRemoveFailed": "移除入住人失败"
       },
       "paymentMethod": "付款方式",
       "selectMethod": "选择方式",
       "method_card": "银行卡",
       "method_cash": "现金",
       "method_bank_transfer": "银行转账",
-      "method_other": "其他"
+      "method_other": "其他",
+      "additionalGuests": "其他入住人",
+      "addGuest": "添加入住人",
+      "removeGuest": "移除入住人",
+      "noAdditionalGuests": "暂无其他入住人。"
     }
   },
   "pendingCheckIns": {

@@ -182,6 +182,21 @@ export async function POST(request: Request) {
       return fail("reservation_items.insert", "Failed to create reservation items", 400, itemsError);
     }
 
+    // Record the booker as the primary guest on the reservation.
+    if (guestId) {
+      await (supabase as any)
+        .from("reservation_guests")
+        .upsert(
+          {
+            organization_id: data.org_id,
+            reservation_id: reservation.id,
+            guest_id: guestId,
+            is_primary: true,
+          },
+          { onConflict: "reservation_id,guest_id" }
+        );
+    }
+
     // Update reservation total_amount
     const { error: totalUpdateError } = await (supabase
       .from("reservations") as any)

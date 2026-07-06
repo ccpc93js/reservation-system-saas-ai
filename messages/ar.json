@@ -337,14 +337,23 @@
         "rateUpdateError": "خطأ أثناء تحديث السعر",
         "paymentSaveFailed": "فشل حفظ الدفع",
         "paymentSaved": "تم حفظ معلومات الدفع",
-        "paymentSaveError": "خطأ أثناء حفظ الدفع"
+        "paymentSaveError": "خطأ أثناء حفظ الدفع",
+        "companionAdded": "تمت إضافة {name} إلى الحجز",
+        "companionAddFailed": "فشل في إضافة الضيف",
+        "companionRemoveConfirm": "إزالة {name} من هذا الحجز؟",
+        "companionRemoved": "تمت إزالة الضيف",
+        "companionRemoveFailed": "فشل في إزالة الضيف"
       },
       "paymentMethod": "طريقة الدفع",
       "selectMethod": "اختر الطريقة",
       "method_card": "بطاقة",
       "method_cash": "نقدًا",
       "method_bank_transfer": "تحويل بنكي",
-      "method_other": "أخرى"
+      "method_other": "أخرى",
+      "additionalGuests": "ضيوف إضافيون",
+      "addGuest": "إضافة ضيف",
+      "removeGuest": "إزالة الضيف",
+      "noAdditionalGuests": "لا يوجد ضيوف إضافيون بعد."
     }
   },
   "pendingCheckIns": {

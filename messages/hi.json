@@ -337,14 +337,23 @@
         "rateUpdateError": "दर अपडेट करने में त्रुटि",
         "paymentSaveFailed": "भुगतान सहेजने में विफल",
         "paymentSaved": "भुगतान जानकारी सहेजी गई",
-        "paymentSaveError": "भुगतान सहेजने में त्रुटि"
+        "paymentSaveError": "भुगतान सहेजने में त्रुटि",
+        "companionAdded": "{name} को आरक्षण में जोड़ा गया",
+        "companionAddFailed": "अतिथि जोड़ने में विफल",
+        "companionRemoveConfirm": "क्या {name} को इस आरक्षण से हटाएँ?",
+        "companionRemoved": "अतिथि हटाया गया",
+        "companionRemoveFailed": "अतिथि हटाने में विफल"
       },
       "paymentMethod": "भुगतान का तरीका",
       "selectMethod": "तरीका चुनें",
       "method_card": "कार्ड",
       "method_cash": "नकद",
       "method_bank_transfer": "बैंक ट्रांसफर",
-      "method_other": "अन्य"
+      "method_other": "अन्य",
+      "additionalGuests": "अतिरिक्त अतिथि",
+      "addGuest": "अतिथि जोड़ें",
+      "removeGuest": "अतिथि हटाएँ",
+      "noAdditionalGuests": "अभी तक कोई अतिरिक्त अतिथि नहीं।"
     }
   },
   "pendingCheckIns": {

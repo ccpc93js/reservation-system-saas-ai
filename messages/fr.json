@@ -337,14 +337,23 @@
         "rateUpdateError": "Erreur lors de la mise à jour du tarif",
         "paymentSaveFailed": "Échec de l'enregistrement du paiement",
         "paymentSaved": "Informations de paiement enregistrées",
-        "paymentSaveError": "Erreur lors de l'enregistrement du paiement"
+        "paymentSaveError": "Erreur lors de l'enregistrement du paiement",
+        "companionAdded": "{name} ajouté à la réservation",
+        "companionAddFailed": "Échec de l'ajout de l'invité",
+        "companionRemoveConfirm": "Retirer {name} de cette réservation ?",
+        "companionRemoved": "Invité retiré",
+        "companionRemoveFailed": "Échec du retrait de l'invité"
       },
       "paymentMethod": "Mode de paiement",
       "selectMethod": "Choisir un mode",
       "method_card": "Carte",
       "method_cash": "Espèces",
       "method_bank_transfer": "Virement",
-      "method_other": "Autre"
+      "method_other": "Autre",
+      "additionalGuests": "Invités supplémentaires",
+      "addGuest": "Ajouter un invité",
+      "removeGuest": "Retirer l'invité",
+      "noAdditionalGuests": "Aucun invité supplémentaire pour le moment."
     }
   },
   "pendingCheckIns": {

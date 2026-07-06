@@ -337,14 +337,23 @@
         "rateUpdateError": "Error updating rate",
         "paymentSaveFailed": "Failed to save payment",
         "paymentSaved": "Payment info saved",
-        "paymentSaveError": "Error saving payment"
+        "paymentSaveError": "Error saving payment",
+        "companionAdded": "{name} added to reservation",
+        "companionAddFailed": "Failed to add guest",
+        "companionRemoveConfirm": "Remove {name} from this reservation?",
+        "companionRemoved": "Guest removed",
+        "companionRemoveFailed": "Failed to remove guest"
       },
       "paymentMethod": "Payment Method",
       "selectMethod": "Select method",
       "method_card": "Card",
       "method_cash": "Cash",
       "method_bank_transfer": "Bank Transfer",
-      "method_other": "Other"
+      "method_other": "Other",
+      "additionalGuests": "Additional guests",
+      "addGuest": "Add guest",
+      "removeGuest": "Remove guest",
+      "noAdditionalGuests": "No additional guests yet."
     }
   },
   "pendingCheckIns": {

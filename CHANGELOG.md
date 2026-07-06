@@ -1,3 +1,46 @@
+## [unreleased] - 2026-07-06
+
+feat: multiple guests per reservation (primary + companions)
+
+New reservation_guests join table links several guests to one reservation.
+The booker stays the primary/lead guest (mirrors reservations.guest_id for
+existing email/list code); additional companion guests can be added and
+removed from the reservation drawer. Each companion is a full guest record,
+so their ID/documents are captured for check-in. Backfilled existing
+reservations, added RLS, synced primary on create + guest change. i18n for
+all 11 locales. No per-bed assignment (guests listed at reservation level).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [032570e] - 2026-07-06
+
+fix: clear edit dialogs to blank on create instead of last-edited data
+
+react-hook-form reset(values) during an edit overwrites the internal
+defaultValues, so a later bare reset() on Create restored the previous
+record instead of a blank form. Pass explicit empty defaults on create.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [3f925e7] - 2026-07-06
+
+feat: loading spinner in bed/room/room-type dialogs while data loads
+
+Show a centered spinner overlay inside the edit dialogs while their
+data is fetched on open, instead of briefly flashing an empty form.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [2132434] - 2026-07-06
+
+fix: add missing rooms/room_types updated_at columns
+
+Editing a room or room type failed with "Could not find the updated_at column
+in the schema cache" — the PATCH routes set updated_at but the columns were
+missing (same as beds). Add them + reload PostgREST schema. Migration included.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [e942c97] - 2026-07-06
 
 feat: replace native confirm() with a styled confirm dialog

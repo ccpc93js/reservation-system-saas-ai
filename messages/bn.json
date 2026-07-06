@@ -337,14 +337,23 @@
         "rateUpdateError": "হার আপডেট করতে ত্রুটি",
         "paymentSaveFailed": "পেমেন্ট সংরক্ষণ করতে ব্যর্থ",
         "paymentSaved": "পেমেন্ট তথ্য সংরক্ষিত হয়েছে",
-        "paymentSaveError": "পেমেন্ট সংরক্ষণে ত্রুটি"
+        "paymentSaveError": "পেমেন্ট সংরক্ষণে ত্রুটি",
+        "companionAdded": "{name} সংরক্ষণে যোগ করা হয়েছে",
+        "companionAddFailed": "অতিথি যোগ করা ব্যর্থ হয়েছে",
+        "companionRemoveConfirm": "এই সংরক্ষণ থেকে {name} সরাবেন?",
+        "companionRemoved": "অতিথি সরানো হয়েছে",
+        "companionRemoveFailed": "অতিথি সরানো ব্যর্থ হয়েছে"
       },
       "paymentMethod": "পেমেন্ট পদ্ধতি",
       "selectMethod": "পদ্ধতি নির্বাচন",
       "method_card": "কার্ড",
       "method_cash": "নগদ",
       "method_bank_transfer": "ব্যাংক ট্রান্সফার",
-      "method_other": "অন্যান্য"
+      "method_other": "অন্যান্য",
+      "additionalGuests": "অতিরিক্ত অতিথি",
+      "addGuest": "অতিথি যোগ করুন",
+      "removeGuest": "অতিথি সরান",
+      "noAdditionalGuests": "এখনও কোনো অতিরিক্ত অতিথি নেই।"
     }
   },
   "pendingCheckIns": {

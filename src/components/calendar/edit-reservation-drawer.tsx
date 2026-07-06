@@ -5,7 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, LogOut, AlertTriangle, User } from "lucide-react";
+import { X, LogOut, AlertTriangle, User, UserPlus, Users, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { updateReservationSchema, type UpdateReservationInput } from "@/lib/validations/reservation";
@@ -94,6 +94,13 @@ export default function EditReservationDrawer({
   // Guest book
   const [inBook, setInBook] = useState(false);
   const [addingToBook, setAddingToBook] = useState(false);
+  // Additional (companion) guests
+  const [companions, setCompanions] = useState<any[]>([]);
+  const [addingCompanion, setAddingCompanion] = useState(false);
+  const [companionSearch, setCompanionSearch] = useState("");
+  const [companionResults, setCompanionResults] = useState<any[]>([]);
+  const [companionSearching, setCompanionSearching] = useState(false);
+  const [savingCompanion, setSavingCompanion] = useState(false);
 
   const {
     register,
@@ -131,6 +138,18 @@ export default function EditReservationDrawer({
       return JSON.parse(textBody);
     } catch {
       return { error: textBody || `Request failed with status ${response.status}` };
+    }
+  };
+
+  const loadCompanions = async (resId?: string | null) => {
+    const rid = resId ?? reservationId;
+    if (!rid) return;
+    try {
+      const res = await fetch(`/api/reservations/${rid}/guests`);
+      const json = await res.json();
+      if (res.ok) setCompanions((json.guests ?? []).filter((g: any) => !g.is_primary));
+    } catch {
+      /* non-blocking */
     }
   };
 
@@ -176,6 +195,7 @@ export default function EditReservationDrawer({
         setSegmentRates({});
 
         await refreshInBook();
+        await loadCompanions(reservationId);
         setNewCheckIn((data as any).check_in || "");
         setNewCheckOut((data as any).check_out || "");
         setPaymentConfirmed((data as any).payment_confirmed ?? false);
@@ -379,10 +399,64 @@ export default function EditReservationDrawer({
       setChangingGuest(false);
       setGuestSearch("");
       setGuestResults([]);
+      // Primary changed → reservation_guests re-synced server-side; reload list.
+      await loadCompanions(reservationId);
       toast.success(t("toasts.guestChanged", { name: `${guest.first_name} ${guest.last_name}` }));
       onReservationUpdated?.();
     } catch {
       toast.error(t("toasts.guestChangeFailed"));
+    }
+  };
+
+  const handleCompanionSearch = async (query: string) => {
+    setCompanionSearch(query);
+    if (query.trim().length < 2) { setCompanionResults([]); return; }
+    setCompanionSearching(true);
+    const supabase = createBrowserClient();
+    const { data } = await supabase
+      .from("guests")
+      .select("id, first_name, last_name, email")
+      .eq("organization_id", reservation?.organization_id)
+      .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%,email.ilike.%${query}%`)
+      .limit(8);
+    // Exclude the primary and already-attached companions.
+    const attached = new Set([reservation?.guest_id, ...companions.map((c) => c.guest_id)]);
+    setCompanionResults((data || []).filter((g: any) => !attached.has(g.id)));
+    setCompanionSearching(false);
+  };
+
+  const handleAddCompanion = async (guest: any) => {
+    setSavingCompanion(true);
+    try {
+      const res = await fetch(`/api/reservations/${reservationId}/guests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guest_id: guest.id }),
+      });
+      const json = await parseApiResponse(res);
+      if (!res.ok) { toast.error(json.error || t("toasts.companionAddFailed")); return; }
+      setCompanions((prev) => [...prev, json.guest]);
+      setCompanionSearch("");
+      setCompanionResults([]);
+      setAddingCompanion(false);
+      toast.success(t("toasts.companionAdded", { name: `${guest.first_name} ${guest.last_name}` }));
+    } catch {
+      toast.error(t("toasts.companionAddFailed"));
+    } finally {
+      setSavingCompanion(false);
+    }
+  };
+
+  const handleRemoveCompanion = async (guestId: string, name: string) => {
+    if (!(await confirmDialog(t("toasts.companionRemoveConfirm", { name })))) return;
+    try {
+      const res = await fetch(`/api/reservations/${reservationId}/guests?guest_id=${guestId}`, { method: "DELETE" });
+      const json = await parseApiResponse(res);
+      if (!res.ok) { toast.error(json.error || t("toasts.companionRemoveFailed")); return; }
+      setCompanions((prev) => prev.filter((c) => c.guest_id !== guestId));
+      toast.success(t("toasts.companionRemoved"));
+    } catch {
+      toast.error(t("toasts.companionRemoveFailed"));
     }
   };
 
@@ -717,6 +791,103 @@ export default function EditReservationDrawer({
                 </div>
               )}
             </div>
+
+            {/* Additional guests */}
+            {reservation?.guest_id && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <Users className="w-3.5 h-3.5" />
+                    {t("additionalGuests")}
+                    {companions.length > 0 && (
+                      <span className="text-muted-foreground/70">({companions.length})</span>
+                    )}
+                  </label>
+                  {!addingCompanion && (
+                    <button
+                      type="button"
+                      onClick={() => setAddingCompanion(true)}
+                      className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" /> {t("addGuest")}
+                    </button>
+                  )}
+                </div>
+
+                {companions.length > 0 && (
+                  <div className="rounded-lg border border-border bg-background divide-y divide-border overflow-hidden">
+                    {companions.map((c) => (
+                      <div key={c.id} className="flex items-center gap-2 px-3 py-2">
+                        <User className="w-4 h-4 text-muted-foreground shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm text-foreground truncate block">
+                            {c.guests?.first_name} {c.guests?.last_name}
+                          </span>
+                          {c.guests?.email && (
+                            <span className="text-xs text-muted-foreground truncate block">{c.guests.email}</span>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveCompanion(c.guest_id, `${c.guests?.first_name} ${c.guests?.last_name}`)}
+                          className="p-1.5 rounded-lg hover:bg-[#EEDCD5] transition-colors shrink-0"
+                          title={t("removeGuest")}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-[#9C4A37]" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {addingCompanion && (
+                  <div className="space-y-1">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={companionSearch}
+                        onChange={(e) => handleCompanionSearch(e.target.value)}
+                        placeholder={t("searchGuestPlaceholder")}
+                        autoFocus
+                        disabled={savingCompanion}
+                        className="flex-1 rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 disabled:opacity-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => { setAddingCompanion(false); setCompanionSearch(""); setCompanionResults([]); }}
+                        className="px-3 py-2 text-sm rounded-lg border border-border text-muted-foreground hover:bg-muted"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    {companionSearching && <p className="text-xs text-muted-foreground px-1">{t("searching")}</p>}
+                    {companionResults.length > 0 && (
+                      <div className="rounded-lg border border-border bg-background shadow-md overflow-hidden">
+                        {companionResults.map((g) => (
+                          <button
+                            key={g.id}
+                            type="button"
+                            onClick={() => handleAddCompanion(g)}
+                            disabled={savingCompanion}
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors border-b border-border last:border-0 disabled:opacity-50"
+                          >
+                            <span className="font-medium text-foreground">{g.first_name} {g.last_name}</span>
+                            {g.email && <span className="text-xs text-muted-foreground ml-2">{g.email}</span>}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {companionSearch.length >= 2 && !companionSearching && companionResults.length === 0 && (
+                      <p className="text-xs text-muted-foreground px-1">{t("noGuestsFound")}</p>
+                    )}
+                  </div>
+                )}
+
+                {companions.length === 0 && !addingCompanion && (
+                  <p className="text-xs text-muted-foreground px-1">{t("noAdditionalGuests")}</p>
+                )}
+              </div>
+            )}
 
             {/* Guest Check-In Link */}
             {reservation?.check_in_token && (

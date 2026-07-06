@@ -337,14 +337,23 @@
         "rateUpdateError": "Error al actualizar la tarifa",
         "paymentSaveFailed": "No se pudo guardar el pago",
         "paymentSaved": "Información de pago guardada",
-        "paymentSaveError": "Error al guardar el pago"
+        "paymentSaveError": "Error al guardar el pago",
+        "companionAdded": "{name} añadido a la reserva",
+        "companionAddFailed": "No se pudo añadir el huésped",
+        "companionRemoveConfirm": "¿Eliminar a {name} de esta reserva?",
+        "companionRemoved": "Huésped eliminado",
+        "companionRemoveFailed": "No se pudo eliminar el huésped"
       },
       "paymentMethod": "Método de pago",
       "selectMethod": "Seleccionar método",
       "method_card": "Tarjeta",
       "method_cash": "Efectivo",
       "method_bank_transfer": "Transferencia",
-      "method_other": "Otro"
+      "method_other": "Otro",
+      "additionalGuests": "Huéspedes adicionales",
+      "addGuest": "Añadir huésped",
+      "removeGuest": "Eliminar huésped",
+      "noAdditionalGuests": "Aún no hay huéspedes adicionales."
     }
   },
   "pendingCheckIns": {

@@ -337,14 +337,23 @@
         "rateUpdateError": "Greška pri ažuriranju cene",
         "paymentSaveFailed": "Neuspešno čuvanje plaćanja",
         "paymentSaved": "Podaci o plaćanju sačuvani",
-        "paymentSaveError": "Greška pri čuvanju plaćanja"
+        "paymentSaveError": "Greška pri čuvanju plaćanja",
+        "companionAdded": "{name} dodat u rezervaciju",
+        "companionAddFailed": "Dodavanje gosta nije uspelo",
+        "companionRemoveConfirm": "Ukloniti {name} iz ove rezervacije?",
+        "companionRemoved": "Gost uklonjen",
+        "companionRemoveFailed": "Uklanjanje gosta nije uspelo"
       },
       "paymentMethod": "Način plaćanja",
       "selectMethod": "Izaberite način",
       "method_card": "Kartica",
       "method_cash": "Gotovina",
       "method_bank_transfer": "Bankovni transfer",
-      "method_other": "Ostalo"
+      "method_other": "Ostalo",
+      "additionalGuests": "Dodatni gosti",
+      "addGuest": "Dodaj gosta",
+      "removeGuest": "Ukloni gosta",
+      "noAdditionalGuests": "Još nema dodatnih gostiju."
     }
   },
   "pendingCheckIns": {

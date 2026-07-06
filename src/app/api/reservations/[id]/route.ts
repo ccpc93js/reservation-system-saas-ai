@@ -146,6 +146,28 @@ export async function PATCH(
       );
     }
 
+    // Keep reservation_guests in sync with the primary guest pointer.
+    // Demote any existing primary, then upsert the new guest as primary.
+    if (updateData.guest_id) {
+      await (supabase as any)
+        .from("reservation_guests")
+        .update({ is_primary: false })
+        .eq("reservation_id", id)
+        .eq("is_primary", true);
+
+      await (supabase as any)
+        .from("reservation_guests")
+        .upsert(
+          {
+            organization_id: reservation.organization_id,
+            reservation_id: id,
+            guest_id: updateData.guest_id,
+            is_primary: true,
+          },
+          { onConflict: "reservation_id,guest_id" }
+        );
+    }
+
     // Update registry actual_check_out_at when checking out
     if (updateData.status === "checked_out") {
       await (supabase as any)
