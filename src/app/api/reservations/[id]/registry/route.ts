@@ -63,6 +63,10 @@ export async function POST(
     const item = res.reservation_items?.[0];
     const bed = item?.beds;
     const room = bed?.rooms;
+    // Multi-bed: record all bed names ("101, 102, 103") in the snapshot.
+    const bedNames = (res.reservation_items ?? [])
+      .map((it: any) => it.beds?.name)
+      .filter(Boolean);
 
     const { error: insertError } = await (supabase as any)
       .from("checkin_registry")
@@ -85,7 +89,7 @@ export async function POST(
         jmbg: g.jmbg,
         service_type: res.service_type,
         room_name: room?.name ?? null,
-        bed_name: bed?.name ?? null,
+        bed_name: bedNames.length > 0 ? bedNames.join(", ") : null,
         check_in: res.check_in,
         check_out: res.check_out,
         actual_check_in_at: res.actual_check_in_at,

@@ -458,7 +458,11 @@ export default function ReservationsListClient({
                 sortedReservations.map((res) => {
                   const firstBed = res.reservation_items?.[0];
                   const roomName = firstBed?.beds?.rooms?.name || "—";
-                  const bedName = firstBed?.beds?.name || "—";
+                  // Multi-bed: show the first bed plus how many more (e.g. "101 +3")
+                  const distinctBeds = new Set((res.reservation_items ?? []).map((it: any) => it.bed_id)).size;
+                  const bedName = firstBed?.beds?.name
+                    ? `${firstBed.beds.name}${distinctBeds > 1 ? ` +${distinctBeds - 1}` : ""}`
+                    : "—";
                   const daysCount = nights(res);
                   const colors = STATUS_COLORS[res.status] || STATUS_COLORS.pending;
 

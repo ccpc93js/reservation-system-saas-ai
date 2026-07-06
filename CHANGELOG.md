@@ -1,3 +1,69 @@
+## [unreleased] - 2026-07-07
+
+fix: multi-bed audit — date edits and extensions now cover every bed
+
+Audit of the multi-bed implementation found two pre-existing flows still
+assuming one bed per reservation:
+
+- update-dates used only the FIRST bed and rebuilt items per-night:
+  editing dates on a multi-bed reservation silently dropped the other
+  beds. Now rebuilds one item per bed spanning the new stay (per-bed rate
+  kept), conflict-checks every bed with the standard status filter and
+  strict overlap (back-to-back allowed). Note: collapses prior extension
+  segments into a single stay line.
+- extend only extended the first bed (other beds were released mid-stay)
+  and created per-night items. Now extends every bed with one item per
+  bed for the extension range.
+- Reservations list shows "101 +3" for multi-bed bookings.
+- Guest Book snapshots record all bed names ("101, 102, 103").
+
+## [6d6f9af] - 2026-07-07
+
+style: center drawer-launched modals in the visible area
+
+Modals opened from the reservation drawer (cancel, checkout, guest
+edit/create) centered on the full viewport, so the right-side drawer
+(max-w-lg) half-covered them. On lg screens they now shift left by half
+the drawer width (16rem), centering in the uncovered area. GuestDialog
+gets an opt-in shiftLeft prop since it is also used without a drawer.
+Mobile unchanged (drawer is full-width there).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [c823e29] - 2026-07-06
+
+style: wrap folio segment row on mobile
+
+On narrow screens the folio line (dates + nights x beds + rate input +
+subtotal) overflowed the card. The row now wraps: dates take their own
+line on mobile, rate and subtotal sit below; unchanged from sm: up.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [a05070a] - 2026-07-06
+
+style: widen reservation drawers to max-w-lg
+
+The folio line (dates + 3n x 4 beds + rate + subtotal) wrapped awkwardly
+at max-w-md. Both the edit and new-booking drawers now use max-w-lg.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [57e2809] - 2026-07-06
+
+fix: folio groups by date range and shows rate x nights x beds
+
+The folio grouped items by creation batch (30s window), so a bed added
+later to the SAME dates showed up as "Extension 1" and nights were
+summed across beds (2 beds x 2n displayed as 4n). Now items group by
+their date range: same-dates beds join one line shown as
+(Nn x M beds) with subtotal rate x nights x beds; only a different date
+range (a real stay extension) gets its own Extension segment. Editing a
+segment rate updates every bed in that segment (server already handled
+multi-item updates). i18n key bedsTimes for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [39b4a33] - 2026-07-06
 
 feat: add/remove beds on an existing reservation from the drawer

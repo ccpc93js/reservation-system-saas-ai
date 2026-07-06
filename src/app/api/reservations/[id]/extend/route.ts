@@ -34,47 +34,39 @@ export async function POST(
       return Response.json({ error: "New check-out must be after current check-out" }, { status: 400 });
     }
 
-    // Get bed from any existing item
-    const { data: anyItem } = await supabase
+    // Extend EVERY bed on the reservation — a group stays together. One item
+    // per bed for the extension range (matches the folio's date-range grouping).
+    const { data: itemsRaw } = await supabase
       .from("reservation_items")
       .select("bed_id")
-      .eq("reservation_id", id)
-      .limit(1)
-      .single();
-    const bedId = (anyItem as any)?.bed_id;
-    if (!bedId) return Response.json({ error: "No bed found for this reservation" }, { status: 400 });
+      .eq("reservation_id", id);
+    const bedIds = Array.from(new Set(((itemsRaw ?? []) as any[]).map((i) => i.bed_id)));
+    if (bedIds.length === 0) return Response.json({ error: "No bed found for this reservation" }, { status: 400 });
 
-    // Conflict check: other reservations on same bed during extension period
+    // Conflict check: other reservations on any of these beds during the extension
     const { data: conflicts } = await (supabase.from("reservation_items") as any)
-      .select("id, reservations!inner(status)")
-      .eq("bed_id", bedId)
+      .select("id, beds(name), reservations!inner(status)")
+      .in("bed_id", bedIds)
       .not("reservation_id", "eq", id)
       .lt("check_in", new_check_out)
       .gt("check_out", res.check_out)
       .not("reservations.status", "in", '("cancelled","no_show")');
 
     if (conflicts && conflicts.length > 0) {
-      return Response.json({ error: "Extension dates conflict with an existing reservation on this bed" }, { status: 409 });
+      const names = Array.from(new Set(conflicts.map((c: any) => c.beds?.name).filter(Boolean)));
+      return Response.json({ error: `Extension dates conflict with an existing reservation${names.length ? ` (${names.join(", ")})` : ""}` }, { status: 409 });
     }
 
-    // Build per-night items for the extension period
     const extNights = differenceInDays(parseISO(new_check_out), parseISO(res.check_out));
-    const newItems = [];
-    for (let i = 0; i < extNights; i++) {
-      const d = new Date(res.check_out);
-      d.setDate(d.getDate() + i);
-      const next = new Date(d);
-      next.setDate(next.getDate() + 1);
-      newItems.push({
-        organization_id: res.organization_id,
-        reservation_id: id,
-        bed_id: bedId,
-        check_in: d.toISOString().split("T")[0],
-        check_out: next.toISOString().split("T")[0],
-        price_per_night: Number(price_per_night),
-        total_price: Number(price_per_night),
-      });
-    }
+    const newItems = bedIds.map((bid) => ({
+      organization_id: res.organization_id,
+      reservation_id: id,
+      bed_id: bid,
+      check_in: res.check_out,
+      check_out: new_check_out,
+      price_per_night: Number(price_per_night),
+      total_price: Number(price_per_night) * extNights,
+    }));
 
     const { error: insertError } = await (supabase.from("reservation_items") as any).insert(newItems);
     if (insertError) return Response.json({ error: insertError.message }, { status: 400 });
@@ -91,7 +83,7 @@ export async function POST(
       .eq("id", id);
     if (updateError) return Response.json({ error: updateError.message }, { status: 400 });
 
-    const extensionTotal = extNights * Number(price_per_night);
+    const extensionTotal = extNights * Number(price_per_night) * bedIds.length;
     return Response.json({ success: true, new_total: newTotal, extension_nights: extNights, extension_total: extensionTotal });
   } catch (err) {
     console.error("Extend error:", err);

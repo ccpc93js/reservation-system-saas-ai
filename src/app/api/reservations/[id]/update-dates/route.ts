@@ -42,23 +42,27 @@ export async function PATCH(
       );
     }
 
-    // Get bed_id from first reservation_item
-    const { data: firstItem, error: itemError } = await supabase
+    // Load ALL items: a reservation may span several beds. Keep each bed's
+    // current rate (first item per bed) when rebuilding.
+    const { data: itemsRaw, error: itemError } = await supabase
       .from("reservation_items")
-      .select("bed_id, price_per_night")
+      .select("bed_id, price_per_night, check_in")
       .eq("reservation_id", id)
-      .limit(1)
-      .single();
+      .order("check_in", { ascending: true });
 
-    if (itemError || !firstItem) {
+    if (itemError || !itemsRaw || itemsRaw.length === 0) {
       return Response.json(
         { error: "Reservation items not found" },
         { status: 404 }
       );
     }
 
-    const bedId = (firstItem as any).bed_id;
-    let pricePerNight = (firstItem as any).price_per_night;
+    // bed_id -> rate (first/earliest item's rate per bed)
+    const bedRates = new Map<string, number>();
+    for (const it of itemsRaw as any[]) {
+      if (!bedRates.has(it.bed_id)) bedRates.set(it.bed_id, Number(it.price_per_night) || 0);
+    }
+    const bedIds = Array.from(bedRates.keys());
 
     // Verify user belongs to org
     const { data: membership, error: membershipError } = await supabase
@@ -91,15 +95,18 @@ export async function PATCH(
     const checkIn = newCheckIn || reservation.check_in;
     const checkOut = newCheckOut || reservation.check_out;
 
-    // Check for conflicts with other reservations on same bed (exclude current reservation)
+    // Conflict check across EVERY bed on the reservation for the new dates.
+    // Strict overlap (lt/gt) so back-to-back turnover is allowed; ignore
+    // cancelled/no_show like the rest of the availability logic.
     if (newCheckIn || newCheckOut) {
-      const { data: conflicts, error: conflictError } = await supabase
-        .from("reservation_items")
-        .select("id")
-        .eq("bed_id", bedId)
+      const { data: conflicts, error: conflictError } = await (supabase
+        .from("reservation_items") as any)
+        .select("id, reservations!inner(status)")
+        .in("bed_id", bedIds)
         .not("reservation_id", "eq", id)
-        .gte("check_out", checkIn)
         .lt("check_in", checkOut)
+        .gt("check_out", checkIn)
+        .not("reservations.status", "in", '("cancelled","no_show")')
         .limit(1);
 
       if (conflictError) {
@@ -130,26 +137,18 @@ export async function PATCH(
       );
     }
 
-    // pricePerNight already fetched above, create new reservation items for each night
+    // Rebuild: ONE item per bed spanning the full stay (matches the create
+    // flow and the folio's date-range grouping), keeping each bed's rate.
     const nights = differenceInDays(parseISO(checkOut), parseISO(checkIn));
-    const newItems = [];
-
-    for (let i = 0; i < nights; i++) {
-      const itemCheckIn = new Date(checkIn);
-      itemCheckIn.setDate(itemCheckIn.getDate() + i);
-      const itemCheckOut = new Date(itemCheckIn);
-      itemCheckOut.setDate(itemCheckOut.getDate() + 1);
-
-      newItems.push({
-        organization_id: reservation.organization_id,
-        reservation_id: id,
-        bed_id: bedId,
-        check_in: itemCheckIn.toISOString().split("T")[0],
-        check_out: itemCheckOut.toISOString().split("T")[0],
-        price_per_night: pricePerNight,
-        total_price: pricePerNight,
-      });
-    }
+    const newItems = bedIds.map((bid) => ({
+      organization_id: reservation.organization_id,
+      reservation_id: id,
+      bed_id: bid,
+      check_in: checkIn,
+      check_out: checkOut,
+      price_per_night: bedRates.get(bid),
+      total_price: (bedRates.get(bid) ?? 0) * nights,
+    }));
 
     // Insert new reservation items
     const { error: insertError } = await (supabase
@@ -165,7 +164,7 @@ export async function PATCH(
     }
 
     // Update reservation with new dates and total amount
-    const totalAmount = nights * pricePerNight;
+    const totalAmount = newItems.reduce((sum, it) => sum + Number(it.total_price), 0);
     const { error: updateError } = await (supabase
       .from("reservations") as any)
       .update({
