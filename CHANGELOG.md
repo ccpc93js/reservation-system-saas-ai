@@ -1,5 +1,39 @@
 ## [unreleased] - 2026-07-07
 
+docs: Help Center articles for every app section
+
+Expanded the Help Center from Channel Manager only to full coverage:
+17 articles across 8 categories — Getting Started (property structure,
+navigation map), Calendar & Bookings (tape basics, multi-bed groups),
+Reservations (drawer, companions, add/remove beds, payment & folio),
+Check-in & Guest Book (online link/QR, pending review, per-occupant
+registry), Guests (profiles/ID scan, duplicate merge), Housekeeping
+(board), Settings & Billing (branding, team roles, plans), plus the
+existing 5 Channel Manager articles. All searchable.
+
+## [f4221d7] - 2026-07-07
+
+feat: in-app Help Center with search + OTA channel manager guide
+
+Users can now self-serve documentation without support:
+
+- New Help page (sidebar -> Help) with client-side search across
+  article titles, summaries, keywords and body text, plus category
+  filter chips and a full article view
+- Typed article registry (src/lib/help/articles.ts) with structured
+  blocks (steps, tables, callouts, code) so new sections plug in as
+  they ship
+- First category: Channel Manager - 5 articles covering how iCal sync
+  works, private-room setup, pooled dorm setup with auto-assign,
+  allotment for walk-ins, and troubleshooting (incl. the Booking.com
+  multi-unit iCal limitation)
+- Markdown companion guide at docs/guides/ota-channel-manager.md
+- Articles in English; page chrome i18n for all 11 locales
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [unreleased] - 2026-07-07
+
 feat: in-app Help Center with search + OTA channel manager guide
 
 New Help section (sidebar → Help) with client-side search across article
