@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Building2, ArrowRight, Loader2, ArrowLeft, Check, X, Link } from "lucide-react";
 import { toast } from "sonner";
+import CountryCitySelect from "@/components/ui/country-city-select";
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -207,16 +208,14 @@ export default function OnboardingClient() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className={labelClass}>City</label>
-                    <input value={form.city} onChange={set("city")} placeholder="Belgrade" className={inputClass} />
-                  </div>
-                  <div>
-                    <label className={labelClass}>Country</label>
-                    <input value={form.country} onChange={set("country")} placeholder="Serbia" className={inputClass} />
-                  </div>
-                </div>
+                <CountryCitySelect
+                  country={form.country}
+                  city={form.city}
+                  onCountryChange={(v) => setForm((f) => ({ ...f, country: v, city: "" }))}
+                  onCityChange={(v) => setForm((f) => ({ ...f, city: v }))}
+                  inputClass={inputClass}
+                  labelClass={labelClass}
+                />
 
                 <button
                   onClick={() => canProceed && setStep(2)}

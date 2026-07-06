@@ -1,3 +1,21 @@
+## [7775ee4] - 2026-07-06
+
+feat: gate Serbia-only fields (JMBG, service type, police-registration) by property country
+
+- Serbian police-registration fields now only show when the property country is
+  Serbia (from onboarding). Matching is case-insensitive + variants (serbia,
+  republic of serbia, rs, srb).
+- Gated: JMBG in guest create/edit dialog; Guest Book JMBG + Service Type
+  columns, the "Serbian police-registration record" subtitle, and the JMBG /
+  service-type fields in its edit form; JMBG + unique_master_citizen in the
+  duplicate-merge dialog.
+- Add useOrgCountry hook (client dialogs) + isSerbia helper; Guest Book page
+  passes org country server-side.
+
+tsc clean.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [1a44ff8] - 2026-07-06
 
 fix: emails show real reservation_number (RES-26-XXXX) not the UUID prefix
