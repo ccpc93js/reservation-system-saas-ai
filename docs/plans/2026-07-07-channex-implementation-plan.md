@@ -3,6 +3,9 @@
 Date: 2026-07-07
 Status: PLAN — execute when 1–2 paying customers need real OTA sync
 Design rationale: `2026-07-07-aggregator-selfservice-channel-manager.md`
+Build aid: the `channex-pms-integration` skill is installed at
+`.claude/skills/channex-pms-integration/` (SKILL.md + references/api.md with
+verified endpoint shapes). Invoke it when implementing any phase below.
 
 ## Guiding decision
 
