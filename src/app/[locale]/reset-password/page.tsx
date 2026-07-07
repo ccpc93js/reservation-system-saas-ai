@@ -21,18 +21,32 @@ export default function ResetPasswordPage() {
   const [linkStatus, setLinkStatus] = useState<"verifying" | "ready" | "invalid">("verifying");
 
   // Establish the recovery session from the link before showing the form.
-  // PKCE links arrive as ?code=; older links set a session via the URL hash.
   useEffect(() => {
     (async () => {
-      const code = new URLSearchParams(window.location.search).get("code");
+      // 1. Already have a session? (code exchanged on a previous load, or a
+      //    hash-based link) — don't re-consume a single-use code on refresh.
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) { setLinkStatus("ready"); return; }
+
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      const tokenHash = params.get("token_hash");
+      const type = params.get("type");
+
+      // 2. token_hash + verifyOtp — works in any browser (no PKCE verifier).
+      if (tokenHash) {
+        const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: (type as any) || "recovery" });
+        setLinkStatus(error ? "invalid" : "ready");
+        return;
+      }
+      // 3. PKCE ?code= — needs the verifier from the SAME browser that
+      //    requested the reset.
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code);
         setLinkStatus(error ? "invalid" : "ready");
         return;
       }
-      // No code — rely on an existing (hash-based or already-set) session.
-      const { data: { session } } = await supabase.auth.getSession();
-      setLinkStatus(session ? "ready" : "invalid");
+      setLinkStatus("invalid");
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
