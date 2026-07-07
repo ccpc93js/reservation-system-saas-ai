@@ -1,3 +1,16 @@
+## [b17dc92] - 2026-07-07
+
+feat: bell notification when a channel sync detects reservations
+
+Syncs only notified on failure/overbooking. Now, when a sync creates,
+updates or cancels reservations, staff get a channel_synced notification
+("{channel}: N new, N updated, N cancelled") linking to the calendar.
+No-change syncs stay silent. The user who triggered a manual sync is
+excluded (they already see the toast); cron syncs notify everyone.
+Wifi icon in the bell; i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [dabaa9c] - 2026-07-07
 
 feat: mock OTA endpoint + realistic guest naming from OTA feeds

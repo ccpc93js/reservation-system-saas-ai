@@ -127,6 +127,36 @@ export async function POST(
     const results = { created: 0, updated: 0, cancelled: 0, skipped: 0, errors: 0 };
     const syncedExternalIds: string[] = [];
 
+    // Per-reservation bell notification (new / cancelled), same shape as the
+    // direct-booking flow so staff see "New reservation for X (RES-…)".
+    const notifyReservation = async (
+      type: "reservation_created" | "reservation_cancelled",
+      reservationId: string,
+      fallbackGuest: string
+    ) => {
+      try {
+        const { data: r } = await serviceClient
+          .from("reservations")
+          .select("reservation_number, guests(first_name, last_name)")
+          .eq("id", reservationId)
+          .single();
+        const g: any = (r as any)?.guests;
+        await notifyOrg(
+          orgId!,
+          type,
+          {
+            guestName: g ? `${g.first_name} ${g.last_name}` : fallbackGuest,
+            reservationNumber: (r as any)?.reservation_number ?? "",
+            roomName: channel.name,
+          },
+          "/calendar",
+          triggeredBy
+        );
+      } catch (err) {
+        console.error("notifyReservation failed:", err);
+      }
+    };
+
     const allEntries = Object.entries(events);
     if (allEntries.length > MAX_EVENTS) {
       console.warn(`[sync] Channel ${id} feed has ${allEntries.length} events, capping at ${MAX_EVENTS}`);
@@ -164,6 +194,7 @@ export async function POST(
             .update({ status: "cancelled", external_sync_at: new Date().toISOString() })
             .eq("id", existing.id);
           results.cancelled++;
+          await notifyReservation("reservation_cancelled", existing.id, guestNameFromSummary(summary, channel.platform));
         } else {
           results.skipped++;
         }
@@ -288,10 +319,11 @@ export async function POST(
           );
         } else {
           results.created++;
+          await notifyReservation("reservation_created", newResId as string, guestNameFromSummary(summary, channel.platform));
         }
       } else {
         // Atomic: create reservation + reservation_item in one transaction via RPC
-        const { error: rpcError } = await serviceClient.rpc("create_ota_reservation", {
+        const { data: newResId, error: rpcError } = await serviceClient.rpc("create_ota_reservation", {
           p_organization_id: orgId,
           p_guest_id: guestId,
           p_channel_id: id,
@@ -309,6 +341,7 @@ export async function POST(
           results.errors++;
         } else {
           results.created++;
+          if (newResId) await notifyReservation("reservation_created", newResId as string, guestNameFromSummary(summary, channel.platform));
         }
       }
     }
@@ -331,6 +364,9 @@ export async function POST(
           .update({ status: "cancelled", external_sync_at: new Date().toISOString() })
           .in("id", orphanIds);
         results.cancelled += orphanIds.length;
+        for (const orphanId of orphanIds) {
+          await notifyReservation("reservation_cancelled", orphanId, PLATFORM_GUEST_NAMES[channel.platform] || "Guest");
+        }
       }
     }
 
@@ -345,9 +381,9 @@ export async function POST(
       })
       .eq("id", id);
 
-    // Notify staff when the sync actually changed something (new/updated/
-    // cancelled reservations) — silent syncs with no changes stay silent.
-    if (results.created + results.updated + results.cancelled > 0) {
+    // Aggregate summary only for date-change updates — creates and
+    // cancellations already produced their own per-reservation notifications.
+    if (results.updated > 0) {
       await notifyOrg(
         orgId,
         "channel_synced",
