@@ -1,3 +1,17 @@
+## [54ced0f] - 2026-07-07
+
+feat: per-reservation notifications from channel syncs
+
+Syncs now emit the same per-reservation notifications as direct
+bookings: each created OTA reservation raises reservation_created
+("New reservation for {guest} ({number})") and each cancellation
+(explicit STATUS:CANCELLED or orphaned event) raises
+reservation_cancelled - both linking to the calendar. The aggregate
+channel_synced summary now fires only for date-change updates, so
+nothing is double-notified. Manual-sync triggerer still excluded.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [b17dc92] - 2026-07-07
 
 feat: bell notification when a channel sync detects reservations

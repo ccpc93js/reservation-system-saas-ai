@@ -149,3 +149,7 @@ Which OTA integration first? Options: (a) aggregator (Beds24/Cloudbeds) — one
 integration, many OTAs, fastest; (b) Booking.com direct XML — most demand,
 most work; (c) keep iCal + document the per-bed-listing workaround for now.
 Recommendation: (a) aggregator when Phase B is scheduled.
+
+**RESOLVED 2026-07-07:** aggregator route chosen, Channex.io recommended
+(white-label, self-service — Beds24 discarded for requiring per-customer
+accounts). Full design: `2026-07-07-aggregator-selfservice-channel-manager.md`.
