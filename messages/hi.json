@@ -115,7 +115,11 @@
       "toastPasswordMin": "पासवर्ड कम से कम 8 अक्षर का होना चाहिए",
       "verifyingLink": "आपका लिंक सत्यापित हो रहा है…",
       "linkInvalid": "यह रीसेट लिंक अमान्य है या समाप्त हो गया है। लॉगिन पेज से नया अनुरोध करें।",
-      "backToLogin": "लॉगिन पर वापस जाएँ"
+      "backToLogin": "लॉगिन पर वापस जाएँ",
+      "confirmPasswordLabel": "पासवर्ड की पुष्टि करें",
+      "confirmPasswordPlaceholder": "पासवर्ड फिर से डालें",
+      "passwordMismatch": "पासवर्ड मेल नहीं खाते",
+      "toastPasswordMismatch": "पासवर्ड मेल नहीं खाते"
     }
   },
   "dashboard": {

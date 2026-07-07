@@ -115,7 +115,11 @@
       "toastPasswordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
       "verifyingLink": "جارٍ التحقق من الرابط…",
       "linkInvalid": "رابط إعادة التعيين غير صالح أو منتهي الصلاحية. اطلب رابطًا جديدًا من صفحة تسجيل الدخول.",
-      "backToLogin": "العودة إلى تسجيل الدخول"
+      "backToLogin": "العودة إلى تسجيل الدخول",
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "toastPasswordMismatch": "كلمتا المرور غير متطابقتين"
     }
   },
   "dashboard": {

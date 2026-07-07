@@ -115,7 +115,11 @@
       "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres",
       "verifyingLink": "Verificando tu enlace…",
       "linkInvalid": "Este enlace de restablecimiento no es válido o expiró. Solicita uno nuevo desde el inicio de sesión.",
-      "backToLogin": "Volver al inicio de sesión"
+      "backToLogin": "Volver al inicio de sesión",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Repite la contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "toastPasswordMismatch": "Las contraseñas no coinciden"
     }
   },
   "dashboard": {

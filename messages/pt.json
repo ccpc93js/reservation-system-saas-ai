@@ -115,7 +115,11 @@
       "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres",
       "verifyingLink": "Verificando o seu link…",
       "linkInvalid": "Este link de redefinição é inválido ou expirou. Solicite um novo na página de login.",
-      "backToLogin": "Voltar ao login"
+      "backToLogin": "Voltar ao login",
+      "confirmPasswordLabel": "Confirmar senha",
+      "confirmPasswordPlaceholder": "Digite a senha novamente",
+      "passwordMismatch": "As senhas não coincidem",
+      "toastPasswordMismatch": "As senhas não coincidem"
     }
   },
   "dashboard": {

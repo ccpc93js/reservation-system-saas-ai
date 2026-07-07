@@ -115,7 +115,11 @@
       "toastPasswordMin": "密码至少需要 8 个字符",
       "verifyingLink": "正在验证链接…",
       "linkInvalid": "此重置链接无效或已过期。请在登录页面重新申请。",
-      "backToLogin": "返回登录"
+      "backToLogin": "返回登录",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "再次输入密码",
+      "passwordMismatch": "两次密码不一致",
+      "toastPasswordMismatch": "两次密码不一致"
     }
   },
   "dashboard": {

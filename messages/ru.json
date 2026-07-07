@@ -115,7 +115,11 @@
       "toastPasswordMin": "Пароль должен содержать не менее 8 символов",
       "verifyingLink": "Проверка ссылки…",
       "linkInvalid": "Ссылка для сброса недействительна или истекла. Запросите новую на странице входа.",
-      "backToLogin": "Назад ко входу"
+      "backToLogin": "Назад ко входу",
+      "confirmPasswordLabel": "Подтвердите пароль",
+      "confirmPasswordPlaceholder": "Повторите пароль",
+      "passwordMismatch": "Пароли не совпадают",
+      "toastPasswordMismatch": "Пароли не совпадают"
     }
   },
   "dashboard": {

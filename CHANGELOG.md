@@ -1,3 +1,20 @@
+## [0c23dba] - 2026-07-07
+
+fix: password-reset link now shows the set-password form
+
+Recovery links (PKCE ?code=) whose redirect fell back to the Site URL
+landed on / and were ignored, so the user never saw a form. Now:
+
+- the root page forwards /?code=... to /reset-password?code=...
+- the reset-password page exchanges the code for a recovery session
+  before showing the form, with verifying / invalid-link states and a
+  back-to-login action; also relies on an existing session when there is
+  no code (older hash-based links)
+- show/hide password toggle on the field
+- i18n (verifyingLink, linkInvalid, backToLogin) for all 11 locales
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [4e7b538] - 2026-07-07
 
 fix: enforce role hierarchy in team management

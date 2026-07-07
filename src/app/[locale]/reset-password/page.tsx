@@ -13,6 +13,7 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const supabase = createBrowserClient();
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -39,6 +40,7 @@ export default function ResetPasswordPage() {
   async function handleReset(e: React.FormEvent) {
     e.preventDefault();
     if (password.length < 8) { toast.error(t("toastPasswordMin")); return; }
+    if (password !== confirm) { toast.error(t("toastPasswordMismatch")); return; }
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
@@ -105,6 +107,20 @@ export default function ResetPasswordPage() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-muted-foreground mb-1">{t("confirmPasswordLabel")}</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                placeholder={t("confirmPasswordPlaceholder")}
+                className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+              />
+              {confirm.length > 0 && confirm !== password && (
+                <p className="text-xs text-red-600 mt-1">{t("passwordMismatch")}</p>
+              )}
             </div>
             <button
               type="submit"

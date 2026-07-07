@@ -115,7 +115,11 @@
       "toastPasswordMin": "パスワードは8文字以上にしてください",
       "verifyingLink": "リンクを確認しています…",
       "linkInvalid": "このリセットリンクは無効または期限切れです。ログインページから再度リクエストしてください。",
-      "backToLogin": "ログインに戻る"
+      "backToLogin": "ログインに戻る",
+      "confirmPasswordLabel": "パスワードの確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "passwordMismatch": "パスワードが一致しません",
+      "toastPasswordMismatch": "パスワードが一致しません"
     }
   },
   "dashboard": {

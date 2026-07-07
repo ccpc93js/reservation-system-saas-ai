@@ -115,7 +115,11 @@
       "toastPasswordMin": "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে",
       "verifyingLink": "আপনার লিঙ্ক যাচাই করা হচ্ছে…",
       "linkInvalid": "এই রিসেট লিঙ্কটি অবৈধ বা মেয়াদোত্তীর্ণ। লগইন পেজ থেকে নতুন একটি অনুরোধ করুন।",
-      "backToLogin": "লগইনে ফিরে যান"
+      "backToLogin": "লগইনে ফিরে যান",
+      "confirmPasswordLabel": "পাসওয়ার্ড নিশ্চিত করুন",
+      "confirmPasswordPlaceholder": "পাসওয়ার্ড আবার লিখুন",
+      "passwordMismatch": "পাসওয়ার্ড মেলে না",
+      "toastPasswordMismatch": "পাসওয়ার্ড মেলে না"
     }
   },
   "dashboard": {

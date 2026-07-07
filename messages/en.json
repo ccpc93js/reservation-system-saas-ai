@@ -115,7 +115,11 @@
       "toastPasswordMin": "Password must be at least 8 characters",
       "verifyingLink": "Verifying your link…",
       "linkInvalid": "This reset link is invalid or has expired. Request a new one from the login page.",
-      "backToLogin": "Back to login"
+      "backToLogin": "Back to login",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter password",
+      "passwordMismatch": "Passwords don't match",
+      "toastPasswordMismatch": "Passwords don't match"
     }
   },
   "dashboard": {
