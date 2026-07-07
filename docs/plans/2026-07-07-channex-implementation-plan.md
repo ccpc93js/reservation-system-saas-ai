@@ -1,0 +1,154 @@
+# Channex Integration — Implementation Plan
+
+Date: 2026-07-07
+Status: PLAN — execute when 1–2 paying customers need real OTA sync
+Design rationale: `2026-07-07-aggregator-selfservice-channel-manager.md`
+
+## Guiding decision
+
+**iCal stays.** The existing iCal channel manager (bed + room-type modes)
+remains fully supported as the free/simple tier. Channex is ADDED as a second
+connection type — "API connection" — on the same Channels page. Both tiers
+share the Phase B primitives (`free_beds`, auto-assign RPC, overbooking
+notifications, folio).
+
+```
+Channels page
+├── API connections (Channex)   ← new, Pro plan
+│     Booking.com · Airbnb · Expedia · …  (real prices, guests, multi-bed)
+└── iCal connections            ← existing, unchanged
+      per-bed and room-type pooled channels
+```
+
+---
+
+## Part 1 — Business steps (you, no code)
+
+1. **Create a free sandbox account** at Channex staging
+   (docs at docs.channex.io; staging environment is free, no contract).
+   Get a test API key. Nothing to lose — do this anytime.
+2. **Read their PMS integration guide** and note the current shape of:
+   properties, room types, rate plans, ARI (availability/rates/inventory)
+   updates, booking webhooks, and the channel-mapping flow (they provide a
+   white-label iframe/wizard for the OTA connection step — verify current
+   options in their docs).
+3. **Apply as PMS partner** — Channex has a certification/partner process
+   for PMS vendors (self-serve test checklist + review). Ask explicitly for:
+   - white-label terms (customers must not need a Channex account/dashboard)
+   - per-property pricing at your expected volumes (~$10–15/property/mo)
+   - which OTAs are available at launch (confirm Hostelworld coverage —
+     if missing and your customers need it, evaluate myallocator as a
+     complement later)
+4. **Sign + get the production master API key.** One contract, yours.
+5. **Set your pricing**: fold into Pro or sell as an add-on
+   ("Channel Manager Pro") with margin over the per-property fee.
+
+Everything in Part 2 can be built against the sandbox before any contract.
+
+---
+
+## Part 2 — Technical implementation (phases)
+
+### Phase 1 — Schema & provider plumbing
+
+- `channels` table: add `provider text not null default 'ical'`
+  (`'ical' | 'channex'`). Existing rows untouched.
+- New table `channel_provider_links` (or columns): per-org Channex ids —
+  `channex_property_id`, and per room type `channex_room_type_id`,
+  `channex_rate_plan_id`.
+- Env: `CHANNEX_API_KEY`, `CHANNEX_BASE_URL` (staging vs prod),
+  `CHANNEX_WEBHOOK_SECRET`.
+- `src/lib/channels/channex.ts` — thin API client (fetch wrapper with the
+  master key): createProperty, upsertRoomType, upsertRatePlan, updateARI,
+  verifyWebhookSignature.
+
+### Phase 2 — Provisioning (self-service "Connect")
+
+- API route `POST /api/channels/channex/provision`:
+  1. create the Channex property from the org's data (name, address,
+     currency, timezone — all already in `organizations`),
+  2. mirror every `room_type` (capacity from bed count) + one rate plan
+     each (base_price),
+  3. store the ids in `channel_provider_links`.
+- Idempotent: re-running syncs changes (renamed room types, new dorms).
+- Re-provision hook: when a room type / bed count changes in the app,
+  update Channex (or flag "out of sync" + a Sync Structure button — simpler
+  v1).
+
+### Phase 3 — Booking ingestion (webhook)
+
+- `POST /api/channels/channex/webhook` — signature-verified.
+- Events: booking new / modification / cancellation.
+- Map payload → existing flow:
+  - guest: real name/email/phone → create or match guest (reuse duplicate
+    detection),
+  - **multi-unit**: extend `create_ota_reservation_room_type` with
+    `p_quantity int default 1` — assign N free beds under the same advisory
+    lock, N reservation_items, ONE reservation,
+  - prices: real `price_per_night`/`total_price` from the payload (replaces
+    the iCal price-0 behavior for this tier),
+  - modifications: date/occupancy changes reuse the reassignment logic,
+  - cancellations: status update + per-reservation notification (existing).
+- Overbooking (no N free beds): create nothing, notify OVERBOOKING
+  (existing pattern), respond so Channex retries/flags.
+- Idempotency: store Channex booking id in `external_id` (existing column),
+  dedupe on it.
+
+### Phase 4 — Availability push (ARI)
+
+- After ANY reservation create/cancel/date-change (all sources, including
+  direct bookings and iCal syncs): debounce (~5–10 s) then push
+  `free_beds(room_type, date)` per affected date range to Channex
+  `updateARI`.
+- Implementation: a small queue table or in-process debounce keyed by
+  `(org, room_type)`; a scheduled reconcile job (daily full push over a
+  365-day horizon) as safety net against drift.
+- Allotment: reuse the existing per-channel allotment semantics if exposed
+  per OTA in Channex; otherwise property-level for v1.
+
+### Phase 5 — UI & self-service onboarding
+
+- Channels page: new "API connections" section above iCal:
+  - **Connect** button per OTA → runs provisioning → shows the guided
+    extranet step (Booking.com: Account → Connectivity provider → select
+    us → confirm; Airbnb: OAuth redirect via Channex wizard/iframe),
+  - connection status per OTA (pending / active / error) from Channex,
+  - mapping review screen (our room types ↔ OTA rooms) — auto-mapped,
+    editable.
+- Paywall: feature-gate on plan (reuse `hasFeature(plan, "channels")` or a
+  new `channels_api` feature flag for the add-on model).
+- Help Center: new articles with per-OTA screenshots of the extranet step;
+  update the OTA guide's Booking.com-limitation warning ("solved by the
+  API connection").
+
+### Phase 6 — Testing & rollout
+
+- Sandbox end-to-end: provision test property → Channex test channel →
+  push availability → fire test bookings (their sandbox can emit booking
+  webhooks) → verify multi-unit auto-assign, prices, notifications, Guest
+  Book flow.
+- Load the webhook with the existing conflict tests (stacked bookings →
+  overbooking path).
+- Pilot: ONE real customer property behind a feature flag; watch a full
+  week of bookings; then open to all Pro plans.
+
+## Effort estimate
+
+| Phase | Size |
+|---|---|
+| 1 Schema + client | small (1 session) |
+| 2 Provisioning | small–medium |
+| 3 Webhook + p_quantity | medium (the core) |
+| 4 ARI push | medium (debounce + reconcile) |
+| 5 UI + Help | medium |
+| 6 Testing/pilot | ongoing |
+
+Total: roughly 4–6 focused sessions against the sandbox, most of it
+adapter code — the domain layer already exists.
+
+## Explicit non-goals (v1)
+
+- Rate push to OTAs (needs a rate-plan editor; availability-only v1 —
+  prices continue to be managed inside each OTA).
+- Replacing iCal — never; it stays as the free tier.
+- Direct OTA certifications — only reconsider at large scale.

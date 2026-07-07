@@ -1,3 +1,21 @@
+## [688fe42] - 2026-07-07
+
+docs: aggregator self-service channel manager design (Channex)
+
+Design doc for the API-based channel manager phase: why an aggregator
+(vs per-OTA certification), the white-label/self-service requirement -
+ONE partner contract and master API key, per-customer provisioning done
+programmatically so customers configure everything from our app (the
+only manual step is the 2-click authorization in their OTA extranet).
+Beds24 discarded (per-customer accounts break white-label); Channex.io
+recommended. Includes capability comparison vs iCal, billing model,
+adapter architecture over the existing Phase B primitives (free_beds,
+auto-assign RPC + future p_quantity), build order, and open questions.
+Price decision recorded: OTA reservations stay at 0 until real prices
+arrive via the aggregator payload.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [54ced0f] - 2026-07-07
 
 feat: per-reservation notifications from channel syncs
