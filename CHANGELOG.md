@@ -1,5 +1,47 @@
 ## [unreleased] - 2026-07-07
 
+feat: mock OTA endpoint + realistic guest naming from OTA feeds
+
+Test the channel manager end-to-end without owning a real OTA listing:
+
+- GET /api/dev/mock-ota emits iCal feeds replicating each platform's
+  documented format — Airbnb ("Reserved - HM…" + owner blocks +
+  reservation-URL description), Booking.com (opaque "CLOSED - Not
+  available"), VRBO ("Reserved - {name}"). Deterministic UIDs (seed);
+  params for update (shift), cancellation (drop / cancelled=1),
+  overbooking (stacked events) and owner blocks. Dev-only (404 in prod
+  unless ALLOW_MOCK_OTA=true).
+- Sync guest naming fixed: summaries with no real name ("CLOSED - Not
+  available", "Reserved - HMXXXX", "Not available", "Blocked") now fall
+  back to the platform placeholder guest instead of creating guests
+  literally named "CLOSED - Not available"; VRBO-style real names are
+  extracted. Raw summary preserved in guest notes.
+- Testing guide (Google Calendar option + mock param table + full test
+  matrix) appended to docs/guides/ota-channel-manager.md.
+
+## [9a96625] - 2026-07-07
+
+docs: Help Center articles for every app section
+
+Expanded the in-app Help Center from Channel Manager only to full
+coverage: 17 searchable articles across 8 categories.
+
+- Getting Started: property structure (room types/rooms/beds),
+  navigation map
+- Calendar & Bookings: tape calendar basics, multi-bed group bookings
+- Reservations: the drawer, companion guests, add/remove beds,
+  payment & folio
+- Check-in & Guest Book: online check-in link/QR, pending review,
+  per-occupant registry & CSV export
+- Guests: profiles/ID scanning, duplicate merge
+- Housekeeping: per-bed status board
+- Settings & Billing: branding, team roles, plans
+- Channel Manager: the existing 5 articles
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [unreleased] - 2026-07-07
+
 docs: Help Center articles for every app section
 
 Expanded the Help Center from Channel Manager only to full coverage:

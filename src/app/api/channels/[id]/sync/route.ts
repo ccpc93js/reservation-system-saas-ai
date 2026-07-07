@@ -13,6 +13,27 @@ const PLATFORM_GUEST_NAMES: Record<string, string> = {
   other: "External Guest",
 };
 
+// Real OTA feeds often carry NO guest name in the summary:
+//   Booking.com → "CLOSED - Not available" (for everything)
+//   Airbnb      → "Reserved - HMABCDE123" (confirmation code) or
+//                 "Airbnb (Not available)" (owner block)
+//   VRBO        → "Reserved - Jane Doe" (actual name) or "Blocked"
+// Extract a human name when there is one; otherwise fall back to the platform
+// placeholder so we never create guests literally named "CLOSED - Not available".
+function guestNameFromSummary(summary: string | undefined, platform: string): string {
+  const s = (summary || "").trim();
+  const fallback = PLATFORM_GUEST_NAMES[platform] || PLATFORM_GUEST_NAMES.other;
+  if (!s) return fallback;
+  if (/^closed/i.test(s)) return fallback;                 // Booking.com
+  if (/not available/i.test(s)) return fallback;           // Airbnb owner block
+  if (/^(blocked|unavailable|reserved)$/i.test(s)) return fallback;
+  const m = s.match(/^reserved\s*[-–—:]\s*(.+)$/i);
+  const candidate = (m ? m[1] : s).trim();
+  // Airbnb confirmation codes ("HMABCDE123") are not names.
+  if (/^HM[A-Z0-9]{6,}$/i.test(candidate)) return fallback;
+  return candidate || fallback;
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -152,9 +173,10 @@ export async function POST(
           .from("guests")
           .insert({
             organization_id: orgId,
-            first_name: summary,
+            first_name: guestNameFromSummary(summary, channel.platform),
             last_name: `[${channel.platform}]`,
-            notes: `Auto-created from ${channel.name} — ${externalId}`,
+            // Keep the raw event summary — it may hold the confirmation code.
+            notes: `Auto-created from ${channel.name} — ${externalId}\nEvent summary: ${summary}`,
           })
           .select("id")
           .single();

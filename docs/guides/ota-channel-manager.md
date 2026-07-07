@@ -133,3 +133,55 @@ through that channel.
   current; you can verify by opening it in a browser.
 - **Sync error / last_error on the channel** — the OTA feed URL is wrong or
   expired. Re-copy the iCal URL from the OTA and update the channel.
+
+---
+
+## For developers: testing without a real OTA listing
+
+### Option A — Google Calendar as a fake OTA
+
+Create a calendar, copy its **secret iCal address** (Settings → Integrate
+calendar) and use it as a channel's iCal URL. Every event you add behaves
+like an OTA booking; moving/deleting events exercises the update and
+cancellation paths. Subscribe to the channel's Export URL from Google
+Calendar ("From URL") to inspect the outgoing blocks visually.
+
+### Option B — built-in mock OTA endpoint
+
+`GET /api/dev/mock-ota` emits iCal feeds that replicate each platform's real
+format (Airbnb `Reserved - HM…` + owner blocks, Booking.com's opaque
+`CLOSED - Not available`, VRBO's `Reserved - {name}`). Disabled in production
+unless `ALLOW_MOCK_OTA=true`.
+
+| Param | Effect |
+|---|---|
+| `platform` | `airbnb` \| `booking_com` \| `vrbo` — feed format |
+| `events` | number of bookings (default 2, max 20) |
+| `nights` | nights per booking (default 2) |
+| `start` | days from today of the first check-in (default 7) |
+| `gap` | days between bookings; `0` stacks them on the same dates |
+| `seed` | UID namespace — same seed = same UIDs across calls |
+| `shift` | move ALL dates by N days, same UIDs → tests the update/reassign path |
+| `drop=1` | omit the first event → tests orphan cancellation |
+| `cancelled=1` | first event carries `STATUS:CANCELLED` |
+| `block=1` | appends an owner "Not available" block (Airbnb/VRBO style) |
+
+Test matrix (channel on a 6-bed dorm, room-type mode):
+
+```
+# 1. create: 3 bookings, same dates → 3 reservations, beds auto-assigned
+/api/dev/mock-ota?platform=airbnb&events=3&seed=t1
+
+# 2. idempotency: sync the same URL again → 0 created
+# 3. update: shift dates 2 days, same UIDs → 3 updated (reassigned if needed)
+/api/dev/mock-ota?platform=airbnb&events=3&seed=t1&shift=2
+
+# 4. cancel: drop one → 1 cancelled on next sync
+/api/dev/mock-ota?platform=airbnb&events=2&seed=t1&shift=2
+
+# 5. overbooking: 7 stacked bookings on 6 beds → 6 created + OVERBOOKING alert
+/api/dev/mock-ota?platform=booking_com&events=7&seed=t2
+
+# 6. naming: booking_com summaries are "CLOSED - Not available" — guests must
+#    be created as "Booking.com Guest", never the literal summary
+```
