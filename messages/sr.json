@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "Ažuriranje uloge nije uspelo",
       "confirmRemove": "Ukloniti {email} iz ove organizacije?",
       "toastRemoved": "Član uklonjen",
-      "toastRemoveFailed": "Uklanjanje člana nije uspelo"
+      "toastRemoveFailed": "Uklanjanje člana nije uspelo",
+      "confirmRevoke": "Opozvati pozivnicu za {email}?",
+      "toastRevoked": "Pozivnica opozvana",
+      "toastRevokeFailed": "Opoziv pozivnice nije uspeo",
+      "revokeInviteTitle": "Opozovi pozivnicu"
     },
     "billing": {
       "toastAdminOnly": "Samo administratori mogu upravljati naplatom",

@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "فشل تحديث الدور",
       "confirmRemove": "إزالة {email} من هذه المؤسسة؟",
       "toastRemoved": "تمت إزالة العضو",
-      "toastRemoveFailed": "فشل إزالة العضو"
+      "toastRemoveFailed": "فشل إزالة العضو",
+      "confirmRevoke": "إلغاء الدعوة لـ {email}؟",
+      "toastRevoked": "تم إلغاء الدعوة",
+      "toastRevokeFailed": "فشل في إلغاء الدعوة",
+      "revokeInviteTitle": "إلغاء الدعوة"
     },
     "billing": {
       "toastAdminOnly": "يمكن للمشرفين فقط إدارة الفوترة",

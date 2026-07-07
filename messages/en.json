@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "Failed to update role",
       "confirmRemove": "Remove {email} from this organization?",
       "toastRemoved": "Member removed",
-      "toastRemoveFailed": "Failed to remove member"
+      "toastRemoveFailed": "Failed to remove member",
+      "confirmRevoke": "Revoke the invitation for {email}?",
+      "toastRevoked": "Invitation revoked",
+      "toastRevokeFailed": "Failed to revoke invitation",
+      "revokeInviteTitle": "Revoke invitation"
     },
     "billing": {
       "toastAdminOnly": "Only admins can manage billing",

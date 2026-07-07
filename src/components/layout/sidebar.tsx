@@ -23,6 +23,7 @@ import {
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { canAccessSection } from "@/lib/permissions";
 import { useState } from "react";
 
 const mainNavRoutes = [
@@ -138,7 +139,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
       <nav className="flex-1 min-h-0 overflow-y-auto">
         {/* Main Nav */}
         <div className="px-3 py-4">
-          {mainNavRoutes.map((item) => {
+          {mainNavRoutes.filter((item) => canAccessSection(userRole, item.path)).map((item) => {
             const href = `/${org.slug}/${item.path}`;
             const isActive = pathname === href || pathname.startsWith(href + "/");
             return (
@@ -165,7 +166,7 @@ export default function Sidebar({ org, user, userRole, isOpen = true, onClose }:
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest px-4 mb-3">
             {t("settingsSection")}
           </p>
-          {settingsNavRoutes.map((item) => {
+          {settingsNavRoutes.filter((item) => canAccessSection(userRole, item.path)).map((item) => {
             const href = `/${org.slug}/${item.path}`;
             const isActive = pathname === href || pathname.startsWith(href + "/");
             return (

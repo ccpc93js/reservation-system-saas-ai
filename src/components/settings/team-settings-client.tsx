@@ -121,6 +121,22 @@ export default function TeamSettingsClient({ userRole }: Props) {
     }
   };
 
+  const handleRevoke = async (inviteId: string, email: string) => {
+    if (!(await confirmDialog(t("confirmRevoke", { email })))) return;
+    setRemovingId(inviteId);
+    try {
+      const res = await fetch(`/api/settings/team/invitations/${inviteId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setInvitations((prev) => prev.filter((i) => i.id !== inviteId));
+      toast.success(t("toastRevoked"));
+    } catch (err: any) {
+      toast.error(err.message || t("toastRevokeFailed"));
+    } finally {
+      setRemovingId(null);
+    }
+  };
+
   return (
     <div className="p-8 max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
@@ -264,6 +280,16 @@ export default function TeamSettingsClient({ userRole }: Props) {
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${roleColor[inv.role] ?? roleColor.staff}`}>
                   {t(`role_${inv.role}`)}
                 </span>
+                {isAdmin && (
+                  <button
+                    onClick={() => handleRevoke(inv.id, inv.email)}
+                    disabled={removingId === inv.id}
+                    className="p-1.5 rounded-lg hover:bg-[#EEDCD5] transition-colors disabled:opacity-50 shrink-0"
+                    title={t("revokeInviteTitle")}
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-[#9C4A37]" />
+                  </button>
+                )}
               </div>
             ))}
           </div>

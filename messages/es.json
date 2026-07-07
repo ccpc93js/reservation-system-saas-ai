@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "Error al actualizar el rol",
       "confirmRemove": "¿Eliminar a {email} de esta organización?",
       "toastRemoved": "Miembro eliminado",
-      "toastRemoveFailed": "Error al eliminar el miembro"
+      "toastRemoveFailed": "Error al eliminar el miembro",
+      "confirmRevoke": "¿Revocar la invitación para {email}?",
+      "toastRevoked": "Invitación revocada",
+      "toastRevokeFailed": "No se pudo revocar la invitación",
+      "revokeInviteTitle": "Revocar invitación"
     },
     "billing": {
       "toastAdminOnly": "Solo los administradores pueden gestionar la facturación",

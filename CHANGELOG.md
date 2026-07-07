@@ -1,3 +1,48 @@
+## [569902a] - 2026-07-07
+
+chore: install channex-pms-integration skill
+
+Adds the third-party Channex PMS-integration skill (SKILL.md +
+references/api.md with verified endpoint shapes) under .claude/skills/
+for use when implementing the Channex phases. Content inspected: pure
+technical API guidance, only channex.io URLs, no injection patterns.
+Linked from the Channex implementation plan.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [569902a] - 2026-07-07
+
+chore: install channex-pms-integration skill
+
+Adds the third-party Channex PMS-integration skill (SKILL.md +
+references/api.md with verified endpoint shapes) under .claude/skills/
+for use when implementing the Channex phases. Content inspected: pure
+technical API guidance, only channex.io URLs, no injection patterns.
+Linked from the Channex implementation plan.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [c098d99] - 2026-07-07
+
+docs: Channex implementation plan (iCal preserved, API tier added)
+
+Step-by-step execution plan for adding Channex as a second connection
+type while keeping the iCal channel manager unchanged as the free tier.
+
+Part 1 - business steps: free sandbox account, PMS partner application
+(white-label terms, per-property pricing, OTA coverage incl. checking
+Hostelworld), contract, pricing strategy (fold into Pro or add-on).
+
+Part 2 - six technical phases: provider schema (channels.provider,
+channex id links), API client module, idempotent provisioning mirroring
+org room types, booking webhook with p_quantity multi-unit auto-assign
+and real prices, debounced ARI availability push with daily reconcile,
+self-service connect UI + Help Center articles, sandbox test matrix and
+single-customer pilot rollout. Estimated 4-6 sessions; domain layer
+already exists from Phase B.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [688fe42] - 2026-07-07
 
 docs: aggregator self-service channel manager design (Channex)

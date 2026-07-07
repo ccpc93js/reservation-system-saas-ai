@@ -1,13 +1,15 @@
 import { createServerClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/lib/types/database";
+import { isManager } from "@/lib/permissions";
 
 async function getOrgAndVerify(supabase: any, userId: string, channelId: string) {
   const { data: membership } = await supabase
     .from("memberships")
-    .select("organization_id")
+    .select("organization_id, role")
     .eq("user_id", userId)
     .single();
   if (!membership) return null;
+  if (!isManager((membership as any).role)) return null;
 
   const { data: channel } = await supabase
     .from("channels")

@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "役割の更新に失敗しました",
       "confirmRemove": "{email} をこの組織から削除しますか？",
       "toastRemoved": "メンバーを削除しました",
-      "toastRemoveFailed": "メンバーの削除に失敗しました"
+      "toastRemoveFailed": "メンバーの削除に失敗しました",
+      "confirmRevoke": "{email} への招待を取り消しますか？",
+      "toastRevoked": "招待を取り消しました",
+      "toastRevokeFailed": "招待の取り消しに失敗しました",
+      "revokeInviteTitle": "招待を取り消す"
     },
     "billing": {
       "toastAdminOnly": "管理者のみが請求を管理できます",

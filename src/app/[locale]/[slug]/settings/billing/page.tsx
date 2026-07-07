@@ -1,12 +1,16 @@
 import { getServerUser } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
 import BillingClient from "@/components/settings/billing-client";
+import { canAccessSection } from "@/lib/permissions";
 
 export default async function BillingPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<{ required?: string; success?: string }>;
 }) {
+  const { slug } = await params;
   const { required, success } = await searchParams;
   const { supabase, user } = await getServerUser();
 
@@ -17,6 +21,9 @@ export default async function BillingPage({
     .single();
 
   if (!membership) redirect("/onboarding");
+
+  // Billing is owner-only.
+  if (!canAccessSection((membership as any).role, "settings/billing")) redirect(`/${slug}/dashboard`);
 
   const org = (membership as any).organizations;
 

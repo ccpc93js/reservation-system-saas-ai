@@ -5,6 +5,7 @@ import AnalyticsClient from "@/components/analytics/analytics-client";
 import { getBookingTrends, getRevenueTrends, getTopRoomsByRevenue, getOccupancyTimeline } from "@/lib/analytics-metrics";
 import Paywall from "@/components/billing/paywall";
 import { hasFeature } from "@/lib/plan";
+import { canAccessSection } from "@/lib/permissions";
 
 export default async function AnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { supabase, user } = await getServerUser();
@@ -15,7 +16,7 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ slug
   // Get org + plan
   const { data: membership } = await supabase
     .from("memberships")
-    .select("organizations(id, plan, slug)")
+    .select("role, organizations(id, plan, slug)")
     .eq("user_id", user.id)
     .single();
 
@@ -23,6 +24,8 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ slug
   const orgPlan = (membership as any)?.organizations?.plan ?? "free";
   const orgSlug = (membership as any)?.organizations?.slug ?? "";
   if (!orgId) redirect("/onboarding");
+  // Analytics is manager+ only.
+  if (!canAccessSection((membership as any).role, "analytics")) redirect(`/${orgSlug}/dashboard`);
 
   if (!hasFeature(orgPlan, "analytics")) {
     return (

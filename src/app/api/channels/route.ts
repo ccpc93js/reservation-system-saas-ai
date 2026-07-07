@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { isManager } from "@/lib/permissions";
 
 export async function GET(request: Request) {
   try {
@@ -34,10 +35,11 @@ export async function POST(request: Request) {
 
     const { data: membership } = await supabase
       .from("memberships")
-      .select("organization_id")
+      .select("organization_id, role")
       .eq("user_id", user.id)
       .single();
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
+    if (!isManager((membership as any).role)) return Response.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await request.json();
     const { name, platform, ical_url, bed_id, color, mapping_mode, room_type_id, allotment } = body;

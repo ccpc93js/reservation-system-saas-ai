@@ -18,7 +18,14 @@ export async function GET(
     if (invitation.accepted_at) return Response.json({ error: "Invitation already accepted" }, { status: 410 });
     if (new Date(invitation.expires_at) < new Date()) return Response.json({ error: "Invitation expired" }, { status: 410 });
 
-    return Response.json({ invitation });
+    // Does an account already exist for this email? Drives the invite page:
+    // existing → "sign in to accept"; new → "set a password".
+    const { data: usersList } = await service.auth.admin.listUsers();
+    const existingUser = !!usersList?.users.some(
+      (u) => u.email?.toLowerCase() === invitation.email.toLowerCase()
+    );
+
+    return Response.json({ invitation, existingUser });
   } catch {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }

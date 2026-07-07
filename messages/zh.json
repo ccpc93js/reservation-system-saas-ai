@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "更新角色失败",
       "confirmRemove": "确定要将 {email} 从该组织中移除吗？",
       "toastRemoved": "成员已移除",
-      "toastRemoveFailed": "移除成员失败"
+      "toastRemoveFailed": "移除成员失败",
+      "confirmRevoke": "撤销给 {email} 的邀请？",
+      "toastRevoked": "邀请已撤销",
+      "toastRevokeFailed": "撤销邀请失败",
+      "revokeInviteTitle": "撤销邀请"
     },
     "billing": {
       "toastAdminOnly": "只有管理员可以管理账单",

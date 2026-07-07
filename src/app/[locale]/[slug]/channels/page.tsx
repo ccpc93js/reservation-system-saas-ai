@@ -3,6 +3,8 @@ import { createServerClient } from "@/lib/supabase/server";
 import ChannelsClient from "@/components/channels/channels-client";
 import Paywall from "@/components/billing/paywall";
 import { hasFeature } from "@/lib/plan";
+import { canAccessSection } from "@/lib/permissions";
+import { redirect } from "next/navigation";
 
 export default async function ChannelsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -11,10 +13,13 @@ export default async function ChannelsPage({ params }: { params: Promise<{ slug:
 
   const { data: membership } = await supabase
     .from("memberships")
-    .select("organization_id, organizations(plan)")
+    .select("organization_id, role, organizations(plan)")
     .single();
 
   if (!membership) return <div>{t("errorLoading")}</div>;
+
+  // Channel Manager is manager+ only.
+  if (!canAccessSection((membership as any).role, "channels")) redirect(`/${slug}/dashboard`);
 
   const orgId = (membership as any).organization_id as string;
   const plan = (membership as any).organizations?.plan ?? "free";

@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "Не удалось обновить роль",
       "confirmRemove": "Удалить {email} из этой организации?",
       "toastRemoved": "Участник удалён",
-      "toastRemoveFailed": "Не удалось удалить участника"
+      "toastRemoveFailed": "Не удалось удалить участника",
+      "confirmRevoke": "Отозвать приглашение для {email}?",
+      "toastRevoked": "Приглашение отозвано",
+      "toastRevokeFailed": "Не удалось отозвать приглашение",
+      "revokeInviteTitle": "Отозвать приглашение"
     },
     "billing": {
       "toastAdminOnly": "Только администраторы могут управлять оплатой",

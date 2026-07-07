@@ -770,7 +770,11 @@
       "toastRoleUpdateFailed": "Échec de la mise à jour du rôle",
       "confirmRemove": "Retirer {email} de cette organisation ?",
       "toastRemoved": "Membre retiré",
-      "toastRemoveFailed": "Échec du retrait du membre"
+      "toastRemoveFailed": "Échec du retrait du membre",
+      "confirmRevoke": "Révoquer l'invitation pour {email} ?",
+      "toastRevoked": "Invitation révoquée",
+      "toastRevokeFailed": "Échec de la révocation de l'invitation",
+      "revokeInviteTitle": "Révoquer l'invitation"
     },
     "billing": {
       "toastAdminOnly": "Seuls les administrateurs peuvent gérer la facturation",
