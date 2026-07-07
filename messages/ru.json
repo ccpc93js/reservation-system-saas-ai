@@ -1339,7 +1339,8 @@
       "reservation_created": "Новое бронирование для {guestName} ({reservationNumber})",
       "reservation_cancelled": "Бронирование отменено для {guestName} ({reservationNumber})",
       "duplicate_guest": "Возможный дублирующийся гость: {guestName} ({documentNumber})",
-      "channel_sync_failed": "Ошибка синхронизации {channelName}: {reason}"
+      "channel_sync_failed": "Ошибка синхронизации {channelName}: {reason}",
+      "channel_synced": "{channelName}: новых {created}, обновлено {updated}, отменено {cancelled}"
     }
   },
   "housekeeping": {

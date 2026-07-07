@@ -2,7 +2,7 @@
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useTranslations } from "next-intl";
-import { Bell, CheckCircle2, CalendarPlus, XCircle, Users, AlertTriangle } from "lucide-react";
+import { Bell, CheckCircle2, CalendarPlus, XCircle, Users, AlertTriangle, Wifi } from "lucide-react";
 import { useNotifications, type AppNotification } from "@/lib/hooks/use-notifications";
 import { useRouter } from "@/i18n/navigation";
 
@@ -12,6 +12,7 @@ const TYPE_ICON: Record<string, typeof Bell> = {
   reservation_cancelled: XCircle,
   duplicate_guest: Users,
   channel_sync_failed: AlertTriangle,
+  channel_synced: Wifi,
 };
 
 function relativeTime(iso: string): string {

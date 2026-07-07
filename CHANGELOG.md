@@ -1,3 +1,28 @@
+## [dabaa9c] - 2026-07-07
+
+feat: mock OTA endpoint + realistic guest naming from OTA feeds
+
+Test the channel manager end-to-end without owning a real OTA listing.
+
+- GET /api/dev/mock-ota emits iCal feeds replicating each platform's
+  documented format: Airbnb ("Reserved - HM..." + owner blocks +
+  reservation-URL description), Booking.com (opaque "CLOSED - Not
+  available" for everything), VRBO ("Reserved - {name}"). Deterministic
+  UIDs via seed; params cover the whole sync surface: shift (update/
+  reassign), drop (orphan cancellation), cancelled=1 (STATUS:CANCELLED),
+  stacked events (overbooking), block=1 (owner blocks). Dev-only: 404 in
+  production unless ALLOW_MOCK_OTA=true.
+- Sync guest naming fixed: summaries carrying no real name ("CLOSED -
+  Not available", "Reserved - HMXXXX", "Not available", "Blocked") fall
+  back to the platform placeholder guest instead of creating guests
+  literally named "CLOSED - Not available". VRBO-style names are
+  extracted; the raw summary is preserved in guest notes.
+- Developer testing guide (Google Calendar option, mock param table,
+  6-step test matrix) appended to docs/guides/ota-channel-manager.md.
+- Verified live: Airbnb and Booking.com feed shapes render correctly.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [unreleased] - 2026-07-07
 
 feat: mock OTA endpoint + realistic guest naming from OTA feeds

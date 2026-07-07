@@ -1339,7 +1339,8 @@
       "reservation_created": "Nueva reserva para {guestName} ({reservationNumber})",
       "reservation_cancelled": "Reserva cancelada para {guestName} ({reservationNumber})",
       "duplicate_guest": "Posible huésped duplicado: {guestName} ({documentNumber})",
-      "channel_sync_failed": "Sincronización de {channelName} fallida: {reason}"
+      "channel_sync_failed": "Sincronización de {channelName} fallida: {reason}",
+      "channel_synced": "{channelName}: {created} nuevas, {updated} actualizadas, {cancelled} canceladas"
     }
   },
   "housekeeping": {

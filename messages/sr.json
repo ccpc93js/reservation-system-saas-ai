@@ -1339,7 +1339,8 @@
       "reservation_created": "Nova rezervacija za {guestName} ({reservationNumber})",
       "reservation_cancelled": "Rezervacija otkazana za {guestName} ({reservationNumber})",
       "duplicate_guest": "Mogući dupli gost: {guestName} ({documentNumber})",
-      "channel_sync_failed": "Sinhronizacija {channelName} nije uspela: {reason}"
+      "channel_sync_failed": "Sinhronizacija {channelName} nije uspela: {reason}",
+      "channel_synced": "{channelName}: {created} novih, {updated} ažuriranih, {cancelled} otkazanih"
     }
   },
   "housekeeping": {

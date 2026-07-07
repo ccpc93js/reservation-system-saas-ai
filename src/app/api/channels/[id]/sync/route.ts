@@ -50,6 +50,9 @@ export async function POST(
     const secret = process.env.CRON_SECRET;
     const isCron = !!secret && auth === `Bearer ${secret}`;
 
+    // Who triggered a manual sync — they already see the result toast, so
+    // the synced notification excludes them (cron syncs notify everyone).
+    let triggeredBy: string | undefined;
     if (isCron) {
       const { data: channel } = await serviceClient
         .from("channels")
@@ -62,6 +65,7 @@ export async function POST(
       const supabase = await createServerClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+      triggeredBy = user.id;
 
       const { data: membership } = await supabase
         .from("memberships")
@@ -340,6 +344,23 @@ export async function POST(
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);
+
+    // Notify staff when the sync actually changed something (new/updated/
+    // cancelled reservations) — silent syncs with no changes stay silent.
+    if (results.created + results.updated + results.cancelled > 0) {
+      await notifyOrg(
+        orgId,
+        "channel_synced",
+        {
+          channelName: channel.name,
+          created: results.created,
+          updated: results.updated,
+          cancelled: results.cancelled,
+        },
+        "/calendar",
+        triggeredBy
+      );
+    }
 
     return Response.json({ success: true, results });
   } catch (err: any) {

@@ -1339,7 +1339,8 @@
       "reservation_created": "{guestName} এর জন্য নতুন রিজার্ভেশন ({reservationNumber})",
       "reservation_cancelled": "{guestName} এর রিজার্ভেশন বাতিল হয়েছে ({reservationNumber})",
       "duplicate_guest": "সম্ভাব্য ডুপ্লিকেট অতিথি: {guestName} ({documentNumber})",
-      "channel_sync_failed": "{channelName} সিঙ্ক ব্যর্থ হয়েছে: {reason}"
+      "channel_sync_failed": "{channelName} সিঙ্ক ব্যর্থ হয়েছে: {reason}",
+      "channel_synced": "{channelName}: {created}টি নতুন, {updated}টি আপডেট, {cancelled}টি বাতিল"
     }
   },
   "housekeeping": {

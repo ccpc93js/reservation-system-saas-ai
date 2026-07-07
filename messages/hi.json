@@ -1339,7 +1339,8 @@
       "reservation_created": "{guestName} के लिए नया आरक्षण ({reservationNumber})",
       "reservation_cancelled": "{guestName} का आरक्षण रद्द किया गया ({reservationNumber})",
       "duplicate_guest": "संभावित डुप्लिकेट अतिथि: {guestName} ({documentNumber})",
-      "channel_sync_failed": "{channelName} सिंक विफल: {reason}"
+      "channel_sync_failed": "{channelName} सिंक विफल: {reason}",
+      "channel_synced": "{channelName}: {created} नई, {updated} अपडेट, {cancelled} रद्द"
     }
   },
   "housekeeping": {

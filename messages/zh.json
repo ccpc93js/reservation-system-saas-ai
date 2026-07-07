@@ -1339,7 +1339,8 @@
       "reservation_created": "{guestName} 的新预订（{reservationNumber}）",
       "reservation_cancelled": "{guestName} 的预订已取消（{reservationNumber}）",
       "duplicate_guest": "可能的重复客人：{guestName}（{documentNumber}）",
-      "channel_sync_failed": "{channelName} 同步失败：{reason}"
+      "channel_sync_failed": "{channelName} 同步失败：{reason}",
+      "channel_synced": "{channelName}：新增 {created}，更新 {updated}，取消 {cancelled}"
     }
   },
   "housekeeping": {

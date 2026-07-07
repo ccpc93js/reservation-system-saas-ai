@@ -1339,7 +1339,8 @@
       "reservation_created": "حجز جديد لـ {guestName} ({reservationNumber})",
       "reservation_cancelled": "تم إلغاء حجز {guestName} ({reservationNumber})",
       "duplicate_guest": "نزيل مكرر محتمل: {guestName} ({documentNumber})",
-      "channel_sync_failed": "فشلت مزامنة {channelName}: {reason}"
+      "channel_sync_failed": "فشلت مزامنة {channelName}: {reason}",
+      "channel_synced": "{channelName}: {created} جديدة، {updated} محدثة، {cancelled} ملغاة"
     }
   },
   "housekeeping": {

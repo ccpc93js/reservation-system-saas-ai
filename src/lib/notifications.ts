@@ -6,7 +6,8 @@ export type NotificationType =
   | "reservation_created"
   | "reservation_cancelled"
   | "duplicate_guest"
-  | "channel_sync_failed";
+  | "channel_sync_failed"
+  | "channel_synced";
 
 export async function notifyOrg(
   organizationId: string,

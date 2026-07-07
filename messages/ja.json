@@ -1339,7 +1339,8 @@
       "reservation_created": "{guestName} の新しい予約（{reservationNumber}）",
       "reservation_cancelled": "{guestName} の予約がキャンセルされました（{reservationNumber}）",
       "duplicate_guest": "重複の可能性があるゲスト：{guestName}（{documentNumber}）",
-      "channel_sync_failed": "{channelName} の同期に失敗しました：{reason}"
+      "channel_sync_failed": "{channelName} の同期に失敗しました：{reason}",
+      "channel_synced": "{channelName}：新規 {created} 件、更新 {updated} 件、キャンセル {cancelled} 件"
     }
   },
   "housekeeping": {
