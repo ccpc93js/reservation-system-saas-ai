@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, DoorOpen, ChevronUp, ChevronDown } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, DoorOpen, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import RoomsDialog from "./rooms-dialog";
 import { Room } from "@/lib/types/database";
@@ -142,6 +142,14 @@ export default function RoomsListClient({
             className="w-full pl-10 pr-4 py-2 border rounded-lg bg-surface disabled:opacity-50"
           />
         </div>
+        <button
+          onClick={handleRefetch}
+          disabled={isLoading}
+          title={t("refresh")}
+          className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg text-foreground bg-surface hover:bg-muted disabled:opacity-50 transition-colors"
+        >
+          <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+        </button>
         <button
           onClick={() => {
             setEditingRoomId(null);

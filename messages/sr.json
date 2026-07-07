@@ -699,7 +699,8 @@
         "cancel": "Otkaži",
         "saving": "Čuvanje...",
         "save": "Sačuvaj"
-      }
+      },
+      "refresh": "Osveži"
     },
     "beds": {
       "toastFetchFailed": "Preuzimanje kreveta nije uspelo",
@@ -743,7 +744,8 @@
         "cancel": "Otkaži",
         "saving": "Čuvanje...",
         "save": "Sačuvaj"
-      }
+      },
+      "refresh": "Osveži"
     }
   },
   "settings": {

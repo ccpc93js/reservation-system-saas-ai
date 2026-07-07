@@ -699,7 +699,8 @@
         "cancel": "Cancel",
         "saving": "Saving...",
         "save": "Save"
-      }
+      },
+      "refresh": "Refresh"
     },
     "beds": {
       "toastFetchFailed": "Failed to fetch beds",
@@ -743,7 +744,8 @@
         "cancel": "Cancel",
         "saving": "Saving...",
         "save": "Save"
-      }
+      },
+      "refresh": "Refresh"
     }
   },
   "settings": {

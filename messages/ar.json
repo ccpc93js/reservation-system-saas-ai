@@ -699,7 +699,8 @@
         "cancel": "إلغاء",
         "saving": "جارٍ الحفظ...",
         "save": "حفظ"
-      }
+      },
+      "refresh": "تحديث"
     },
     "beds": {
       "toastFetchFailed": "فشل جلب الأسرّة",
@@ -743,7 +744,8 @@
         "cancel": "إلغاء",
         "saving": "جارٍ الحفظ...",
         "save": "حفظ"
-      }
+      },
+      "refresh": "تحديث"
     }
   },
   "settings": {

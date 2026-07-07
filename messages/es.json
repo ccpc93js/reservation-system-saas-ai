@@ -699,7 +699,8 @@
         "cancel": "Cancelar",
         "saving": "Guardando...",
         "save": "Guardar"
-      }
+      },
+      "refresh": "Actualizar"
     },
     "beds": {
       "toastFetchFailed": "Error al obtener las camas",
@@ -743,7 +744,8 @@
         "cancel": "Cancelar",
         "saving": "Guardando...",
         "save": "Guardar"
-      }
+      },
+      "refresh": "Actualizar"
     }
   },
   "settings": {

@@ -699,7 +699,8 @@
         "cancel": "Annuler",
         "saving": "Enregistrement...",
         "save": "Enregistrer"
-      }
+      },
+      "refresh": "Actualiser"
     },
     "beds": {
       "toastFetchFailed": "Échec de la récupération des lits",
@@ -743,7 +744,8 @@
         "cancel": "Annuler",
         "saving": "Enregistrement...",
         "save": "Enregistrer"
-      }
+      },
+      "refresh": "Actualiser"
     }
   },
   "settings": {
