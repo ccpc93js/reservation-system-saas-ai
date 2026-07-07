@@ -494,7 +494,10 @@
       "statusUpdateFailed": "অবস্থা আপডেট করতে ব্যর্থ",
       "statusUpdated": "অবস্থা আপডেট হয়েছে"
     },
-    "refresh": "রিফ্রেশ"
+    "refresh": "রিফ্রেশ",
+    "exportCsv": "CSV এক্সপোর্ট",
+    "toastNoneToExport": "এক্সপোর্ট করার মতো সংরক্ষণ নেই",
+    "toastExportFailed": "এক্সপোর্ট ব্যর্থ"
   },
   "guests": {
     "errorLoading": "অতিথি লোড করতে ত্রুটি",

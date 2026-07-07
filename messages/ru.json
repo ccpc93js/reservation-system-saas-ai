@@ -494,7 +494,10 @@
       "statusUpdateFailed": "Не удалось обновить статус",
       "statusUpdated": "Статус обновлён"
     },
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "exportCsv": "Экспорт CSV",
+    "toastNoneToExport": "Нет броней для экспорта",
+    "toastExportFailed": "Ошибка экспорта"
   },
   "guests": {
     "errorLoading": "Ошибка загрузки гостей",

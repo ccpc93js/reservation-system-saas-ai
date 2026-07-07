@@ -494,7 +494,10 @@
       "statusUpdateFailed": "状态更新失败",
       "statusUpdated": "状态已更新"
     },
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "exportCsv": "导出 CSV",
+    "toastNoneToExport": "没有可导出的预订",
+    "toastExportFailed": "导出失败"
   },
   "guests": {
     "errorLoading": "加载客人时出错",

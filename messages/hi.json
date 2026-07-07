@@ -494,7 +494,10 @@
       "statusUpdateFailed": "स्थिति अपडेट करने में विफल",
       "statusUpdated": "स्थिति अपडेट हो गई"
     },
-    "refresh": "रीफ़्रेश करें"
+    "refresh": "रीफ़्रेश करें",
+    "exportCsv": "CSV निर्यात करें",
+    "toastNoneToExport": "निर्यात के लिए कोई आरक्षण नहीं",
+    "toastExportFailed": "निर्यात विफल"
   },
   "guests": {
     "errorLoading": "अतिथि लोड करने में त्रुटि",

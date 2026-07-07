@@ -494,7 +494,10 @@
       "statusUpdateFailed": "Failed to update status",
       "statusUpdated": "Status updated"
     },
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "exportCsv": "Export CSV",
+    "toastNoneToExport": "No reservations to export",
+    "toastExportFailed": "Export failed"
   },
   "guests": {
     "errorLoading": "Error loading guests",

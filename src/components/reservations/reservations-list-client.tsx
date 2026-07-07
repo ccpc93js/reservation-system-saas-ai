@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
+import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown, RefreshCw, Download } from "lucide-react";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -205,6 +205,62 @@ export default function ReservationsListClient({
     setRefreshing(false);
   };
 
+  const [exporting, setExporting] = useState(false);
+  // Export ALL reservations matching the current filters (not just the page).
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams({ page: "1", limit: "10000" });
+      if (filters.status) params.append("status", filters.status);
+      if (filters.checkInFrom) params.append("check_in_from", filters.checkInFrom);
+      if (filters.checkInTo) params.append("check_in_to", filters.checkInTo);
+      const res = await fetch(`/api/reservations?${params}`);
+      const data = await res.json();
+      const rows: any[] = data.reservations || [];
+      if (rows.length === 0) { toast.error(t("toastNoneToExport")); return; }
+
+      const nightsOf = (r: any) => {
+        if (!r.check_in || !r.check_out) return "";
+        return Math.max(0, Math.round((new Date(r.check_out).getTime() - new Date(r.check_in).getTime()) / 86400000));
+      };
+      const headers = ["Reservation #", "Guest", "Room", "Beds", "Check-in", "Check-out", "Nights", "Status", "Channel", "Total", "Paid"];
+      const esc = (v: any) => {
+        const s = v == null ? "" : String(v);
+        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const lines = [headers.join(",")];
+      for (const r of rows) {
+        const items: any[] = r.reservation_items ?? [];
+        const bedNames = Array.from(new Set(items.map((i) => i.beds?.name).filter(Boolean)));
+        const roomName = items[0]?.beds?.rooms?.name ?? "";
+        lines.push([
+          r.reservation_number,
+          r.guests ? `${r.guests.first_name} ${r.guests.last_name}` : "",
+          roomName,
+          bedNames.join(" / "),
+          r.check_in,
+          r.check_out,
+          nightsOf(r),
+          r.status,
+          r.channel_source ?? r.channel ?? "",
+          r.total_amount,
+          r.paid_amount,
+        ].map(esc).join(","));
+      }
+      const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `reservations-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error(t("toastExportFailed"));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleSort = (column: string) => {
     if (sortBy === column) {
       setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -341,6 +397,14 @@ export default function ReservationsListClient({
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
           {t("refresh")}
+        </button>
+        <button
+          onClick={handleExport}
+          disabled={exporting || isLoading}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-background hover:bg-muted disabled:opacity-50 transition-all shrink-0"
+        >
+          <Download className={`w-4 h-4 ${exporting ? "animate-pulse" : ""}`} />
+          {t("exportCsv")}
         </button>
       </div>
 

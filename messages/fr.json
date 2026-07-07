@@ -494,7 +494,10 @@
       "statusUpdateFailed": "Échec de la mise à jour du statut",
       "statusUpdated": "Statut mis à jour"
     },
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "exportCsv": "Exporter CSV",
+    "toastNoneToExport": "Aucune réservation à exporter",
+    "toastExportFailed": "Échec de l’export"
   },
   "guests": {
     "errorLoading": "Erreur lors du chargement des clients",

@@ -494,7 +494,10 @@
       "statusUpdateFailed": "Neuspešno ažuriranje statusa",
       "statusUpdated": "Status ažuriran"
     },
-    "refresh": "Osveži"
+    "refresh": "Osveži",
+    "exportCsv": "Izvezi CSV",
+    "toastNoneToExport": "Nema rezervacija za izvoz",
+    "toastExportFailed": "Izvoz nije uspeo"
   },
   "guests": {
     "errorLoading": "Greška pri učitavanju gostiju",

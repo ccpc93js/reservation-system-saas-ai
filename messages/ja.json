@@ -494,7 +494,10 @@
       "statusUpdateFailed": "ステータスの更新に失敗しました",
       "statusUpdated": "ステータスを更新しました"
     },
-    "refresh": "更新"
+    "refresh": "更新",
+    "exportCsv": "CSVエクスポート",
+    "toastNoneToExport": "エクスポートする予約がありません",
+    "toastExportFailed": "エクスポートに失敗しました"
   },
   "guests": {
     "errorLoading": "ゲストの読み込みエラー",

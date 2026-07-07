@@ -494,7 +494,10 @@
       "statusUpdateFailed": "فشل تحديث الحالة",
       "statusUpdated": "تم تحديث الحالة"
     },
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "exportCsv": "تصدير CSV",
+    "toastNoneToExport": "لا توجد حجوزات للتصدير",
+    "toastExportFailed": "فشل التصدير"
   },
   "guests": {
     "errorLoading": "خطأ في تحميل النزلاء",

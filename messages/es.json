@@ -494,7 +494,10 @@
       "statusUpdateFailed": "No se pudo actualizar el estado",
       "statusUpdated": "Estado actualizado"
     },
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "exportCsv": "Exportar CSV",
+    "toastNoneToExport": "No hay reservas para exportar",
+    "toastExportFailed": "Error al exportar"
   },
   "guests": {
     "errorLoading": "Error al cargar los huéspedes",
