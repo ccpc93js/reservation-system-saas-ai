@@ -6,11 +6,13 @@ import ReservationsListClient from "@/components/reservations/reservations-list-
 export default async function ReservationsPage() {
   const t = await getTranslations("reservations");
   const supabase = await createServerClient();
+  const { data: { user: _authUser } } = await supabase.auth.getUser();
 
   // Get org context
   const { data: membership, error } = await supabase
     .from("memberships")
     .select("organization_id")
+    .eq("user_id", _authUser?.id ?? "")
     .single();
 
   if (error || !membership) {

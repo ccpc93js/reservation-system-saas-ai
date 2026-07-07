@@ -9,11 +9,13 @@ import { redirect } from "next/navigation";
 export default async function ChannelsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createServerClient();
+  const { data: { user: _authUser } } = await supabase.auth.getUser();
   const t = await getTranslations("channels");
 
   const { data: membership } = await supabase
     .from("memberships")
     .select("organization_id, role, organizations(plan)")
+    .eq("user_id", _authUser?.id ?? "")
     .single();
 
   if (!membership) return <div>{t("errorLoading")}</div>;

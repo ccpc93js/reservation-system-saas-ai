@@ -4,12 +4,14 @@ import GuestListClient from "@/components/guests/guest-list-client";
 
 export default async function GuestsPage() {
   const supabase = await createServerClient();
+  const { data: { user: _authUser } } = await supabase.auth.getUser();
   const t = await getTranslations("guests");
 
   // Get org context
   const { data: membership, error } = await supabase
     .from("memberships")
     .select("organization_id")
+    .eq("user_id", _authUser?.id ?? "")
     .single();
 
   if (error || !membership) {
