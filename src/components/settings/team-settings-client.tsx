@@ -5,6 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { UserPlus, Trash2, Mail, Clock, X } from "lucide-react";
+import { canManageMember, assignableRoles } from "@/lib/permissions";
 
 interface Member {
   id: string;
@@ -186,7 +187,7 @@ export default function TeamSettingsClient({ userRole }: Props) {
               onChange={(e) => setInviteRole(e.target.value)}
               className="rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20"
             >
-              {ROLES.map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
+              {assignableRoles(userRole).map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
             </select>
             <button
               onClick={handleInvite}
@@ -226,20 +227,20 @@ export default function TeamSettingsClient({ userRole }: Props) {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  {isAdmin && !m.is_self ? (
+                  {canManageMember(userRole, m.role) && !m.is_self ? (
                     <select
                       value={m.role}
                       onChange={(e) => handleRoleChange(m.user_id, e.target.value)}
                       className="text-xs rounded-lg border border-border bg-background text-foreground px-2 py-1 focus:outline-none"
                     >
-                      {ROLES.map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
+                      {assignableRoles(userRole).map((r) => <option key={r} value={r}>{t(`role_${r}`)}</option>)}
                     </select>
                   ) : (
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${roleColor[m.role] ?? roleColor.staff}`}>
                       {t(`role_${m.role}`)}
                     </span>
                   )}
-                  {isAdmin && !m.is_self && (
+                  {canManageMember(userRole, m.role) && !m.is_self && (
                     <button
                       onClick={() => handleRemove(m.user_id, m.email)}
                       disabled={removingId === m.user_id}

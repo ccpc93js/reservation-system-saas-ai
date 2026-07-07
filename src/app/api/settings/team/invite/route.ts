@@ -1,5 +1,6 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { canAddUser, getUserLimit } from "@/lib/plan";
+import { assignableRoles } from "@/lib/permissions";
 import { getSiteOrigin } from "@/lib/site-url";
 import { generateEmailHTML } from "@/lib/email";
 
@@ -21,6 +22,9 @@ export async function POST(request: Request) {
 
     const { email, role = "staff" } = await request.json();
     if (!email) return Response.json({ error: "Email required" }, { status: 400 });
+    if (!assignableRoles(membership.role).includes(role)) {
+      return Response.json({ error: "You can't invite someone at that role" }, { status: 403 });
+    }
 
     // Check user limit
     const plan = (membership as any).organizations?.plan ?? "free";

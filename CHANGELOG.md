@@ -1,3 +1,82 @@
+## [59e303b] - 2026-07-07
+
+fix: membership queries broke on multi-member orgs (missing user_id filter)
+
+Six page loaders queried memberships with .single() but no
+.eq(user_id), relying on one membership row. Once an org has more than
+one member, RLS returns every membership in the org, so .single()
+errored and the page showed "Error loading ..." (team, property,
+calendar, channels, guests, reservations). This surfaced the moment a
+second member (a manager) joined. Each loader now fetches the auth user
+and filters memberships by user_id.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [28e6bd5] - 2026-07-07
+
+feat: show/hide password toggle on the invite set-password form
+
+Eye button toggles both password fields between hidden and plain text.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [28e6bd5] - 2026-07-07
+
+feat: show/hide password toggle on the invite set-password form
+
+Eye button toggles both password fields between hidden and plain text.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [28e6bd5] - 2026-07-07
+
+feat: show/hide password toggle on the invite set-password form
+
+Eye button toggles both password fields between hidden and plain text.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [28e6bd5] - 2026-07-07
+
+feat: show/hide password toggle on the invite set-password form
+
+Eye button toggles both password fields between hidden and plain text.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [28e6bd5] - 2026-07-07
+
+feat: show/hide password toggle on the invite set-password form
+
+Eye button toggles both password fields between hidden and plain text.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [db1ee9f] - 2026-07-07
+
+feat: RBAC gating, invite password setup, and invite revoke
+
+Team & permissions polish:
+
+- New src/lib/permissions.ts: role-to-section access map (owner >
+  manager/admin > staff). Restricted sections: analytics + channel
+  manager (manager+), property settings (manager+), billing (owner).
+- Sidebar hides nav items the role cannot access.
+- SSR page gating redirects non-authorized roles to the dashboard
+  (analytics, channels, settings/property, settings/billing) - not just
+  hiding the link.
+- API hardening: channel create/edit/delete and org settings PATCH now
+  require manager+; invite/revoke require manager+.
+- Invited members can now SET A PASSWORD to join: GET invitation reports
+  whether an account exists; new /register route creates a pre-verified
+  auth user + membership + marks accepted; the invite page branches into
+  accept (signed in), sign-in (existing account) or set-password (new).
+- Owners/managers can revoke pending invitations (new DELETE route +
+  trash button); member removal already existed.
+- i18n for the revoke strings in all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [569902a] - 2026-07-07
 
 chore: install channex-pms-integration skill

@@ -27,3 +27,24 @@ export const isManager = (role: string | undefined): boolean =>
   !!role && MANAGERS.includes(role as Role);
 
 export const isOwner = (role: string | undefined): boolean => role === "owner";
+
+// ── Team-management hierarchy ────────────────────────────────────────────
+// You can only manage members strictly below your own rank, and only assign
+// roles up to your rank (only an owner can grant "owner").
+export const ROLE_RANK: Record<string, number> = { owner: 3, admin: 2, manager: 2, staff: 1 };
+
+export const roleRank = (role: string | undefined): number =>
+  (role && ROLE_RANK[role]) || 0;
+
+// Can `actorRole` change/remove a member who currently has `targetRole`?
+export const canManageMember = (actorRole: string | undefined, targetRole: string | undefined): boolean =>
+  roleRank(actorRole) > roleRank(targetRole);
+
+// Roles `actorRole` is allowed to assign.
+export const assignableRoles = (actorRole: string | undefined): string[] => {
+  const rank = roleRank(actorRole);
+  const owner = actorRole === "owner";
+  return (["owner", "manager", "staff"] as const).filter(
+    (r) => ROLE_RANK[r] <= rank && (r !== "owner" || owner)
+  );
+};
