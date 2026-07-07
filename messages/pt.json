@@ -112,7 +112,10 @@
       "updating": "Atualizando…",
       "updatePassword": "Atualizar senha",
       "updatedRedirecting": "Senha atualizada! Redirecionando para o painel...",
-      "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres"
+      "toastPasswordMin": "A senha deve ter pelo menos 8 caracteres",
+      "verifyingLink": "Verificando o seu link…",
+      "linkInvalid": "Este link de redefinição é inválido ou expirou. Solicite um novo na página de login.",
+      "backToLogin": "Voltar ao login"
     }
   },
   "dashboard": {

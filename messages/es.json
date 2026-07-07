@@ -112,7 +112,10 @@
       "updating": "Actualizando…",
       "updatePassword": "Actualizar contraseña",
       "updatedRedirecting": "¡Contraseña actualizada! Redirigiendo al panel...",
-      "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres"
+      "toastPasswordMin": "La contraseña debe tener al menos 8 caracteres",
+      "verifyingLink": "Verificando tu enlace…",
+      "linkInvalid": "Este enlace de restablecimiento no es válido o expiró. Solicita uno nuevo desde el inicio de sesión.",
+      "backToLogin": "Volver al inicio de sesión"
     }
   },
   "dashboard": {

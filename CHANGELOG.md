@@ -1,3 +1,21 @@
+## [4e7b538] - 2026-07-07
+
+fix: enforce role hierarchy in team management
+
+A manager could edit or remove the owner: the team controls only
+checked "is admin", not rank. Added a role hierarchy (owner > manager/
+admin > staff):
+
+- permissions.ts: ROLE_RANK, canManageMember (must strictly outrank the
+  target), assignableRoles (roles you may grant; only owner grants owner)
+- Member API (PATCH/DELETE): verify the actor outranks the target and
+  the requested role is assignable; never demote/remove the last owner
+- Invite API: reject inviting above your assignable roles
+- Team UI: role dropdown + remove button now show only for members you
+  outrank; role and invite selects list only assignable roles
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [59e303b] - 2026-07-07
 
 fix: membership queries broke on multi-member orgs (missing user_id filter)

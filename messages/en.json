@@ -112,7 +112,10 @@
       "updating": "Updating…",
       "updatePassword": "Update Password",
       "updatedRedirecting": "Password updated! Redirecting to dashboard...",
-      "toastPasswordMin": "Password must be at least 8 characters"
+      "toastPasswordMin": "Password must be at least 8 characters",
+      "verifyingLink": "Verifying your link…",
+      "linkInvalid": "This reset link is invalid or has expired. Request a new one from the login page.",
+      "backToLogin": "Back to login"
     }
   },
   "dashboard": {

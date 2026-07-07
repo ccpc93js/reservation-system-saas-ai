@@ -112,7 +112,10 @@
       "updating": "更新中…",
       "updatePassword": "パスワードを更新",
       "updatedRedirecting": "パスワードを更新しました！ダッシュボードへリダイレクトしています...",
-      "toastPasswordMin": "パスワードは8文字以上にしてください"
+      "toastPasswordMin": "パスワードは8文字以上にしてください",
+      "verifyingLink": "リンクを確認しています…",
+      "linkInvalid": "このリセットリンクは無効または期限切れです。ログインページから再度リクエストしてください。",
+      "backToLogin": "ログインに戻る"
     }
   },
   "dashboard": {

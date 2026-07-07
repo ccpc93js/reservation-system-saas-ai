@@ -41,7 +41,16 @@ const jsonLd = {
   ],
 };
 
-export default async function RootPage() {
+export default async function RootPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ code?: string }>;
+}) {
+  // A password-recovery link whose redirect fell back to the Site URL lands
+  // here as /?code=… — forward it to the set-password form.
+  const { code } = await searchParams;
+  if (code) redirect(`/reset-password?code=${encodeURIComponent(code)}`);
+
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 

@@ -112,7 +112,10 @@
       "updating": "更新中…",
       "updatePassword": "更新密码",
       "updatedRedirecting": "密码已更新！正在跳转到仪表盘...",
-      "toastPasswordMin": "密码至少需要 8 个字符"
+      "toastPasswordMin": "密码至少需要 8 个字符",
+      "verifyingLink": "正在验证链接…",
+      "linkInvalid": "此重置链接无效或已过期。请在登录页面重新申请。",
+      "backToLogin": "返回登录"
     }
   },
   "dashboard": {

@@ -112,7 +112,10 @@
       "updating": "Mise à jour…",
       "updatePassword": "Mettre à jour le mot de passe",
       "updatedRedirecting": "Mot de passe mis à jour ! Redirection vers le tableau de bord...",
-      "toastPasswordMin": "Le mot de passe doit contenir au moins 8 caractères"
+      "toastPasswordMin": "Le mot de passe doit contenir au moins 8 caractères",
+      "verifyingLink": "Vérification de votre lien…",
+      "linkInvalid": "Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau depuis la page de connexion.",
+      "backToLogin": "Retour à la connexion"
     }
   },
   "dashboard": {

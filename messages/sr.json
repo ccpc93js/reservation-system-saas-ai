@@ -112,7 +112,10 @@
       "updating": "Ažuriranje…",
       "updatePassword": "Ažuriraj lozinku",
       "updatedRedirecting": "Lozinka ažurirana! Preusmeravanje na kontrolnu tablu...",
-      "toastPasswordMin": "Lozinka mora imati najmanje 8 karaktera"
+      "toastPasswordMin": "Lozinka mora imati najmanje 8 karaktera",
+      "verifyingLink": "Проверавамо ваш линк…",
+      "linkInvalid": "Овај линк за ресетовање је неважећи или истекао. Затражите нови са странице за пријаву.",
+      "backToLogin": "Назад на пријаву"
     }
   },
   "dashboard": {
