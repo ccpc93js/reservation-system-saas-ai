@@ -593,7 +593,10 @@
       "toastMergeFailed": "मर्ज विफल",
       "toastMerged": "अतिथि सफलतापूर्वक मर्ज किए गए!"
     },
-    "refresh": "रीफ़्रेश करें"
+    "refresh": "रीफ़्रेश करें",
+    "exportCsv": "CSV निर्यात करें",
+    "toastNoGuestsToExport": "निर्यात के लिए कोई अतिथि नहीं",
+    "toastExportFailed": "निर्यात विफल"
   },
   "rooms": {
     "unauthorized": "अनधिकृत",

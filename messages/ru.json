@@ -593,7 +593,10 @@
       "toastMergeFailed": "Не удалось объединить",
       "toastMerged": "Гости успешно объединены!"
     },
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "exportCsv": "Экспорт CSV",
+    "toastNoGuestsToExport": "Нет гостей для экспорта",
+    "toastExportFailed": "Ошибка экспорта"
   },
   "rooms": {
     "unauthorized": "Нет доступа",

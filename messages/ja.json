@@ -593,7 +593,10 @@
       "toastMergeFailed": "統合に失敗しました",
       "toastMerged": "ゲストを正常に統合しました！"
     },
-    "refresh": "更新"
+    "refresh": "更新",
+    "exportCsv": "CSVエクスポート",
+    "toastNoGuestsToExport": "エクスポートするゲストがいません",
+    "toastExportFailed": "エクスポートに失敗しました"
   },
   "rooms": {
     "unauthorized": "権限がありません",

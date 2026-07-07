@@ -593,7 +593,10 @@
       "toastMergeFailed": "فشل الدمج",
       "toastMerged": "تم دمج النزلاء بنجاح!"
     },
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "exportCsv": "تصدير CSV",
+    "toastNoGuestsToExport": "لا يوجد ضيوف للتصدير",
+    "toastExportFailed": "فشل التصدير"
   },
   "rooms": {
     "unauthorized": "غير مصرح به",

@@ -593,7 +593,10 @@
       "toastMergeFailed": "合并失败",
       "toastMerged": "客人合并成功！"
     },
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "exportCsv": "导出 CSV",
+    "toastNoGuestsToExport": "没有可导出的入住人",
+    "toastExportFailed": "导出失败"
   },
   "rooms": {
     "unauthorized": "未授权",

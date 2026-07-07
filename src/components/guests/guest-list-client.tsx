@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
-import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
+import { Search, Plus, Edit, Trash2, ChevronLeft, ChevronRight, Users, ChevronUp, ChevronDown, RefreshCw, Download } from "lucide-react";
 import { toast } from "sonner";
 import GuestDialog from "@/components/guests/guest-dialog";
 import { TableSkeleton } from "@/components/loading-skeleton";
@@ -37,6 +37,7 @@ export default function GuestListClient({
   const [total, setTotal] = useState(totalGuests);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string | null>(null);
@@ -77,6 +78,44 @@ export default function GuestListClient({
   const handleOpenCreate = () => {
     setEditingGuestId(null);
     setOpenDialog(true);
+  };
+
+  // Export ALL guests matching the current search (not just the page) to CSV.
+  // UTF-8 BOM so Excel renders accents; opens directly in Excel/Sheets.
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams({ search: search.trim(), page: "1", limit: "10000" });
+      const res = await fetch(`/api/guests?${params}`);
+      const data = await res.json();
+      const rows: any[] = data.guests || [];
+      if (rows.length === 0) { toast.error(t("toastNoGuestsToExport")); return; }
+
+      const headers = ["First name", "Last name", "Email", "Phone", "Nationality", "Document type", "Document number", "Date of birth", "Created"];
+      const esc = (v: any) => {
+        const s = v == null ? "" : String(v);
+        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const lines = [headers.join(",")];
+      for (const g of rows) {
+        lines.push([
+          g.first_name, g.last_name, g.email, g.phone, g.nationality,
+          g.document_type, g.document_number, g.date_of_birth,
+          g.created_at ? new Date(g.created_at).toISOString().slice(0, 10) : "",
+        ].map(esc).join(","));
+      }
+      const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `guests-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error(t("toastExportFailed"));
+    } finally {
+      setExporting(false);
+    }
   };
 
   const handleOpenEdit = (guestId: string) => {
@@ -166,6 +205,14 @@ export default function GuestListClient({
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
             {t("refresh")}
+          </button>
+          <button
+            onClick={handleExport}
+            disabled={exporting || isLoading}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-border bg-background hover:bg-muted disabled:opacity-50 transition-colors"
+          >
+            <Download className={`w-4 h-4 ${exporting ? "animate-pulse" : ""}`} />
+            {t("exportCsv")}
           </button>
           <button
             onClick={handleOpenCreate}

@@ -593,7 +593,10 @@
       "toastMergeFailed": "Error al combinar",
       "toastMerged": "¡Huéspedes combinados con éxito!"
     },
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "exportCsv": "Exportar CSV",
+    "toastNoGuestsToExport": "No hay huéspedes para exportar",
+    "toastExportFailed": "Error al exportar"
   },
   "rooms": {
     "unauthorized": "No autorizado",

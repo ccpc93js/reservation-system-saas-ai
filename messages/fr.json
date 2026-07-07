@@ -593,7 +593,10 @@
       "toastMergeFailed": "Échec de la fusion",
       "toastMerged": "Clients fusionnés avec succès !"
     },
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "exportCsv": "Exporter CSV",
+    "toastNoGuestsToExport": "Aucun invité à exporter",
+    "toastExportFailed": "Échec de l’export"
   },
   "rooms": {
     "unauthorized": "Non autorisé",

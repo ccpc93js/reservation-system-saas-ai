@@ -593,7 +593,10 @@
       "toastMergeFailed": "Spajanje nije uspelo",
       "toastMerged": "Gosti su uspešno spojeni!"
     },
-    "refresh": "Osveži"
+    "refresh": "Osveži",
+    "exportCsv": "Izvezi CSV",
+    "toastNoGuestsToExport": "Nema gostiju za izvoz",
+    "toastExportFailed": "Izvoz nije uspeo"
   },
   "rooms": {
     "unauthorized": "Neovlašćeno",
