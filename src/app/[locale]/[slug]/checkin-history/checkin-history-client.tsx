@@ -6,7 +6,8 @@ import { createPortal } from "react-dom";
 import { isSerbia } from "@/lib/hooks/use-org-country";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Download, Search, History, RefreshCw, Trash2, Pencil, X, ChevronDown, AlertTriangle } from "lucide-react";
+import { Search, History, RefreshCw, Trash2, Pencil, X, ChevronDown, AlertTriangle } from "lucide-react";
+import ExportCsvButton, { type CsvColumn } from "@/components/ui/export-csv-button";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { COUNTRIES } from "@/lib/countries";
 import { getGuestBookLimit, PLAN_NAMES } from "@/lib/plan";
@@ -48,52 +49,32 @@ function toDateTimeInputValue(val: string | null | undefined) {
   return new Date(val).toISOString().slice(0, 16);
 }
 
-function exportCSV(records: any[], orgName: string) {
-  const headers = [
-    "Reservation #", "Last Name", "First Name", "Date of Birth",
-    "Citizenship", "Place of Birth", "Country of Birth",
-    "ID Type", "ID Number", "Date of Issue", "Place of Issue", "Date of Expiry",
-    "JMBG", "Service Type",
-    "Room", "Bed", "Check-In Date", "Check-Out Date",
-    "Arrival (Actual)", "Departure (Actual)",
-    "Total Amount", "Amount Paid", "Currency",
-  ];
-
-  const rows = records.map((r) => [
-    r.reservation_number ?? "",
-    r.last_name ?? "",
-    r.first_name ?? "",
-    r.date_of_birth ?? "",
-    r.nationality ?? "",
-    r.place_of_birth ?? "",
-    r.country_of_birth ?? "",
-    DOC_LABELS[r.document_type] ?? r.document_type ?? "",
-    r.document_number ?? "",
-    r.document_issued_date ?? "",
-    r.document_issued_place ?? "",
-    r.document_expiry ?? "",
-    r.jmbg ?? "",
-    SERVICE_LABELS[r.service_type] ?? r.service_type ?? "",
-    r.room_name ?? "",
-    r.bed_name ?? "",
-    r.check_in ?? "",
-    r.check_out ?? "",
-    r.actual_check_in_at ? new Date(r.actual_check_in_at).toLocaleString() : "",
-    r.actual_check_out_at ? new Date(r.actual_check_out_at).toLocaleString() : "",
-    r.total_amount ?? "",
-    r.paid_amount ?? "",
-    r.payment_currency ?? "",
-  ].map((v) => `"${String(v).replace(/"/g, '""')}"`));
-
-  const csv = [headers.map((h) => `"${h}"`), ...rows].map((r) => r.join(",")).join("\n");
-  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `guest-book-${orgName.toLowerCase().replace(/\s+/g, "-")}-${new Date().toISOString().split("T")[0]}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+// Guest Book / check-in registry CSV columns (per-occupant legal record).
+const GUEST_BOOK_COLUMNS: CsvColumn<any>[] = [
+  { header: "Reservation #", value: (r) => r.reservation_number },
+  { header: "Last Name", value: (r) => r.last_name },
+  { header: "First Name", value: (r) => r.first_name },
+  { header: "Date of Birth", value: (r) => r.date_of_birth },
+  { header: "Citizenship", value: (r) => r.nationality },
+  { header: "Place of Birth", value: (r) => r.place_of_birth },
+  { header: "Country of Birth", value: (r) => r.country_of_birth },
+  { header: "ID Type", value: (r) => DOC_LABELS[r.document_type] ?? r.document_type },
+  { header: "ID Number", value: (r) => r.document_number },
+  { header: "Date of Issue", value: (r) => r.document_issued_date },
+  { header: "Place of Issue", value: (r) => r.document_issued_place },
+  { header: "Date of Expiry", value: (r) => r.document_expiry },
+  { header: "JMBG", value: (r) => r.jmbg },
+  { header: "Service Type", value: (r) => SERVICE_LABELS[r.service_type] ?? r.service_type },
+  { header: "Room", value: (r) => r.room_name },
+  { header: "Bed", value: (r) => r.bed_name },
+  { header: "Check-In Date", value: (r) => r.check_in },
+  { header: "Check-Out Date", value: (r) => r.check_out },
+  { header: "Arrival (Actual)", value: (r) => r.actual_check_in_at ? new Date(r.actual_check_in_at).toLocaleString() : "" },
+  { header: "Departure (Actual)", value: (r) => r.actual_check_out_at ? new Date(r.actual_check_out_at).toLocaleString() : "" },
+  { header: "Total Amount", value: (r) => r.total_amount },
+  { header: "Amount Paid", value: (r) => r.paid_amount },
+  { header: "Currency", value: (r) => r.payment_currency },
+];
 
 interface Props {
   records: any[];
@@ -308,12 +289,14 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
             )}
           </p>
         </div>
-        <button onClick={() => exportCSV(filtered, orgName)} disabled={filtered.length === 0}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all shrink-0"
-          style={{ background: "linear-gradient(135deg, #5f7048, #7f8a58)", boxShadow: "0 4px 14px rgba(95,112,72,0.3)" }}>
-          <Download className="w-4 h-4" />
-          {t("exportCsv")}
-        </button>
+        <ExportCsvButton
+          label={t("exportCsv")}
+          filename={`guest-book-${orgName.toLowerCase().replace(/\s+/g, "-")}`}
+          rows={filtered}
+          columns={GUEST_BOOK_COLUMNS}
+          disabled={filtered.length === 0}
+          emptyMessage={t("exportCsv")}
+        />
       </div>
 
       {/* Search + table toolbar — search stays in original position */}

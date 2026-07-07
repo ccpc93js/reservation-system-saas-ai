@@ -1,3 +1,117 @@
+## [d1edc40] - 2026-07-07
+
+feat: export Reservations to CSV
+
+Export button (next to Refresh) downloads ALL reservations matching the
+current status/date filters, not just the page: number, guest, room,
+beds, dates, nights, status, channel, total and paid. UTF-8 BOM for
+Excel/Sheets. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [fed5797] - 2026-07-07
+
+feat: export Guest Directory to CSV
+
+Export button (next to Refresh) downloads ALL guests matching the
+current search, not just the visible page: name, email, phone,
+nationality, document type/number, DOB and created date. UTF-8 BOM so
+Excel/Sheets render accents; opens directly as a spreadsheet. i18n for
+all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [9f5229a] - 2026-07-07
+
+feat: refresh button on Rooms and Beds lists too
+
+Matches the Room Types list: a refresh button (spins while loading) next
+to New on the Rooms and Beds tabs of Room Inventory. i18n for all 11
+locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [cdfc1e5] - 2026-07-07
+
+feat: refresh button on the Room Types list
+
+Adds a refresh button (spinning while loading) next to New in Room
+Inventory to re-fetch room types on demand. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [cdfc1e5] - 2026-07-07
+
+feat: refresh button on the Room Types list
+
+Adds a refresh button (spinning while loading) next to New in Room
+Inventory to re-fetch room types on demand. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [cdfc1e5] - 2026-07-07
+
+feat: refresh button on the Room Types list
+
+Adds a refresh button (spinning while loading) next to New in Room
+Inventory to re-fetch room types on demand. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [cdfc1e5] - 2026-07-07
+
+feat: refresh button on the Room Types list
+
+Adds a refresh button (spinning while loading) next to New in Room
+Inventory to re-fetch room types on demand. i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [c5a2d31] - 2026-07-07
+
+docs: Supabase auth configuration guide
+
+One-time dashboard setup for reliable email flows: Site URL + redirect
+URL allowlist (/** wildcard), switching the password-reset email to a
+token_hash link (cross-browser, avoids fragile PKCE), how the reset flow
+works end to end, invite + signup notes, required env vars, and a
+troubleshooting table.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [d3a979f] - 2026-07-07
+
+fix: reset-password surfaces Supabase error + handles hash-token links
+
+Reads error_description from the URL (query or hash) so an expired/used
+one-time token shows a specific reason instead of the generic message.
+Also restores a session from an implicit-flow hash (access_token/
+refresh_token) when present.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [489bc6a] - 2026-07-07
+
+fix: reset-password no longer fails on refresh / already-consumed code
+
+The page re-ran exchangeCodeForSession on every mount, so a refresh or
+re-opened (single-use) PKCE code showed "invalid link" even with a valid
+recovery session. Now it checks for an existing session first and only
+then exchanges. Adds token_hash + verifyOtp support (works cross-browser,
+unlike PKCE which needs the verifier from the requesting browser).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [3a6c182] - 2026-07-07
+
+feat: confirm-password field on the reset-password form
+
+Adds a Confirm password input with live mismatch hint and submit-time
+validation (must match the new password). Follows the show/hide toggle.
+i18n for all 11 locales.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [0c23dba] - 2026-07-07
 
 fix: password-reset link now shows the set-password form
