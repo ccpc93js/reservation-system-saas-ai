@@ -655,7 +655,8 @@
         "cancel": "取消",
         "saving": "保存中…",
         "save": "保存"
-      }
+      },
+      "refresh": "刷新"
     },
     "rooms": {
       "toastFetchFailed": "获取房间失败",

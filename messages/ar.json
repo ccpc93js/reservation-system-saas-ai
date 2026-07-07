@@ -655,7 +655,8 @@
         "cancel": "إلغاء",
         "saving": "جارٍ الحفظ...",
         "save": "حفظ"
-      }
+      },
+      "refresh": "تحديث"
     },
     "rooms": {
       "toastFetchFailed": "فشل جلب الغرف",

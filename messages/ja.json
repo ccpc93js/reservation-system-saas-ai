@@ -655,7 +655,8 @@
         "cancel": "キャンセル",
         "saving": "保存中...",
         "save": "保存"
-      }
+      },
+      "refresh": "更新"
     },
     "rooms": {
       "toastFetchFailed": "客室の取得に失敗しました",

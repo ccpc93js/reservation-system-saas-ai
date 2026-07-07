@@ -655,7 +655,8 @@
         "cancel": "Otkaži",
         "saving": "Čuvanje...",
         "save": "Sačuvaj"
-      }
+      },
+      "refresh": "Osveži"
     },
     "rooms": {
       "toastFetchFailed": "Preuzimanje soba nije uspelo",

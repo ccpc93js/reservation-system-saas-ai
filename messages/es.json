@@ -655,7 +655,8 @@
         "cancel": "Cancelar",
         "saving": "Guardando...",
         "save": "Guardar"
-      }
+      },
+      "refresh": "Actualizar"
     },
     "rooms": {
       "toastFetchFailed": "Error al obtener las habitaciones",

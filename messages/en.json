@@ -655,7 +655,8 @@
         "cancel": "Cancel",
         "saving": "Saving...",
         "save": "Save"
-      }
+      },
+      "refresh": "Refresh"
     },
     "rooms": {
       "toastFetchFailed": "Failed to fetch rooms",
