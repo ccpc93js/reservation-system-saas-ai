@@ -19,16 +19,33 @@ export default function ResetPasswordPage() {
   const [done, setDone] = useState(false);
   // "verifying" while exchanging the ?code= link, "invalid" if it fails.
   const [linkStatus, setLinkStatus] = useState<"verifying" | "ready" | "invalid">("verifying");
+  const [linkError, setLinkError] = useState("");
 
   // Establish the recovery session from the link before showing the form.
   useEffect(() => {
     (async () => {
+      // Surface an error Supabase appended to the URL (query or hash), e.g.
+      // an expired/used one-time token — so the message is specific.
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const search = new URLSearchParams(window.location.search);
+      const errDesc = search.get("error_description") || hashParams.get("error_description");
+      if (errDesc) { setLinkError(errDesc.replace(/\+/g, " ")); setLinkStatus("invalid"); return; }
+
       // 1. Already have a session? (code exchanged on a previous load, or a
       //    hash-based link) — don't re-consume a single-use code on refresh.
       const { data: { session } } = await supabase.auth.getSession();
       if (session) { setLinkStatus("ready"); return; }
 
-      const params = new URLSearchParams(window.location.search);
+      // Older implicit links deliver the recovery token in the URL hash.
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+      if (accessToken && refreshToken) {
+        const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+        setLinkStatus(error ? "invalid" : "ready");
+        return;
+      }
+
+      const params = search;
       const code = params.get("code");
       const tokenHash = params.get("token_hash");
       const type = params.get("type");
@@ -87,6 +104,7 @@ export default function ResetPasswordPage() {
           <div className="space-y-4">
             <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700">
               {t("linkInvalid")}
+              {linkError && <span className="block mt-1 text-xs opacity-80">({linkError})</span>}
             </div>
             <button
               onClick={() => router.push("/login")}
