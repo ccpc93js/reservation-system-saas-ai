@@ -14,7 +14,9 @@
       "settingsTeam": "チーム",
       "settingsBilling": "請求とプラン",
       "settings": "設定",
-      "housekeeping": "ハウスキーピング"
+      "housekeeping": "ハウスキーピング",
+      "checkinHistory": "ゲスト台帳",
+      "help": "ヘルプ"
     },
     "searchPlaceholder": "ゲスト、予約を検索...",
     "clearSearch": "検索をクリア",
@@ -242,7 +244,8 @@
       "bedsCount": "{count}床",
       "selectAtLeastOneBed": "少なくとも1つのベッドを選択してください",
       "pickCheckoutToChooseBeds": "ベッドを選ぶにはチェックアウト日を選択してください",
-      "selectDatePlaceholder": "日付を選択"
+      "selectDatePlaceholder": "日付を選択",
+      "checkOutAfterCheckIn": "チェックアウト日はチェックイン日より後にしてください"
     },
     "editReservation": {
       "loading": "読み込み中...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "ベッドの追加に失敗しました",
         "bedRemoveConfirm": "この予約からベッド {name} を削除しますか？",
         "bedRemoved": "ベッド {name} を削除しました",
-        "bedRemoveFailed": "ベッドの削除に失敗しました"
+        "bedRemoveFailed": "ベッドの削除に失敗しました",
+        "extendDateInvalid": "新しいチェックアウト日は現在のチェックアウト日より後にしてください"
       },
       "paymentMethod": "支払い方法",
       "selectMethod": "方法を選択",
@@ -460,6 +464,7 @@
     "allStatuses": "すべてのステータス",
     "checkInFrom": "チェックイン開始日",
     "checkInTo": "チェックイン終了日",
+    "selectDatePlaceholder": "日付を選択",
     "colReservationNumber": "予約番号",
     "colGuest": "ゲスト",
     "colRoomBed": "部屋 / ベッド",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "このエントリをゲストブックから削除しますか？",
     "toastSaveFailed": "保存に失敗しました",
     "toastRemoveFailed": "エントリの削除に失敗しました",
-    "recordDescriptor": "セルビア警察登録記録"
+    "recordDescriptor": "セルビア警察登録記録",
+    "checkOutAfterCheckIn": "チェックアウト日はチェックイン日より後である必要があります"
   },
   "channels": {
     "errorLoading": "チャネルの読み込みエラー",

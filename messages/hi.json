@@ -14,7 +14,9 @@
       "settingsTeam": "टीम",
       "settingsBilling": "बिलिंग और प्लान",
       "settings": "सेटिंग्स",
-      "housekeeping": "हाउसकीपिंग"
+      "housekeeping": "हाउसकीपिंग",
+      "checkinHistory": "अतिथि पंजी",
+      "help": "सहायता"
     },
     "searchPlaceholder": "अतिथि, आरक्षण खोजें...",
     "clearSearch": "खोज साफ़ करें",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} बेड",
       "selectAtLeastOneBed": "कम से कम एक बेड चुनें",
       "pickCheckoutToChooseBeds": "बेड चुनने के लिए चेक-आउट तिथि चुनें",
-      "selectDatePlaceholder": "तारीख चुनें"
+      "selectDatePlaceholder": "तारीख चुनें",
+      "checkOutAfterCheckIn": "चेक-आउट तिथि चेक-इन तिथि के बाद होनी चाहिए"
     },
     "editReservation": {
       "loading": "लोड हो रहा है...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "बेड जोड़ने में विफल",
         "bedRemoveConfirm": "क्या इस आरक्षण से बेड {name} हटाएँ?",
         "bedRemoved": "बेड {name} हटाया गया",
-        "bedRemoveFailed": "बेड हटाने में विफल"
+        "bedRemoveFailed": "बेड हटाने में विफल",
+        "extendDateInvalid": "नई चेक-आउट तिथि वर्तमान चेक-आउट तिथि के बाद होनी चाहिए"
       },
       "paymentMethod": "भुगतान का तरीका",
       "selectMethod": "तरीका चुनें",
@@ -460,6 +464,7 @@
     "allStatuses": "सभी स्थितियां",
     "checkInFrom": "चेक-इन प्रारंभ",
     "checkInTo": "चेक-इन अंत",
+    "selectDatePlaceholder": "तारीख चुनें",
     "colReservationNumber": "आरक्षण #",
     "colGuest": "अतिथि",
     "colRoomBed": "कमरा / बेड",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "क्या इस प्रविष्टि को गेस्ट बुक से हटाना है?",
     "toastSaveFailed": "सहेजने में विफल",
     "toastRemoveFailed": "प्रविष्टि हटाने में विफल",
-    "recordDescriptor": "सर्बियाई पुलिस-पंजीकरण रिकॉर्ड"
+    "recordDescriptor": "सर्बियाई पुलिस-पंजीकरण रिकॉर्ड",
+    "checkOutAfterCheckIn": "चेक-आउट तारीख चेक-इन तारीख के बाद होनी चाहिए"
   },
   "channels": {
     "errorLoading": "चैनल लोड करने में त्रुटि",

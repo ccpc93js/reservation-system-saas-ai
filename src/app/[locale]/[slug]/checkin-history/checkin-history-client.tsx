@@ -212,6 +212,12 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
 
   const handleSave = async () => {
     if (!editingId || !editForm) return;
+    // Hard guard: mobile date pickers often ignore the `min` attr, so a
+    // check-out on/before check-in could be picked. Block it before saving.
+    if (editForm.check_in && editForm.check_out && editForm.check_out <= editForm.check_in) {
+      alert(t("checkOutAfterCheckIn"));
+      return;
+    }
     setSaving(true);
     try {
       const body: Record<string, any> = { ...editForm };
@@ -528,7 +534,7 @@ export default function CheckinHistoryClient({ records, orgName, orgCurrency, or
                   </div>
                   <div>
                     <label className={labelCls}>{t("checkOutDate")}</label>
-                    <input type="date" className={inputCls} value={editForm.check_out} onChange={(e) => set("check_out", e.target.value)} />
+                    <input type="date" className={inputCls} value={editForm.check_out} min={editForm.check_in || undefined} onChange={(e) => set("check_out", e.target.value)} />
                   </div>
                   <div>
                     <label className={labelCls}>{t("actualArrival")}</label>

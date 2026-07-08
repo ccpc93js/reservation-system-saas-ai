@@ -14,7 +14,9 @@
       "settingsTeam": "Équipe",
       "settingsBilling": "Facturation et forfait",
       "settings": "Paramètres",
-      "housekeeping": "Ménage"
+      "housekeeping": "Ménage",
+      "checkinHistory": "Registre des clients",
+      "help": "Aide"
     },
     "searchPlaceholder": "Rechercher des clients, réservations...",
     "clearSearch": "Effacer la recherche",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} lits",
       "selectAtLeastOneBed": "Sélectionnez au moins un lit",
       "pickCheckoutToChooseBeds": "Sélectionnez une date de départ pour choisir les lits",
-      "selectDatePlaceholder": "Sélectionnez une date"
+      "selectDatePlaceholder": "Sélectionnez une date",
+      "checkOutAfterCheckIn": "La date de départ doit être postérieure à la date d’arrivée"
     },
     "editReservation": {
       "loading": "Chargement...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "Échec de l'ajout du lit",
         "bedRemoveConfirm": "Retirer le lit {name} de cette réservation ?",
         "bedRemoved": "Lit {name} retiré",
-        "bedRemoveFailed": "Échec du retrait du lit"
+        "bedRemoveFailed": "Échec du retrait du lit",
+        "extendDateInvalid": "La nouvelle date de départ doit être postérieure à la date de départ actuelle"
       },
       "paymentMethod": "Mode de paiement",
       "selectMethod": "Choisir un mode",
@@ -460,6 +464,7 @@
     "allStatuses": "Tous les statuts",
     "checkInFrom": "Arrivée à partir de",
     "checkInTo": "Arrivée jusqu'à",
+    "selectDatePlaceholder": "Sélectionnez une date",
     "colReservationNumber": "N° de réservation",
     "colGuest": "Client",
     "colRoomBed": "Chambre / Lit",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "Retirer cette entrée du registre des clients ?",
     "toastSaveFailed": "Échec de l'enregistrement",
     "toastRemoveFailed": "Échec de la suppression de l'entrée",
-    "recordDescriptor": "Registre de police serbe"
+    "recordDescriptor": "Registre de police serbe",
+    "checkOutAfterCheckIn": "La date de départ doit être postérieure à celle d'arrivée"
   },
   "channels": {
     "errorLoading": "Erreur lors du chargement des canaux",

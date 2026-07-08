@@ -14,7 +14,9 @@
       "settingsTeam": "الفريق",
       "settingsBilling": "الفوترة والخطة",
       "settings": "الإعدادات",
-      "housekeeping": "التدبير المنزلي"
+      "housekeeping": "التدبير المنزلي",
+      "checkinHistory": "سجل النزلاء",
+      "help": "مساعدة"
     },
     "searchPlaceholder": "ابحث عن النزلاء أو الحجوزات...",
     "clearSearch": "مسح البحث",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} أسرّة",
       "selectAtLeastOneBed": "اختر سريرًا واحدًا على الأقل",
       "pickCheckoutToChooseBeds": "اختر تاريخ المغادرة لاختيار الأسرّة",
-      "selectDatePlaceholder": "اختر تاريخًا"
+      "selectDatePlaceholder": "اختر تاريخًا",
+      "checkOutAfterCheckIn": "تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول"
     },
     "editReservation": {
       "loading": "جارٍ التحميل...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "فشل في إضافة السرير",
         "bedRemoveConfirm": "إزالة السرير {name} من هذا الحجز؟",
         "bedRemoved": "تمت إزالة السرير {name}",
-        "bedRemoveFailed": "فشل في إزالة السرير"
+        "bedRemoveFailed": "فشل في إزالة السرير",
+        "extendDateInvalid": "يجب أن يكون تاريخ المغادرة الجديد بعد تاريخ المغادرة الحالي"
       },
       "paymentMethod": "طريقة الدفع",
       "selectMethod": "اختر الطريقة",
@@ -460,6 +464,7 @@
     "allStatuses": "جميع الحالات",
     "checkInFrom": "تسجيل الوصول من",
     "checkInTo": "تسجيل الوصول إلى",
+    "selectDatePlaceholder": "اختر تاريخًا",
     "colReservationNumber": "رقم الحجز",
     "colGuest": "النزيل",
     "colRoomBed": "الغرفة / السرير",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "إزالة هذا الإدخال من سجل النزلاء؟",
     "toastSaveFailed": "فشل الحفظ",
     "toastRemoveFailed": "فشل إزالة الإدخال",
-    "recordDescriptor": "سجل تسجيل الشرطة الصربية"
+    "recordDescriptor": "سجل تسجيل الشرطة الصربية",
+    "checkOutAfterCheckIn": "يجب أن يكون تاريخ المغادرة بعد تاريخ الوصول"
   },
   "channels": {
     "errorLoading": "خطأ في تحميل القنوات",

@@ -14,7 +14,9 @@
       "settingsTeam": "Team",
       "settingsBilling": "Billing & Plan",
       "settings": "Settings",
-      "housekeeping": "Housekeeping"
+      "housekeeping": "Housekeeping",
+      "checkinHistory": "Guest Book",
+      "help": "Help"
     },
     "searchPlaceholder": "Search guests, reservations...",
     "clearSearch": "Clear search",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} beds",
       "selectAtLeastOneBed": "Select at least one bed",
       "pickCheckoutToChooseBeds": "Select a check-out date to choose beds",
-      "selectDatePlaceholder": "Select a date"
+      "selectDatePlaceholder": "Select a date",
+      "checkOutAfterCheckIn": "Check-out date must be after check-in date"
     },
     "editReservation": {
       "loading": "Loading...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "Failed to add bed",
         "bedRemoveConfirm": "Remove bed {name} from this reservation?",
         "bedRemoved": "Bed {name} removed",
-        "bedRemoveFailed": "Failed to remove bed"
+        "bedRemoveFailed": "Failed to remove bed",
+        "extendDateInvalid": "New check-out must be after the current check-out date"
       },
       "paymentMethod": "Payment Method",
       "selectMethod": "Select method",
@@ -460,6 +464,7 @@
     "allStatuses": "All Statuses",
     "checkInFrom": "Check-in From",
     "checkInTo": "Check-in To",
+    "selectDatePlaceholder": "Select a date",
     "colReservationNumber": "Reservation #",
     "colGuest": "Guest",
     "colRoomBed": "Room / Bed",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "Remove this entry from the Guest Book?",
     "toastSaveFailed": "Failed to save",
     "toastRemoveFailed": "Failed to remove entry",
-    "recordDescriptor": "Serbian police-registration record"
+    "recordDescriptor": "Serbian police-registration record",
+    "checkOutAfterCheckIn": "Check-out date must be after check-in date"
   },
   "channels": {
     "errorLoading": "Error loading channels",

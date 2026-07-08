@@ -14,7 +14,9 @@
       "settingsTeam": "Equipo",
       "settingsBilling": "Facturación y plan",
       "settings": "Configuración",
-      "housekeeping": "Limpieza"
+      "housekeeping": "Limpieza",
+      "checkinHistory": "Registro de huéspedes",
+      "help": "Ayuda"
     },
     "searchPlaceholder": "Buscar huéspedes, reservas...",
     "clearSearch": "Borrar búsqueda",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} camas",
       "selectAtLeastOneBed": "Selecciona al menos una cama",
       "pickCheckoutToChooseBeds": "Selecciona la fecha de salida para elegir las camas",
-      "selectDatePlaceholder": "Selecciona una fecha"
+      "selectDatePlaceholder": "Selecciona una fecha",
+      "checkOutAfterCheckIn": "La fecha de salida debe ser posterior a la fecha de entrada"
     },
     "editReservation": {
       "loading": "Cargando...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "No se pudo agregar la cama",
         "bedRemoveConfirm": "¿Quitar la cama {name} de esta reserva?",
         "bedRemoved": "Cama {name} quitada",
-        "bedRemoveFailed": "No se pudo quitar la cama"
+        "bedRemoveFailed": "No se pudo quitar la cama",
+        "extendDateInvalid": "La nueva fecha de salida debe ser posterior a la fecha de salida actual"
       },
       "paymentMethod": "Método de pago",
       "selectMethod": "Seleccionar método",
@@ -460,6 +464,7 @@
     "allStatuses": "Todos los estados",
     "checkInFrom": "Entrada desde",
     "checkInTo": "Entrada hasta",
+    "selectDatePlaceholder": "Selecciona una fecha",
     "colReservationNumber": "N.º de reserva",
     "colGuest": "Huésped",
     "colRoomBed": "Habitación / Cama",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "¿Eliminar esta entrada del libro de huéspedes?",
     "toastSaveFailed": "Error al guardar",
     "toastRemoveFailed": "Error al eliminar la entrada",
-    "recordDescriptor": "Registro policial serbio"
+    "recordDescriptor": "Registro policial serbio",
+    "checkOutAfterCheckIn": "La fecha de salida debe ser posterior a la de entrada"
   },
   "channels": {
     "errorLoading": "Error al cargar los canales",

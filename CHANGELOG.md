@@ -1,3 +1,18 @@
+## [1e9689f] - 2026-07-07
+
+refactor: reusable ExportCsvButton component
+
+Extracts the Guest Book CSV export model into a shared
+components/ui/export-csv-button.tsx: typed columns (header + value
+accessor), static rows or async fetchRows (export beyond the current
+page), UTF-8 BOM, CSV escaping, auto date-stamped filename, gradient or
+outline variant, empty/error toasts.
+
+Adopted in Guest Book (checkin-history, gradient), Guest Directory and
+Reservations (outline) - replacing three inline exporters.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [d1edc40] - 2026-07-07
 
 feat: export Reservations to CSV

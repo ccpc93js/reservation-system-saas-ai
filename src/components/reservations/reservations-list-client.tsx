@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown, RefreshCw } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { Search, X, ChevronLeft, ChevronRight, BookOpen, ChevronUp, ChevronDown, RefreshCw, Calendar } from "lucide-react";
 import ExportCsvButton from "@/components/ui/export-csv-button";
 import { toast } from "sonner";
 import EditReservationDrawer from "@/components/calendar/edit-reservation-drawer";
@@ -59,6 +59,17 @@ export default function ReservationsListClient({
   orgId,
 }: ReservationsListClientProps) {
   const t = useTranslations("reservations");
+  const locale = useLocale();
+  // European dd/mm/yyyy display with a localized weekday, matching the reservation
+  // drawer. Parse with explicit local time so a "YYYY-MM-DD" never shifts by timezone.
+  const fmtDate = (s?: string) => {
+    if (!s) return "";
+    const d = new Date(`${s}T00:00:00`);
+    const weekday = new Intl.DateTimeFormat(locale, { weekday: "short" }).format(d);
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    return `${weekday}, ${dd}/${mm}/${d.getFullYear()}`;
+  };
   const statusLabels: Record<string, string> = {
     pending: t("statusOptions.pending"),
     confirmed: t("statusOptions.confirmed"),
@@ -428,23 +439,45 @@ export default function ReservationsListClient({
           <label className="block text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
             {t("checkInFrom")}
           </label>
-          <input
-            type="date"
-            value={filters.checkInFrom}
-            onChange={(e) => setFilters({ ...filters, checkInFrom: e.target.value })}
-            className="w-full px-3 py-2 rounded-lg border border-border text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
-          />
+          {/* Transparent native date input over a locale-formatted display,
+              so the value reads dd/mm/yyyy (matching the reservation drawer). */}
+          <div className="relative">
+            <div className="w-full rounded-lg border border-border px-3 py-2 text-sm bg-surface flex items-center justify-between pointer-events-none">
+              <span className={filters.checkInFrom ? "text-foreground" : "text-muted-foreground"}>
+                {filters.checkInFrom ? fmtDate(filters.checkInFrom) : t("selectDatePlaceholder")}
+              </span>
+              <Calendar className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <input
+              type="date"
+              lang={locale}
+              value={filters.checkInFrom}
+              onClick={(e) => { try { (e.currentTarget as HTMLInputElement).showPicker(); } catch { /* older browsers */ } }}
+              onChange={(e) => setFilters({ ...filters, checkInFrom: e.target.value })}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
             {t("checkInTo")}
           </label>
-          <input
-            type="date"
-            value={filters.checkInTo}
-            onChange={(e) => setFilters({ ...filters, checkInTo: e.target.value })}
-            className="w-full px-3 py-2 rounded-lg border border-border text-sm bg-surface text-foreground focus:outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
-          />
+          <div className="relative">
+            <div className="w-full rounded-lg border border-border px-3 py-2 text-sm bg-surface flex items-center justify-between pointer-events-none">
+              <span className={filters.checkInTo ? "text-foreground" : "text-muted-foreground"}>
+                {filters.checkInTo ? fmtDate(filters.checkInTo) : t("selectDatePlaceholder")}
+              </span>
+              <Calendar className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <input
+              type="date"
+              lang={locale}
+              value={filters.checkInTo}
+              onClick={(e) => { try { (e.currentTarget as HTMLInputElement).showPicker(); } catch { /* older browsers */ } }}
+              onChange={(e) => setFilters({ ...filters, checkInTo: e.target.value })}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
       </div>
 

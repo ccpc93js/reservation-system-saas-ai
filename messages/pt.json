@@ -14,7 +14,9 @@
       "settingsTeam": "Equipe",
       "settingsBilling": "Faturamento e plano",
       "settings": "Configurações",
-      "housekeeping": "Limpeza"
+      "housekeeping": "Limpeza",
+      "checkinHistory": "Registro de hóspedes",
+      "help": "Ajuda"
     },
     "searchPlaceholder": "Buscar hóspedes, reservas...",
     "clearSearch": "Limpar busca",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} camas",
       "selectAtLeastOneBed": "Selecione pelo menos uma cama",
       "pickCheckoutToChooseBeds": "Selecione a data de saída para escolher as camas",
-      "selectDatePlaceholder": "Selecione uma data"
+      "selectDatePlaceholder": "Selecione uma data",
+      "checkOutAfterCheckIn": "A data de saída deve ser posterior à data de entrada"
     },
     "editReservation": {
       "loading": "Carregando...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "Falha ao adicionar cama",
         "bedRemoveConfirm": "Remover a cama {name} desta reserva?",
         "bedRemoved": "Cama {name} removida",
-        "bedRemoveFailed": "Falha ao remover cama"
+        "bedRemoveFailed": "Falha ao remover cama",
+        "extendDateInvalid": "A nova data de saída deve ser posterior à data de saída atual"
       },
       "paymentMethod": "Método de pagamento",
       "selectMethod": "Selecionar método",
@@ -460,6 +464,7 @@
     "allStatuses": "Todos os status",
     "checkInFrom": "Entrada a partir de",
     "checkInTo": "Entrada até",
+    "selectDatePlaceholder": "Selecione uma data",
     "colReservationNumber": "Nº de reserva",
     "colGuest": "Hóspede",
     "colRoomBed": "Quarto / Cama",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "Remover esta entrada do livro de hóspedes?",
     "toastSaveFailed": "Falha ao salvar",
     "toastRemoveFailed": "Falha ao remover a entrada",
-    "recordDescriptor": "Registro policial sérvio"
+    "recordDescriptor": "Registro policial sérvio",
+    "checkOutAfterCheckIn": "A data de saída deve ser posterior à de entrada"
   },
   "channels": {
     "errorLoading": "Erro ao carregar canais",

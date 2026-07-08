@@ -585,6 +585,10 @@ export default function EditReservationDrawer({
 
   const handleExtend = async () => {
     if (!extendDate || !extendRate) { toast.error(t("toasts.extendMissingFields")); return; }
+    // Hard guard: mobile date pickers often ignore the `min` attr, so a new
+    // check-out on/before the current one could be picked. Block it here.
+    const currentCheckOut = reservation?.check_out ?? "";
+    if (currentCheckOut && extendDate <= currentCheckOut) { toast.error(t("toasts.extendDateInvalid")); return; }
     setIsExtending(true);
     try {
       const res = await fetch(`/api/reservations/${reservationId}/extend`, {

@@ -14,7 +14,9 @@
       "settingsTeam": "টিম",
       "settingsBilling": "বিলিং ও প্ল্যান",
       "settings": "সেটিংস",
-      "housekeeping": "হাউসকিপিং"
+      "housekeeping": "হাউসকিপিং",
+      "checkinHistory": "অতিথি রেজিস্ট্রি",
+      "help": "সহায়তা"
     },
     "searchPlaceholder": "অতিথি, রিজার্ভেশন খুঁজুন...",
     "clearSearch": "খোঁজ মুছুন",
@@ -242,7 +244,8 @@
       "bedsCount": "{count}টি বেড",
       "selectAtLeastOneBed": "অন্তত একটি বেড নির্বাচন করুন",
       "pickCheckoutToChooseBeds": "বেড নির্বাচন করতে চেক-আউট তারিখ বেছে নিন",
-      "selectDatePlaceholder": "একটি তারিখ নির্বাচন করুন"
+      "selectDatePlaceholder": "একটি তারিখ নির্বাচন করুন",
+      "checkOutAfterCheckIn": "চেক-আউট তারিখ চেক-ইন তারিখের পরে হতে হবে"
     },
     "editReservation": {
       "loading": "লোড হচ্ছে...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "বেড যোগ করা ব্যর্থ",
         "bedRemoveConfirm": "এই সংরক্ষণ থেকে বেড {name} সরাবেন?",
         "bedRemoved": "বেড {name} সরানো হয়েছে",
-        "bedRemoveFailed": "বেড সরানো ব্যর্থ"
+        "bedRemoveFailed": "বেড সরানো ব্যর্থ",
+        "extendDateInvalid": "নতুন চেক-আউট তারিখ বর্তমান চেক-আউট তারিখের পরে হতে হবে"
       },
       "paymentMethod": "পেমেন্ট পদ্ধতি",
       "selectMethod": "পদ্ধতি নির্বাচন",
@@ -460,6 +464,7 @@
     "allStatuses": "সব অবস্থা",
     "checkInFrom": "চেক-ইন শুরু",
     "checkInTo": "চেক-ইন শেষ",
+    "selectDatePlaceholder": "একটি তারিখ নির্বাচন করুন",
     "colReservationNumber": "রিজার্ভেশন #",
     "colGuest": "অতিথি",
     "colRoomBed": "রুম / বেড",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "গেস্ট বুক থেকে এই এন্ট্রি সরাতে চান?",
     "toastSaveFailed": "সংরক্ষণ ব্যর্থ",
     "toastRemoveFailed": "এন্ট্রি সরাতে ব্যর্থ",
-    "recordDescriptor": "সার্বিয়ান পুলিশ-নিবন্ধন রেকর্ড"
+    "recordDescriptor": "সার্বিয়ান পুলিশ-নিবন্ধন রেকর্ড",
+    "checkOutAfterCheckIn": "চেক-আউট তারিখ অবশ্যই চেক-ইন তারিখের পরে হতে হবে"
   },
   "channels": {
     "errorLoading": "চ্যানেল লোড করতে ত্রুটি",

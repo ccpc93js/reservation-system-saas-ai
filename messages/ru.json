@@ -14,7 +14,9 @@
       "settingsTeam": "Команда",
       "settingsBilling": "Оплата и тариф",
       "settings": "Настройки",
-      "housekeeping": "Уборка номеров"
+      "housekeeping": "Уборка номеров",
+      "checkinHistory": "Журнал гостей",
+      "help": "Помощь"
     },
     "searchPlaceholder": "Поиск гостей, бронирований...",
     "clearSearch": "Очистить поиск",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} кроватей",
       "selectAtLeastOneBed": "Выберите хотя бы одну кровать",
       "pickCheckoutToChooseBeds": "Выберите дату выезда, чтобы выбрать кровати",
-      "selectDatePlaceholder": "Выберите дату"
+      "selectDatePlaceholder": "Выберите дату",
+      "checkOutAfterCheckIn": "Дата выезда должна быть позже даты заезда"
     },
     "editReservation": {
       "loading": "Загрузка...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "Не удалось добавить кровать",
         "bedRemoveConfirm": "Убрать кровать {name} из этого бронирования?",
         "bedRemoved": "Кровать {name} убрана",
-        "bedRemoveFailed": "Не удалось убрать кровать"
+        "bedRemoveFailed": "Не удалось убрать кровать",
+        "extendDateInvalid": "Новая дата выезда должна быть позже текущей даты выезда"
       },
       "paymentMethod": "Способ оплаты",
       "selectMethod": "Выберите способ",
@@ -460,6 +464,7 @@
     "allStatuses": "Все статусы",
     "checkInFrom": "Заезд с",
     "checkInTo": "Заезд по",
+    "selectDatePlaceholder": "Выберите дату",
     "colReservationNumber": "№ брони",
     "colGuest": "Гость",
     "colRoomBed": "Номер / Кровать",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "Удалить эту запись из книги гостей?",
     "toastSaveFailed": "Не удалось сохранить",
     "toastRemoveFailed": "Не удалось удалить запись",
-    "recordDescriptor": "Сербский полицейский регистрационный учёт"
+    "recordDescriptor": "Сербский полицейский регистрационный учёт",
+    "checkOutAfterCheckIn": "Дата выезда должна быть позже даты заезда"
   },
   "channels": {
     "errorLoading": "Ошибка загрузки каналов",

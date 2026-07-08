@@ -14,7 +14,9 @@
       "settingsTeam": "团队",
       "settingsBilling": "账单与套餐",
       "settings": "设置",
-      "housekeeping": "客房清洁"
+      "housekeeping": "客房清洁",
+      "checkinHistory": "客人登记簿",
+      "help": "帮助"
     },
     "searchPlaceholder": "搜索客人、预订...",
     "clearSearch": "清除搜索",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} 个床位",
       "selectAtLeastOneBed": "请至少选择一个床位",
       "pickCheckoutToChooseBeds": "请选择退房日期以选择床位",
-      "selectDatePlaceholder": "选择日期"
+      "selectDatePlaceholder": "选择日期",
+      "checkOutAfterCheckIn": "退房日期必须晚于入住日期"
     },
     "editReservation": {
       "loading": "加载中...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "添加床位失败",
         "bedRemoveConfirm": "从此预订中移除床位 {name}？",
         "bedRemoved": "已移除床位 {name}",
-        "bedRemoveFailed": "移除床位失败"
+        "bedRemoveFailed": "移除床位失败",
+        "extendDateInvalid": "新退房日期必须晚于当前退房日期"
       },
       "paymentMethod": "付款方式",
       "selectMethod": "选择方式",
@@ -460,6 +464,7 @@
     "allStatuses": "所有状态",
     "checkInFrom": "入住起始日期",
     "checkInTo": "入住截止日期",
+    "selectDatePlaceholder": "选择日期",
     "colReservationNumber": "预订号",
     "colGuest": "客人",
     "colRoomBed": "房间 / 床位",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "确定要从住客登记簿中移除此条目吗？",
     "toastSaveFailed": "保存失败",
     "toastRemoveFailed": "移除条目失败",
-    "recordDescriptor": "塞尔维亚警方登记记录"
+    "recordDescriptor": "塞尔维亚警方登记记录",
+    "checkOutAfterCheckIn": "退房日期必须晚于入住日期"
   },
   "channels": {
     "errorLoading": "加载渠道时出错",

@@ -86,6 +86,8 @@ export default function NewReservationDrawer({
     watch,
     reset,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<CreateReservationInput>({
     resolver: yupResolver(createReservationSchema),
     defaultValues: {
@@ -430,6 +432,14 @@ export default function NewReservationDrawer({
                   }}
                   onChange={(e) => {
                     register("check_out").onChange(e);
+                    // Hard guard: mobile date pickers often ignore the `min` attr,
+                    // letting a check-out on/before check-in be picked. Reject it
+                    // here so it never reaches availability or submit.
+                    if (e.target.value && checkIn && e.target.value <= checkIn) {
+                      setError("check_out", { type: "manual", message: t("checkOutAfterCheckIn") });
+                      return;
+                    }
+                    clearErrors("check_out");
                     if (e.target.value && checkIn) checkAvailability(checkIn, e.target.value);
                   }}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"

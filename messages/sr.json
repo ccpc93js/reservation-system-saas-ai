@@ -14,7 +14,9 @@
       "settingsTeam": "Tim",
       "settingsBilling": "Naplata i plan",
       "settings": "Podešavanja",
-      "housekeeping": "Domaćinstvo"
+      "housekeeping": "Domaćinstvo",
+      "checkinHistory": "Knjiga gostiju",
+      "help": "Pomoć"
     },
     "searchPlaceholder": "Pretraži goste, rezervacije...",
     "clearSearch": "Obriši pretragu",
@@ -242,7 +244,8 @@
       "bedsCount": "{count} kreveta",
       "selectAtLeastOneBed": "Izaberite bar jedan krevet",
       "pickCheckoutToChooseBeds": "Izaberite datum odjave da biste izabrali krevete",
-      "selectDatePlaceholder": "Izaberite datum"
+      "selectDatePlaceholder": "Izaberite datum",
+      "checkOutAfterCheckIn": "Datum odjave mora biti nakon datuma prijave"
     },
     "editReservation": {
       "loading": "Učitavanje...",
@@ -364,7 +367,8 @@
         "bedAddFailed": "Dodavanje kreveta nije uspelo",
         "bedRemoveConfirm": "Ukloniti krevet {name} iz ove rezervacije?",
         "bedRemoved": "Krevet {name} uklonjen",
-        "bedRemoveFailed": "Uklanjanje kreveta nije uspelo"
+        "bedRemoveFailed": "Uklanjanje kreveta nije uspelo",
+        "extendDateInvalid": "Novi datum odjave mora biti nakon trenutnog datuma odjave"
       },
       "paymentMethod": "Način plaćanja",
       "selectMethod": "Izaberite način",
@@ -460,6 +464,7 @@
     "allStatuses": "Svi statusi",
     "checkInFrom": "Prijava od",
     "checkInTo": "Prijava do",
+    "selectDatePlaceholder": "Izaberite datum",
     "colReservationNumber": "Broj rezervacije",
     "colGuest": "Gost",
     "colRoomBed": "Soba / Krevet",
@@ -1107,7 +1112,8 @@
     "confirmRemove": "Ukloniti ovaj unos iz knjige gostiju?",
     "toastSaveFailed": "Čuvanje nije uspelo",
     "toastRemoveFailed": "Uklanjanje unosa nije uspelo",
-    "recordDescriptor": "Srpska policijska evidencija prijava"
+    "recordDescriptor": "Srpska policijska evidencija prijava",
+    "checkOutAfterCheckIn": "Datum odjave mora biti posle datuma prijave"
   },
   "channels": {
     "errorLoading": "Greška pri učitavanju kanala",
