@@ -1,3 +1,34 @@
+## [554010d] - 2026-07-22
+
+feat: Channex integration Phases 1-2 (schema, client, provisioning)
+
+Groundwork for API-based OTA connections alongside the existing iCal
+channels (two-tier: iCal free, Channex Pro), and app-driven white-label
+provisioning so the hostel owner never touches the Channex dashboard.
+
+Phase 1 — schema & client:
+- Migration 20260721_channex_phase1: provider column on channels
+  (default 'ical', existing rows untouched) + channel_provider_links
+  mapping table (generic kind/local_id -> channex_id) with RLS.
+- src/lib/channels/channex.ts: thin Channex REST client (data envelope
+  unwrap, normalized ChannexError, transient retries, cents boundary);
+  property/room_type/rate_plan CRUD, ARI push/readback, *-options reads.
+- GET /api/channels/channex/ping: manager-only connectivity check.
+
+Phase 2 — provisioning:
+- src/lib/channels/channex-provision.ts: provisionOrg() mirrors property
+  -> room types -> one rate plan each from organizations + room_types,
+  idempotent (POST unmapped / PUT mapped), ids persisted in
+  channel_provider_links. dorm -> per-bed (occ 1), private -> per-room
+  (occ = capacity); rate-plan occupancy clamped to occ_adults.
+- POST /api/channels/channex/provision: manager-only (200 ok / 207 partial).
+
+Verified against Channex staging: property list, options endpoints, and
+full create chain (property/room_type/rate_plan). occ_children/occ_infants
+are required despite the docs (noted in the skill reference).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [b2a2dd7] - 2026-07-21
 
 @
@@ -18,6 +49,24 @@ Reservations filter date inputs now use the reservation drawers
 fix: mobile date input format, checkout>checkin guard, navbar title
 
 Reservations filter date inputs now use the reservation drawers
+
+## Unreleased - 2026-07-22
+
+feat: Channex integration Phase 3 (inbound bookings)
+
+Receives OTA bookings from Channex via revision feed + webhook, into the
+existing multi-bed reservation flow.
+
+- Migration 20260722_channex_phase3_bookings: create_channex_reservation()
+  assigns N free beds atomically under one advisory lock, one reservation +
+  N items with real prices, returns null on overbooking (books nothing).
+  Partial index on reservations(external_id) for booking dedupe.
+- src/lib/channels/channex-bookings.ts: applyRevision() (new → create,
+  cancelled → cancel, modified → flag a human, overbooking → notify) +
+  drainFeed() (bounded, acks on success, leaves errors for retry).
+- POST /api/channels/channex/feed: cron/manager feed poller (account-wide).
+- POST /api/channels/channex/webhook: shared-secret, pull-by-id → apply → ack.
+- Client: revision feed/ack/get, booking list, webhook CRUD.
 
 ## Unreleased - 2026-07-21
 

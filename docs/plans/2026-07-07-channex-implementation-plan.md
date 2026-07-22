@@ -95,7 +95,20 @@ NOTE: needs the Phase 1 migration applied first (writes channel_provider_links).
   update Channex (or flag "out of sync" + a Sync Structure button — simpler
   v1).
 
-### Phase 3 — Booking ingestion (webhook)
+### Phase 3 — Booking ingestion (webhook)  ✅ DONE (2026-07-22)
+
+Feed poller + webhook, both funneling into `applyRevision`
+(`src/lib/channels/channex-bookings.ts`). Migration
+`20260722_channex_phase3_bookings.sql` adds `create_channex_reservation`
+(multi-bed atomic assign under one advisory lock, real prices, null on
+overbooking) + a partial index on `reservations(external_id)`. Routes:
+`POST /api/channels/channex/feed` (cron/manager, drains account-wide feed,
+acks on success, leaves hard errors un-acked + alerts) and `POST
+/api/channels/channex/webhook` (shared-secret, pulls revision by id → apply
+→ ack). new → create; cancelled → cancel by external_id; modified → flag +
+notify a human (no auto-mutate); overbooking → notify, book nothing. Dedupe
+by Channex booking_id in `reservations.external_id`. TODO: schedule the
+poller (no vercel.json cron yet) and register the webhook once per env.
 
 - `POST /api/channels/channex/webhook` — signature-verified.
 - Events: booking new / modification / cancellation.

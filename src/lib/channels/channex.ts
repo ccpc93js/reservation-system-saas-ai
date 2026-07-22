@@ -344,7 +344,107 @@ export const channex = {
       },
     });
   },
+
+  // ── Inbound bookings ──
+
+  /** One page of unacked revisions (oldest-first). Drain until meta.total 0. */
+  bookingFeed(page = 1): Promise<FeedPage> {
+    return channexRequest<FeedPage>("/booking_revisions/feed", { query: { page } });
+  },
+
+  /** One revision by id (use after a webhook — pull is source of truth). */
+  getRevision(id: string): Promise<Revision> {
+    return channexRequest<Revision>(`/booking_revisions/${id}`);
+  },
+
+  /** Acknowledge a revision so it leaves the feed. Ack only after apply. */
+  ackRevision(id: string): Promise<unknown> {
+    return channexRequest(`/booking_revisions/${id}/ack`, { method: "POST", body: {} });
+  },
+
+  /** Durable booking list — MANUAL, time-scoped recovery after a >30-min gap. */
+  listBookings(propertyId: string, insertedSince?: string): Promise<unknown> {
+    return channexRequest("/bookings", {
+      query: { "filter[property_id]": propertyId, "filter[inserted_at][gte]": insertedSince },
+    });
+  },
+
+  // ── Webhooks (registration) ──
+
+  listWebhooks(): Promise<ChannexEntity[]> {
+    return channexRequest<ChannexEntity[]>("/webhooks");
+  },
+
+  /** Register a callback for booking events. property_id null = all properties. */
+  createWebhook(attrs: {
+    callback_url: string;
+    event_mask?: string;
+    property_id?: string | null;
+    is_active?: boolean;
+    send_data?: boolean;
+  }): Promise<ChannexEntity> {
+    return channexRequest<ChannexEntity>("/webhooks", {
+      method: "POST",
+      body: {
+        webhook: {
+          event_mask: "booking_new;booking_modification;booking_cancellation",
+          is_active: true,
+          send_data: false,
+          ...attrs,
+        },
+      },
+    });
+  },
+
+  deleteWebhook(id: string): Promise<unknown> {
+    return channexRequest(`/webhooks/${id}`, { method: "DELETE" });
+  },
 };
+
+// ─── Inbound bookings (revision feed) ────────────────────────────────────────
+
+export interface RevisionRoom {
+  checkin_date?: string;
+  checkout_date?: string;
+  room_type_id?: string;
+  rate_plan_id?: string;
+  amount?: string;
+  occupancy?: { adults?: number; children?: number; infants?: number };
+  days?: Record<string, string>;
+  guests?: unknown[];
+}
+
+export interface RevisionAttributes {
+  booking_id: string;
+  status: "new" | "modified" | "cancelled";
+  property_id: string;
+  ota_name?: string;
+  ota_reservation_code?: string;
+  arrival_date?: string;
+  departure_date?: string;
+  amount?: string; // major units, string
+  currency?: string;
+  payment_collect?: "ota" | "property";
+  customer?: {
+    name?: string;
+    surname?: string;
+    mail?: string;
+    phone?: string;
+    country?: string;
+    address?: string;
+  };
+  rooms?: RevisionRoom[];
+}
+
+export interface Revision {
+  id: string; // revision UUID (ack target)
+  attributes: RevisionAttributes;
+}
+
+export interface FeedPage {
+  data: Revision[];
+  meta: { total: number; limit: number; page: number };
+}
 
 // Convert a major-unit amount (e.g. 80 or "80.00") to Channex cents. Money
 // crosses into the API here and nowhere else.
