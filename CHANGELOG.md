@@ -1,3 +1,23 @@
+## [f73dacf] - 2026-07-22
+
+docs: dedupe CHANGELOG Channex entries
+
+Collapse the duplicate [4670c80] block and the triplicated [b2a2dd7]
+(2026-07-21) entries the changelog hook re-prepended, and drop the manual
+Unreleased blocks now superseded by the committed [hash] entries.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## Unreleased - 2026-07-22
+
+fix: make CHANGELOG auto-update hook idempotent
+
+The .claude/update-docs.sh post-commit hook prepended every commit message
+unconditionally, so a manual CHANGELOG entry + the hook's own entry (and any
+re-run) produced duplicate/triplicate blocks. It now skips when the commit
+hash or its subject line is already present, and strips stray "@" marker
+lines. No-op when the entry was written by hand before committing.
+
 ## [4670c80] - 2026-07-22
 
 feat: Channex integration Phase 3 (inbound bookings)
