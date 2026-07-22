@@ -126,9 +126,12 @@ export type Database = {
         Row: {
           allotment: number | null
           bed_id: string | null
+          channex_channel_id: string | null
+          channex_status: string | null
           color: string
           created_at: string
           export_token: string
+          hotel_id: string | null
           ical_url: string | null
           id: string
           is_active: boolean
@@ -146,9 +149,12 @@ export type Database = {
         Insert: {
           allotment?: number | null
           bed_id?: string | null
+          channex_channel_id?: string | null
+          channex_status?: string | null
           color?: string
           created_at?: string
           export_token?: string
+          hotel_id?: string | null
           ical_url?: string | null
           id?: string
           is_active?: boolean
@@ -166,9 +172,12 @@ export type Database = {
         Update: {
           allotment?: number | null
           bed_id?: string | null
+          channex_channel_id?: string | null
+          channex_status?: string | null
           color?: string
           created_at?: string
           export_token?: string
+          hotel_id?: string | null
           ical_url?: string | null
           id?: string
           is_active?: boolean

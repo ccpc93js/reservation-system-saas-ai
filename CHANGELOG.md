@@ -1,8 +1,44 @@
+## [f4581f4] - 2026-07-22
+
+feat: Channex Channel API client methods (Phase 5 groundwork)
+
+Adds the channel-connection endpoints to the client: groups, list/get
+channels, test_connection, mapping_details, create/activate/deactivate/delete
+channel, plus ChannelCreateAttrs/ChannelRatePlanMapping types (OTA room/rate
+codes are integers). Verified live against staging: groups, test_connection
+and Booking.com mapping_details return the expected shapes. The create+activate
+step is exercised per real customer (needs the owner's Booking.com hotel id +
+extranet authorization), so it is not wired to a UI yet.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [c458882] - 2026-07-22
 
 docs: label changelog hook-fix entry with its hash
 
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## Unreleased - 2026-07-22
+
+feat: Channex integration Phase 5 (in-app Connect UI)
+
+White-label in-app OTA connection flow — the owner never opens the Channex
+dashboard. Pro-gated (reuses the existing "channels" feature).
+
+- Migration 20260722_channex_phase5_*: channex_channel_id / hotel_id /
+  channex_status columns on channels (an OTA connection = a channels row
+  with provider='channex').
+- src/lib/channels/channex-connect.ts: getConnectOptions (validate hotel id +
+  fetch OTA rooms/rates + our rate plans), connectChannel (create + activate +
+  persist), disconnectChannel (deactivate + delete).
+- Endpoints: POST /api/channels/channex/connect/options, POST|DELETE
+  /api/channels/channex/connect (manager-only, Pro).
+- src/components/channels/channex-section.tsx: "Channel Manager (API)" section
+  — sync structure/availability, connected list + disconnect, and a Connect
+  wizard with the manual OTA→rate-plan mapping screen. Mounted atop
+  ChannelsClient; i18n keys added to all 11 locales.
+- Channel API client methods verified live (groups, test_connection,
+  Booking.com mapping_details).
 
 ## Unreleased - 2026-07-22
 

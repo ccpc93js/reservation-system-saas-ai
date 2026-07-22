@@ -152,7 +152,23 @@ dates. TODO: also trigger scoped pushes from iCal-sync and direct-booking paths
 - Allotment: reuse the existing per-channel allotment semantics if exposed
   per OTA in Channex; otherwise property-level for v1.
 
-### Phase 5 — UI & self-service onboarding
+### Phase 5 — UI & self-service onboarding  ✅ DONE (2026-07-22)
+
+In-app white-label Connect flow. Backend: `channex-connect.ts`
+(getConnectOptions → test_connection + mapping_details + our rate plans;
+connectChannel → create+activate+persist as a channels row provider='channex';
+disconnectChannel → deactivate+delete). Endpoints `POST
+/api/channels/channex/connect/options`, `POST|DELETE
+/api/channels/channex/connect` — manager-only, Pro-gated via
+`hasFeature(plan,"channels")`. Migration `20260722_channex_phase5_*` adds
+`channex_channel_id`/`hotel_id`/`channex_status` to channels. UI:
+`ChannexSection` (Sync structure / Sync availability / connected list +
+disconnect / Connect wizard with the manual OTA→rate-plan mapping screen),
+mounted atop `ChannelsClient`; i18n keys added to all 11 locales (English
+values — real translation pending). Channel API shapes verified live (groups,
+test_connection, Booking.com mapping_details); create+activate is exercised per
+real customer (needs the owner's hotel id + extranet authorization).
+Follow-up: translate the new i18n keys; guided Booking.com extranet screen.
 
 - Channels page: new "API connections" section above iCal:
   - **Connect** button per OTA → runs provisioning → shows the guided

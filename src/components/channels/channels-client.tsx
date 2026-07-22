@@ -5,6 +5,7 @@ import { confirmDialog } from "@/components/ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { Plus, RefreshCw, Trash2, Edit, Copy, Check, ExternalLink, Wifi, WifiOff, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
+import ChannexSection, { type ChannexChannel } from "./channex-section";
 
 // Brand names (Booking.com, Airbnb, VRBO, Expedia, Hostelworld) stay as-is in
 // every language; only the two generic labels ("Direct", "Other") translate.
@@ -38,6 +39,9 @@ interface Channel {
   room_type_id?: string | null;
   allotment?: number | null;
   room_types?: { id: string; name: string } | null;
+  provider?: string;
+  hotel_id?: string | null;
+  channex_status?: string | null;
 }
 
 interface Bed {
@@ -254,9 +258,23 @@ export default function ChannelsClient({ initialChannels, beds, roomTypes = [], 
     toast.success(t("toastExportUrlCopied"));
   };
 
-  // Split by mapping mode
-  const roomTypeChannels = channels.filter((ch) => ch.mapping_mode === "room_type");
-  const bedChannelsAll = channels.filter((ch) => ch.mapping_mode !== "room_type");
+  // Channex (API) channels are managed by their own section; keep them out of
+  // the iCal bed/room-type groupings below.
+  const channexChannels: ChannexChannel[] = channels
+    .filter((ch) => ch.provider === "channex")
+    .map((ch) => ({
+      id: ch.id,
+      name: ch.name,
+      platform: ch.platform,
+      hotel_id: ch.hotel_id ?? null,
+      channex_status: ch.channex_status ?? null,
+      color: ch.color,
+    }));
+  const icalChannels = channels.filter((ch) => ch.provider !== "channex");
+
+  // Split by mapping mode (iCal only)
+  const roomTypeChannels = icalChannels.filter((ch) => ch.mapping_mode === "room_type");
+  const bedChannelsAll = icalChannels.filter((ch) => ch.mapping_mode !== "room_type");
 
   // Group bed channels by bed_id
   const channelsByBed = bedChannelsAll.reduce<Record<string, Channel[]>>((acc, ch) => {
@@ -447,6 +465,9 @@ export default function ChannelsClient({ initialChannels, beds, roomTypes = [], 
           {syncingAll ? t("syncingEllipsis") : t("syncAll")}
         </button>
       </div>
+
+      {/* Channex (API) connections — real-time OTA sync, Pro tier */}
+      <ChannexSection orgId={orgId} initialChannexChannels={channexChannels} roomTypes={roomTypes} />
 
       {/* Beds with channels */}
       {bedsWithChannels.length === 0 && bedsWithout.length === 0 && (
