@@ -76,6 +76,9 @@ GET  /room_types?filter[property_id]=UUID
 ATTRS: `property_id` (UUID), `title`, `count_of_rooms` (int),
 `occ_adults`, `occ_children`, `occ_infants`, `default_occupancy`
 (must be ≤ occ_adults), `room_kind` ("room" | "dorm"), `content`.
+NOTE (verified on staging 2026-07): `occ_children` and `occ_infants` are
+NOT optional in practice — omitting them 422s with `"can't be blank"`.
+Always send them (0 is fine).
 New room types start with availability 0 — you must push availability
 after creating them.
 

@@ -52,7 +52,14 @@ Everything in Part 2 can be built against the sandbox before any contract.
 
 ## Part 2 — Technical implementation (phases)
 
-### Phase 1 — Schema & provider plumbing
+### Phase 1 — Schema & provider plumbing  ✅ DONE (2026-07-21)
+
+Built against staging; `GET /properties` returns 200 and lists the org's
+property. Migration `supabase/migrations/20260721_channex_phase1.sql`, client
+`src/lib/channels/channex.ts`, connectivity route
+`GET /api/channels/channex/ping`. Mapping stored as a generic
+`channel_provider_links (kind, local_id) → channex_id` table (serves
+property/room_type/rate_plan now, booking dedupe later) rather than per-column.
 
 - `channels` table: add `provider text not null default 'ical'`
   (`'ical' | 'channex'`). Existing rows untouched.
@@ -65,7 +72,17 @@ Everything in Part 2 can be built against the sandbox before any contract.
   master key): createProperty, upsertRoomType, upsertRatePlan, updateARI,
   verifyWebhookSignature.
 
-### Phase 2 — Provisioning (self-service "Connect")
+### Phase 2 — Provisioning (self-service "Connect")  ✅ DONE (2026-07-21)
+
+App-driven, fully white-label — owner never opens Channex. `provisionOrg`
+(`src/lib/channels/channex-provision.ts`) mirrors property → room types →
+one rate plan each from PMS data, idempotent (POST unmapped / PUT mapped),
+ids stored in `channel_provider_links`. Route `POST
+/api/channels/channex/provision` (manager-only, 200 ok / 207 partial).
+Mapping: dorm → per-bed (count_of_rooms = active beds, occ 1); private →
+per-room (count_of_rooms = rooms, occ = capacity). Write payloads verified
+against staging; `occ_children`/`occ_infants` required (0) despite docs.
+NOTE: needs the Phase 1 migration applied first (writes channel_provider_links).
 
 - API route `POST /api/channels/channex/provision`:
   1. create the Channex property from the org's data (name, address,

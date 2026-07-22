@@ -1,3 +1,62 @@
+## [b2a2dd7] - 2026-07-21
+
+@
+fix: mobile date input format, checkout>checkin guard, navbar title
+
+Reservations filter date inputs now use the reservation drawers
+
+## [b2a2dd7] - 2026-07-21
+
+@
+fix: mobile date input format, checkout>checkin guard, navbar title
+
+Reservations filter date inputs now use the reservation drawers
+
+## [b2a2dd7] - 2026-07-21
+
+@
+fix: mobile date input format, checkout>checkin guard, navbar title
+
+Reservations filter date inputs now use the reservation drawers
+
+## Unreleased - 2026-07-21
+
+feat: Channex integration Phase 2 (app-driven provisioning)
+
+White-label provisioning — the hostel owner never touches the Channex
+dashboard; the app mirrors their property into Channex from PMS data.
+
+- src/lib/channels/channex-provision.ts: provisionOrg() creates/updates the
+  Channex property, room types and one rate plan each from organizations +
+  room_types, idempotent (POST unmapped / PUT mapped), ids persisted in
+  channel_provider_links. dorm → per-bed (occ 1), private → per-room
+  (occ = capacity); rate-plan occupancy clamped to occ_adults.
+- POST /api/channels/channex/provision: manager-only (200 ok / 207 partial).
+- Adds three *-options read endpoints to the client (property/room_type/
+  rate_plan) for mapping/repair.
+- Verified write payloads against staging; occ_children/occ_infants required.
+
+feat: Channex integration Phase 1 (schema + API client)
+
+Groundwork for API-based OTA connections alongside the existing iCal
+channels (two-tier: iCal free, Channex Pro). No behavior change to iCal.
+
+- Migration 20260721_channex_phase1: `provider` column on channels
+  (default 'ical', existing rows untouched) + `channel_provider_links`
+  mapping table (generic kind/local_id → channex_id) with RLS.
+- src/lib/channels/channex.ts: thin Channex REST client — {data} envelope
+  unwrap, normalized ChannexError, transient retries, cents boundary;
+  property/room_type/rate_plan + ARI push/readback methods.
+- GET /api/channels/channex/ping: manager-only connectivity check.
+- Verified against staging: GET /properties → 200.
+
+## [b2a2dd7] - 2026-07-08
+
+@
+fix: mobile date input format, checkout>checkin guard, navbar title
+
+Reservations filter date inputs now use the reservation drawers
+
 ## [1e9689f] - 2026-07-07
 
 refactor: reusable ExportCsvButton component
