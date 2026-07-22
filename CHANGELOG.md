@@ -8,7 +8,7 @@ Unreleased blocks now superseded by the committed [hash] entries.
 
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 
-## Unreleased - 2026-07-22
+## [e5bc0af] - 2026-07-22
 
 fix: make CHANGELOG auto-update hook idempotent
 
