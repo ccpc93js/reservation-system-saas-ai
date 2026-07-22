@@ -399,7 +399,79 @@ export const channex = {
   deleteWebhook(id: string): Promise<unknown> {
     return channexRequest(`/webhooks/${id}`, { method: "DELETE" });
   },
+
+  // ── Channel connection (Channel API) ──
+
+  /** Groups the key can access; a channel create needs a group that owns the property. */
+  listGroups(): Promise<ChannexEntity[]> {
+    return channexRequest<ChannexEntity[]>("/groups");
+  },
+
+  listChannels(): Promise<ChannexEntity[]> {
+    return channexRequest<ChannexEntity[]>("/channels");
+  },
+
+  getChannel(id: string): Promise<ChannexEntity> {
+    return channexRequest<ChannexEntity>(`/channels/${id}`);
+  },
+
+  /** Validate OTA credentials before mapping. {success, errors}. hotel_id = OTA property id. */
+  testConnection(channel: string, hotelId: string): Promise<{ success: boolean; errors: unknown }> {
+    return channexRequest("/channels/test_connection", {
+      method: "POST",
+      body: { channel, settings: { hotel_id: hotelId } },
+    });
+  },
+
+  /** OTA's rooms/rates for mapping. Booking.com: {rooms:[{id, rates:[{id,...}]}]} (integer codes). */
+  mappingDetails(channel: string, hotelId: string): Promise<{ rooms?: unknown[] }> {
+    return channexRequest("/channels/mapping_details", {
+      method: "POST",
+      body: { channel, settings: { hotel_id: hotelId } },
+    });
+  },
+
+  /** Create a channel (inactive). See ChannelCreateAttrs — codes must be integers. */
+  createChannel(attrs: ChannelCreateAttrs): Promise<ChannexEntity> {
+    return channexRequest<ChannexEntity>("/channels", { method: "POST", body: { channel: attrs } });
+  },
+
+  activateChannel(id: string): Promise<unknown> {
+    return channexRequest(`/channels/${id}/activate`, { method: "POST", body: {} });
+  },
+
+  deactivateChannel(id: string): Promise<unknown> {
+    return channexRequest(`/channels/${id}/deactivate`, { method: "POST", body: {} });
+  },
+
+  /** Delete a channel — must be inactive first (422 "is active" otherwise). */
+  deleteChannel(id: string): Promise<unknown> {
+    return channexRequest(`/channels/${id}`, { method: "DELETE" });
+  },
 };
+
+export interface ChannelRatePlanMapping {
+  rate_plan_id: string; // your Channex rate plan UUID
+  settings: {
+    room_type_code: number; // OTA room id — INTEGER (strings land under "removed rates")
+    rate_plan_code: number; // OTA rate id — INTEGER
+    occupancy?: number | null;
+    pricing_type?: string; // "OBP" | "PP"
+    primary_occ?: boolean | null;
+    readonly?: boolean;
+    occ_changed?: boolean;
+  };
+}
+
+export interface ChannelCreateAttrs {
+  channel: string; // e.g. "BookingCom"
+  group_id: string; // REQUIRED — a group that owns the property
+  title: string;
+  properties: string[]; // [property UUID]
+  rate_plans: ChannelRatePlanMapping[];
+  settings: { hotel_id: string };
+  is_active?: boolean; // created inactive by default
+}
 
 // ─── Inbound bookings (revision feed) ────────────────────────────────────────
 
