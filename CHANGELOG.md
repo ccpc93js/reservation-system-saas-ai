@@ -1,3 +1,28 @@
+## [c458882] - 2026-07-22
+
+docs: label changelog hook-fix entry with its hash
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## Unreleased - 2026-07-22
+
+feat: Channex integration Phase 4 (availability/ARI push)
+
+Push free-bed availability to Channex so OTAs stop overselling. Availability
+is computed from the PMS (source of truth); Channex counters mirror it.
+
+- Migrations 20260722_channex_phase4_*: free_beds_calendar (free beds per
+  room type per night) + free_beds_ranges (gaps-and-islands SQL compression
+  to ranges — avoids PostgREST's 1000-row cap).
+- src/lib/channels/channex-availability.ts: pushAvailabilityForOrg() maps
+  provisioned room types, pushes compressed ranges, never past dates; scoped
+  (stay window) or full-horizon.
+- Scoped push fires inline in applyRevision after create/cancel.
+- POST /api/channels/channex/push-availability: cron (all provisioned orgs)
+  or manager (own org) 365-day reconcile.
+- Verified on staging: 7/7 room types readback-correct; a 3-bed booking
+  decremented Blue Dorm 6→3 on stay nights, back to 6 on checkout.
+
 ## [f73dacf] - 2026-07-22
 
 docs: dedupe CHANGELOG Channex entries

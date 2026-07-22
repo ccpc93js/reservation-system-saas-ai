@@ -127,7 +127,20 @@ poller (no vercel.json cron yet) and register the webhook once per env.
 - Idempotency: store Channex booking id in `external_id` (existing column),
   dedupe on it.
 
-### Phase 4 — Availability push (ARI)
+### Phase 4 — Availability push (ARI)  ✅ DONE (2026-07-22)
+
+`pushAvailabilityForOrg` (`src/lib/channels/channex-availability.ts`) computes
+free beds per room type from the PMS and pushes to Channex. Migrations
+`20260722_channex_phase4_*` add `free_beds_calendar` (per-night) and
+`free_beds_ranges` (gaps-and-islands SQL compression — one row per run, avoids
+PostgREST's 1000-row cap that first truncated the push to 3 of 7 room types).
+Scoped push fires inline in `applyRevision` after create/cancel (stay window);
+full-horizon reconcile via `POST /api/channels/channex/push-availability`
+(cron = all provisioned orgs / manager = own org, 365-day horizon). Verified on
+staging: all 7 room types readback-correct; a 3-bed booking decremented Blue
+Dorm 6→3 on the stay nights and back to 6 on checkout day. Never sends past
+dates. TODO: also trigger scoped pushes from iCal-sync and direct-booking paths
+(nightly reconcile covers drift meanwhile).
 
 - After ANY reservation create/cancel/date-change (all sources, including
   direct bookings and iCal syncs): debounce (~5–10 s) then push

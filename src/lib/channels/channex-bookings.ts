@@ -14,7 +14,21 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { channex, type RevisionAttributes } from "./channex";
+import { pushAvailabilityForOrg } from "./channex-availability";
 import { notifyOrg } from "@/lib/notifications";
+
+// After an inbound booking changes the calendar, push the affected date window
+// so OTAs see the new availability. Scoped to the stay window (cheap), all room
+// types. Awaited-but-swallowed: a push failure must not block the ack — the
+// periodic reconcile corrects any drift.
+async function pushWindow(supabase: SupabaseClient, orgId: string, from?: string, to?: string): Promise<void> {
+  if (!from || !to) return;
+  try {
+    await pushAvailabilityForOrg(supabase, orgId, { from, to });
+  } catch (err) {
+    console.error("channex availability push failed:", err);
+  }
+}
 
 const OTA_PLATFORM: Record<string, string> = {
   "booking.com": "booking_com",
@@ -82,6 +96,7 @@ export async function applyRevision(
           .update({ status: "cancelled", external_sync_at: new Date().toISOString() })
           .eq("id", (existing as any).id);
         await notify(supabase, orgId, "reservation_cancelled", (existing as any).id, attrs);
+        await pushWindow(supabase, orgId, attrs.arrival_date, attrs.departure_date);
         return { action: "cancelled", bookingId, reservationId: (existing as any).id };
       }
       return { action: "skipped", bookingId, warning: "cancel for unknown/already-cancelled booking" };
@@ -165,6 +180,7 @@ export async function applyRevision(
     }
 
     await notify(supabase, orgId, "reservation_created", newResId as string, attrs);
+    await pushWindow(supabase, orgId, checkIn, checkOut);
     return { action: "created", bookingId, reservationId: newResId as string, warning: mixedTypes ? "mixed room types" : undefined };
   } catch (err) {
     return { action: "error", bookingId, warning: err instanceof Error ? err.message : "unknown error" };
