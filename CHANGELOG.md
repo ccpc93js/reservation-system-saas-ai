@@ -1,3 +1,45 @@
+## [f3d1bc0] - 2026-07-23
+
+docs: mark outbound availability sync verified in plan
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [3311bed] - 2026-07-23
+
+feat: push availability to Channex on direct booking changes
+
+Real-time outbound sync for the app's own booking paths (previously only
+inbound Channex bookings and the nightly reconcile pushed availability).
+Adds syncAvailabilityWindow() — awaited but never throws, no-op when the org
+isn't Channex-connected — and calls it after: create (block booked nights),
+cancel (free them), update-dates (old+new window), extend (extension window).
+So an app booking now decrements Channex availability within seconds, closing
+the outbound real-time gap; the nightly reconcile remains the backstop.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [e18e9c7] - 2026-07-23
+
+fix: normalize OTA name variants to channel_source
+
+A Channex revision's ota_name can be 'Booking.com' or the channel code
+'BookingCom'; the old exact-match map only caught the former, so
+manually-created / code-named bookings fell through to 'other'. Reduce the
+name to lowercase alphanumerics before matching so both map to booking_com.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [0cee499] - 2026-07-23
+
+fix: surface Channex object-shaped validation error details
+
+Channex returns error details as an array for some errors and an object
+keyed by field for others (e.g. {settings: ["...already exists"]}). The
+formatter only handled arrays, so object details were dropped and the user
+saw a bare "Validation Error". Normalize both shapes into a readable list.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [f4581f4] - 2026-07-22
 
 feat: Channex Channel API client methods (Phase 5 groundwork)
