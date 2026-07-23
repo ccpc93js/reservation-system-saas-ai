@@ -139,8 +139,11 @@ full-horizon reconcile via `POST /api/channels/channex/push-availability`
 (cron = all provisioned orgs / manager = own org, 365-day horizon). Verified on
 staging: all 7 room types readback-correct; a 3-bed booking decremented Blue
 Dorm 6→3 on the stay nights and back to 6 on checkout day. Never sends past
-dates. TODO: also trigger scoped pushes from iCal-sync and direct-booking paths
-(nightly reconcile covers drift meanwhile).
+dates. Direct app-booking paths (create/cancel/update-dates/extend) now call
+`syncAvailabilityWindow` inline (committed 3311bed) — VERIFIED live: an app
+booking dropped Channex 6→3 within seconds, and the reconcile route corrected a
+booking whose inline push had failed (drift → 2). Still TODO: the iCal-sync
+path (bed-level model; nightly reconcile covers it meanwhile).
 
 - After ANY reservation create/cancel/date-change (all sources, including
   direct bookings and iCal syncs): debounce (~5–10 s) then push
