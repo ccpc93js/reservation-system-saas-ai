@@ -102,7 +102,7 @@ async function channexRequest<T = unknown>(path: string, opts: RequestOpts = {})
           res.status,
           e?.code ?? "http_error",
           e?.title ?? res.statusText ?? "Request failed",
-          Array.isArray(e?.details) ? e.details : undefined
+          normalizeDetails(e?.details)
         );
       }
 
@@ -125,6 +125,23 @@ async function channexRequest<T = unknown>(path: string, opts: RequestOpts = {})
     }
   }
   throw lastErr;
+}
+
+// Channex error `details` is sometimes an array (["restrictions is required"])
+// and sometimes an object keyed by field ({settings: ["...already exists"]}).
+// Flatten both into a readable string[] so the real message reaches the user.
+function normalizeDetails(details: unknown): string[] | undefined {
+  if (!details) return undefined;
+  if (Array.isArray(details)) return details.map(String);
+  if (typeof details === "object") {
+    const out: string[] = [];
+    for (const [field, msgs] of Object.entries(details as Record<string, unknown>)) {
+      const list = Array.isArray(msgs) ? msgs : [msgs];
+      for (const m of list) out.push(`${field}: ${m}`);
+    }
+    return out.length ? out : undefined;
+  }
+  return [String(details)];
 }
 
 function safeParse(text: string): unknown {
