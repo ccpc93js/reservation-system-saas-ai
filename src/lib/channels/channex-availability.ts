@@ -44,6 +44,25 @@ export interface PushAvailabilityResult {
   skipped?: string;
 }
 
+// Fire-after-a-booking-change helper for the app's own mutation paths (direct
+// create / cancel / date change). Awaited but never throws — a Channex outage
+// must not fail the booking; the nightly reconcile is the backstop. No-op when
+// the org isn't provisioned. Pass the widest touched window (e.g. old+new dates
+// on a move).
+export async function syncAvailabilityWindow(
+  supabase: SupabaseClient,
+  orgId: string,
+  from?: string,
+  to?: string
+): Promise<void> {
+  if (!from || !to) return;
+  try {
+    await pushAvailabilityForOrg(supabase, orgId, { from, to });
+  } catch (err) {
+    console.error("channex availability sync failed:", err);
+  }
+}
+
 export async function pushAvailabilityForOrg(
   supabase: SupabaseClient,
   orgId: string,
