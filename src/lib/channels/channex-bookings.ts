@@ -30,17 +30,21 @@ async function pushWindow(supabase: SupabaseClient, orgId: string, from?: string
   }
 }
 
+// Keys are the OTA name reduced to lowercase alphanumerics, so "Booking.com",
+// "BookingCom" and "booking.com" all collapse to "bookingcom".
 const OTA_PLATFORM: Record<string, string> = {
-  "booking.com": "booking_com",
+  bookingcom: "booking_com",
   airbnb: "airbnb",
   vrbo: "vrbo",
+  homeaway: "vrbo",
   expedia: "expedia",
   hostelworld: "hostelworld",
 };
 
 function normalizeOta(otaName?: string): string {
   if (!otaName) return "other";
-  return OTA_PLATFORM[otaName.trim().toLowerCase()] ?? "other";
+  const key = otaName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return OTA_PLATFORM[key] ?? "other";
 }
 
 export type ApplyAction = "created" | "cancelled" | "modified_flagged" | "skipped" | "overbooking" | "error";
