@@ -1,5 +1,20 @@
 ## Unreleased - 2026-07-24
 
+feat: Channex webhook registration endpoint
+
+One-time-per-environment, idempotent registration of the account-wide inbound
+booking webhook (the feed poller stays as the backstop).
+
+- POST /api/channels/channex/setup-webhook registers the global webhook if
+  absent (GET reports status, DELETE removes it). Manager-only or cron.
+  Refuses a localhost origin (Channex can't reach it) and requires
+  CHANNEX_WEBHOOK_SECRET.
+- Client createWebhook now sends is_global for account-wide hooks — staging
+  422s on a null property_id ("is required when is_global is false").
+  Verified create/list/delete against staging.
+
+## Unreleased - 2026-07-24
+
 feat: Channex follow-ups — iCal-sync outbound push + i18n translations
 
 - iCal sync now pushes availability to Channex after any change (create/

@@ -289,7 +289,10 @@ POST /webhooks
 {"webhook": {
   "callback_url": "https://you/api/channex",
   "event_mask": "booking_new;booking_modification;booking_cancellation",
-  "property_id": null,          // null = all properties on the account
+  "is_global": true,            // account-wide. VERIFIED on staging: a null
+                                // property_id alone 422s ("is required when
+                                // is_global is false") — send is_global:true for
+                                // all properties, or a specific property_id.
   "is_active": true,
   "send_data": true
 }}

@@ -392,10 +392,13 @@ export const channex = {
     return channexRequest<ChannexEntity[]>("/webhooks");
   },
 
-  /** Register a callback for booking events. property_id null = all properties. */
+  /** Register a callback for booking events. Account-wide needs is_global:true
+   *  (staging rejects a null property_id with "is required when is_global is
+   *  false"); otherwise pass a specific property_id. */
   createWebhook(attrs: {
     callback_url: string;
     event_mask?: string;
+    is_global?: boolean;
     property_id?: string | null;
     is_active?: boolean;
     send_data?: boolean;
