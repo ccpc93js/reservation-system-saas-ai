@@ -1,5 +1,16 @@
 ## Unreleased - 2026-07-24
 
+fix: lazy Stripe client so builds don't need STRIPE_SECRET_KEY
+
+The Stripe client was constructed at module load in four files
+(billing/checkout, billing/portal, webhooks/stripe, billing-reconcile), so
+Next's build-time page-data collection ran `new Stripe(undefined)` and threw
+when the secret was absent (e.g. a Vercel preview env without it) — failing
+the whole build. New `src/lib/stripe.ts` exposes `getStripe()` that
+constructs lazily on first request-time use; all four callers switched to it.
+
+## Unreleased - 2026-07-24
+
 feat: Channex webhook registration endpoint
 
 One-time-per-environment, idempotent registration of the account-wide inbound

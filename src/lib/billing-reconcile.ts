@@ -1,8 +1,6 @@
-import Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/server";
 import { PRICE_TO_PLAN } from "@/lib/plan";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Safety net for the payment gate: the webhook (checkout.session.completed) is
 // the primary path that clears `pending_plan` and sets `plan`, but if it is
@@ -19,7 +17,7 @@ export async function reconcilePendingPlan(org: {
   if (!org.pending_plan || !org.stripe_customer_id) return null;
 
   try {
-    const subs = await stripe.subscriptions.list({
+    const subs = await getStripe().subscriptions.list({
       customer: org.stripe_customer_id,
       status: "all",
       limit: 5,

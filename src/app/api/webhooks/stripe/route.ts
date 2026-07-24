@@ -1,8 +1,7 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/server";
 import { PRICE_TO_PLAN } from "@/lib/plan";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -12,7 +11,7 @@ export async function POST(request: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err: any) {
     console.error("Webhook signature failed:", err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
@@ -55,7 +54,7 @@ export async function POST(request: Request) {
           null;
         if (!subId) break;
 
-        const subscription = await stripe.subscriptions.retrieve(subId);
+        const subscription = await getStripe().subscriptions.retrieve(subId);
         const orgId = subscription.metadata?.org_id;
         const priceId = subscription.items.data[0]?.price.id ?? "";
         // Never downgrade to free on an unmapped price — prefer the plan stored
