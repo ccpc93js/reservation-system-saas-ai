@@ -1,5 +1,6 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { notifyOrg } from "@/lib/notifications";
+import { pushAvailabilityForOrg } from "@/lib/channels/channex-availability";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ical = require("node-ical");
 
@@ -380,6 +381,18 @@ export async function POST(
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);
+
+    // iCal bookings changed the calendar → mirror the new availability to
+    // Channex so API-connected OTAs see it too. No-op if this org isn't
+    // Channex-provisioned. Full-horizon push (cheap, run-length compressed);
+    // errors are swallowed so an iCal sync never fails on a Channex hiccup.
+    if (results.created + results.updated + results.cancelled > 0) {
+      try {
+        await pushAvailabilityForOrg(serviceClient as any, orgId);
+      } catch (err) {
+        console.error("channex availability push after iCal sync failed:", err);
+      }
+    }
 
     // Aggregate summary only for date-change updates — creates and
     // cancellations already produced their own per-reservation notifications.

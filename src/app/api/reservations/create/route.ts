@@ -3,6 +3,7 @@ import { createReservationSchema } from "@/lib/validations/reservation";
 import { differenceInDays } from "date-fns";
 import { sendReservationConfirmationEmail, getOrgBranding } from "@/lib/email";
 import { notifyOrg } from "@/lib/notifications";
+import { syncAvailabilityWindow } from "@/lib/channels/channex-availability";
 
 const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -257,6 +258,10 @@ export async function POST(request: Request) {
         (reservation as any).check_in_token
       ).catch((err) => console.error("Email send failed:", err));
     }
+
+    // Push the new occupancy to Channel Manager (Channex) so OTAs stop
+    // selling these beds. No-op if the org isn't connected to Channex.
+    await syncAvailabilityWindow(supabase as any, data.org_id, data.check_in, data.check_out);
 
     // Notify staff (excluding whoever created it)
     await notifyOrg(

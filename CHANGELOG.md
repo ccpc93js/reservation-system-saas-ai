@@ -1,3 +1,232 @@
+## Unreleased - 2026-07-24
+
+fix: lazy Stripe client so builds don't need STRIPE_SECRET_KEY
+
+The Stripe client was constructed at module load in four files
+(billing/checkout, billing/portal, webhooks/stripe, billing-reconcile), so
+Next's build-time page-data collection ran `new Stripe(undefined)` and threw
+when the secret was absent (e.g. a Vercel preview env without it) — failing
+the whole build. New `src/lib/stripe.ts` exposes `getStripe()` that
+constructs lazily on first request-time use; all four callers switched to it.
+
+## Unreleased - 2026-07-24
+
+feat: Channex webhook registration endpoint
+
+One-time-per-environment, idempotent registration of the account-wide inbound
+booking webhook (the feed poller stays as the backstop).
+
+- POST /api/channels/channex/setup-webhook registers the global webhook if
+  absent (GET reports status, DELETE removes it). Manager-only or cron.
+  Refuses a localhost origin (Channex can't reach it) and requires
+  CHANNEX_WEBHOOK_SECRET.
+- Client createWebhook now sends is_global for account-wide hooks — staging
+  422s on a null property_id ("is required when is_global is false").
+  Verified create/list/delete against staging.
+
+## Unreleased - 2026-07-24
+
+feat: Channex follow-ups — iCal-sync outbound push + i18n translations
+
+- iCal sync now pushes availability to Channex after any change (create/
+  update/cancel), so API-connected OTAs see iCal bookings too. Full-horizon
+  push, errors swallowed, no-op when the org isn't Channex-provisioned.
+- Translated the Channex UI keys (channels.channex, 34 keys) from English
+  placeholders into all 10 non-English locales (es, fr, pt, ru, ja, zh, ar,
+  hi, bn, sr).
+
+## [89cbc7a] - 2026-07-23
+
+docs: changelog entry for plan doc update
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [f3d1bc0] - 2026-07-23
+
+docs: mark outbound availability sync verified in plan
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [3311bed] - 2026-07-23
+
+feat: push availability to Channex on direct booking changes
+
+Real-time outbound sync for the app's own booking paths (previously only
+inbound Channex bookings and the nightly reconcile pushed availability).
+Adds syncAvailabilityWindow() — awaited but never throws, no-op when the org
+isn't Channex-connected — and calls it after: create (block booked nights),
+cancel (free them), update-dates (old+new window), extend (extension window).
+So an app booking now decrements Channex availability within seconds, closing
+the outbound real-time gap; the nightly reconcile remains the backstop.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [e18e9c7] - 2026-07-23
+
+fix: normalize OTA name variants to channel_source
+
+A Channex revision's ota_name can be 'Booking.com' or the channel code
+'BookingCom'; the old exact-match map only caught the former, so
+manually-created / code-named bookings fell through to 'other'. Reduce the
+name to lowercase alphanumerics before matching so both map to booking_com.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [0cee499] - 2026-07-23
+
+fix: surface Channex object-shaped validation error details
+
+Channex returns error details as an array for some errors and an object
+keyed by field for others (e.g. {settings: ["...already exists"]}). The
+formatter only handled arrays, so object details were dropped and the user
+saw a bare "Validation Error". Normalize both shapes into a readable list.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [f4581f4] - 2026-07-22
+
+feat: Channex Channel API client methods (Phase 5 groundwork)
+
+Adds the channel-connection endpoints to the client: groups, list/get
+channels, test_connection, mapping_details, create/activate/deactivate/delete
+channel, plus ChannelCreateAttrs/ChannelRatePlanMapping types (OTA room/rate
+codes are integers). Verified live against staging: groups, test_connection
+and Booking.com mapping_details return the expected shapes. The create+activate
+step is exercised per real customer (needs the owner's Booking.com hotel id +
+extranet authorization), so it is not wired to a UI yet.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [c458882] - 2026-07-22
+
+docs: label changelog hook-fix entry with its hash
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## Unreleased - 2026-07-22
+
+feat: Channex integration Phase 5 (in-app Connect UI)
+
+White-label in-app OTA connection flow — the owner never opens the Channex
+dashboard. Pro-gated (reuses the existing "channels" feature).
+
+- Migration 20260722_channex_phase5_*: channex_channel_id / hotel_id /
+  channex_status columns on channels (an OTA connection = a channels row
+  with provider='channex').
+- src/lib/channels/channex-connect.ts: getConnectOptions (validate hotel id +
+  fetch OTA rooms/rates + our rate plans), connectChannel (create + activate +
+  persist), disconnectChannel (deactivate + delete).
+- Endpoints: POST /api/channels/channex/connect/options, POST|DELETE
+  /api/channels/channex/connect (manager-only, Pro).
+- src/components/channels/channex-section.tsx: "Channel Manager (API)" section
+  — sync structure/availability, connected list + disconnect, and a Connect
+  wizard with the manual OTA→rate-plan mapping screen. Mounted atop
+  ChannelsClient; i18n keys added to all 11 locales.
+- Channel API client methods verified live (groups, test_connection,
+  Booking.com mapping_details).
+
+## Unreleased - 2026-07-22
+
+feat: Channex integration Phase 4 (availability/ARI push)
+
+Push free-bed availability to Channex so OTAs stop overselling. Availability
+is computed from the PMS (source of truth); Channex counters mirror it.
+
+- Migrations 20260722_channex_phase4_*: free_beds_calendar (free beds per
+  room type per night) + free_beds_ranges (gaps-and-islands SQL compression
+  to ranges — avoids PostgREST's 1000-row cap).
+- src/lib/channels/channex-availability.ts: pushAvailabilityForOrg() maps
+  provisioned room types, pushes compressed ranges, never past dates; scoped
+  (stay window) or full-horizon.
+- Scoped push fires inline in applyRevision after create/cancel.
+- POST /api/channels/channex/push-availability: cron (all provisioned orgs)
+  or manager (own org) 365-day reconcile.
+- Verified on staging: 7/7 room types readback-correct; a 3-bed booking
+  decremented Blue Dorm 6→3 on stay nights, back to 6 on checkout.
+
+## [f73dacf] - 2026-07-22
+
+docs: dedupe CHANGELOG Channex entries
+
+Collapse the duplicate [4670c80] block and the triplicated [b2a2dd7]
+(2026-07-21) entries the changelog hook re-prepended, and drop the manual
+Unreleased blocks now superseded by the committed [hash] entries.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [e5bc0af] - 2026-07-22
+
+fix: make CHANGELOG auto-update hook idempotent
+
+The .claude/update-docs.sh post-commit hook prepended every commit message
+unconditionally, so a manual CHANGELOG entry + the hook's own entry (and any
+re-run) produced duplicate/triplicate blocks. It now skips when the commit
+hash or its subject line is already present, and strips stray "@" marker
+lines. No-op when the entry was written by hand before committing.
+
+## [4670c80] - 2026-07-22
+
+feat: Channex integration Phase 3 (inbound bookings)
+
+Receive OTA bookings from Channex via the revision feed and webhook, into
+the existing multi-bed reservation flow. No change to iCal channels.
+
+- Migration 20260722_channex_phase3_bookings: create_channex_reservation()
+  assigns N free beds atomically under one advisory lock, writes one
+  reservation + N items with real prices, returns null on overbooking (books
+  nothing). Partial index on reservations(external_id) for booking dedupe.
+- src/lib/channels/channex-bookings.ts: applyRevision() (new -> create,
+  cancelled -> cancel by external_id, modified -> flag a human, overbooking
+  -> notify) and drainFeed() (bounded, acks on success, leaves hard errors
+  un-acked for retry within the 30-min window).
+- POST /api/channels/channex/feed: cron/manager account-wide feed poller.
+- POST /api/channels/channex/webhook: shared-secret, pull revision by id ->
+  apply -> ack; feed poller is the backstop for missed webhooks.
+- Client: revision feed/get/ack, booking list, webhook CRUD.
+
+Not yet exercised against a live booking (needs the Channex "Booking CRS"
+app to inject one) and the poller still needs scheduling.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [554010d] - 2026-07-22
+
+feat: Channex integration Phases 1-2 (schema, client, provisioning)
+
+Groundwork for API-based OTA connections alongside the existing iCal
+channels (two-tier: iCal free, Channex Pro), and app-driven white-label
+provisioning so the hostel owner never touches the Channex dashboard.
+
+Phase 1 — schema & client:
+- Migration 20260721_channex_phase1: provider column on channels
+  (default 'ical', existing rows untouched) + channel_provider_links
+  mapping table (generic kind/local_id -> channex_id) with RLS.
+- src/lib/channels/channex.ts: thin Channex REST client (data envelope
+  unwrap, normalized ChannexError, transient retries, cents boundary);
+  property/room_type/rate_plan CRUD, ARI push/readback, *-options reads.
+- GET /api/channels/channex/ping: manager-only connectivity check.
+
+Phase 2 — provisioning:
+- src/lib/channels/channex-provision.ts: provisionOrg() mirrors property
+  -> room types -> one rate plan each from organizations + room_types,
+  idempotent (POST unmapped / PUT mapped), ids persisted in
+  channel_provider_links. dorm -> per-bed (occ 1), private -> per-room
+  (occ = capacity); rate-plan occupancy clamped to occ_adults.
+- POST /api/channels/channex/provision: manager-only (200 ok / 207 partial).
+
+Verified against Channex staging: property list, options endpoints, and
+full create chain (property/room_type/rate_plan). occ_children/occ_infants
+are required despite the docs (noted in the skill reference).
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+## [b2a2dd7] - 2026-07-08
+
+@
+fix: mobile date input format, checkout>checkin guard, navbar title
+
+Reservations filter date inputs now use the reservation drawers
+
 ## [1e9689f] - 2026-07-07
 
 refactor: reusable ExportCsvButton component

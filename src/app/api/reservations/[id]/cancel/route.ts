@@ -1,8 +1,9 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { sendReservationCancelledEmail, getOrgBranding } from "@/lib/email";
 import { notifyOrg } from "@/lib/notifications";
+import { syncAvailabilityWindow } from "@/lib/channels/channex-availability";
 
-type ReservationOrg = { organization_id: string };
+type ReservationOrg = { organization_id: string; check_in: string; check_out: string };
 
 export async function PATCH(
   request: Request,
@@ -25,7 +26,7 @@ export async function PATCH(
     // Get reservation to verify access
     const { data: reservationRaw, error: resError } = await supabase
       .from("reservations")
-      .select("organization_id")
+      .select("organization_id, check_in, check_out")
       .eq("id", id)
       .single();
 
@@ -88,6 +89,9 @@ export async function PATCH(
         { status: 400 }
       );
     }
+
+    // Freed beds → push the restored availability to Channex (no-op if not connected).
+    await syncAvailabilityWindow(supabase as any, reservation.organization_id, reservation.check_in, reservation.check_out);
 
     // Send cancellation email
     const { data: resData } = await supabase

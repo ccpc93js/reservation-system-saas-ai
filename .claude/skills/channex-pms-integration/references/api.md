@@ -76,6 +76,9 @@ GET  /room_types?filter[property_id]=UUID
 ATTRS: `property_id` (UUID), `title`, `count_of_rooms` (int),
 `occ_adults`, `occ_children`, `occ_infants`, `default_occupancy`
 (must be ≤ occ_adults), `room_kind` ("room" | "dorm"), `content`.
+NOTE (verified on staging 2026-07): `occ_children` and `occ_infants` are
+NOT optional in practice — omitting them 422s with `"can't be blank"`.
+Always send them (0 is fine).
 New room types start with availability 0 — you must push availability
 after creating them.
 
@@ -286,7 +289,10 @@ POST /webhooks
 {"webhook": {
   "callback_url": "https://you/api/channex",
   "event_mask": "booking_new;booking_modification;booking_cancellation",
-  "property_id": null,          // null = all properties on the account
+  "is_global": true,            // account-wide. VERIFIED on staging: a null
+                                // property_id alone 422s ("is required when
+                                // is_global is false") — send is_global:true for
+                                // all properties, or a specific property_id.
   "is_active": true,
   "send_data": true
 }}

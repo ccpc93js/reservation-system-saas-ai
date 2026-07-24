@@ -36,22 +36,32 @@ while IFS= read -r file; do
   esac
 done <<< "$CHANGED_FILES"
 
-# Get commit message
-COMMIT_MSG=$(git log -1 --format="%B" HEAD)
+# Get commit message. Strip stray "@" marker lines (caveman-commit artifact).
 COMMIT_HASH=$(git log -1 --format="%h" HEAD)
+COMMIT_MSG=$(git log -1 --format="%B" HEAD | sed '/^@$/d')
+# First meaningful line (skip blanks / "@") — used to detect a manual entry.
+COMMIT_SUBJECT=$(printf '%s\n' "$COMMIT_MSG" | grep -vE '^\s*$' | head -1)
 
-# Update CHANGELOG
+# Update CHANGELOG — idempotently. Skip if this commit is already recorded,
+# either by hash (hook re-run) or by its subject line (a manual entry already
+# added before committing). Prevents the duplicate/triplicate entries the old
+# unconditional prepend produced.
 if [ -f CHANGELOG.md ]; then
-  # Insert new entry at the top of CHANGELOG
-  DATE=$(date +"%Y-%m-%d")
-  {
-    echo "## [$COMMIT_HASH] - $DATE"
-    echo ""
-    echo "$COMMIT_MSG"
-    echo ""
-    cat CHANGELOG.md
-  } > CHANGELOG.md.tmp
-  mv CHANGELOG.md.tmp CHANGELOG.md
+  already_logged=0
+  grep -qF "[$COMMIT_HASH]" CHANGELOG.md && already_logged=1
+  [ -n "$COMMIT_SUBJECT" ] && grep -qF "$COMMIT_SUBJECT" CHANGELOG.md && already_logged=1
+
+  if [ "$already_logged" -eq 0 ]; then
+    DATE=$(date +"%Y-%m-%d")
+    {
+      echo "## [$COMMIT_HASH] - $DATE"
+      echo ""
+      echo "$COMMIT_MSG"
+      echo ""
+      cat CHANGELOG.md
+    } > CHANGELOG.md.tmp
+    mv CHANGELOG.md.tmp CHANGELOG.md
+  fi
 fi
 
 # Update architecture doc if needed

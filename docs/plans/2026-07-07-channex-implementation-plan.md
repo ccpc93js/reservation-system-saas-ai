@@ -52,7 +52,14 @@ Everything in Part 2 can be built against the sandbox before any contract.
 
 ## Part 2 — Technical implementation (phases)
 
-### Phase 1 — Schema & provider plumbing
+### Phase 1 — Schema & provider plumbing  ✅ DONE (2026-07-21)
+
+Built against staging; `GET /properties` returns 200 and lists the org's
+property. Migration `supabase/migrations/20260721_channex_phase1.sql`, client
+`src/lib/channels/channex.ts`, connectivity route
+`GET /api/channels/channex/ping`. Mapping stored as a generic
+`channel_provider_links (kind, local_id) → channex_id` table (serves
+property/room_type/rate_plan now, booking dedupe later) rather than per-column.
 
 - `channels` table: add `provider text not null default 'ical'`
   (`'ical' | 'channex'`). Existing rows untouched.
@@ -65,7 +72,17 @@ Everything in Part 2 can be built against the sandbox before any contract.
   master key): createProperty, upsertRoomType, upsertRatePlan, updateARI,
   verifyWebhookSignature.
 
-### Phase 2 — Provisioning (self-service "Connect")
+### Phase 2 — Provisioning (self-service "Connect")  ✅ DONE (2026-07-21)
+
+App-driven, fully white-label — owner never opens Channex. `provisionOrg`
+(`src/lib/channels/channex-provision.ts`) mirrors property → room types →
+one rate plan each from PMS data, idempotent (POST unmapped / PUT mapped),
+ids stored in `channel_provider_links`. Route `POST
+/api/channels/channex/provision` (manager-only, 200 ok / 207 partial).
+Mapping: dorm → per-bed (count_of_rooms = active beds, occ 1); private →
+per-room (count_of_rooms = rooms, occ = capacity). Write payloads verified
+against staging; `occ_children`/`occ_infants` required (0) despite docs.
+NOTE: needs the Phase 1 migration applied first (writes channel_provider_links).
 
 - API route `POST /api/channels/channex/provision`:
   1. create the Channex property from the org's data (name, address,
@@ -78,7 +95,20 @@ Everything in Part 2 can be built against the sandbox before any contract.
   update Channex (or flag "out of sync" + a Sync Structure button — simpler
   v1).
 
-### Phase 3 — Booking ingestion (webhook)
+### Phase 3 — Booking ingestion (webhook)  ✅ DONE (2026-07-22)
+
+Feed poller + webhook, both funneling into `applyRevision`
+(`src/lib/channels/channex-bookings.ts`). Migration
+`20260722_channex_phase3_bookings.sql` adds `create_channex_reservation`
+(multi-bed atomic assign under one advisory lock, real prices, null on
+overbooking) + a partial index on `reservations(external_id)`. Routes:
+`POST /api/channels/channex/feed` (cron/manager, drains account-wide feed,
+acks on success, leaves hard errors un-acked + alerts) and `POST
+/api/channels/channex/webhook` (shared-secret, pulls revision by id → apply
+→ ack). new → create; cancelled → cancel by external_id; modified → flag +
+notify a human (no auto-mutate); overbooking → notify, book nothing. Dedupe
+by Channex booking_id in `reservations.external_id`. TODO: schedule the
+poller (no vercel.json cron yet) and register the webhook once per env.
 
 - `POST /api/channels/channex/webhook` — signature-verified.
 - Events: booking new / modification / cancellation.
@@ -97,7 +127,23 @@ Everything in Part 2 can be built against the sandbox before any contract.
 - Idempotency: store Channex booking id in `external_id` (existing column),
   dedupe on it.
 
-### Phase 4 — Availability push (ARI)
+### Phase 4 — Availability push (ARI)  ✅ DONE (2026-07-22)
+
+`pushAvailabilityForOrg` (`src/lib/channels/channex-availability.ts`) computes
+free beds per room type from the PMS and pushes to Channex. Migrations
+`20260722_channex_phase4_*` add `free_beds_calendar` (per-night) and
+`free_beds_ranges` (gaps-and-islands SQL compression — one row per run, avoids
+PostgREST's 1000-row cap that first truncated the push to 3 of 7 room types).
+Scoped push fires inline in `applyRevision` after create/cancel (stay window);
+full-horizon reconcile via `POST /api/channels/channex/push-availability`
+(cron = all provisioned orgs / manager = own org, 365-day horizon). Verified on
+staging: all 7 room types readback-correct; a 3-bed booking decremented Blue
+Dorm 6→3 on the stay nights and back to 6 on checkout day. Never sends past
+dates. Direct app-booking paths (create/cancel/update-dates/extend) now call
+`syncAvailabilityWindow` inline (committed 3311bed) — VERIFIED live: an app
+booking dropped Channex 6→3 within seconds, and the reconcile route corrected a
+booking whose inline push had failed (drift → 2). Still TODO: the iCal-sync
+path (bed-level model; nightly reconcile covers it meanwhile).
 
 - After ANY reservation create/cancel/date-change (all sources, including
   direct bookings and iCal syncs): debounce (~5–10 s) then push
@@ -109,7 +155,23 @@ Everything in Part 2 can be built against the sandbox before any contract.
 - Allotment: reuse the existing per-channel allotment semantics if exposed
   per OTA in Channex; otherwise property-level for v1.
 
-### Phase 5 — UI & self-service onboarding
+### Phase 5 — UI & self-service onboarding  ✅ DONE (2026-07-22)
+
+In-app white-label Connect flow. Backend: `channex-connect.ts`
+(getConnectOptions → test_connection + mapping_details + our rate plans;
+connectChannel → create+activate+persist as a channels row provider='channex';
+disconnectChannel → deactivate+delete). Endpoints `POST
+/api/channels/channex/connect/options`, `POST|DELETE
+/api/channels/channex/connect` — manager-only, Pro-gated via
+`hasFeature(plan,"channels")`. Migration `20260722_channex_phase5_*` adds
+`channex_channel_id`/`hotel_id`/`channex_status` to channels. UI:
+`ChannexSection` (Sync structure / Sync availability / connected list +
+disconnect / Connect wizard with the manual OTA→rate-plan mapping screen),
+mounted atop `ChannelsClient`; i18n keys added to all 11 locales (English
+values — real translation pending). Channel API shapes verified live (groups,
+test_connection, Booking.com mapping_details); create+activate is exercised per
+real customer (needs the owner's hotel id + extranet authorization).
+Follow-up: translate the new i18n keys; guided Booking.com extranet screen.
 
 - Channels page: new "API connections" section above iCal:
   - **Connect** button per OTA → runs provisioning → shows the guided

@@ -126,9 +126,12 @@ export type Database = {
         Row: {
           allotment: number | null
           bed_id: string | null
+          channex_channel_id: string | null
+          channex_status: string | null
           color: string
           created_at: string
           export_token: string
+          hotel_id: string | null
           ical_url: string | null
           id: string
           is_active: boolean
@@ -138,6 +141,7 @@ export type Database = {
           name: string
           organization_id: string
           platform: string
+          provider: string
           room_type_id: string | null
           sync_count: number
           updated_at: string
@@ -145,9 +149,12 @@ export type Database = {
         Insert: {
           allotment?: number | null
           bed_id?: string | null
+          channex_channel_id?: string | null
+          channex_status?: string | null
           color?: string
           created_at?: string
           export_token?: string
+          hotel_id?: string | null
           ical_url?: string | null
           id?: string
           is_active?: boolean
@@ -157,6 +164,7 @@ export type Database = {
           name: string
           organization_id: string
           platform: string
+          provider?: string
           room_type_id?: string | null
           sync_count?: number
           updated_at?: string
@@ -164,9 +172,12 @@ export type Database = {
         Update: {
           allotment?: number | null
           bed_id?: string | null
+          channex_channel_id?: string | null
+          channex_status?: string | null
           color?: string
           created_at?: string
           export_token?: string
+          hotel_id?: string | null
           ical_url?: string | null
           id?: string
           is_active?: boolean
@@ -176,6 +187,7 @@ export type Database = {
           name?: string
           organization_id?: string
           platform?: string
+          provider?: string
           room_type_id?: string | null
           sync_count?: number
           updated_at?: string
@@ -200,6 +212,44 @@ export type Database = {
             columns: ["room_type_id"]
             isOneToOne: false
             referencedRelation: "room_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_provider_links: {
+        Row: {
+          channex_id: string
+          created_at: string
+          id: string
+          kind: string
+          local_id: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          channex_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          local_id: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          channex_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          local_id?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_provider_links_org_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
