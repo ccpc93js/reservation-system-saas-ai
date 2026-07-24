@@ -1,5 +1,21 @@
 ## Unreleased - 2026-07-24
 
+feat: Channex doctor (health check) + client envelope fix
+
+- src/lib/channels/channex-doctor.ts + GET /api/channels/channex/doctor:
+  runs the full chain — key → API reachable → property/room/rate mappings
+  complete → sampled availability readback matches local free beds → feed
+  reachable (+ pending count) → webhook registered. 200 healthy / 503 on a
+  hard failure so CI and uptime monitors can gate on it. Manager or cron
+  (cron checks every provisioned org). Verified live: 7/7 green.
+- fix: the client returned the whole {data, meta} envelope whenever meta was
+  present, so list endpoints (listProperties, listWebhooks, listChannels,
+  listGroups) got an object instead of the array — listProperties read 0 and
+  listWebhooks crashed. Now unwraps to `data` by default; only bookingFeed
+  opts into meta.
+
+## Unreleased - 2026-07-24
+
 fix: lazy Stripe client so builds don't need STRIPE_SECRET_KEY
 
 The Stripe client was constructed at module load in four files
