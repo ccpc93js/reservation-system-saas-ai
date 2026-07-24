@@ -1,3 +1,20 @@
+## Unreleased - 2026-07-24
+
+feat: Channex follow-ups — iCal-sync outbound push + i18n translations
+
+- iCal sync now pushes availability to Channex after any change (create/
+  update/cancel), so API-connected OTAs see iCal bookings too. Full-horizon
+  push, errors swallowed, no-op when the org isn't Channex-provisioned.
+- Translated the Channex UI keys (channels.channex, 34 keys) from English
+  placeholders into all 10 non-English locales (es, fr, pt, ru, ja, zh, ar,
+  hi, bn, sr).
+
+## [89cbc7a] - 2026-07-23
+
+docs: changelog entry for plan doc update
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
 ## [f3d1bc0] - 2026-07-23
 
 docs: mark outbound availability sync verified in plan
