@@ -1,5 +1,14 @@
 ## Unreleased - 2026-07-24
 
+feat: guided Booking.com extranet steps in the connect wizard
+
+A collapsible "How to connect on Booking.com" in the connect wizard (shown for
+Booking.com): find your Hotel ID → authorize the connectivity provider in the
+extranet → return and paste it. The one manual OTA-side step, walked through
+in-app. i18n in all 11 locales.
+
+## Unreleased - 2026-07-24
+
 feat: Channex modified-booking reconciliation
 
 OTA modifications ("modified" revisions) used to be flagged only. Now they're

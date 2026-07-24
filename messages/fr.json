@@ -1216,7 +1216,12 @@
       "pendingDismiss": "Ignorer",
       "toastModApplied": "Modification appliquée",
       "toastModDismissed": "Modification ignorée",
-      "toastModFailed": "Impossible de résoudre la modification"
+      "toastModFailed": "Impossible de résoudre la modification",
+      "extranetGuideTitle": "Comment connecter sur Booking.com",
+      "extranetStep1": "Connectez-vous à l'Extranet Booking.com (admin.booking.com).",
+      "extranetStep2": "Votre ID d'hôtel est affiché sous le nom de l'établissement (et dans l'URL comme hotel_id=…).",
+      "extranetStep3": "Allez dans Compte → Fournisseur de connectivité et sélectionnez ce gestionnaire de canaux.",
+      "extranetStep4": "Confirmez la connexion, puis revenez ici et collez votre ID d'hôtel."
     }
   },
   "demoBanner": {

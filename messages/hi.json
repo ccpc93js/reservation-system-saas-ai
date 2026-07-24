@@ -1216,7 +1216,12 @@
       "pendingDismiss": "अनदेखा करें",
       "toastModApplied": "बदलाव लागू किया गया",
       "toastModDismissed": "बदलाव अनदेखा किया गया",
-      "toastModFailed": "बदलाव हल नहीं हो सका"
+      "toastModFailed": "बदलाव हल नहीं हो सका",
+      "extranetGuideTitle": "Booking.com पर कैसे कनेक्ट करें",
+      "extranetStep1": "Booking.com एक्स्ट्रानेट (admin.booking.com) में लॉग इन करें।",
+      "extranetStep2": "आपका होटल ID प्रॉपर्टी नाम के नीचे दिखता है (और URL में hotel_id=… के रूप में)।",
+      "extranetStep3": "खाता → कनेक्टिविटी प्रोवाइडर पर जाएँ और इस चैनल मैनेजर को चुनें।",
+      "extranetStep4": "कनेक्शन की पुष्टि करें, फिर यहाँ लौटकर अपना होटल ID पेस्ट करें।"
     }
   },
   "demoBanner": {

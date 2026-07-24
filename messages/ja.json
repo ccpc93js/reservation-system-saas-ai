@@ -1216,7 +1216,12 @@
       "pendingDismiss": "破棄",
       "toastModApplied": "変更を適用しました",
       "toastModDismissed": "変更を破棄しました",
-      "toastModFailed": "変更を処理できませんでした"
+      "toastModFailed": "変更を処理できませんでした",
+      "extranetGuideTitle": "Booking.com での接続方法",
+      "extranetStep1": "Booking.com エクストラネット（admin.booking.com）にログインします。",
+      "extranetStep2": "ホテル ID は施設名の下（および URL の hotel_id=… ）に表示されます。",
+      "extranetStep3": "アカウント → 接続プロバイダー でこのチャネルマネージャーを選択します。",
+      "extranetStep4": "接続を確認し、ここに戻ってホテル ID を貼り付けます。"
     }
   },
   "demoBanner": {

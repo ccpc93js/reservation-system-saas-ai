@@ -1216,7 +1216,12 @@
       "pendingDismiss": "Dismiss",
       "toastModApplied": "Change applied",
       "toastModDismissed": "Change dismissed",
-      "toastModFailed": "Could not resolve the change"
+      "toastModFailed": "Could not resolve the change",
+      "extranetGuideTitle": "How to connect on Booking.com",
+      "extranetStep1": "Log in to the Booking.com Extranet (admin.booking.com).",
+      "extranetStep2": "Your Hotel ID is shown under the property name (and in the URL as hotel_id=…).",
+      "extranetStep3": "Go to Account → Connectivity provider and select this channel manager.",
+      "extranetStep4": "Confirm the connection, then return here and paste your Hotel ID."
     }
   },
   "demoBanner": {

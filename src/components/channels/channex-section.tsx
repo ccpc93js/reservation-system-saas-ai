@@ -358,6 +358,17 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
                   <input value={hotelId} onChange={(e) => setHotelId(e.target.value)} placeholder={t("channex.hotelIdPlaceholder")} className="mt-1 w-full rounded-lg border border-border bg-background text-foreground px-3 py-2 text-sm" />
                   <p className="text-[10px] text-muted-foreground mt-1">{t("channex.extranetHint")}</p>
                 </div>
+                {platform === "booking_com" && (
+                  <details className="rounded-lg border border-border bg-muted/20 px-3 py-2 text-xs">
+                    <summary className="cursor-pointer font-medium text-foreground">{t("channex.extranetGuideTitle")}</summary>
+                    <ol className="mt-2 space-y-1 list-decimal list-inside text-muted-foreground">
+                      <li>{t("channex.extranetStep1")}</li>
+                      <li>{t("channex.extranetStep2")}</li>
+                      <li>{t("channex.extranetStep3")}</li>
+                      <li>{t("channex.extranetStep4")}</li>
+                    </ol>
+                  </details>
+                )}
                 <div className="flex justify-end gap-2">
                   <button onClick={() => setWizardOpen(false)} className="px-3 py-2 text-xs border border-border rounded-lg text-muted-foreground hover:bg-muted">{t("cancel")}</button>
                   <button onClick={fetchOptions} disabled={loadingOptions} className="px-4 py-2 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50">

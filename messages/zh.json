@@ -1216,7 +1216,12 @@
       "pendingDismiss": "忽略",
       "toastModApplied": "变更已应用",
       "toastModDismissed": "变更已忽略",
-      "toastModFailed": "无法处理该变更"
+      "toastModFailed": "无法处理该变更",
+      "extranetGuideTitle": "如何在 Booking.com 上连接",
+      "extranetStep1": "登录 Booking.com Extranet（admin.booking.com）。",
+      "extranetStep2": "酒店 ID 显示在物业名称下方（URL 中为 hotel_id=…）。",
+      "extranetStep3": "前往 账户 → 连接服务商，选择此渠道管理器。",
+      "extranetStep4": "确认连接，然后返回此处粘贴您的酒店 ID。"
     }
   },
   "demoBanner": {

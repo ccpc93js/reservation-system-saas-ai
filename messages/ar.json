@@ -1216,7 +1216,12 @@
       "pendingDismiss": "تجاهل",
       "toastModApplied": "تم تطبيق التغيير",
       "toastModDismissed": "تم تجاهل التغيير",
-      "toastModFailed": "تعذّر معالجة التغيير"
+      "toastModFailed": "تعذّر معالجة التغيير",
+      "extranetGuideTitle": "كيفية الربط على Booking.com",
+      "extranetStep1": "سجّل الدخول إلى إكسترانت Booking.com (admin.booking.com).",
+      "extranetStep2": "يظهر معرّف الفندق أسفل اسم الملكية (وفي الرابط بصيغة hotel_id=…).",
+      "extranetStep3": "انتقل إلى الحساب ← مزوّد الاتصال واختر مدير القنوات هذا.",
+      "extranetStep4": "أكّد الاتصال، ثم عُد إلى هنا والصق معرّف الفندق."
     }
   },
   "demoBanner": {

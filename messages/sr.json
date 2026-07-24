@@ -1216,7 +1216,12 @@
       "pendingDismiss": "Odbaci",
       "toastModApplied": "Izmena primenjena",
       "toastModDismissed": "Izmena odbačena",
-      "toastModFailed": "Nije moguće rešiti izmenu"
+      "toastModFailed": "Nije moguće rešiti izmenu",
+      "extranetGuideTitle": "Kako povezati na Booking.com",
+      "extranetStep1": "Prijavite se na Booking.com Ekstranet (admin.booking.com).",
+      "extranetStep2": "ID hotela je prikazan ispod naziva objekta (i u URL-u kao hotel_id=…).",
+      "extranetStep3": "Idite na Nalog → Provajder povezivanja i izaberite ovog menadžera kanala.",
+      "extranetStep4": "Potvrdite vezu, zatim se vratite ovde i nalepite ID hotela."
     }
   },
   "demoBanner": {

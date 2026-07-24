@@ -1216,7 +1216,12 @@
       "pendingDismiss": "উপেক্ষা করুন",
       "toastModApplied": "পরিবর্তন প্রয়োগ হয়েছে",
       "toastModDismissed": "পরিবর্তন উপেক্ষা করা হয়েছে",
-      "toastModFailed": "পরিবর্তন সমাধান করা যায়নি"
+      "toastModFailed": "পরিবর্তন সমাধান করা যায়নি",
+      "extranetGuideTitle": "Booking.com-এ কীভাবে সংযুক্ত করবেন",
+      "extranetStep1": "Booking.com এক্সট্রানেটে (admin.booking.com) লগ ইন করুন।",
+      "extranetStep2": "আপনার হোটেল ID প্রপার্টির নামের নিচে দেখা যায় (এবং URL-এ hotel_id=… হিসেবে)।",
+      "extranetStep3": "অ্যাকাউন্ট → কানেক্টিভিটি প্রোভাইডার-এ যান এবং এই চ্যানেল ম্যানেজার নির্বাচন করুন।",
+      "extranetStep4": "সংযোগ নিশ্চিত করুন, তারপর এখানে ফিরে এসে আপনার হোটেল ID পেস্ট করুন।"
     }
   },
   "demoBanner": {

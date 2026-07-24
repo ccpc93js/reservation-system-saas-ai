@@ -1216,7 +1216,12 @@
       "pendingDismiss": "Ignorar",
       "toastModApplied": "Alteração aplicada",
       "toastModDismissed": "Alteração ignorada",
-      "toastModFailed": "Não foi possível resolver a alteração"
+      "toastModFailed": "Não foi possível resolver a alteração",
+      "extranetGuideTitle": "Como ligar no Booking.com",
+      "extranetStep1": "Inicie sessão na Extranet do Booking.com (admin.booking.com).",
+      "extranetStep2": "O seu ID de hotel aparece sob o nome da propriedade (e no URL como hotel_id=…).",
+      "extranetStep3": "Vá a Conta → Fornecedor de conectividade e selecione este gestor de canais.",
+      "extranetStep4": "Confirme a ligação, volte aqui e cole o seu ID de hotel."
     }
   },
   "demoBanner": {
