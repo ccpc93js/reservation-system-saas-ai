@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "No se pudo conectar el canal",
       "toastConnected": "Canal conectado",
       "toastDisconnectFailed": "No se pudo desconectar",
-      "toastDisconnected": "Canal desconectado"
+      "toastDisconnected": "Canal desconectado",
+      "pendingHeading": "Cambios de OTA por revisar ({count})",
+      "pendingDates": "Fechas",
+      "pendingAmount": "Nuevo total",
+      "pendingApply": "Aplicar",
+      "pendingDismiss": "Descartar",
+      "toastModApplied": "Cambio aplicado",
+      "toastModDismissed": "Cambio descartado",
+      "toastModFailed": "No se pudo resolver el cambio"
     }
   },
   "demoBanner": {

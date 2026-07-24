@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "चैनल कनेक्ट करने में विफल",
       "toastConnected": "चैनल कनेक्ट हो गया",
       "toastDisconnectFailed": "डिस्कनेक्ट करने में विफल",
-      "toastDisconnected": "चैनल डिस्कनेक्ट हो गया"
+      "toastDisconnected": "चैनल डिस्कनेक्ट हो गया",
+      "pendingHeading": "समीक्षा हेतु OTA बदलाव ({count})",
+      "pendingDates": "तिथियाँ",
+      "pendingAmount": "नया कुल",
+      "pendingApply": "लागू करें",
+      "pendingDismiss": "अनदेखा करें",
+      "toastModApplied": "बदलाव लागू किया गया",
+      "toastModDismissed": "बदलाव अनदेखा किया गया",
+      "toastModFailed": "बदलाव हल नहीं हो सका"
     }
   },
   "demoBanner": {

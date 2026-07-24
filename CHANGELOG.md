@@ -1,5 +1,26 @@
 ## Unreleased - 2026-07-24
 
+feat: Channex modified-booking reconciliation
+
+OTA modifications ("modified" revisions) used to be flagged only. Now they're
+parked for review and applied on demand.
+
+- Migration 20260724_channex_pending_modifications: channex_pending_mods table
+  (one open row per booking) with RLS.
+- applyRevision now stores the proposed date/amount change instead of just
+  notifying.
+- src/lib/channels/channex-mods.ts: list / apply / dismiss. Apply updates the
+  reservation dates + amount, reassigns beds within the room type when the new
+  dates clash, refuses (leaves pending) if that would overbook, and pushes the
+  new availability. Room-type changes are not auto-applied.
+- GET/POST /api/channels/channex/modifications (manager-only).
+- ChannexSection shows a "changes to review" panel with Apply/Dismiss; i18n in
+  all 11 locales.
+- Verified live: a seeded modification moved a reservation Sep 10-12 → 15-18,
+  updated the total, and resolved to applied.
+
+## Unreleased - 2026-07-24
+
 feat: Channex outage recovery (time-scoped booking backfill)
 
 - src/lib/channels/channex-recovery.ts + POST /api/channels/channex/recover:

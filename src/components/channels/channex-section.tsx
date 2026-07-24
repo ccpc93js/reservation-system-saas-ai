@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { confirmDialog } from "@/components/ui/confirm-dialog";
-import { Plus, RefreshCw, Wifi, Trash2, X, Server } from "lucide-react";
+import { Plus, RefreshCw, Wifi, Trash2, X, Server, AlertTriangle } from "lucide-react";
 
 // OTAs connectable via the Channex API. Brand names stay untranslated.
 const OTAS = [
@@ -25,6 +25,20 @@ export interface ChannexChannel {
 interface RoomType {
   id: string;
   name: string;
+}
+
+interface PendingMod {
+  id: string;
+  booking_id: string;
+  ota_name: string | null;
+  ota_reservation_code: string | null;
+  new_check_in: string | null;
+  new_check_out: string | null;
+  new_amount: number | null;
+  reservation_number: string | null;
+  current_check_in: string | null;
+  current_check_out: string | null;
+  guest_name: string | null;
 }
 
 // mapping_details room/rate shape (OTA side).
@@ -72,6 +86,36 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
   // mapping: key `${roomId}:${rateId}` -> our rate plan id ("" = unmapped)
   const [mapping, setMapping] = useState<Record<string, string>>({});
   const [connecting, setConnecting] = useState(false);
+
+  // Pending OTA modifications awaiting review.
+  const [mods, setMods] = useState<PendingMod[]>([]);
+  const [resolvingMod, setResolvingMod] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/channels/channex/modifications")
+      .then((r) => (r.ok ? r.json() : { mods: [] }))
+      .then((d) => setMods(d.mods ?? []))
+      .catch(() => {});
+  }, []);
+
+  const resolveMod = async (mod: PendingMod, action: "apply" | "dismiss") => {
+    setResolvingMod(mod.id);
+    try {
+      const res = await fetch("/api/channels/channex/modifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ modId: mod.id, action }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || t("channex.toastModFailed"));
+      setMods((prev) => prev.filter((m) => m.id !== mod.id));
+      toast.success(action === "apply" ? t("channex.toastModApplied") : t("channex.toastModDismissed"));
+    } catch (err: any) {
+      toast.error(err.message || t("channex.toastModFailed"));
+    } finally {
+      setResolvingMod(null);
+    }
+  };
 
   const otaLabel = (v: string) => OTAS.find((o) => o.value === v)?.label ?? v;
 
@@ -215,6 +259,51 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
           </button>
         </div>
       </div>
+
+      {/* Pending OTA modifications — review before applying to the calendar */}
+      {mods.length > 0 && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50/60 overflow-hidden">
+          <div className="px-4 py-2 flex items-center gap-1.5 text-xs font-semibold text-amber-800 border-b border-amber-200">
+            <AlertTriangle className="w-3.5 h-3.5" /> {t("channex.pendingHeading", { count: mods.length })}
+          </div>
+          <div className="divide-y divide-amber-200">
+            {mods.map((mod) => (
+              <div key={mod.id} className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+                <div className="min-w-0 text-xs">
+                  <div className="font-medium text-foreground">
+                    {mod.guest_name ?? mod.ota_name ?? "OTA"} {mod.reservation_number ? `· ${mod.reservation_number}` : ""}
+                  </div>
+                  <div className="text-muted-foreground mt-0.5">
+                    {(mod.new_check_in || mod.new_check_out) && (
+                      <span>
+                        {t("channex.pendingDates")}: {mod.current_check_in}→{mod.current_check_out}{" "}
+                        <span className="text-amber-700 font-medium">⇒ {mod.new_check_in}→{mod.new_check_out}</span>
+                      </span>
+                    )}
+                    {mod.new_amount != null && <span className="ml-2">{t("channex.pendingAmount")}: {mod.new_amount}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => resolveMod(mod, "dismiss")}
+                    disabled={resolvingMod === mod.id}
+                    className="px-3 py-1.5 text-xs border border-border rounded-lg text-muted-foreground hover:bg-muted disabled:opacity-50"
+                  >
+                    {t("channex.pendingDismiss")}
+                  </button>
+                  <button
+                    onClick={() => resolveMod(mod, "apply")}
+                    disabled={resolvingMod === mod.id}
+                    className="px-3 py-1.5 text-xs bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50"
+                  >
+                    {t("channex.pendingApply")}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Connected channels */}
       {channels.length === 0 ? (

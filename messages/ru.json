@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "Не удалось подключить канал",
       "toastConnected": "Канал подключён",
       "toastDisconnectFailed": "Не удалось отключить",
-      "toastDisconnected": "Канал отключён"
+      "toastDisconnected": "Канал отключён",
+      "pendingHeading": "Изменения OTA на проверку ({count})",
+      "pendingDates": "Даты",
+      "pendingAmount": "Новая сумма",
+      "pendingApply": "Применить",
+      "pendingDismiss": "Отклонить",
+      "toastModApplied": "Изменение применено",
+      "toastModDismissed": "Изменение отклонено",
+      "toastModFailed": "Не удалось обработать изменение"
     }
   },
   "demoBanner": {

@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "チャネルの接続に失敗しました",
       "toastConnected": "チャネルを接続しました",
       "toastDisconnectFailed": "接続解除に失敗しました",
-      "toastDisconnected": "チャネルの接続を解除しました"
+      "toastDisconnected": "チャネルの接続を解除しました",
+      "pendingHeading": "確認が必要な OTA 変更（{count}）",
+      "pendingDates": "日付",
+      "pendingAmount": "新しい合計",
+      "pendingApply": "適用",
+      "pendingDismiss": "破棄",
+      "toastModApplied": "変更を適用しました",
+      "toastModDismissed": "変更を破棄しました",
+      "toastModFailed": "変更を処理できませんでした"
     }
   },
   "demoBanner": {

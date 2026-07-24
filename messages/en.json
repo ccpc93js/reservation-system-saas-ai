@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "Failed to connect the channel",
       "toastConnected": "Channel connected",
       "toastDisconnectFailed": "Failed to disconnect",
-      "toastDisconnected": "Channel disconnected"
+      "toastDisconnected": "Channel disconnected",
+      "pendingHeading": "OTA changes to review ({count})",
+      "pendingDates": "Dates",
+      "pendingAmount": "New total",
+      "pendingApply": "Apply",
+      "pendingDismiss": "Dismiss",
+      "toastModApplied": "Change applied",
+      "toastModDismissed": "Change dismissed",
+      "toastModFailed": "Could not resolve the change"
     }
   },
   "demoBanner": {

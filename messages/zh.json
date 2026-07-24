@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "渠道连接失败",
       "toastConnected": "渠道已连接",
       "toastDisconnectFailed": "断开连接失败",
-      "toastDisconnected": "渠道已断开"
+      "toastDisconnected": "渠道已断开",
+      "pendingHeading": "待审核的 OTA 变更（{count}）",
+      "pendingDates": "日期",
+      "pendingAmount": "新总额",
+      "pendingApply": "应用",
+      "pendingDismiss": "忽略",
+      "toastModApplied": "变更已应用",
+      "toastModDismissed": "变更已忽略",
+      "toastModFailed": "无法处理该变更"
     }
   },
   "demoBanner": {

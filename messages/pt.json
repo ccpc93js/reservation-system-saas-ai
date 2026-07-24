@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "Falha ao ligar o canal",
       "toastConnected": "Canal ligado",
       "toastDisconnectFailed": "Falha ao desligar",
-      "toastDisconnected": "Canal desligado"
+      "toastDisconnected": "Canal desligado",
+      "pendingHeading": "Alterações de OTA para rever ({count})",
+      "pendingDates": "Datas",
+      "pendingAmount": "Novo total",
+      "pendingApply": "Aplicar",
+      "pendingDismiss": "Ignorar",
+      "toastModApplied": "Alteração aplicada",
+      "toastModDismissed": "Alteração ignorada",
+      "toastModFailed": "Não foi possível resolver a alteração"
     }
   },
   "demoBanner": {

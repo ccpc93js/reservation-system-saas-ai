@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "Povezivanje kanala nije uspelo",
       "toastConnected": "Kanal povezan",
       "toastDisconnectFailed": "Prekid veze nije uspeo",
-      "toastDisconnected": "Veza sa kanalom prekinuta"
+      "toastDisconnected": "Veza sa kanalom prekinuta",
+      "pendingHeading": "OTA izmene za pregled ({count})",
+      "pendingDates": "Datumi",
+      "pendingAmount": "Novi ukupno",
+      "pendingApply": "Primeni",
+      "pendingDismiss": "Odbaci",
+      "toastModApplied": "Izmena primenjena",
+      "toastModDismissed": "Izmena odbačena",
+      "toastModFailed": "Nije moguće rešiti izmenu"
     }
   },
   "demoBanner": {

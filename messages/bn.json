@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "চ্যানেল সংযুক্ত করা যায়নি",
       "toastConnected": "চ্যানেল সংযুক্ত হয়েছে",
       "toastDisconnectFailed": "সংযোগ বিচ্ছিন্ন করা যায়নি",
-      "toastDisconnected": "চ্যানেলের সংযোগ বিচ্ছিন্ন হয়েছে"
+      "toastDisconnected": "চ্যানেলের সংযোগ বিচ্ছিন্ন হয়েছে",
+      "pendingHeading": "পর্যালোচনার জন্য OTA পরিবর্তন ({count})",
+      "pendingDates": "তারিখ",
+      "pendingAmount": "নতুন মোট",
+      "pendingApply": "প্রয়োগ করুন",
+      "pendingDismiss": "উপেক্ষা করুন",
+      "toastModApplied": "পরিবর্তন প্রয়োগ হয়েছে",
+      "toastModDismissed": "পরিবর্তন উপেক্ষা করা হয়েছে",
+      "toastModFailed": "পরিবর্তন সমাধান করা যায়নি"
     }
   },
   "demoBanner": {

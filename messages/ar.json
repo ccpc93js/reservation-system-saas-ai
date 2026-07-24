@@ -1208,7 +1208,15 @@
       "toastConnectFailed": "فشل ربط القناة",
       "toastConnected": "تم ربط القناة",
       "toastDisconnectFailed": "فشل قطع الاتصال",
-      "toastDisconnected": "تم قطع اتصال القناة"
+      "toastDisconnected": "تم قطع اتصال القناة",
+      "pendingHeading": "تغييرات OTA للمراجعة ({count})",
+      "pendingDates": "التواريخ",
+      "pendingAmount": "الإجمالي الجديد",
+      "pendingApply": "تطبيق",
+      "pendingDismiss": "تجاهل",
+      "toastModApplied": "تم تطبيق التغيير",
+      "toastModDismissed": "تم تجاهل التغيير",
+      "toastModFailed": "تعذّر معالجة التغيير"
     }
   },
   "demoBanner": {
