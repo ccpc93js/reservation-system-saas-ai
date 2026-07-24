@@ -1,5 +1,19 @@
 ## Unreleased - 2026-07-24
 
+feat: Channex outage recovery (time-scoped booking backfill)
+
+- src/lib/channels/channex-recovery.ts + POST /api/channels/channex/recover:
+  after a >30-min feed/webhook outage (beyond the revision-expiry window),
+  re-pull the durable GET /bookings list since {since} and apply anything the
+  PMS is missing, deduped by Channex booking id via applyRevision. Paginated,
+  bounded, safe to re-run. Manager-only or a one-off CRON_SECRET call — NOT a
+  cron (a periodic full re-pull is heavy and pointless).
+- Client listBookings now paginates + returns meta; a booking's attributes are
+  applied through the same applyRevision path as feed revisions.
+- Verified live: a deleted booking was re-imported (scanned 1, created 1).
+
+## Unreleased - 2026-07-24
+
 feat: Channex doctor (health check) + client envelope fix
 
 - src/lib/channels/channex-doctor.ts + GET /api/channels/channex/doctor:

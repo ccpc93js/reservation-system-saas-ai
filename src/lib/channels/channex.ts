@@ -383,10 +383,13 @@ export const channex = {
     return channexRequest(`/booking_revisions/${id}/ack`, { method: "POST", body: {} });
   },
 
-  /** Durable booking list — MANUAL, time-scoped recovery after a >30-min gap. */
-  listBookings(propertyId: string, insertedSince?: string): Promise<unknown> {
-    return channexRequest("/bookings", {
-      query: { "filter[property_id]": propertyId, "filter[inserted_at][gte]": insertedSince },
+  /** Durable booking list — MANUAL, time-scoped recovery after a >30-min gap.
+   *  Paginated (newest-first). Each item's `attributes` matches RevisionAttributes
+   *  closely enough to feed straight into applyRevision. */
+  listBookings(propertyId: string, insertedSince?: string, page = 1): Promise<BookingListPage> {
+    return channexRequest<BookingListPage>("/bookings", {
+      query: { "filter[property_id]": propertyId, "filter[inserted_at][gte]": insertedSince, page },
+      withMeta: true,
     });
   },
 
@@ -539,6 +542,13 @@ export interface Revision {
 
 export interface FeedPage {
   data: Revision[];
+  meta: { total: number; limit: number; page: number };
+}
+
+// A durable-booking-list page. Each booking's attributes are a superset of a
+// revision's, so they can be applied through the same path.
+export interface BookingListPage {
+  data: { id: string; attributes: RevisionAttributes }[];
   meta: { total: number; limit: number; page: number };
 }
 
