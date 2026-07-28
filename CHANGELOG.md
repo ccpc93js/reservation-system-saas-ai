@@ -1,5 +1,29 @@
 ## Unreleased - 2026-07-24
 
+feat: Channex ARI outbox + rate push (certification readiness)
+
+Certification requires that PMS save-handlers not call the Channex API directly
+and that pushes go through a rate-limited queue as deltas. Reworked accordingly.
+
+- Migration 20260724_channex_outbox: channex_outbox queue (RLS).
+- src/lib/channels/channex-outbox.ts: enqueueAvailability / enqueueRestrictions
+  (cheap inserts, skip non-provisioned orgs) + processOutbox worker — coalesces
+  due rows per (org, kind) into one push each, caps calls/run (20 ARI/min),
+  exponential backoff on 429/5xx, parks 4xx as error.
+- POST /api/channels/channex/outbox/process: the worker (cron ~1 min, or manager).
+- src/lib/channels/channex-rates.ts: pushRatesForOrg — pushes base_price as the
+  rate via /restrictions (partial `rate`-only update), compressed, never past.
+- All booking-change paths now ENQUEUE instead of pushing inline: direct
+  create/cancel/update-dates/extend, inbound applyRevision, iCal sync,
+  modification apply. Removed the old inline syncAvailabilityWindow.
+- base_price change (room-type PATCH) enqueues a rate push.
+- Full sync (push-availability route) is now 2 calls/property — availability +
+  rates — over a 500-day horizon.
+- Verified live: full sync pushed 7 room types + 7 rates (readback-correct,
+  €15/40/60/35 = base_price); 3 queued rows coalesced into 2 API calls, all sent.
+
+## Unreleased - 2026-07-24
+
 feat: guided Booking.com extranet steps in the connect wizard
 
 A collapsible "How to connect on Booking.com" in the connect wizard (shown for

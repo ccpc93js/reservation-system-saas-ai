@@ -1,6 +1,7 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { pushAvailabilityForOrg } from "@/lib/channels/channex-availability";
+import { pushRatesForOrg } from "@/lib/channels/channex-rates";
 import { ChannexConfigError } from "@/lib/channels/channex";
 
 // Phase 4 — availability (ARI) reconcile push. Pushes free-bed counts over a
@@ -37,11 +38,16 @@ export async function POST(request: Request) {
       orgIds = [(membership as any).organization_id];
     }
 
-    const horizonDays = 365;
+    // Full sync = 2 API calls per property (availability + rates), 500-day
+    // horizon, as certification expects. Allowed as an occasional reconcile;
+    // routine deltas go through the outbox worker.
+    const horizonDays = 500;
     const results = [];
     for (const orgId of orgIds) {
       try {
-        results.push({ orgId, ...(await pushAvailabilityForOrg(service as any, orgId, { horizonDays })) });
+        const availability = await pushAvailabilityForOrg(service as any, orgId, { horizonDays });
+        const rates = await pushRatesForOrg(service as any, orgId, { horizonDays });
+        results.push({ orgId, ok: availability.ok && rates.ok, availability, rates });
       } catch (err) {
         results.push({ orgId, ok: false, error: err instanceof Error ? err.message : "error" });
       }

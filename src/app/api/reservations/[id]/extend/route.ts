@@ -1,6 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { differenceInDays, parseISO } from "date-fns";
-import { syncAvailabilityWindow } from "@/lib/channels/channex-availability";
+import { enqueueAvailability } from "@/lib/channels/channex-outbox";
 
 export async function POST(
   request: Request,
@@ -85,7 +85,7 @@ export async function POST(
     if (updateError) return Response.json({ error: updateError.message }, { status: 400 });
 
     // Extended nights now occupied → push availability for the extension window.
-    await syncAvailabilityWindow(supabase as any, res.organization_id, res.check_out, new_check_out);
+    await enqueueAvailability(supabase as any, res.organization_id, res.check_out, new_check_out);
 
     const extensionTotal = extNights * Number(price_per_night) * bedIds.length;
     return Response.json({ success: true, new_total: newTotal, extension_nights: extNights, extension_total: extensionTotal });

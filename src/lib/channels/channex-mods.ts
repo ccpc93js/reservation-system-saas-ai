@@ -5,7 +5,7 @@
 // pending) if that would overbook. Room-type changes are not auto-applied.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { syncAvailabilityWindow } from "./channex-availability";
+import { enqueueAvailability } from "./channex-outbox";
 
 export interface PendingMod {
   id: string;
@@ -161,7 +161,7 @@ export async function applyModification(
   // Availability moved (old window freed, new window taken).
   const from = oldIn < newIn ? oldIn : newIn;
   const to = oldOut > newOut ? oldOut : newOut;
-  await syncAvailabilityWindow(supabase, orgId, from, to);
+  await enqueueAvailability(supabase, orgId, from, to);
 
   return { ok: true };
 }

@@ -14,19 +14,18 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { channex, type RevisionAttributes } from "./channex";
-import { pushAvailabilityForOrg } from "./channex-availability";
+import { enqueueAvailability } from "./channex-outbox";
 import { notifyOrg } from "@/lib/notifications";
 
-// After an inbound booking changes the calendar, push the affected date window
-// so OTAs see the new availability. Scoped to the stay window (cheap), all room
-// types. Awaited-but-swallowed: a push failure must not block the ack — the
-// periodic reconcile corrects any drift.
+// After an inbound booking changes the calendar, queue an availability push for
+// the affected window so OTAs see it. Enqueue only — the outbox worker batches
+// + rate-limits, so ingesting a burst of bookings won't hammer the API.
 async function pushWindow(supabase: SupabaseClient, orgId: string, from?: string, to?: string): Promise<void> {
   if (!from || !to) return;
   try {
-    await pushAvailabilityForOrg(supabase, orgId, { from, to });
+    await enqueueAvailability(supabase, orgId, from, to);
   } catch (err) {
-    console.error("channex availability push failed:", err);
+    console.error("channex availability enqueue failed:", err);
   }
 }
 

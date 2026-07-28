@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { updateRoomTypeSchema } from "@/lib/validations/room";
+import { enqueueRestrictions } from "@/lib/channels/channex-outbox";
 
 export async function GET(
   _request: Request,
@@ -143,6 +144,14 @@ export async function PATCH(
         { error: updateError.message || "Failed to update room type" },
         { status: 400 }
       );
+    }
+
+    // A base_price change is a rate change → queue a restrictions (rate) push
+    // for this room type. No-op if the org isn't Channex-provisioned.
+    if (body.base_price !== undefined) {
+      const today = new Date().toISOString().slice(0, 10);
+      const horizon = new Date(Date.now() + 500 * 86400000).toISOString().slice(0, 10);
+      await enqueueRestrictions(supabase as any, (membership as any).organization_id, today, horizon, [id]);
     }
 
     return Response.json({ success: true });

@@ -1,6 +1,6 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { notifyOrg } from "@/lib/notifications";
-import { pushAvailabilityForOrg } from "@/lib/channels/channex-availability";
+import { enqueueAvailability } from "@/lib/channels/channex-outbox";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ical = require("node-ical");
 
@@ -382,15 +382,17 @@ export async function POST(
       })
       .eq("id", id);
 
-    // iCal bookings changed the calendar → mirror the new availability to
-    // Channex so API-connected OTAs see it too. No-op if this org isn't
-    // Channex-provisioned. Full-horizon push (cheap, run-length compressed);
-    // errors are swallowed so an iCal sync never fails on a Channex hiccup.
+    // iCal bookings changed the calendar → queue an availability push so
+    // API-connected OTAs see it too. Enqueue only (the outbox worker batches +
+    // rate-limits); no-op if this org isn't Channex-provisioned. Cover a wide
+    // window since iCal events span far out.
     if (results.created + results.updated + results.cancelled > 0) {
       try {
-        await pushAvailabilityForOrg(serviceClient as any, orgId);
+        const today = new Date().toISOString().slice(0, 10);
+        const horizon = new Date(Date.now() + 500 * 86400000).toISOString().slice(0, 10);
+        await enqueueAvailability(serviceClient as any, orgId, today, horizon);
       } catch (err) {
-        console.error("channex availability push after iCal sync failed:", err);
+        console.error("channex availability enqueue after iCal sync failed:", err);
       }
     }
 
