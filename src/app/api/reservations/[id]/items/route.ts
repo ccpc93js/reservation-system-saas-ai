@@ -9,7 +9,7 @@ async function loadReservation(supabase: any, reservationId: string) {
 
   const { data: res } = await supabase
     .from("reservations")
-    .select("id, organization_id, check_in, check_out")
+    .select("id, organization_id, check_in, check_out, total_amount, overbooked")
     .eq("id", reservationId)
     .single();
   if (!res) return { error: "Reservation not found", status: 404 as const };
@@ -62,16 +62,19 @@ export async function POST(
       .from("reservation_items")
       .select("bed_id, price_per_night, beds(room_id)")
       .eq("reservation_id", id);
-    if (!existing || existing.length === 0) {
-      return Response.json({ error: "Reservation has no beds to extend from" }, { status: 400 });
-    }
-    const allowedRooms = new Set(existing.map((it: any) => it.beds?.room_id).filter(Boolean));
-    const alreadyOn = new Set(existing.map((it: any) => it.bed_id));
-    const rate = Number(existing[0].price_per_night) || 0;
+    // A bedless reservation (e.g. an overbooked OTA import) is being PLACED for
+    // the first time — allow any bed, and derive a per-bed rate from the total.
+    const firstPlacement = !existing || existing.length === 0;
     const nights = differenceInDays(new Date(res.check_out), new Date(res.check_in));
     if (nights <= 0) return Response.json({ error: "Invalid reservation dates" }, { status: 400 });
 
-    // Validate every requested bed: same org, in an allowed room, not already on it.
+    const allowedRooms = firstPlacement ? null : new Set(existing.map((it: any) => it.beds?.room_id).filter(Boolean));
+    const alreadyOn = new Set((existing ?? []).map((it: any) => it.bed_id));
+    const rate = firstPlacement
+      ? (nights > 0 && bedIds.length > 0 ? Number(res.total_amount || 0) / nights / bedIds.length : 0)
+      : (Number(existing[0].price_per_night) || 0);
+
+    // Validate every requested bed: same org, (same room unless first placement), not already on it.
     const { data: beds } = await (supabase as any)
       .from("beds")
       .select("id, name, room_id, organization_id, is_active")
@@ -81,7 +84,7 @@ export async function POST(
       const b: any = bedMap.get(bid);
       if (!b || b.organization_id !== res.organization_id) return Response.json({ error: "Bed not found" }, { status: 404 });
       if (alreadyOn.has(bid)) return Response.json({ error: "Bed is already on this reservation" }, { status: 409 });
-      if (!allowedRooms.has(b.room_id)) return Response.json({ error: "Bed must be in the same room as the reservation" }, { status: 400 });
+      if (allowedRooms && !allowedRooms.has(b.room_id)) return Response.json({ error: "Bed must be in the same room as the reservation" }, { status: 400 });
       if (!b.is_active) return Response.json({ error: `Bed ${b.name} is inactive` }, { status: 400 });
     }
 
@@ -109,6 +112,11 @@ export async function POST(
     }));
     const { error: insErr } = await (supabase as any).from("reservation_items").insert(payload);
     if (insErr) return Response.json({ error: insErr.message }, { status: 400 });
+
+    // Placing an overbooked reservation clears the flag.
+    if (res.overbooked) {
+      await (supabase as any).from("reservations").update({ overbooked: false }).eq("id", id);
+    }
 
     const total = await recomputeTotal(supabase, id);
     return Response.json({ success: true, total_amount: total });

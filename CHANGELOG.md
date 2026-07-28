@@ -1,5 +1,17 @@
 ## Unreleased - 2026-07-28
 
+feat: ingest unplaceable OTA bookings instead of dropping them
+
+An overbooked inbound OTA booking (no free bed/room) was blocked with only a
+notification, leaving no record — a guest with a valid OTA confirmation could
+arrive unknown to the PMS. Now it's ingested as a flagged, unassigned
+reservation (guest, dates, OTA code, total; no bed; overbooked=true, status
+pending), visible in Reservations with an "Overbooked" badge. Staff place it
+via Add Bed (now allowed as a first placement for a bedless reservation), which
+clears the flag. Migration adds reservations.overbooked; i18n in all 11 locales.
+
+## Unreleased - 2026-07-28
+
 feat: auto-select the whole room for private-room direct bookings
 
 The New Reservation drawer defaulted to the single anchor bed for every room.

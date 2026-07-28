@@ -816,6 +816,7 @@ export type Database = {
           online_checkin_completed_at: string | null
           online_checkin_token: string | null
           organization_id: string
+          overbooked: boolean
           paid_amount: number
           payment_confirmed: boolean
           payment_currency: string | null
@@ -862,6 +863,7 @@ export type Database = {
           online_checkin_completed_at?: string | null
           online_checkin_token?: string | null
           organization_id: string
+          overbooked?: boolean
           paid_amount?: number
           payment_confirmed?: boolean
           payment_currency?: string | null
@@ -908,6 +910,7 @@ export type Database = {
           online_checkin_completed_at?: string | null
           online_checkin_token?: string | null
           organization_id?: string
+          overbooked?: boolean
           paid_amount?: number
           payment_confirmed?: boolean
           payment_currency?: string | null

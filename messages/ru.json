@@ -503,7 +503,8 @@
     "refresh": "Обновить",
     "exportCsv": "Экспорт CSV",
     "toastNoneToExport": "Нет броней для экспорта",
-    "toastExportFailed": "Ошибка экспорта"
+    "toastExportFailed": "Ошибка экспорта",
+    "overbookedBadge": "Овербукинг"
   },
   "guests": {
     "errorLoading": "Ошибка загрузки гостей",

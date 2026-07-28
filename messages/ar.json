@@ -503,7 +503,8 @@
     "refresh": "تحديث",
     "exportCsv": "تصدير CSV",
     "toastNoneToExport": "لا توجد حجوزات للتصدير",
-    "toastExportFailed": "فشل التصدير"
+    "toastExportFailed": "فشل التصدير",
+    "overbookedBadge": "حجز زائد"
   },
   "guests": {
     "errorLoading": "خطأ في تحميل النزلاء",

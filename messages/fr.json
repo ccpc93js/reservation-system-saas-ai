@@ -503,7 +503,8 @@
     "refresh": "Actualiser",
     "exportCsv": "Exporter CSV",
     "toastNoneToExport": "Aucune réservation à exporter",
-    "toastExportFailed": "Échec de l’export"
+    "toastExportFailed": "Échec de l’export",
+    "overbookedBadge": "Surréservation"
   },
   "guests": {
     "errorLoading": "Erreur lors du chargement des clients",
