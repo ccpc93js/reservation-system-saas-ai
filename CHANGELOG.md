@@ -1,3 +1,14 @@
+## Unreleased - 2026-07-28
+
+fix: assign one bed per guest for dorm OTA bookings
+
+An inbound OTA booking for a per-bed dorm was assigned bed count = number of
+room entries (usually 1), ignoring occupancy — so a 3-guest dorm booking got
+1 bed. applyRevision now sizes a dorm booking by occupancy (adults + children)
+across the room entries; private rooms stay one unit per room entry. The
+reservation total is unchanged (what the guest paid); availability now
+decrements by the correct bed count.
+
 ## Unreleased - 2026-07-24
 
 chore: Vercel cron config for the Channex workers
