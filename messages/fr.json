@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "Sélectionnez au moins un lit",
       "pickCheckoutToChooseBeds": "Sélectionnez une date de départ pour choisir les lits",
       "selectDatePlaceholder": "Sélectionnez une date",
-      "checkOutAfterCheckIn": "La date de départ doit être postérieure à la date d’arrivée"
+      "checkOutAfterCheckIn": "La date de départ doit être postérieure à la date d’arrivée",
+      "wholeRoomPrivate": "Chambre entière (privée)"
     },
     "editReservation": {
       "loading": "Chargement...",

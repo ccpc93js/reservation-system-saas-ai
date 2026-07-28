@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "اختر سريرًا واحدًا على الأقل",
       "pickCheckoutToChooseBeds": "اختر تاريخ المغادرة لاختيار الأسرّة",
       "selectDatePlaceholder": "اختر تاريخًا",
-      "checkOutAfterCheckIn": "تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول"
+      "checkOutAfterCheckIn": "تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول",
+      "wholeRoomPrivate": "الغرفة كاملة (خاصة)"
     },
     "editReservation": {
       "loading": "جارٍ التحميل...",

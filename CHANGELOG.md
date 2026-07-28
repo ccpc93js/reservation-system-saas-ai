@@ -1,5 +1,15 @@
 ## Unreleased - 2026-07-28
 
+feat: auto-select the whole room for private-room direct bookings
+
+The New Reservation drawer defaulted to the single anchor bed for every room.
+For a private room type it now auto-selects the whole room (all free beds) once
+dates are chosen, and hides the per-bed quantity picker (a private room is a
+whole unit) — matching the OTA-booking behaviour. Dorms keep the per-bed
+picker. i18n key in all 11 locales.
+
+## Unreleased - 2026-07-28
+
 fix: correct private-room handling for OTA bookings and availability
 
 Private room types were mishandled: an OTA booking assigned 1 bed, and

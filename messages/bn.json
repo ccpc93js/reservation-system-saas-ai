@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "অন্তত একটি বেড নির্বাচন করুন",
       "pickCheckoutToChooseBeds": "বেড নির্বাচন করতে চেক-আউট তারিখ বেছে নিন",
       "selectDatePlaceholder": "একটি তারিখ নির্বাচন করুন",
-      "checkOutAfterCheckIn": "চেক-আউট তারিখ চেক-ইন তারিখের পরে হতে হবে"
+      "checkOutAfterCheckIn": "চেক-আউট তারিখ চেক-ইন তারিখের পরে হতে হবে",
+      "wholeRoomPrivate": "সম্পূর্ণ রুম (প্রাইভেট)"
     },
     "editReservation": {
       "loading": "লোড হচ্ছে...",
