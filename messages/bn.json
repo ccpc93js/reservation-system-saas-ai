@@ -49,7 +49,8 @@
       "settingsTeam": "টিম",
       "settingsBilling": "বিলিং ও প্ল্যান",
       "housekeeping": "হাউসকিপিং",
-      "help": "সহায়তা"
+      "help": "সহায়তা",
+      "notifications": "বিজ্ঞপ্তি"
     },
     "role": {
       "owner": "মালিক",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "সম্ভাব্য ডুপ্লিকেট অতিথি: {guestName} ({documentNumber})",
       "channel_sync_failed": "{channelName} সিঙ্ক ব্যর্থ হয়েছে: {reason}",
       "channel_synced": "{channelName}: {created}টি নতুন, {updated}টি আপডেট, {cancelled}টি বাতিল"
+    },
+    "pageTitle": "বিজ্ঞপ্তি",
+    "pageSubtitle": "আপনার সব সতর্কতা — খুঁজুন ও ফিল্টার করুন।",
+    "searchPlaceholder": "বিজ্ঞপ্তি খুঁজুন…",
+    "allTypes": "সব ধরন",
+    "statusAll": "সব",
+    "statusUnread": "অপঠিত",
+    "statusRead": "পঠিত",
+    "loadMore": "আরও লোড করুন",
+    "loading": "লোড হচ্ছে…",
+    "noResults": "মিলে যাওয়া কোনো বিজ্ঞপ্তি নেই",
+    "unread": "অপঠিত",
+    "read": "পঠিত",
+    "typeLabels": {
+      "checkin_submitted": "চেক-ইন জমা দেওয়া হয়েছে",
+      "reservation_created": "নতুন বুকিং",
+      "reservation_cancelled": "বাতিল",
+      "duplicate_guest": "ডুপ্লিকেট অতিথি",
+      "channel_sync_failed": "চ্যানেল সতর্কতা",
+      "channel_synced": "চ্যানেল সিঙ্ক হয়েছে"
     }
   },
   "housekeeping": {

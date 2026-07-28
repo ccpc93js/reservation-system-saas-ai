@@ -49,7 +49,8 @@
       "settingsTeam": "Équipe",
       "settingsBilling": "Facturation et forfait",
       "housekeeping": "Ménage",
-      "help": "Aide"
+      "help": "Aide",
+      "notifications": "Notifications"
     },
     "role": {
       "owner": "Propriétaire",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "Client potentiellement en double : {guestName} ({documentNumber})",
       "channel_sync_failed": "Échec de la synchronisation de {channelName} : {reason}",
       "channel_synced": "{channelName} : {created} nouvelles, {updated} mises à jour, {cancelled} annulées"
+    },
+    "pageTitle": "Notifications",
+    "pageSubtitle": "Toutes vos alertes — recherchez et filtrez.",
+    "searchPlaceholder": "Rechercher des notifications…",
+    "allTypes": "Tous les types",
+    "statusAll": "Toutes",
+    "statusUnread": "Non lues",
+    "statusRead": "Lues",
+    "loadMore": "Charger plus",
+    "loading": "Chargement…",
+    "noResults": "Aucune notification correspondante",
+    "unread": "Non lue",
+    "read": "Lue",
+    "typeLabels": {
+      "checkin_submitted": "Check-in envoyé",
+      "reservation_created": "Nouvelle réservation",
+      "reservation_cancelled": "Annulation",
+      "duplicate_guest": "Client en double",
+      "channel_sync_failed": "Alerte de canal",
+      "channel_synced": "Canal synchronisé"
     }
   },
   "housekeeping": {

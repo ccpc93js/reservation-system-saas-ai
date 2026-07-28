@@ -49,7 +49,8 @@
       "settingsTeam": "टीम",
       "settingsBilling": "बिलिंग और प्लान",
       "housekeeping": "हाउसकीपिंग",
-      "help": "सहायता"
+      "help": "सहायता",
+      "notifications": "सूचनाएँ"
     },
     "role": {
       "owner": "मालिक",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "संभावित डुप्लिकेट अतिथि: {guestName} ({documentNumber})",
       "channel_sync_failed": "{channelName} सिंक विफल: {reason}",
       "channel_synced": "{channelName}: {created} नई, {updated} अपडेट, {cancelled} रद्द"
+    },
+    "pageTitle": "सूचनाएँ",
+    "pageSubtitle": "आपकी सभी अलर्ट — खोजें और फ़िल्टर करें।",
+    "searchPlaceholder": "सूचनाएँ खोजें…",
+    "allTypes": "सभी प्रकार",
+    "statusAll": "सभी",
+    "statusUnread": "अपठित",
+    "statusRead": "पठित",
+    "loadMore": "और लोड करें",
+    "loading": "लोड हो रहा है…",
+    "noResults": "कोई मेल खाती सूचना नहीं",
+    "unread": "अपठित",
+    "read": "पठित",
+    "typeLabels": {
+      "checkin_submitted": "चेक-इन सबमिट किया गया",
+      "reservation_created": "नई बुकिंग",
+      "reservation_cancelled": "रद्दीकरण",
+      "duplicate_guest": "डुप्लिकेट अतिथि",
+      "channel_sync_failed": "चैनल अलर्ट",
+      "channel_synced": "चैनल सिंक हुआ"
     }
   },
   "housekeeping": {
