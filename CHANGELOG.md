@@ -1,5 +1,23 @@
 ## Unreleased - 2026-07-28
 
+fix: correct private-room handling for OTA bookings and availability
+
+Private room types were mishandled: an OTA booking assigned 1 bed, and
+availability pushed bed-count (0–6) for a room type Channex tracks as
+count_of_rooms (0–1) — so Channex could oversell a private room.
+
+- Migration 20260728_channex_free_units_by_type: free_beds_calendar now
+  returns free BEDS for dorms and free ROOMS for private types (a private
+  room is occupied if any of its beds is booked that night).
+- Migration 20260728_channex_reservation_whole_room: create_channex_reservation
+  gains p_whole_room — a private booking takes a whole free room (all its
+  beds), returning null (overbooking) if none is fully free.
+- applyRevision routes dorm → one bed per guest (occupancy), private → whole
+  room. Verified live: a 5-guest Family Room booking now occupies all 6 beds
+  and the room reads 0 available.
+
+## Unreleased - 2026-07-28
+
 fix: assign one bed per guest for dorm OTA bookings
 
 An inbound OTA booking for a per-bed dorm was assigned bed count = number of

@@ -161,20 +161,25 @@ export async function applyRevision(
     const localRoomTypeId = rtLink.local_id;
     const mixedTypes = rooms.some((r) => r.room_type_id && r.room_type_id !== firstChannexRt);
 
-    // Beds to assign. A DORM is sold per bed, so a 3-guest dorm booking needs 3
-    // beds — count the occupancy (adults + children; infants don't take a bed)
-    // across the room entries. A PRIVATE room is one unit per room entry.
+    // How to occupy the room type:
+    //   DORM    → sold per bed: one bed per guest (occupancy across room entries).
+    //   PRIVATE → sold as a whole unit: the RPC takes a whole free room (all its
+    //             beds), so the remaining beds can't be sold to someone else.
     const { data: localRt } = await supabase
       .from("room_types")
-      .select("type")
+      .select("type, capacity")
       .eq("id", localRoomTypeId)
       .maybeSingle();
     const isDorm = (localRt as { type?: string } | null)?.type === "dorm";
+    const capacity = Math.max(1, Number((localRt as { capacity?: number } | null)?.capacity) || 1);
     const occSum = rooms.reduce((n, r) => {
       const o = r.occupancy || {};
       return n + (Number(o.adults) || 0) + (Number(o.children) || 0);
     }, 0);
-    const quantity = isDorm ? Math.max(1, occSum || rooms.length) : rooms.length;
+    const wholeRoom = !isDorm;
+    // Bed count only drives the per-bed price split; for a private whole room
+    // the RPC assigns the room's actual beds and ignores p_quantity.
+    const bedCount = isDorm ? Math.max(1, occSum || rooms.length) : capacity;
 
     // Dates: prefer per-room, fall back to booking-level.
     const checkIn = rooms[0].checkin_date || attrs.arrival_date;
@@ -184,7 +189,7 @@ export async function applyRevision(
     // Money: booking-level total, split to a nightly per-bed figure.
     const total = Number(attrs.amount ?? 0) || 0;
     const nights = Math.max(1, Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000));
-    const pricePerNight = quantity > 0 && nights > 0 ? total / quantity / nights : 0;
+    const pricePerNight = bedCount > 0 && nights > 0 ? total / bedCount / nights : 0;
 
     // Guest: create from the real customer details.
     const guestId = await upsertGuest(supabase, orgId, platform, attrs);
@@ -198,21 +203,22 @@ export async function applyRevision(
       p_check_out: checkOut,
       p_notes: `${attrs.ota_name ?? "OTA"}${otaCode}${mixedTypes ? " — MIXED room types, review" : ""}`,
       p_room_type_id: localRoomTypeId,
-      p_quantity: quantity,
+      p_quantity: bedCount,
       p_price_per_night: pricePerNight,
       p_total_price: total,
+      p_whole_room: wholeRoom,
     });
 
     if (rpcErr) return { action: "error", bookingId, warning: rpcErr.message };
 
     if (!newResId) {
-      // Overbooking — not enough free beds. Never drop the booking silently.
+      // Overbooking — not enough free beds / no free room. Never drop silently.
       await notifyOrg(
         orgId,
         "channel_sync_failed",
         {
           channelName: `${attrs.ota_name ?? "OTA"}${otaCode}`,
-          reason: `OVERBOOKING: no ${quantity} free bed(s) for ${checkIn} → ${checkOut}. Booking ${bookingId} needs manual placement.`,
+          reason: `OVERBOOKING: no ${wholeRoom ? "free room" : `${bedCount} free bed(s)`} for ${checkIn} → ${checkOut}. Booking ${bookingId} needs manual placement.`,
         },
         "/reservations"
       );
