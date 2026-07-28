@@ -39,3 +39,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+// Vercel cron triggers with a GET (carrying Authorization: Bearer $CRON_SECRET).
+export const GET = POST;

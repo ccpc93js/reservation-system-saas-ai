@@ -1,1 +1,7 @@
-{}
+{
+  "crons": [
+    { "path": "/api/channels/channex/outbox/process", "schedule": "* * * * *" },
+    { "path": "/api/channels/channex/feed", "schedule": "*/2 * * * *" },
+    { "path": "/api/channels/channex/push-availability", "schedule": "0 4 * * *" }
+  ]
+}

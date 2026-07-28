@@ -1,5 +1,17 @@
 ## Unreleased - 2026-07-24
 
+chore: Vercel cron config for the Channex workers
+
+- vercel.json crons: outbox worker every minute, feed poll every 2 min,
+  full-sync reconcile daily at 04:00 UTC.
+- Added GET handlers (export const GET = POST) to the outbox/feed/
+  push-availability routes since Vercel cron triggers via GET with the
+  Authorization: Bearer $CRON_SECRET header.
+- NOTE: 3 crons + minute schedules require Vercel Pro (Hobby caps at 2 daily
+  crons). Crons only register on production deployments.
+
+## Unreleased - 2026-07-24
+
 feat: Channex ARI outbox + rate push (certification readiness)
 
 Certification requires that PMS save-handlers not call the Channex API directly
