@@ -147,9 +147,8 @@ export async function applyRevision(
     // 5. New booking (or a modification we don't yet hold → treat as new).
     if (existing) return { action: "skipped", bookingId, warning: "already imported" };
 
-    // Map the room type. A booking can list several rooms; v1 assigns from the
-    // first mapped room type with quantity = number of room entries. Mixed
-    // types are flagged (rare for hostels).
+    // Map the room type from the first room entry. Mixed types are flagged
+    // (rare for hostels).
     const rooms = attrs.rooms ?? [];
     if (rooms.length === 0) return { action: "error", bookingId, warning: "no rooms in revision" };
 
@@ -161,7 +160,21 @@ export async function applyRevision(
     }
     const localRoomTypeId = rtLink.local_id;
     const mixedTypes = rooms.some((r) => r.room_type_id && r.room_type_id !== firstChannexRt);
-    const quantity = rooms.length;
+
+    // Beds to assign. A DORM is sold per bed, so a 3-guest dorm booking needs 3
+    // beds — count the occupancy (adults + children; infants don't take a bed)
+    // across the room entries. A PRIVATE room is one unit per room entry.
+    const { data: localRt } = await supabase
+      .from("room_types")
+      .select("type")
+      .eq("id", localRoomTypeId)
+      .maybeSingle();
+    const isDorm = (localRt as { type?: string } | null)?.type === "dorm";
+    const occSum = rooms.reduce((n, r) => {
+      const o = r.occupancy || {};
+      return n + (Number(o.adults) || 0) + (Number(o.children) || 0);
+    }, 0);
+    const quantity = isDorm ? Math.max(1, occSum || rooms.length) : rooms.length;
 
     // Dates: prefer per-room, fall back to booking-level.
     const checkIn = rooms[0].checkin_date || attrs.arrival_date;
