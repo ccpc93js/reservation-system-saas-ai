@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "Izaberite bar jedan krevet",
       "pickCheckoutToChooseBeds": "Izaberite datum odjave da biste izabrali krevete",
       "selectDatePlaceholder": "Izaberite datum",
-      "checkOutAfterCheckIn": "Datum odjave mora biti nakon datuma prijave"
+      "checkOutAfterCheckIn": "Datum odjave mora biti nakon datuma prijave",
+      "wholeRoomPrivate": "Cela soba (privatna)"
     },
     "editReservation": {
       "loading": "Učitavanje...",

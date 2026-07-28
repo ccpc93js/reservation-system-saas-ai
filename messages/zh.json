@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "请至少选择一个床位",
       "pickCheckoutToChooseBeds": "请选择退房日期以选择床位",
       "selectDatePlaceholder": "选择日期",
-      "checkOutAfterCheckIn": "退房日期必须晚于入住日期"
+      "checkOutAfterCheckIn": "退房日期必须晚于入住日期",
+      "wholeRoomPrivate": "整间房（私人）"
     },
     "editReservation": {
       "loading": "加载中...",

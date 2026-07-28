@@ -55,6 +55,8 @@ export default function NewReservationDrawer({
   const [roomId, setRoomId] = useState<string | null>(null);
   const [roomBeds, setRoomBeds] = useState<{ id: string; name: string; available: boolean; is_active: boolean }[]>([]);
   const [selectedBedIds, setSelectedBedIds] = useState<string[]>(bedId ? [bedId] : []);
+  // A private room is sold as a whole unit → auto-select all its beds.
+  const [isPrivateRoom, setIsPrivateRoom] = useState(false);
 
   const getTodayLocalDateStr = () => {
     const now = new Date();
@@ -112,6 +114,7 @@ export default function NewReservationDrawer({
       setConflict(null);
       setRoomBeds([]);
       setSelectedBedIds([]);
+      setIsPrivateRoom(false);
       setGuestMode("new");
       setSelectedGuest(null);
       setGuestSearch("");
@@ -209,9 +212,11 @@ export default function NewReservationDrawer({
     (async () => {
       const supabase = createBrowserClient();
       const { data: bed } = await (supabase as any)
-        .from("beds").select("room_id").eq("id", bedId).single();
+        .from("beds").select("room_id, rooms(room_types(type))").eq("id", bedId).single();
       const rid = bed?.room_id ?? null;
       setRoomId(rid);
+      // Whole-room default applies to private room types only.
+      setIsPrivateRoom(bed?.rooms?.room_types?.type === "private");
       if (!rid) return;
       const { data: beds } = await (supabase as any)
         .from("beds")
@@ -240,19 +245,25 @@ export default function NewReservationDrawer({
         if (cancelled) return;
         const beds = data.beds ?? [];
         setRoomBeds(beds);
-        // Drop selections that are no longer free; keep the anchor if it is.
-        setSelectedBedIds((prev) => {
-          const avail = new Set(beds.filter((b: any) => b.available).map((b: any) => b.id));
-          let next = prev.filter((id) => avail.has(id));
-          if (next.length === 0 && bedId && avail.has(bedId)) next = [bedId];
-          return next;
-        });
+        const availableIds = beds.filter((b: any) => b.available).map((b: any) => b.id);
+        if (isPrivateRoom) {
+          // Private room = whole unit: auto-select every free bed in the room.
+          setSelectedBedIds(availableIds);
+        } else {
+          // Dorm: drop selections that are no longer free; keep the anchor if it is.
+          setSelectedBedIds((prev) => {
+            const avail = new Set(availableIds);
+            let next = prev.filter((id) => avail.has(id));
+            if (next.length === 0 && bedId && avail.has(bedId)) next = [bedId];
+            return next;
+          });
+        }
       } catch {
         /* server re-validates on submit */
       }
     })();
     return () => { cancelled = true; };
-  }, [open, roomId, checkIn, checkOut, bedId]);
+  }, [open, roomId, checkIn, checkOut, bedId, isPrivateRoom]);
 
   const availableBeds = roomBeds.filter((b) => b.available);
   const freeCount = availableBeds.length;
@@ -487,36 +498,44 @@ export default function NewReservationDrawer({
                   </div>
                 )}
 
-                {/* Quantity quick-pick (auto-assign N free beds) */}
-                <div className="flex items-center gap-2 mb-2">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(selectedBedIds.length - 1)}
-                    disabled={!datesReady || selectedBedIds.length <= 0}
-                    className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[2rem] text-center text-sm font-semibold text-foreground">
-                    {datesReady ? selectedBedIds.length : 0}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(selectedBedIds.length + 1)}
-                    disabled={!datesReady || selectedBedIds.length >= freeCount}
-                    className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(freeCount)}
-                    disabled={!datesReady || freeCount === 0}
-                    className="ml-auto text-xs font-medium text-primary hover:text-primary/80 disabled:opacity-40"
-                  >
-                    {t("wholeRoom")}
-                  </button>
-                </div>
+                {/* Private room = whole unit; dorm = per-bed quantity picker. */}
+                {isPrivateRoom ? (
+                  datesReady && (
+                    <div className="flex items-center gap-1.5 mb-2 text-xs text-primary font-medium">
+                      <BedDouble className="w-3.5 h-3.5" /> {t("wholeRoomPrivate")}
+                    </div>
+                  )
+                ) : (
+                  <div className="flex items-center gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(selectedBedIds.length - 1)}
+                      disabled={!datesReady || selectedBedIds.length <= 0}
+                      className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-[2rem] text-center text-sm font-semibold text-foreground">
+                      {datesReady ? selectedBedIds.length : 0}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(selectedBedIds.length + 1)}
+                      disabled={!datesReady || selectedBedIds.length >= freeCount}
+                      className="w-8 h-8 rounded-lg border border-border text-foreground hover:bg-muted disabled:opacity-40 transition-colors"
+                    >
+                      +
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(freeCount)}
+                      disabled={!datesReady || freeCount === 0}
+                      className="ml-auto text-xs font-medium text-primary hover:text-primary/80 disabled:opacity-40"
+                    >
+                      {t("wholeRoom")}
+                    </button>
+                  </div>
+                )}
 
                 {/* Explicit bed list */}
                 <div className="rounded-lg border border-border divide-y divide-border max-h-44 overflow-y-auto">

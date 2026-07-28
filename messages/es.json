@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "Selecciona al menos una cama",
       "pickCheckoutToChooseBeds": "Selecciona la fecha de salida para elegir las camas",
       "selectDatePlaceholder": "Selecciona una fecha",
-      "checkOutAfterCheckIn": "La fecha de salida debe ser posterior a la fecha de entrada"
+      "checkOutAfterCheckIn": "La fecha de salida debe ser posterior a la fecha de entrada",
+      "wholeRoomPrivate": "Habitación completa (privada)"
     },
     "editReservation": {
       "loading": "Cargando...",

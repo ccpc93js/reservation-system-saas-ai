@@ -245,7 +245,8 @@
       "selectAtLeastOneBed": "Выберите хотя бы одну кровать",
       "pickCheckoutToChooseBeds": "Выберите дату выезда, чтобы выбрать кровати",
       "selectDatePlaceholder": "Выберите дату",
-      "checkOutAfterCheckIn": "Дата выезда должна быть позже даты заезда"
+      "checkOutAfterCheckIn": "Дата выезда должна быть позже даты заезда",
+      "wholeRoomPrivate": "Весь номер (приватный)"
     },
     "editReservation": {
       "loading": "Загрузка...",
