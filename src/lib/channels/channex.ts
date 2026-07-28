@@ -54,6 +54,9 @@ interface RequestOpts {
   // transient-failure retries (network / 5xx). Reads and idempotent upserts
   // are safe to retry; keep it modest.
   retries?: number;
+  // Return the full {data, meta} envelope instead of just data. Only the
+  // paginated feed needs meta; every other caller wants the bare data.
+  withMeta?: boolean;
 }
 
 function buildUrl(baseUrl: string, path: string, query?: Query) {
@@ -68,7 +71,7 @@ function buildUrl(baseUrl: string, path: string, query?: Query) {
 
 async function channexRequest<T = unknown>(path: string, opts: RequestOpts = {}): Promise<T> {
   const { apiKey, baseUrl } = config();
-  const { method = "GET", body, query, retries = 2 } = opts;
+  const { method = "GET", body, query, retries = 2, withMeta = false } = opts;
   const url = buildUrl(baseUrl, path, query);
 
   let lastErr: unknown;
@@ -106,11 +109,12 @@ async function channexRequest<T = unknown>(path: string, opts: RequestOpts = {})
         );
       }
 
-      // Success — unwrap the {data, meta} envelope. Return both when meta is
-      // present (feeds/lists paginate), otherwise just data.
+      // Success — unwrap the {data, meta} envelope to just `data`, unless the
+      // caller explicitly wants meta (the paginated feed). Returning the whole
+      // envelope by default breaks list callers that expect a bare array.
       if (json && typeof json === "object" && "data" in (json as any)) {
         const { data, meta } = json as any;
-        return (meta !== undefined ? { data, meta } : data) as T;
+        return (withMeta ? { data, meta } : data) as T;
       }
       return json as T;
     } catch (err) {
@@ -366,7 +370,7 @@ export const channex = {
 
   /** One page of unacked revisions (oldest-first). Drain until meta.total 0. */
   bookingFeed(page = 1): Promise<FeedPage> {
-    return channexRequest<FeedPage>("/booking_revisions/feed", { query: { page } });
+    return channexRequest<FeedPage>("/booking_revisions/feed", { query: { page }, withMeta: true });
   },
 
   /** One revision by id (use after a webhook — pull is source of truth). */
@@ -379,10 +383,13 @@ export const channex = {
     return channexRequest(`/booking_revisions/${id}/ack`, { method: "POST", body: {} });
   },
 
-  /** Durable booking list — MANUAL, time-scoped recovery after a >30-min gap. */
-  listBookings(propertyId: string, insertedSince?: string): Promise<unknown> {
-    return channexRequest("/bookings", {
-      query: { "filter[property_id]": propertyId, "filter[inserted_at][gte]": insertedSince },
+  /** Durable booking list — MANUAL, time-scoped recovery after a >30-min gap.
+   *  Paginated (newest-first). Each item's `attributes` matches RevisionAttributes
+   *  closely enough to feed straight into applyRevision. */
+  listBookings(propertyId: string, insertedSince?: string, page = 1): Promise<BookingListPage> {
+    return channexRequest<BookingListPage>("/bookings", {
+      query: { "filter[property_id]": propertyId, "filter[inserted_at][gte]": insertedSince, page },
+      withMeta: true,
     });
   },
 
@@ -535,6 +542,13 @@ export interface Revision {
 
 export interface FeedPage {
   data: Revision[];
+  meta: { total: number; limit: number; page: number };
+}
+
+// A durable-booking-list page. Each booking's attributes are a superset of a
+// revision's, so they can be applied through the same path.
+export interface BookingListPage {
+  data: { id: string; attributes: RevisionAttributes }[];
   meta: { total: number; limit: number; page: number };
 }
 

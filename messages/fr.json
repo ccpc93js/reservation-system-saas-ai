@@ -1208,7 +1208,20 @@
       "toastConnectFailed": "Échec de la connexion du canal",
       "toastConnected": "Canal connecté",
       "toastDisconnectFailed": "Échec de la déconnexion",
-      "toastDisconnected": "Canal déconnecté"
+      "toastDisconnected": "Canal déconnecté",
+      "pendingHeading": "Modifications OTA à examiner ({count})",
+      "pendingDates": "Dates",
+      "pendingAmount": "Nouveau total",
+      "pendingApply": "Appliquer",
+      "pendingDismiss": "Ignorer",
+      "toastModApplied": "Modification appliquée",
+      "toastModDismissed": "Modification ignorée",
+      "toastModFailed": "Impossible de résoudre la modification",
+      "extranetGuideTitle": "Comment connecter sur Booking.com",
+      "extranetStep1": "Connectez-vous à l'Extranet Booking.com (admin.booking.com).",
+      "extranetStep2": "Votre ID d'hôtel est affiché sous le nom de l'établissement (et dans l'URL comme hotel_id=…).",
+      "extranetStep3": "Allez dans Compte → Fournisseur de connectivité et sélectionnez ce gestionnaire de canaux.",
+      "extranetStep4": "Confirmez la connexion, puis revenez ici et collez votre ID d'hôtel."
     }
   },
   "demoBanner": {

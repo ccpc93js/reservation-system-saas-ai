@@ -1,6 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { differenceInDays, parseISO } from "date-fns";
-import { syncAvailabilityWindow } from "@/lib/channels/channex-availability";
+import { enqueueAvailability } from "@/lib/channels/channex-outbox";
 
 type ReservationOrg = {
   organization_id: string;
@@ -187,7 +187,7 @@ export async function PATCH(
     // Channex frees the vacated nights and blocks the new ones (no-op if not connected).
     const from = reservation.check_in < checkIn ? reservation.check_in : checkIn;
     const to = reservation.check_out > checkOut ? reservation.check_out : checkOut;
-    await syncAvailabilityWindow(supabase as any, reservation.organization_id, from, to);
+    await enqueueAvailability(supabase as any, reservation.organization_id, from, to);
 
     return Response.json({
       success: true,

@@ -14,19 +14,18 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { channex, type RevisionAttributes } from "./channex";
-import { pushAvailabilityForOrg } from "./channex-availability";
+import { enqueueAvailability } from "./channex-outbox";
 import { notifyOrg } from "@/lib/notifications";
 
-// After an inbound booking changes the calendar, push the affected date window
-// so OTAs see the new availability. Scoped to the stay window (cheap), all room
-// types. Awaited-but-swallowed: a push failure must not block the ack — the
-// periodic reconcile corrects any drift.
+// After an inbound booking changes the calendar, queue an availability push for
+// the affected window so OTAs see it. Enqueue only — the outbox worker batches
+// + rate-limits, so ingesting a burst of bookings won't hammer the API.
 async function pushWindow(supabase: SupabaseClient, orgId: string, from?: string, to?: string): Promise<void> {
   if (!from || !to) return;
   try {
-    await pushAvailabilityForOrg(supabase, orgId, { from, to });
+    await enqueueAvailability(supabase, orgId, from, to);
   } catch (err) {
-    console.error("channex availability push failed:", err);
+    console.error("channex availability enqueue failed:", err);
   }
 }
 
@@ -107,16 +106,40 @@ export async function applyRevision(
     }
 
     // 4. Modification of a booking we already hold — do NOT mutate the live
-    //    calendar automatically; flag for a human.
+    //    calendar automatically. Park the proposed change for a manager to
+    //    apply or dismiss, and flag it.
     if (attrs.status === "modified" && existing) {
+      const room0 = attrs.rooms?.[0];
+      const newCheckIn = room0?.checkin_date || attrs.arrival_date || null;
+      const newCheckOut = room0?.checkout_date || attrs.departure_date || null;
+      const newAmount = attrs.amount != null ? Number(attrs.amount) : null;
+
+      // One open row per booking — replace any prior pending one.
+      await supabase
+        .from("channex_pending_mods")
+        .delete()
+        .eq("organization_id", orgId)
+        .eq("booking_id", bookingId)
+        .eq("status", "pending");
+      await supabase.from("channex_pending_mods").insert({
+        organization_id: orgId,
+        reservation_id: (existing as any).id,
+        booking_id: bookingId,
+        ota_name: attrs.ota_name ?? null,
+        ota_reservation_code: attrs.ota_reservation_code ?? null,
+        new_check_in: newCheckIn,
+        new_check_out: newCheckOut,
+        new_amount: newAmount,
+      });
+
       await notifyOrg(
         orgId,
         "channel_sync_failed",
         {
           channelName: `${attrs.ota_name ?? "OTA"}${otaCode}`,
-          reason: `Booking MODIFIED on ${attrs.ota_name ?? "OTA"} — review manually (dates/rooms/price may have changed). Booking ${bookingId}.`,
+          reason: `Booking MODIFIED on ${attrs.ota_name ?? "OTA"} — review the pending change (dates/price). Booking ${bookingId}.`,
         },
-        "/reservations"
+        "/channels"
       );
       return { action: "modified_flagged", bookingId, reservationId: (existing as any).id };
     }

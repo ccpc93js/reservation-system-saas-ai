@@ -1208,7 +1208,20 @@
       "toastConnectFailed": "チャネルの接続に失敗しました",
       "toastConnected": "チャネルを接続しました",
       "toastDisconnectFailed": "接続解除に失敗しました",
-      "toastDisconnected": "チャネルの接続を解除しました"
+      "toastDisconnected": "チャネルの接続を解除しました",
+      "pendingHeading": "確認が必要な OTA 変更（{count}）",
+      "pendingDates": "日付",
+      "pendingAmount": "新しい合計",
+      "pendingApply": "適用",
+      "pendingDismiss": "破棄",
+      "toastModApplied": "変更を適用しました",
+      "toastModDismissed": "変更を破棄しました",
+      "toastModFailed": "変更を処理できませんでした",
+      "extranetGuideTitle": "Booking.com での接続方法",
+      "extranetStep1": "Booking.com エクストラネット（admin.booking.com）にログインします。",
+      "extranetStep2": "ホテル ID は施設名の下（および URL の hotel_id=… ）に表示されます。",
+      "extranetStep3": "アカウント → 接続プロバイダー でこのチャネルマネージャーを選択します。",
+      "extranetStep4": "接続を確認し、ここに戻ってホテル ID を貼り付けます。"
     }
   },
   "demoBanner": {

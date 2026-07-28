@@ -1208,7 +1208,20 @@
       "toastConnectFailed": "Failed to connect the channel",
       "toastConnected": "Channel connected",
       "toastDisconnectFailed": "Failed to disconnect",
-      "toastDisconnected": "Channel disconnected"
+      "toastDisconnected": "Channel disconnected",
+      "pendingHeading": "OTA changes to review ({count})",
+      "pendingDates": "Dates",
+      "pendingAmount": "New total",
+      "pendingApply": "Apply",
+      "pendingDismiss": "Dismiss",
+      "toastModApplied": "Change applied",
+      "toastModDismissed": "Change dismissed",
+      "toastModFailed": "Could not resolve the change",
+      "extranetGuideTitle": "How to connect on Booking.com",
+      "extranetStep1": "Log in to the Booking.com Extranet (admin.booking.com).",
+      "extranetStep2": "Your Hotel ID is shown under the property name (and in the URL as hotel_id=…).",
+      "extranetStep3": "Go to Account → Connectivity provider and select this channel manager.",
+      "extranetStep4": "Confirm the connection, then return here and paste your Hotel ID."
     }
   },
   "demoBanner": {

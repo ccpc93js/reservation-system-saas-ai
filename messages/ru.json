@@ -1208,7 +1208,20 @@
       "toastConnectFailed": "Не удалось подключить канал",
       "toastConnected": "Канал подключён",
       "toastDisconnectFailed": "Не удалось отключить",
-      "toastDisconnected": "Канал отключён"
+      "toastDisconnected": "Канал отключён",
+      "pendingHeading": "Изменения OTA на проверку ({count})",
+      "pendingDates": "Даты",
+      "pendingAmount": "Новая сумма",
+      "pendingApply": "Применить",
+      "pendingDismiss": "Отклонить",
+      "toastModApplied": "Изменение применено",
+      "toastModDismissed": "Изменение отклонено",
+      "toastModFailed": "Не удалось обработать изменение",
+      "extranetGuideTitle": "Как подключить на Booking.com",
+      "extranetStep1": "Войдите в экстранет Booking.com (admin.booking.com).",
+      "extranetStep2": "ID отеля показан под названием объекта (и в URL как hotel_id=…).",
+      "extranetStep3": "Перейдите в Аккаунт → Поставщик подключения и выберите этот менеджер каналов.",
+      "extranetStep4": "Подтвердите подключение, вернитесь сюда и вставьте ID отеля."
     }
   },
   "demoBanner": {

@@ -1,5 +1,101 @@
 ## Unreleased - 2026-07-24
 
+chore: Vercel cron config for the Channex workers
+
+- vercel.json crons: outbox worker every minute, feed poll every 2 min,
+  full-sync reconcile daily at 04:00 UTC.
+- Added GET handlers (export const GET = POST) to the outbox/feed/
+  push-availability routes since Vercel cron triggers via GET with the
+  Authorization: Bearer $CRON_SECRET header.
+- NOTE: 3 crons + minute schedules require Vercel Pro (Hobby caps at 2 daily
+  crons). Crons only register on production deployments.
+
+## Unreleased - 2026-07-24
+
+feat: Channex ARI outbox + rate push (certification readiness)
+
+Certification requires that PMS save-handlers not call the Channex API directly
+and that pushes go through a rate-limited queue as deltas. Reworked accordingly.
+
+- Migration 20260724_channex_outbox: channex_outbox queue (RLS).
+- src/lib/channels/channex-outbox.ts: enqueueAvailability / enqueueRestrictions
+  (cheap inserts, skip non-provisioned orgs) + processOutbox worker — coalesces
+  due rows per (org, kind) into one push each, caps calls/run (20 ARI/min),
+  exponential backoff on 429/5xx, parks 4xx as error.
+- POST /api/channels/channex/outbox/process: the worker (cron ~1 min, or manager).
+- src/lib/channels/channex-rates.ts: pushRatesForOrg — pushes base_price as the
+  rate via /restrictions (partial `rate`-only update), compressed, never past.
+- All booking-change paths now ENQUEUE instead of pushing inline: direct
+  create/cancel/update-dates/extend, inbound applyRevision, iCal sync,
+  modification apply. Removed the old inline syncAvailabilityWindow.
+- base_price change (room-type PATCH) enqueues a rate push.
+- Full sync (push-availability route) is now 2 calls/property — availability +
+  rates — over a 500-day horizon.
+- Verified live: full sync pushed 7 room types + 7 rates (readback-correct,
+  €15/40/60/35 = base_price); 3 queued rows coalesced into 2 API calls, all sent.
+
+## Unreleased - 2026-07-24
+
+feat: guided Booking.com extranet steps in the connect wizard
+
+A collapsible "How to connect on Booking.com" in the connect wizard (shown for
+Booking.com): find your Hotel ID → authorize the connectivity provider in the
+extranet → return and paste it. The one manual OTA-side step, walked through
+in-app. i18n in all 11 locales.
+
+## Unreleased - 2026-07-24
+
+feat: Channex modified-booking reconciliation
+
+OTA modifications ("modified" revisions) used to be flagged only. Now they're
+parked for review and applied on demand.
+
+- Migration 20260724_channex_pending_modifications: channex_pending_mods table
+  (one open row per booking) with RLS.
+- applyRevision now stores the proposed date/amount change instead of just
+  notifying.
+- src/lib/channels/channex-mods.ts: list / apply / dismiss. Apply updates the
+  reservation dates + amount, reassigns beds within the room type when the new
+  dates clash, refuses (leaves pending) if that would overbook, and pushes the
+  new availability. Room-type changes are not auto-applied.
+- GET/POST /api/channels/channex/modifications (manager-only).
+- ChannexSection shows a "changes to review" panel with Apply/Dismiss; i18n in
+  all 11 locales.
+- Verified live: a seeded modification moved a reservation Sep 10-12 → 15-18,
+  updated the total, and resolved to applied.
+
+## Unreleased - 2026-07-24
+
+feat: Channex outage recovery (time-scoped booking backfill)
+
+- src/lib/channels/channex-recovery.ts + POST /api/channels/channex/recover:
+  after a >30-min feed/webhook outage (beyond the revision-expiry window),
+  re-pull the durable GET /bookings list since {since} and apply anything the
+  PMS is missing, deduped by Channex booking id via applyRevision. Paginated,
+  bounded, safe to re-run. Manager-only or a one-off CRON_SECRET call — NOT a
+  cron (a periodic full re-pull is heavy and pointless).
+- Client listBookings now paginates + returns meta; a booking's attributes are
+  applied through the same applyRevision path as feed revisions.
+- Verified live: a deleted booking was re-imported (scanned 1, created 1).
+
+## Unreleased - 2026-07-24
+
+feat: Channex doctor (health check) + client envelope fix
+
+- src/lib/channels/channex-doctor.ts + GET /api/channels/channex/doctor:
+  runs the full chain — key → API reachable → property/room/rate mappings
+  complete → sampled availability readback matches local free beds → feed
+  reachable (+ pending count) → webhook registered. 200 healthy / 503 on a
+  hard failure so CI and uptime monitors can gate on it. Manager or cron
+  (cron checks every provisioned org). Verified live: 7/7 green.
+- fix: the client returned the whole {data, meta} envelope whenever meta was
+  present, so list endpoints (listProperties, listWebhooks, listChannels,
+  listGroups) got an object instead of the array — listProperties read 0 and
+  listWebhooks crashed. Now unwraps to `data` by default; only bookingFeed
+  opts into meta.
+
+## Unreleased - 2026-07-24
+
 fix: lazy Stripe client so builds don't need STRIPE_SECRET_KEY
 
 The Stripe client was constructed at module load in four files
