@@ -49,7 +49,8 @@
       "settingsTeam": "Equipo",
       "settingsBilling": "Facturación y plan",
       "housekeeping": "Limpieza",
-      "help": "Ayuda"
+      "help": "Ayuda",
+      "notifications": "Notificaciones"
     },
     "role": {
       "owner": "Propietario",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "Posible huésped duplicado: {guestName} ({documentNumber})",
       "channel_sync_failed": "Sincronización de {channelName} fallida: {reason}",
       "channel_synced": "{channelName}: {created} nuevas, {updated} actualizadas, {cancelled} canceladas"
+    },
+    "pageTitle": "Notificaciones",
+    "pageSubtitle": "Todas tus alertas — busca y filtra.",
+    "searchPlaceholder": "Buscar notificaciones…",
+    "allTypes": "Todos los tipos",
+    "statusAll": "Todas",
+    "statusUnread": "No leídas",
+    "statusRead": "Leídas",
+    "loadMore": "Cargar más",
+    "loading": "Cargando…",
+    "noResults": "Sin notificaciones coincidentes",
+    "unread": "No leída",
+    "read": "Leída",
+    "typeLabels": {
+      "checkin_submitted": "Check-in enviado",
+      "reservation_created": "Nueva reserva",
+      "reservation_cancelled": "Cancelación",
+      "duplicate_guest": "Huésped duplicado",
+      "channel_sync_failed": "Alerta de canal",
+      "channel_synced": "Canal sincronizado"
     }
   },
   "housekeeping": {

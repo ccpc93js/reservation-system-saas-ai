@@ -19,6 +19,7 @@ import {
   History,
   Sparkles,
   HelpCircle,
+  Bell,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
@@ -30,6 +31,7 @@ const mainNavRoutes = [
   { path: "dashboard", labelKey: "dashboard", icon: LayoutDashboard },
   { path: "calendar", labelKey: "calendar", icon: CalendarDays },
   { path: "reservations", labelKey: "reservations", icon: BookOpen },
+  { path: "notifications", labelKey: "notifications", icon: Bell },
   { path: "check-in-pending", labelKey: "checkInPending", icon: ClipboardList },
   { path: "checkin-history", labelKey: "checkinHistory", icon: History },
   { path: "analytics", labelKey: "analytics", icon: BarChart3 },

@@ -49,7 +49,8 @@
       "settingsTeam": "Tim",
       "settingsBilling": "Naplata i plan",
       "housekeeping": "Domaćinstvo",
-      "help": "Pomoć"
+      "help": "Pomoć",
+      "notifications": "Obaveštenja"
     },
     "role": {
       "owner": "Vlasnik",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "Mogući dupli gost: {guestName} ({documentNumber})",
       "channel_sync_failed": "Sinhronizacija {channelName} nije uspela: {reason}",
       "channel_synced": "{channelName}: {created} novih, {updated} ažuriranih, {cancelled} otkazanih"
+    },
+    "pageTitle": "Obaveštenja",
+    "pageSubtitle": "Sva vaša upozorenja — pretraga i filtriranje.",
+    "searchPlaceholder": "Pretraži obaveštenja…",
+    "allTypes": "Svi tipovi",
+    "statusAll": "Sva",
+    "statusUnread": "Nepročitana",
+    "statusRead": "Pročitana",
+    "loadMore": "Učitaj još",
+    "loading": "Učitavanje…",
+    "noResults": "Nema odgovarajućih obaveštenja",
+    "unread": "Nepročitano",
+    "read": "Pročitano",
+    "typeLabels": {
+      "checkin_submitted": "Prijava poslata",
+      "reservation_created": "Nova rezervacija",
+      "reservation_cancelled": "Otkazivanje",
+      "duplicate_guest": "Duplirani gost",
+      "channel_sync_failed": "Upozorenje kanala",
+      "channel_synced": "Kanal sinhronizovan"
     }
   },
   "housekeeping": {

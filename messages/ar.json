@@ -49,7 +49,8 @@
       "settingsTeam": "الفريق",
       "settingsBilling": "الفوترة والخطة",
       "housekeeping": "التدبير المنزلي",
-      "help": "مساعدة"
+      "help": "مساعدة",
+      "notifications": "الإشعارات"
     },
     "role": {
       "owner": "المالك",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "نزيل مكرر محتمل: {guestName} ({documentNumber})",
       "channel_sync_failed": "فشلت مزامنة {channelName}: {reason}",
       "channel_synced": "{channelName}: {created} جديدة، {updated} محدثة، {cancelled} ملغاة"
+    },
+    "pageTitle": "الإشعارات",
+    "pageSubtitle": "كل تنبيهاتك — ابحث وصفِّ.",
+    "searchPlaceholder": "ابحث في الإشعارات…",
+    "allTypes": "كل الأنواع",
+    "statusAll": "الكل",
+    "statusUnread": "غير المقروءة",
+    "statusRead": "المقروءة",
+    "loadMore": "تحميل المزيد",
+    "loading": "جارٍ التحميل…",
+    "noResults": "لا توجد إشعارات مطابقة",
+    "unread": "غير مقروء",
+    "read": "مقروء",
+    "typeLabels": {
+      "checkin_submitted": "تم إرسال تسجيل الوصول",
+      "reservation_created": "حجز جديد",
+      "reservation_cancelled": "إلغاء",
+      "duplicate_guest": "نزيل مكرر",
+      "channel_sync_failed": "تنبيه القناة",
+      "channel_synced": "تمت مزامنة القناة"
     }
   },
   "housekeeping": {

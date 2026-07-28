@@ -1,5 +1,15 @@
 ## Unreleased - 2026-07-28
 
+feat: full Notifications page with filter + search
+
+Adds a dedicated Notifications section (sidebar entry) beyond the bell dropdown:
+lists all notifications with server-side type + read/unread filters, pagination
+(Load more), realtime new-notification prepend, client-side text search, and
+mark-read / mark-all-read. Reuses the existing notifications table + APIs. i18n
+(page keys + type labels + nav label) in all 11 locales.
+
+## Unreleased - 2026-07-28
+
 feat: ingest unplaceable OTA bookings instead of dropping them
 
 An overbooked inbound OTA booking (no free bed/room) was blocked with only a

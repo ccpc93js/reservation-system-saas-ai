@@ -49,7 +49,8 @@
       "settingsTeam": "Команда",
       "settingsBilling": "Оплата и тариф",
       "housekeeping": "Уборка номеров",
-      "help": "Помощь"
+      "help": "Помощь",
+      "notifications": "Уведомления"
     },
     "role": {
       "owner": "Владелец",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "Возможный дублирующийся гость: {guestName} ({documentNumber})",
       "channel_sync_failed": "Ошибка синхронизации {channelName}: {reason}",
       "channel_synced": "{channelName}: новых {created}, обновлено {updated}, отменено {cancelled}"
+    },
+    "pageTitle": "Уведомления",
+    "pageSubtitle": "Все ваши оповещения — поиск и фильтры.",
+    "searchPlaceholder": "Поиск уведомлений…",
+    "allTypes": "Все типы",
+    "statusAll": "Все",
+    "statusUnread": "Непрочитанные",
+    "statusRead": "Прочитанные",
+    "loadMore": "Загрузить ещё",
+    "loading": "Загрузка…",
+    "noResults": "Нет подходящих уведомлений",
+    "unread": "Не прочитано",
+    "read": "Прочитано",
+    "typeLabels": {
+      "checkin_submitted": "Заезд отправлен",
+      "reservation_created": "Новое бронирование",
+      "reservation_cancelled": "Отмена",
+      "duplicate_guest": "Дубликат гостя",
+      "channel_sync_failed": "Оповещение канала",
+      "channel_synced": "Канал синхронизирован"
     }
   },
   "housekeeping": {

@@ -49,7 +49,8 @@
       "settingsTeam": "チーム",
       "settingsBilling": "請求とプラン",
       "housekeeping": "ハウスキーピング",
-      "help": "ヘルプ"
+      "help": "ヘルプ",
+      "notifications": "通知"
     },
     "role": {
       "owner": "オーナー",
@@ -1418,6 +1419,26 @@
       "duplicate_guest": "重複の可能性があるゲスト：{guestName}（{documentNumber}）",
       "channel_sync_failed": "{channelName} の同期に失敗しました：{reason}",
       "channel_synced": "{channelName}：新規 {created} 件、更新 {updated} 件、キャンセル {cancelled} 件"
+    },
+    "pageTitle": "通知",
+    "pageSubtitle": "すべてのアラート — 検索・絞り込み。",
+    "searchPlaceholder": "通知を検索…",
+    "allTypes": "すべての種類",
+    "statusAll": "すべて",
+    "statusUnread": "未読",
+    "statusRead": "既読",
+    "loadMore": "もっと読み込む",
+    "loading": "読み込み中…",
+    "noResults": "該当する通知はありません",
+    "unread": "未読",
+    "read": "既読",
+    "typeLabels": {
+      "checkin_submitted": "チェックイン送信",
+      "reservation_created": "新規予約",
+      "reservation_cancelled": "キャンセル",
+      "duplicate_guest": "重複ゲスト",
+      "channel_sync_failed": "チャネル警告",
+      "channel_synced": "チャネル同期"
     }
   },
   "housekeeping": {
