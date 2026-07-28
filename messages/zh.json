@@ -503,7 +503,8 @@
     "refresh": "刷新",
     "exportCsv": "导出 CSV",
     "toastNoneToExport": "没有可导出的预订",
-    "toastExportFailed": "导出失败"
+    "toastExportFailed": "导出失败",
+    "overbookedBadge": "超额预订"
   },
   "guests": {
     "errorLoading": "加载客人时出错",

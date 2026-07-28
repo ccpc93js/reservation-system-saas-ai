@@ -26,7 +26,7 @@ export default async function ReservationsPage() {
     .from("reservations")
     .select(
       `
-      id, reservation_number, check_in, check_out, status, channel,
+      id, reservation_number, check_in, check_out, status, channel, overbooked,
       total_amount, paid_amount, created_at,
       guests(first_name, last_name),
       reservation_items(bed_id, beds(id, name, rooms(id, name)))

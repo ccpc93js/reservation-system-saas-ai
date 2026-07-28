@@ -30,6 +30,7 @@ interface Reservation {
   check_out: string;
   status: string;
   channel: string;
+  overbooked?: boolean;
   total_amount: number;
   paid_amount: number;
   created_at: string;
@@ -552,7 +553,13 @@ export default function ReservationsListClient({
                           : "—"}
                       </td>
                       <td className="px-4 py-3.5">
-                        {roomName} / {bedName}
+                        {res.overbooked ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                            ⚠ {t("overbookedBadge")}
+                          </span>
+                        ) : (
+                          `${roomName} / ${bedName}`
+                        )}
                       </td>
                       <td className="px-4 py-3.5">
                         {new Date(res.check_in).toLocaleDateString()}

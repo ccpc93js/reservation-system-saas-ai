@@ -503,7 +503,8 @@
     "refresh": "Osveži",
     "exportCsv": "Izvezi CSV",
     "toastNoneToExport": "Nema rezervacija za izvoz",
-    "toastExportFailed": "Izvoz nije uspeo"
+    "toastExportFailed": "Izvoz nije uspeo",
+    "overbookedBadge": "Prekobukiranje"
   },
   "guests": {
     "errorLoading": "Greška pri učitavanju gostiju",

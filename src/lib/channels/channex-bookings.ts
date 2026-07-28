@@ -212,17 +212,45 @@ export async function applyRevision(
     if (rpcErr) return { action: "error", bookingId, warning: rpcErr.message };
 
     if (!newResId) {
-      // Overbooking — not enough free beds / no free room. Never drop silently.
+      // Overbooking — no free bed/room. NEVER drop an OTA booking: the guest
+      // holds a real confirmation. Ingest it as an unassigned, flagged
+      // reservation (no beds) so staff can see and place it, and alert.
+      const { data: obRes } = await supabase
+        .from("reservations")
+        .insert({
+          organization_id: orgId,
+          guest_id: guestId,
+          channel_source: platform,
+          external_id: bookingId,
+          external_sync_at: new Date().toISOString(),
+          check_in: checkIn,
+          check_out: checkOut,
+          status: "pending",
+          total_amount: total,
+          paid_amount: 0,
+          overbooked: true,
+          notes: `⚠ OVERBOOKED — needs bed placement. ${attrs.ota_name ?? "OTA"}${otaCode}${mixedTypes ? " — MIXED room types" : ""}`,
+        })
+        .select("id")
+        .single();
+      if (guestId && obRes) {
+        await supabase
+          .from("reservation_guests")
+          .upsert(
+            { organization_id: orgId, reservation_id: (obRes as any).id, guest_id: guestId, is_primary: true },
+            { onConflict: "reservation_id,guest_id" }
+          );
+      }
       await notifyOrg(
         orgId,
         "channel_sync_failed",
         {
           channelName: `${attrs.ota_name ?? "OTA"}${otaCode}`,
-          reason: `OVERBOOKING: no ${wholeRoom ? "free room" : `${bedCount} free bed(s)`} for ${checkIn} → ${checkOut}. Booking ${bookingId} needs manual placement.`,
+          reason: `OVERBOOKING: no ${wholeRoom ? "free room" : `${bedCount} free bed(s)`} for ${checkIn} → ${checkOut}. Booking ${bookingId} imported UNASSIGNED — place it in Reservations.`,
         },
         "/reservations"
       );
-      return { action: "overbooking", bookingId, warning: "no free beds" };
+      return { action: "overbooking", bookingId, reservationId: (obRes as any)?.id, warning: "overbooked — imported unassigned" };
     }
 
     await notify(supabase, orgId, "reservation_created", newResId as string, attrs);
