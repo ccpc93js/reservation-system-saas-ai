@@ -51,6 +51,11 @@ export default function RoomTypeDialog({
       capacity: 1,
       base_price: 0,
       description: "",
+      stop_sell: false,
+      closed_to_arrival: false,
+      closed_to_departure: false,
+      min_stay_arrival: null,
+      min_stay_through: null,
     },
   });
 
@@ -68,6 +73,11 @@ export default function RoomTypeDialog({
         capacity: 1,
         base_price: 0,
         description: "",
+        stop_sell: false,
+        closed_to_arrival: false,
+        closed_to_departure: false,
+        min_stay_arrival: null,
+        min_stay_through: null,
       });
     }
   }, [open, isEditing]);
@@ -90,6 +100,11 @@ export default function RoomTypeDialog({
         capacity: roomType.capacity,
         base_price: roomType.base_price,
         description: roomType.description || "",
+        stop_sell: !!roomType.stop_sell,
+        closed_to_arrival: !!roomType.closed_to_arrival,
+        closed_to_departure: !!roomType.closed_to_departure,
+        min_stay_arrival: roomType.min_stay_arrival ?? null,
+        min_stay_through: roomType.min_stay_through ?? null,
       });
     } catch (error) {
       toast.error(t("toastLoadFailed"));
@@ -297,6 +312,60 @@ export default function RoomTypeDialog({
               {errors.description && (
                 <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
               )}
+            </div>
+
+            {/* Channel restrictions */}
+            <div className="pt-2 border-t border-border">
+              <p className="text-sm font-medium mb-3">{t("channelRestrictionsHeading")}</p>
+
+              <div className="space-y-2 mb-4">
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" {...register("stop_sell")} disabled={isLoading || isDeleting} />
+                  {t("stopSellLabel")}
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" {...register("closed_to_arrival")} disabled={isLoading || isDeleting} />
+                  {t("closedToArrivalLabel")}
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" {...register("closed_to_departure")} disabled={isLoading || isDeleting} />
+                  {t("closedToDepartureLabel")}
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("minStayArrivalLabel")}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    {...register("min_stay_arrival", { valueAsNumber: true })}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      errors.min_stay_arrival ? "border-red-500" : "border-border"
+                    } disabled:opacity-50`}
+                    disabled={isLoading || isDeleting}
+                  />
+                  {errors.min_stay_arrival && (
+                    <p className="text-red-500 text-sm mt-1">{errors.min_stay_arrival.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("minStayThroughLabel")}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    {...register("min_stay_through", { valueAsNumber: true })}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      errors.min_stay_through ? "border-red-500" : "border-border"
+                    } disabled:opacity-50`}
+                    disabled={isLoading || isDeleting}
+                  />
+                  {errors.min_stay_through && (
+                    <p className="text-red-500 text-sm mt-1">{errors.min_stay_through.message}</p>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Footer */}

@@ -1,8 +1,10 @@
-// Channex rate push. The PMS models one base_price per room type, so a rate
-// plan's rate is that base_price applied across the horizon. We push ONLY the
-// `rate` field via /restrictions (a partial update — never clobbers min-stay /
-// closures we don't model). Constant rate over a window compresses to one entry
-// per rate plan. Never sends past dates.
+// Channex rate + restriction push. The PMS models rate and the ARI
+// restrictions (stop_sell, closed_to_arrival/departure, min_stay_arrival/
+// through) as standing values on room_types, applied across the whole
+// horizon — not per-date. /restrictions is a partial update: null min-stay
+// fields are omitted rather than sent as null, so they never clobber a
+// value set some other way. Constant values over a window compress to one
+// entry per rate plan. Never sends past dates.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { channex, toChannexMinor, type RestrictionValue } from "./channex";
@@ -58,12 +60,20 @@ export async function pushRatesForOrg(
 
   const { data: roomTypes } = await supabase
     .from("room_types")
-    .select("id, base_price")
+    .select("id, base_price, stop_sell, closed_to_arrival, closed_to_departure, min_stay_arrival, min_stay_through")
     .eq("organization_id", orgId);
 
   const filter = opts.roomTypeLocalIds ? new Set(opts.roomTypeLocalIds) : null;
   const values: RestrictionValue[] = [];
-  for (const rt of (roomTypes as { id: string; base_price: number }[]) ?? []) {
+  for (const rt of (roomTypes as {
+    id: string;
+    base_price: number;
+    stop_sell: boolean;
+    closed_to_arrival: boolean;
+    closed_to_departure: boolean;
+    min_stay_arrival: number | null;
+    min_stay_through: number | null;
+  }[]) ?? []) {
     if (filter && !filter.has(rt.id)) continue;
     const ratePlanId = rpMap.get(rt.id);
     if (!ratePlanId) continue;
@@ -72,7 +82,15 @@ export async function pushRatesForOrg(
       rate_plan_id: ratePlanId,
       date_from: from,
       date_to: lastNight,
-      rate: toChannexMinor(rt.base_price ?? 0), // partial update — only `rate`
+      rate: toChannexMinor(rt.base_price ?? 0), // partial update — only the fields below
+      stop_sell: rt.stop_sell,
+      closed_to_arrival: rt.closed_to_arrival,
+      closed_to_departure: rt.closed_to_departure,
+      // Omit null min-stay rather than sending null: /restrictions is a partial
+      // update, so omitting leaves whatever Channex already has untouched
+      // instead of clearing a value set some other way (e.g. the dashboard).
+      ...(rt.min_stay_arrival != null ? { min_stay_arrival: rt.min_stay_arrival } : {}),
+      ...(rt.min_stay_through != null ? { min_stay_through: rt.min_stay_through } : {}),
     });
   }
 

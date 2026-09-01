@@ -129,6 +129,11 @@ export async function PATCH(
     if (body.capacity !== undefined) updateData.capacity = body.capacity || null;
     if (body.base_price !== undefined) updateData.base_price = body.base_price || null;
     if (body.description !== undefined) updateData.description = body.description || null;
+    if (body.stop_sell !== undefined) updateData.stop_sell = !!body.stop_sell;
+    if (body.closed_to_arrival !== undefined) updateData.closed_to_arrival = !!body.closed_to_arrival;
+    if (body.closed_to_departure !== undefined) updateData.closed_to_departure = !!body.closed_to_departure;
+    if (body.min_stay_arrival !== undefined) updateData.min_stay_arrival = body.min_stay_arrival ?? null;
+    if (body.min_stay_through !== undefined) updateData.min_stay_through = body.min_stay_through ?? null;
 
     updateData.updated_at = new Date().toISOString();
 
@@ -146,9 +151,17 @@ export async function PATCH(
       );
     }
 
-    // A base_price change is a rate change → queue a restrictions (rate) push
-    // for this room type. No-op if the org isn't Channex-provisioned.
-    if (body.base_price !== undefined) {
+    // A rate or restriction field change → queue a restrictions push for this
+    // room type. No-op if the org isn't Channex-provisioned.
+    const restrictionFieldsChanged = [
+      "base_price",
+      "stop_sell",
+      "closed_to_arrival",
+      "closed_to_departure",
+      "min_stay_arrival",
+      "min_stay_through",
+    ].some((field) => body[field] !== undefined);
+    if (restrictionFieldsChanged) {
       const today = new Date().toISOString().slice(0, 10);
       const horizon = new Date(Date.now() + 500 * 86400000).toISOString().slice(0, 10);
       await enqueueRestrictions(supabase as any, (membership as any).organization_id, today, horizon, [id]);

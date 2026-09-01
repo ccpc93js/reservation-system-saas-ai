@@ -122,6 +122,44 @@ export type Database = {
           },
         ]
       }
+      channel_provider_links: {
+        Row: {
+          channex_id: string
+          created_at: string
+          id: string
+          kind: string
+          local_id: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          channex_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          local_id: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          channex_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          local_id?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_provider_links_org_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channels: {
         Row: {
           allotment: number | null
@@ -216,40 +254,115 @@ export type Database = {
           },
         ]
       }
-      channel_provider_links: {
+      channex_outbox: {
         Row: {
-          channex_id: string
+          attempts: number
           created_at: string
+          from_date: string
           id: string
           kind: string
-          local_id: string
+          last_error: string | null
+          next_attempt_at: string | null
           organization_id: string
-          updated_at: string
+          room_type_ids: string[] | null
+          sent_at: string | null
+          status: string
+          to_date: string
         }
         Insert: {
-          channex_id: string
+          attempts?: number
           created_at?: string
+          from_date: string
           id?: string
           kind: string
-          local_id: string
+          last_error?: string | null
+          next_attempt_at?: string | null
           organization_id: string
-          updated_at?: string
+          room_type_ids?: string[] | null
+          sent_at?: string | null
+          status?: string
+          to_date: string
         }
         Update: {
-          channex_id?: string
+          attempts?: number
           created_at?: string
+          from_date?: string
           id?: string
           kind?: string
-          local_id?: string
+          last_error?: string | null
+          next_attempt_at?: string | null
           organization_id?: string
-          updated_at?: string
+          room_type_ids?: string[] | null
+          sent_at?: string | null
+          status?: string
+          to_date?: string
         }
         Relationships: [
           {
-            foreignKeyName: "channel_provider_links_org_fkey"
+            foreignKeyName: "channex_outbox_org_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channex_pending_mods: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          new_amount: number | null
+          new_check_in: string | null
+          new_check_out: string | null
+          organization_id: string
+          ota_name: string | null
+          ota_reservation_code: string | null
+          reservation_id: string
+          resolved_at: string | null
+          status: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          new_amount?: number | null
+          new_check_in?: string | null
+          new_check_out?: string | null
+          organization_id: string
+          ota_name?: string | null
+          ota_reservation_code?: string | null
+          reservation_id: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          new_amount?: number | null
+          new_check_in?: string | null
+          new_check_out?: string | null
+          organization_id?: string
+          ota_name?: string | null
+          ota_reservation_code?: string | null
+          reservation_id?: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channex_pending_mods_org_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channex_pending_mods_res_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
             referencedColumns: ["id"]
           },
         ]
@@ -953,36 +1066,51 @@ export type Database = {
         Row: {
           base_price: number
           capacity: number
+          closed_to_arrival: boolean
+          closed_to_departure: boolean
           created_at: string
           description: string | null
           gender: string | null
           id: string
+          min_stay_arrival: number | null
+          min_stay_through: number | null
           name: string
           organization_id: string
+          stop_sell: boolean
           type: string
           updated_at: string
         }
         Insert: {
           base_price?: number
           capacity?: number
+          closed_to_arrival?: boolean
+          closed_to_departure?: boolean
           created_at?: string
           description?: string | null
           gender?: string | null
           id?: string
+          min_stay_arrival?: number | null
+          min_stay_through?: number | null
           name: string
           organization_id: string
+          stop_sell?: boolean
           type: string
           updated_at?: string
         }
         Update: {
           base_price?: number
           capacity?: number
+          closed_to_arrival?: boolean
+          closed_to_departure?: boolean
           created_at?: string
           description?: string | null
           gender?: string | null
           id?: string
+          min_stay_arrival?: number | null
+          min_stay_through?: number | null
           name?: string
           organization_id?: string
+          stop_sell?: boolean
           type?: string
           updated_at?: string
         }
@@ -1096,6 +1224,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_channex_reservation: {
+        Args: {
+          p_channel_source: string
+          p_check_in: string
+          p_check_out: string
+          p_external_id: string
+          p_guest_id: string
+          p_notes: string
+          p_organization_id: string
+          p_price_per_night: number
+          p_quantity: number
+          p_room_type_id: string
+          p_total_price: number
+          p_whole_room?: boolean
+        }
+        Returns: string
+      }
       create_ota_reservation: {
         Args: {
           p_bed_id: string
@@ -1131,6 +1276,23 @@ export type Database = {
           p_room_type_id: string
         }
         Returns: number
+      }
+      free_beds_calendar: {
+        Args: { p_from: string; p_organization_id: string; p_to: string }
+        Returns: {
+          d: string
+          free: number
+          room_type_id: string
+        }[]
+      }
+      free_beds_ranges: {
+        Args: { p_from: string; p_organization_id: string; p_to: string }
+        Returns: {
+          date_from: string
+          date_to: string
+          free: number
+          room_type_id: string
+        }[]
       }
       generate_reservation_number: { Args: { org_id: string }; Returns: string }
       get_user_org_ids: { Args: never; Returns: string[] }

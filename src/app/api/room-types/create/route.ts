@@ -52,6 +52,11 @@ export async function POST(request: Request) {
         capacity: body.capacity,
         base_price: body.base_price,
         description: body.description || null,
+        stop_sell: body.stop_sell ?? false,
+        closed_to_arrival: body.closed_to_arrival ?? false,
+        closed_to_departure: body.closed_to_departure ?? false,
+        min_stay_arrival: body.min_stay_arrival ?? null,
+        min_stay_through: body.min_stay_through ?? null,
       })
       .select("id")
       .single();

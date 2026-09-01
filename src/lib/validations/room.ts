@@ -19,6 +19,11 @@ export const createRoomTypeSchema = yup.object().shape({
   capacity: yup.number().min(1, "Capacity must be at least 1").max(20, "Capacity must be at most 20").required("Capacity is required"),
   base_price: yup.number().min(0.01, "Price must be greater than 0").required("Base price is required"),
   description: yup.string().max(500, "Description must be at most 500 characters").nullable().optional(),
+  stop_sell: yup.boolean().optional(),
+  closed_to_arrival: yup.boolean().optional(),
+  closed_to_departure: yup.boolean().optional(),
+  min_stay_arrival: optionalNumber().min(1, "Min stay must be at least 1 night"),
+  min_stay_through: optionalNumber().min(1, "Min stay must be at least 1 night"),
 });
 
 export const updateRoomTypeSchema = createRoomTypeSchema.shape({
