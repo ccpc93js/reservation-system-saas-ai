@@ -241,7 +241,7 @@ export interface RatePlanOptionInfo {
 
 // The options endpoints return entities as {id, type, attributes:{...}}; the
 // useful fields live under attributes.
-function unwrapOptions<T>(rows: ChannexEntity[]): T[] {
+export function unwrapOptions<T>(rows: ChannexEntity[]): T[] {
   return rows.map((r) => ({ id: r.id, ...(r.attributes as object) })) as T[];
 }
 
