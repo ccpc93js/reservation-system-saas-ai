@@ -92,7 +92,7 @@ describe("processOutbox", () => {
     await processOutbox(db as unknown as SupabaseClient);
 
     const [, , opts] = vi.mocked(pushAvailabilityForOrg).mock.calls[0];
-    expect(opts.roomTypeLocalIds).toBeUndefined();
+    expect(opts?.roomTypeLocalIds).toBeUndefined();
   });
 
   it("retries with exponential backoff on a transient (network) push failure", async () => {
