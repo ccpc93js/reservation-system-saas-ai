@@ -24,6 +24,7 @@ export const createRoomTypeSchema = yup.object().shape({
   closed_to_departure: yup.boolean().optional(),
   min_stay_arrival: optionalNumber().min(1, "Min stay must be at least 1 night"),
   min_stay_through: optionalNumber().min(1, "Min stay must be at least 1 night"),
+  max_stay: optionalNumber().min(1, "Max stay must be at least 1 night"),
 });
 
 export const updateRoomTypeSchema = createRoomTypeSchema.shape({
