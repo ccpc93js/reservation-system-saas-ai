@@ -29,6 +29,12 @@ describe("PATCH /api/room-types/rate-overrides/[id]", () => {
     vi.mocked(clearRateOverrideField).mockReset();
   });
 
+  it("returns 401 when not authenticated", async () => {
+    db.setUser(null);
+    const res = await PATCH(patchRequest({ field: "rate" }), { params: Promise.resolve({ id: "ov-1" }) });
+    expect(res.status).toBe(401);
+  });
+
   it("returns 403 for a staff member", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
     const res = await PATCH(patchRequest({ field: "rate" }), { params: Promise.resolve({ id: "ov-1" }) });
