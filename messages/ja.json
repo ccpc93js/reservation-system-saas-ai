@@ -50,7 +50,8 @@
       "settingsBilling": "請求とプラン",
       "housekeeping": "ハウスキーピング",
       "help": "ヘルプ",
-      "notifications": "通知"
+      "notifications": "通知",
+      "rates": "Rates & Restrictions"
     },
     "role": {
       "owner": "オーナー",
@@ -674,7 +675,8 @@
         "delete": "削除",
         "cancel": "キャンセル",
         "saving": "保存中...",
-        "save": "保存"
+        "save": "保存",
+        "maxStayLabel": "Max stay"
       },
       "refresh": "更新"
     },
@@ -1480,5 +1482,37 @@
     "allCategories": "すべて",
     "noResults": "検索に一致する記事がありません。",
     "backToHelp": "ヘルプセンターに戻る"
+  },
+  "rates": {
+    "noOrgFound": "No organization found",
+    "title": "Rates & Restrictions",
+    "subtitle": "Set date-specific rates and restrictions that are pushed to your connected channels",
+    "formHeading": "Set an override",
+    "roomTypesLabel": "Room types",
+    "dateFromLabel": "From",
+    "dateToLabel": "To",
+    "rateLabel": "Rate",
+    "minStayArrivalLabel": "Min stay (arrival)",
+    "minStayThroughLabel": "Min stay (through)",
+    "maxStayLabel": "Max stay",
+    "stopSellLabel": "Stop sell",
+    "closedToArrivalLabel": "Closed to arrival",
+    "closedToDepartureLabel": "Closed to departure",
+    "saveButton": "Apply",
+    "errorNoRoomTypes": "Select at least one room type",
+    "errorInvalidDates": "Choose a valid date range",
+    "errorNoFields": "Enable at least one field to apply",
+    "toastSaveFailed": "Failed to save overrides",
+    "toastSaved": "{count, plural, one {# override saved} other {# overrides saved}}",
+    "toastListFailed": "Failed to load overrides",
+    "toastClearFailed": "Failed to clear override",
+    "listHeading": "Upcoming overrides",
+    "toLabel": "to",
+    "colDate": "Date",
+    "colRoomType": "Room type",
+    "colField": "Field",
+    "colValue": "Value",
+    "colActions": "Actions",
+    "noneYet": "No overrides in this date range"
   }
 }

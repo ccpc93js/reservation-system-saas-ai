@@ -50,7 +50,8 @@
       "settingsBilling": "الفوترة والخطة",
       "housekeeping": "التدبير المنزلي",
       "help": "مساعدة",
-      "notifications": "الإشعارات"
+      "notifications": "الإشعارات",
+      "rates": "Rates & Restrictions"
     },
     "role": {
       "owner": "المالك",
@@ -668,7 +669,8 @@
         "delete": "حذف",
         "cancel": "إلغاء",
         "saving": "جارٍ الحفظ...",
-        "save": "حفظ"
+        "save": "حفظ",
+        "maxStayLabel": "Max stay"
       },
       "refresh": "تحديث"
     },
@@ -1474,5 +1476,37 @@
     "allCategories": "الكل",
     "noResults": "لا توجد مقالات مطابقة لبحثك.",
     "backToHelp": "العودة إلى مركز المساعدة"
+  },
+  "rates": {
+    "noOrgFound": "No organization found",
+    "title": "Rates & Restrictions",
+    "subtitle": "Set date-specific rates and restrictions that are pushed to your connected channels",
+    "formHeading": "Set an override",
+    "roomTypesLabel": "Room types",
+    "dateFromLabel": "From",
+    "dateToLabel": "To",
+    "rateLabel": "Rate",
+    "minStayArrivalLabel": "Min stay (arrival)",
+    "minStayThroughLabel": "Min stay (through)",
+    "maxStayLabel": "Max stay",
+    "stopSellLabel": "Stop sell",
+    "closedToArrivalLabel": "Closed to arrival",
+    "closedToDepartureLabel": "Closed to departure",
+    "saveButton": "Apply",
+    "errorNoRoomTypes": "Select at least one room type",
+    "errorInvalidDates": "Choose a valid date range",
+    "errorNoFields": "Enable at least one field to apply",
+    "toastSaveFailed": "Failed to save overrides",
+    "toastSaved": "{count, plural, one {# override saved} other {# overrides saved}}",
+    "toastListFailed": "Failed to load overrides",
+    "toastClearFailed": "Failed to clear override",
+    "listHeading": "Upcoming overrides",
+    "toLabel": "to",
+    "colDate": "Date",
+    "colRoomType": "Room type",
+    "colField": "Field",
+    "colValue": "Value",
+    "colActions": "Actions",
+    "noneYet": "No overrides in this date range"
   }
 }

@@ -50,7 +50,8 @@
       "settingsBilling": "账单与套餐",
       "housekeeping": "客房清洁",
       "help": "帮助",
-      "notifications": "通知"
+      "notifications": "通知",
+      "rates": "Rates & Restrictions"
     },
     "role": {
       "owner": "所有者",
@@ -674,7 +675,8 @@
         "delete": "删除",
         "cancel": "取消",
         "saving": "保存中…",
-        "save": "保存"
+        "save": "保存",
+        "maxStayLabel": "Max stay"
       },
       "refresh": "刷新"
     },
@@ -1480,5 +1482,37 @@
     "allCategories": "全部",
     "noResults": "没有匹配的文章。",
     "backToHelp": "返回帮助中心"
+  },
+  "rates": {
+    "noOrgFound": "No organization found",
+    "title": "Rates & Restrictions",
+    "subtitle": "Set date-specific rates and restrictions that are pushed to your connected channels",
+    "formHeading": "Set an override",
+    "roomTypesLabel": "Room types",
+    "dateFromLabel": "From",
+    "dateToLabel": "To",
+    "rateLabel": "Rate",
+    "minStayArrivalLabel": "Min stay (arrival)",
+    "minStayThroughLabel": "Min stay (through)",
+    "maxStayLabel": "Max stay",
+    "stopSellLabel": "Stop sell",
+    "closedToArrivalLabel": "Closed to arrival",
+    "closedToDepartureLabel": "Closed to departure",
+    "saveButton": "Apply",
+    "errorNoRoomTypes": "Select at least one room type",
+    "errorInvalidDates": "Choose a valid date range",
+    "errorNoFields": "Enable at least one field to apply",
+    "toastSaveFailed": "Failed to save overrides",
+    "toastSaved": "{count, plural, one {# override saved} other {# overrides saved}}",
+    "toastListFailed": "Failed to load overrides",
+    "toastClearFailed": "Failed to clear override",
+    "listHeading": "Upcoming overrides",
+    "toLabel": "to",
+    "colDate": "Date",
+    "colRoomType": "Room type",
+    "colField": "Field",
+    "colValue": "Value",
+    "colActions": "Actions",
+    "noneYet": "No overrides in this date range"
   }
 }
