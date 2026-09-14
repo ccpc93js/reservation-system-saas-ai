@@ -78,4 +78,16 @@ describe("FakeSupabaseClient", () => {
     const { data } = await db.from("nights").select("*").gte("date", "2026-07-02").lte("date", "2026-07-08");
     expect(data).toEqual([{ date: "2026-07-05" }]);
   });
+
+  it("auth.getUser() reflects setUser()", async () => {
+    const db = new FakeSupabaseClient();
+    let res = await db.auth.getUser();
+    expect(res.data.user).toBeNull();
+    expect(res.error).not.toBeNull();
+
+    db.setUser({ id: "user-1" });
+    res = await db.auth.getUser();
+    expect(res.data.user).toEqual({ id: "user-1" });
+    expect(res.error).toBeNull();
+  });
 });

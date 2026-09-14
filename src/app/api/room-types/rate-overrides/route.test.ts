@@ -2,13 +2,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { FakeSupabaseClient } from "@/lib/test/fake-supabase";
 
 const db = new FakeSupabaseClient();
-let currentUser: { id: string } | null = { id: "user-1" };
 
 vi.mock("@/lib/supabase/server", () => ({
   createServerClient: async () => {
-    (db as any).auth = {
-      getUser: async () => ({ data: { user: currentUser }, error: currentUser ? null : { message: "no user" } }),
-    };
     return db;
   },
 }));
@@ -31,12 +27,12 @@ function jsonRequest(body: unknown) {
 describe("POST /api/room-types/rate-overrides", () => {
   beforeEach(() => {
     db.tables = {};
-    currentUser = { id: "user-1" };
+    db.setUser({ id: "user-1" });
     vi.mocked(applyRateOverrides).mockReset();
   });
 
   it("returns 401 when not authenticated", async () => {
-    currentUser = null;
+    db.setUser(null);
     const res = await POST(jsonRequest({}));
     expect(res.status).toBe(401);
   });
@@ -73,7 +69,7 @@ describe("POST /api/room-types/rate-overrides", () => {
 describe("GET /api/room-types/rate-overrides", () => {
   beforeEach(() => {
     db.tables = {};
-    currentUser = { id: "user-1" };
+    db.setUser({ id: "user-1" });
   });
 
   it("returns 400 without from/to", async () => {

@@ -9,12 +9,12 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership } = await supabase
+    const { data: membership, error: membershipError } = await supabase
       .from("memberships")
       .select("organization_id")
       .eq("user_id", user.id)
       .single();
-    if (!membership) return Response.json({ error: "You don't have access to any organization" }, { status: 403 });
+    if (membershipError || !membership) return Response.json({ error: "You don't have access to any organization" }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
     const from = searchParams.get("from");
@@ -43,12 +43,12 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership } = await supabase
+    const { data: membership, error: membershipError } = await supabase
       .from("memberships")
       .select("organization_id, role")
       .eq("user_id", user.id)
       .single();
-    if (!membership || !isManager((membership as any).role)) {
+    if (membershipError || !membership || !isManager((membership as any).role)) {
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
