@@ -53,6 +53,14 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
     this.filters.push((row) => vals.includes(row[col]));
     return this;
   }
+  gte(col: string, val: any) {
+    this.filters.push((row) => row[col] != null && row[col] >= val);
+    return this;
+  }
+  lte(col: string, val: any) {
+    this.filters.push((row) => row[col] != null && row[col] <= val);
+    return this;
+  }
   or(expr: string) {
     this.filters.push(parseOrFilter(expr));
     return this;

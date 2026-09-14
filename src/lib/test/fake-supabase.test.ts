@@ -71,4 +71,11 @@ describe("FakeSupabaseClient", () => {
     const db = new FakeSupabaseClient();
     await expect(db.rpc("nope")).rejects.toThrow(/no rpc handler registered/);
   });
+
+  it("gte/lte filter by comparison", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("nights", [{ date: "2026-07-01" }, { date: "2026-07-05" }, { date: "2026-07-10" }]);
+    const { data } = await db.from("nights").select("*").gte("date", "2026-07-02").lte("date", "2026-07-08");
+    expect(data).toEqual([{ date: "2026-07-05" }]);
+  });
 });
