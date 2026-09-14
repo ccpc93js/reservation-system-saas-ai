@@ -2,7 +2,7 @@
 //
 // Minimal fake Supabase client for unit tests. Implements only the
 // chainable query-builder methods actually used by src/lib code today:
-// select/eq/in/or/order/limit/single/maybeSingle, insert/update/upsert/
+// select/eq/in/gte/lte/or/order/limit/single/maybeSingle, insert/update/upsert/
 // delete, and rpc(). Intentionally not a structural subtype of the real
 // SupabaseClient type — cast with `as unknown as SupabaseClient` at each
 // call site. Extend this file (don't reach for a full Postgrest emulator)
