@@ -56,6 +56,7 @@ export default function RoomTypeDialog({
       closed_to_departure: false,
       min_stay_arrival: null,
       min_stay_through: null,
+      max_stay: null,
     },
   });
 
@@ -78,6 +79,7 @@ export default function RoomTypeDialog({
         closed_to_departure: false,
         min_stay_arrival: null,
         min_stay_through: null,
+        max_stay: null,
       });
     }
   }, [open, isEditing]);
@@ -105,6 +107,7 @@ export default function RoomTypeDialog({
         closed_to_departure: !!roomType.closed_to_departure,
         min_stay_arrival: roomType.min_stay_arrival ?? null,
         min_stay_through: roomType.min_stay_through ?? null,
+        max_stay: roomType.max_stay ?? null,
       });
     } catch (error) {
       toast.error(t("toastLoadFailed"));
@@ -363,6 +366,24 @@ export default function RoomTypeDialog({
                   />
                   {errors.min_stay_through && (
                     <p className="text-red-500 text-sm mt-1">{errors.min_stay_through.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("maxStayLabel")}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    {...register("max_stay", { valueAsNumber: true })}
+                    className={`w-full px-3 py-2 border rounded-lg ${
+                      errors.max_stay ? "border-red-500" : "border-border"
+                    } disabled:opacity-50`}
+                    disabled={isLoading || isDeleting}
+                  />
+                  {errors.max_stay && (
+                    <p className="text-red-500 text-sm mt-1">{errors.max_stay.message}</p>
                   )}
                 </div>
               </div>
