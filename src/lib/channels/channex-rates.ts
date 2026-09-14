@@ -33,6 +33,8 @@ export interface PushRatesOptions {
 export interface PushRatesResult {
   ok: boolean;
   propertyId: string | null;
+  // Count of distinct Channex rate_plan_ids actually pushed to — NOT the
+  // number of /restrictions entries sent (see `entries` for that).
   ratePlansPushed: number;
   entries: number;
   skipped?: string;
@@ -125,7 +127,7 @@ export async function pushRatesForOrg(
   for (const o of (overrides as any[]) ?? []) overrideMap.set(`${o.room_type_id}:${o.date}`, o);
 
   const values: RestrictionValue[] = [];
-  let ratePlansPushed = 0;
+  const ratePlanSet = new Set<string>();
 
   for (const rt of roomTypeRows) {
     let runStart: string | null = null;
@@ -169,8 +171,11 @@ export async function pushRatesForOrg(
     }
     flush(cursor);
 
-    ratePlansPushed += rpMap.get(rt.id)!.length;
+    // Distinct rate plans actually processed for this room type, not the
+    // number of /restrictions entries sent (see `entries`).
+    for (const ratePlanId of rpMap.get(rt.id)!) ratePlanSet.add(ratePlanId);
   }
+  const ratePlansPushed = ratePlanSet.size;
 
   if (values.length === 0) return { ok: true, propertyId, ratePlansPushed: 0, entries: 0, skipped: "nothing to push" };
 
