@@ -23,14 +23,17 @@ describe("applyRateOverrides", () => {
       fields: { rate: 333 },
     });
 
-    expect(result).toEqual({ ok: true, rowsWritten: 1 });
+    expect(result).toEqual({ ok: true, rowsWritten: 1, skippedRoomTypeIds: [] });
     expect(db.tables.room_type_rate_overrides).toHaveLength(1);
     expect(db.tables.room_type_rate_overrides[0]).toMatchObject({
       room_type_id: "rt-1",
       date: "2026-11-21",
       rate: 333,
-      min_stay_arrival: null,
     });
+    // Untouched fields aren't part of the upsert payload at all (partial
+    // upsert), so a brand-new row simply doesn't carry the key — the real
+    // DB column still defaults to NULL, this just isn't the fake's job to model.
+    expect(db.tables.room_type_rate_overrides[0]).not.toHaveProperty("min_stay_arrival");
     expect(enqueueRestrictions).toHaveBeenCalledWith(db, orgId, "2026-11-21", "2026-11-22", ["rt-1"]);
   });
 
@@ -80,7 +83,28 @@ describe("applyRateOverrides", () => {
     });
 
     expect(result.ok).toBe(false);
+    expect(result.skippedRoomTypeIds).toEqual(["rt-1"]);
     expect(db.tables.room_type_rate_overrides ?? []).toHaveLength(0);
+  });
+
+  it("skips room types that don't belong to the org but still writes the valid ones", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("room_types", [{ id: "rt-1", organization_id: orgId }]);
+
+    const result = await applyRateOverrides(db as unknown as SupabaseClient, orgId, {
+      roomTypeIds: ["rt-1", "rt-invalid"],
+      dateFrom: "2026-11-21",
+      dateTo: "2026-11-21",
+      fields: { rate: 333 },
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.skippedRoomTypeIds).toEqual(["rt-invalid"]);
+    expect(db.tables.room_type_rate_overrides).toHaveLength(1);
+    expect(db.tables.room_type_rate_overrides[0]).toMatchObject({ room_type_id: "rt-1" });
+    expect(
+      db.tables.room_type_rate_overrides.some((r: any) => r.room_type_id === "rt-invalid")
+    ).toBe(false);
   });
 });
 
