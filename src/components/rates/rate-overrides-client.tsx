@@ -143,7 +143,25 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
         return;
       }
       toast.success(t("toastSaved", { count: data.rows_written }));
-      fetchOverrides();
+
+      // Expand the list window (never shrink it) so the just-saved range is visible.
+      const newListFrom = dateFrom < listFrom ? dateFrom : listFrom;
+      const newListTo = dateTo > listTo ? dateTo : listTo;
+      const windowChanged = newListFrom !== listFrom || newListTo !== listTo;
+      if (newListFrom !== listFrom) setListFrom(newListFrom);
+      if (newListTo !== listTo) setListTo(newListTo);
+      if (!windowChanged) {
+        // Window already covers the saved range; the listFrom/listTo effect
+        // won't fire, so refetch explicitly to pick up the new data.
+        fetchOverrides();
+      }
+
+      // Reset "apply this field" toggles so stale enabled fields from this
+      // save don't silently carry over into the next edit.
+      setEnabledFields({
+        rate: false, min_stay_arrival: false, min_stay_through: false, max_stay: false,
+        stop_sell: false, closed_to_arrival: false, closed_to_departure: false,
+      });
     } catch (error) {
       toast.error(t("toastSaveFailed"));
       console.error(error);
