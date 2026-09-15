@@ -1,17 +1,20 @@
 import { getTranslations } from "next-intl/server";
 import { getServerUser } from "@/lib/supabase/session";
 import RateOverridesClient from "@/components/rates/rate-overrides-client";
+import { canAccessSection } from "@/lib/permissions";
+import { redirect } from "next/navigation";
 
-type Membership = { organization_id: string };
+type Membership = { organization_id: string; role: string };
 type RoomTypeOption = { id: string; name: string };
 
-export default async function RatesPage() {
+export default async function RatesPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { supabase, user } = await getServerUser();
   const t = await getTranslations("rates");
 
   const { data: membershipRaw } = await supabase
     .from("memberships")
-    .select("organization_id")
+    .select("organization_id, role")
     .eq("user_id", user.id)
     .single();
   const membership = membershipRaw as Membership | null;
@@ -19,6 +22,8 @@ export default async function RatesPage() {
   if (!membership) {
     return <div className="text-sm text-muted-foreground">{t("noOrgFound")}</div>;
   }
+
+  if (!canAccessSection(membership.role, "rates")) redirect(`/${slug}/dashboard`);
 
   const { data: roomTypes = [] } = await supabase
     .from("room_types")

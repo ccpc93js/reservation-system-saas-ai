@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { OVERRIDE_FIELD_KEYS } from "@/lib/rate-overrides";
 
 const optionalNumber = () =>
   yup
@@ -7,16 +8,6 @@ const optionalNumber = () =>
       original === "" || original === null || original === undefined || Number.isNaN(value) ? undefined : value
     )
     .optional();
-
-const FIELD_KEYS = [
-  "rate",
-  "min_stay_arrival",
-  "min_stay_through",
-  "max_stay",
-  "stop_sell",
-  "closed_to_arrival",
-  "closed_to_departure",
-] as const;
 
 export const applyRateOverridesSchema = yup
   .object()
@@ -38,5 +29,5 @@ export const applyRateOverridesSchema = yup
     closed_to_departure: yup.boolean().optional(),
   })
   .test("at-least-one-field", "Set at least one field to apply", (value) =>
-    FIELD_KEYS.some((k) => (value as Record<string, unknown> | undefined)?.[k] !== undefined)
+    OVERRIDE_FIELD_KEYS.some((k) => (value as Record<string, unknown> | undefined)?.[k] !== undefined)
   );

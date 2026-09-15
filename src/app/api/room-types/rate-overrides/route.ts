@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     });
 
     if (!result.ok) return Response.json({ error: result.error || "Failed to apply overrides" }, { status: 400 });
-    return Response.json({ success: true, rows_written: result.rowsWritten });
+    return Response.json({ success: true, rows_written: result.rowsWritten, skipped_room_type_ids: result.skippedRoomTypeIds });
   } catch (error) {
     console.error("Error applying rate overrides:", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });

@@ -143,6 +143,9 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
         return;
       }
       toast.success(t("toastSaved", { count: data.rows_written }));
+      if (data.skipped_room_type_ids?.length > 0) {
+        toast.warning(t("toastSkippedRoomTypes", { count: data.skipped_room_type_ids.length }));
+      }
 
       // Expand the list window (never shrink it) so the just-saved range is visible.
       const newListFrom = dateFrom < listFrom ? dateFrom : listFrom;

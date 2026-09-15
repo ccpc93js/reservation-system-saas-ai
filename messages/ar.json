@@ -1498,6 +1498,7 @@
     "errorNoFields": "Enable at least one field to apply",
     "toastSaveFailed": "Failed to save overrides",
     "toastSaved": "{count, plural, one {# override saved} other {# overrides saved}}",
+    "toastSkippedRoomTypes": "{count, plural, one {# room type was skipped (may have been removed)} other {# room types were skipped (may have been removed)}}",
     "toastListFailed": "Failed to load overrides",
     "toastClearFailed": "Failed to clear override",
     "listHeading": "Upcoming overrides",
