@@ -19,19 +19,28 @@ const colorMap: Record<string, { bg: string; text: string }> = {
   emerald: { bg: "bg-emerald-50", text: "text-emerald-600" },
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const t = await getTranslations("dashboard");
   const { supabase, user } = await getServerUser();
 
   // Get org
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+  if (!org) redirect("/onboarding");
+
   const { data: membership } = await supabase
     .from("memberships")
-    .select("organizations(id)")
+    .select("id")
+    .eq("organization_id", org.id)
     .eq("user_id", user.id)
     .single();
+  if (!membership) redirect("/onboarding");
 
-  const orgId = (membership as any)?.organizations?.id;
-  if (!orgId) redirect("/onboarding");
+  const orgId = org.id;
 
   // Setup progress checks (parallel with metrics)
   const [occupancy, revenue, arrivals, activeCount, avgNights, setupChecks] = await Promise.all([
