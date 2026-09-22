@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase/server";
+import { getPrimaryOrgSlug } from "@/lib/org-membership";
 
 // Legacy route group — redirect all old /(dashboard)/* routes to /{slug}/*
 export default async function LegacyDashboardLayout({
@@ -12,13 +13,7 @@ export default async function LegacyDashboardLayout({
 
   if (!user) redirect("/login");
 
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("organization_id, organizations(slug)")
-    .eq("user_id", user.id)
-    .single();
-
-  const slug = (membership as any)?.organizations?.slug;
+  const slug = await getPrimaryOrgSlug(supabase, user.id);
   if (slug) redirect(`/${slug}/dashboard`);
   redirect("/onboarding");
 

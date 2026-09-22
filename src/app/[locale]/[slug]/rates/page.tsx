@@ -12,9 +12,20 @@ export default async function RatesPage({ params }: { params: Promise<{ slug: st
   const { supabase, user } = await getServerUser();
   const t = await getTranslations("rates");
 
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+
+  if (!org) {
+    return <div className="text-sm text-muted-foreground">{t("noOrgFound")}</div>;
+  }
+
   const { data: membershipRaw } = await supabase
     .from("memberships")
     .select("organization_id, role")
+    .eq("organization_id", org.id)
     .eq("user_id", user.id)
     .single();
   const membership = membershipRaw as Membership | null;

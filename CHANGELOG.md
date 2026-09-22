@@ -1,3 +1,19 @@
+## [92e3db4] - 2026-09-22
+
+fix: always redirect to /onboarding for users with multiple org memberships
+
+.single() on the memberships lookup threw (PGRST116) whenever a user
+belonged to more than one org; the error was ignored, membership came
+back undefined, and every login/callback path fell through to
+/onboarding regardless of existing orgs.
+
+Extracts a shared getPrimaryOrgSlug() helper (order by created_at,
+limit 1, maybeSingle) used by auth/callback, the root page, the login
+page, and the tenant layout's fallback redirect, so 0 or N rows are
+handled instead of assumed-exactly-1.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [dd91ebc] - 2026-09-15
 
 fix: add SSR permission gate to rates page, surface skipped room types, dedupe validation field list
