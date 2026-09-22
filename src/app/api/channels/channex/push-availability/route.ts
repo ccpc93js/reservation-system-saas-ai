@@ -3,6 +3,7 @@ import { isManager } from "@/lib/permissions";
 import { pushAvailabilityForOrg } from "@/lib/channels/channex-availability";
 import { pushRatesForOrg } from "@/lib/channels/channex-rates";
 import { ChannexConfigError } from "@/lib/channels/channex";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 // Phase 4 — availability (ARI) reconcile push. Pushes free-bed counts over a
 // long horizon to Channex. Run nightly (cron) as drift correction across all
@@ -27,15 +28,11 @@ export async function POST(request: Request) {
       const supabase = await createServerClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-      const { data: membership } = await supabase
-        .from("memberships")
-        .select("organization_id, role")
-        .eq("user_id", user.id)
-        .single();
-      if (!membership || !isManager((membership as any).role)) {
+      const membership = await getPrimaryMembership(supabase, user.id);
+      if (!membership || !isManager(membership.role)) {
         return Response.json({ error: "Forbidden" }, { status: 403 });
       }
-      orgIds = [(membership as any).organization_id];
+      orgIds = [membership.organizationId];
     }
 
     // Full sync = 2 API calls per property (availability + rates), 500-day

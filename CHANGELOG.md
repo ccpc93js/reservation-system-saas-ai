@@ -1,3 +1,20 @@
+## [3be1b79] - 2026-09-22
+
+fix: 403 on rate-override save for multi-org accounts
+
+Fourth spot with the same unscoped-membership bug, and the one
+directly blocking the certification manual test: POST/GET
+/api/room-types/rate-overrides and PATCH .../[id] all looked up
+organization_id + role via .single() on user_id alone, which throws
+for this 3-membership test account, giving a blanket 403 Forbidden on
+Apply regardless of actual role.
+
+Adds getPrimaryMembership() alongside getPrimaryOrgSlug() in
+org-membership.ts (same oldest-membership tie-break, tested) and wires
+it into all three handlers.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [5c4f345] - 2026-09-22
 
 fix: scope dashboard's org lookup by slug, not just user_id
