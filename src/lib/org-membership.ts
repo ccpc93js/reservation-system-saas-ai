@@ -18,3 +18,21 @@ export async function getPrimaryOrgSlug(
 
   return (data as any)?.organizations?.slug ?? null;
 }
+
+// Same tolerance as getPrimaryOrgSlug, for the many API routes that need this
+// caller's org id + role rather than a slug (no [slug] param in scope there).
+export async function getPrimaryMembership(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<{ organizationId: string; role: string } | null> {
+  const { data } = await supabase
+    .from("memberships")
+    .select("organization_id, role")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (!data) return null;
+  return { organizationId: (data as any).organization_id, role: (data as any).role };
+}

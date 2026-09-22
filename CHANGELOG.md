@@ -1,3 +1,37 @@
+## [5c4f345] - 2026-09-22
+
+fix: scope dashboard's org lookup by slug, not just user_id
+
+Same unscoped-membership bug, third spot: DashboardPage queried
+organizations(id) via memberships filtered by user_id alone (no slug
+param even in scope), so it broke for this multi-org account with the
+same PGRST116-on-multi-row failure and redirected straight back to
+/onboarding — even after the layout above it had already resolved and
+authorized the correct org for the URL's [slug].
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [97f7ded] - 2026-09-22
+
+fix: scope org/role lookups by org id, not just user id, on multi-org accounts
+
+Two more spots hit the same unscoped-membership bug as the last fix,
+both directly blocking on this account (3 memberships):
+
+- (dashboard)/layout.tsx: legacy route group (still reachable at plain
+  /dashboard per middleware's UNLOCALIZED_EXACT) had its own unfixed
+  copy of the .single()-throws-on-multi-row bug, bouncing straight to
+  /onboarding.
+- [slug]/rates/page.tsx: looked up the caller's membership by user_id
+  alone, with no organization_id filter at all — broke outright for a
+  multi-org user, and even for a single-org user it silently ignored
+  which org the URL's [slug] pointed to. Now resolves the org by slug
+  first (the pattern already used by checkin-history/page.tsx) and
+  scopes the membership check to that org id, matching what the parent
+  layout already enforces before rendering this page.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [92e3db4] - 2026-09-22
 
 fix: always redirect to /onboarding for users with multiple org memberships

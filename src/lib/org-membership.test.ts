@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { FakeSupabaseClient } from "@/lib/test/fake-supabase";
-import { getPrimaryOrgSlug } from "@/lib/org-membership";
+import { getPrimaryOrgSlug, getPrimaryMembership } from "@/lib/org-membership";
 
 describe("getPrimaryOrgSlug", () => {
   it("returns the org slug for a user with exactly one membership", async () => {
@@ -49,5 +49,40 @@ describe("getPrimaryOrgSlug", () => {
     const slug = await getPrimaryOrgSlug(client as unknown as SupabaseClient, "u1");
 
     expect(slug).toBeNull();
+  });
+});
+
+describe("getPrimaryMembership", () => {
+  it("returns organizationId + role for a single-membership user", async () => {
+    const client = new FakeSupabaseClient();
+    client.seed("memberships", [
+      { id: "m1", user_id: "u1", organization_id: "o1", role: "manager", created_at: "2026-01-01" },
+    ]);
+
+    const membership = await getPrimaryMembership(client as unknown as SupabaseClient, "u1");
+
+    expect(membership).toEqual({ organizationId: "o1", role: "manager" });
+  });
+
+  it("returns null for a user with no memberships, instead of throwing", async () => {
+    const client = new FakeSupabaseClient();
+
+    const membership = await getPrimaryMembership(client as unknown as SupabaseClient, "u1");
+
+    expect(membership).toBeNull();
+  });
+
+  // Same PGRST116-on-multi-row bug as getPrimaryOrgSlug, hit by every API route
+  // that looks up "the caller's org + role" by user_id alone with .single().
+  it("returns the oldest membership for a user with multiple memberships, instead of throwing", async () => {
+    const client = new FakeSupabaseClient();
+    client.seed("memberships", [
+      { id: "m2", user_id: "u1", organization_id: "o2", role: "owner", created_at: "2026-03-01" },
+      { id: "m1", user_id: "u1", organization_id: "o1", role: "manager", created_at: "2026-01-01" },
+    ]);
+
+    const membership = await getPrimaryMembership(client as unknown as SupabaseClient, "u1");
+
+    expect(membership).toEqual({ organizationId: "o1", role: "manager" });
   });
 });

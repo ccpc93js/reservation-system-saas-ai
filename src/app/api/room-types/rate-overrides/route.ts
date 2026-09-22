@@ -2,6 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { applyRateOverridesSchema } from "@/lib/validations/rate-override";
 import { applyRateOverrides, OVERRIDE_FIELD_KEYS } from "@/lib/rate-overrides";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 export async function GET(request: Request) {
   try {
@@ -9,12 +10,8 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-    if (membershipError || !membership) return Response.json({ error: "You don't have access to any organization" }, { status: 403 });
+    const membership = await getPrimaryMembership(supabase, user.id);
+    if (!membership) return Response.json({ error: "You don't have access to any organization" }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
     const from = searchParams.get("from");
@@ -24,7 +21,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase
       .from("room_type_rate_overrides")
       .select("*")
-      .eq("organization_id", (membership as any).organization_id)
+      .eq("organization_id", membership.organizationId)
       .gte("date", from)
       .lte("date", to)
       .order("date", { ascending: true });
@@ -43,12 +40,8 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id, role")
-      .eq("user_id", user.id)
-      .single();
-    if (membershipError || !membership || !isManager((membership as any).role)) {
+    const membership = await getPrimaryMembership(supabase, user.id);
+    if (!membership || !isManager(membership.role)) {
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -64,7 +57,7 @@ export async function POST(request: Request) {
       if (body[key] !== undefined) fields[key] = body[key];
     }
 
-    const result = await applyRateOverrides(supabase, (membership as any).organization_id, {
+    const result = await applyRateOverrides(supabase, membership.organizationId, {
       roomTypeIds: body.room_type_ids,
       dateFrom: body.date_from,
       dateTo: body.date_to,
