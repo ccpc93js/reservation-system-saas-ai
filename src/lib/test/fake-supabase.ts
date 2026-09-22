@@ -39,6 +39,8 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
   private limitN: number | null = null;
   private selectCols: string | null = null;
   private upsertOnConflict?: string;
+  private orderCol: string | null = null;
+  private orderAscending = true;
 
   constructor(private client: FakeSupabaseClient, private table: string) {}
 
@@ -66,7 +68,9 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
     this.filters.push(parseOrFilter(expr));
     return this;
   }
-  order(_col: string, _opts?: unknown) {
+  order(col: string, opts?: { ascending?: boolean }) {
+    this.orderCol = col;
+    this.orderAscending = opts?.ascending ?? true;
     return this;
   }
   limit(n: number) {
@@ -112,6 +116,11 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
 
     if (this.op === "select") {
       let result = rows.filter((r) => this.filters.every((f) => f(r)));
+      if (this.orderCol) {
+        const col = this.orderCol;
+        const dir = this.orderAscending ? 1 : -1;
+        result = [...result].sort((a, b) => (a[col] < b[col] ? -dir : a[col] > b[col] ? dir : 0));
+      }
       if (this.limitN != null) result = result.slice(0, this.limitN);
       if (this.wantSingle) {
         return result.length === 1

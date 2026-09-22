@@ -1,4 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { getPrimaryOrgSlug } from "@/lib/org-membership";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -13,13 +14,7 @@ export async function GET(request: Request) {
     if (!error) {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: membership } = await supabase
-          .from("memberships")
-          .select("organization_id, organizations(slug)")
-          .eq("user_id", user.id)
-          .single();
-
-        const slug = (membership as any)?.organizations?.slug;
+        const slug = await getPrimaryOrgSlug(supabase, user.id);
         if (slug) {
           return NextResponse.redirect(`${origin}/${slug}/dashboard`);
         }

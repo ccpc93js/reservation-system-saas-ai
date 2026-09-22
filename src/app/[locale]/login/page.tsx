@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter as useNextRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createBrowserClient } from "@/lib/supabase/client";
+import { getPrimaryOrgSlug } from "@/lib/org-membership";
 import { toast } from "sonner";
 import { Loader2, ArrowLeft, Mail, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
@@ -47,13 +48,7 @@ export default function LoginPage() {
       return;
     }
 
-    const { data: membership } = await supabase
-      .from("memberships")
-      .select("organization_id, organizations(slug)")
-      .eq("user_id", authData.user.id)
-      .single();
-
-    const slug = (membership as any)?.organizations?.slug;
+    const slug = await getPrimaryOrgSlug(supabase, authData.user.id);
     if (slug) {
       router.push(`/${slug}/dashboard`);
       router.refresh();

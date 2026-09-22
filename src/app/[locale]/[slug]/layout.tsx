@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getServerUser } from "@/lib/supabase/session";
+import { getPrimaryOrgSlug } from "@/lib/org-membership";
 import DashboardLayoutClient from "@/components/layout/dashboard-layout-client";
 import DemoWelcomeModal from "@/components/demo/demo-welcome-modal";
 import { reconcilePendingPlan } from "@/lib/billing-reconcile";
@@ -56,12 +57,7 @@ export default async function TenantLayout({
     .single();
 
   if (!membership) {
-    const { data: myMembership } = await supabase
-      .from("memberships")
-      .select("organization_id, organizations(slug)")
-      .eq("user_id", user.id)
-      .single();
-    const mySlug = (myMembership as any)?.organizations?.slug;
+    const mySlug = await getPrimaryOrgSlug(supabase, user.id);
     if (mySlug) redirect(`/${mySlug}/dashboard`);
     redirect("/onboarding");
   }
