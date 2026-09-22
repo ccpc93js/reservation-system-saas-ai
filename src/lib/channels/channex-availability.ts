@@ -42,6 +42,8 @@ export interface PushAvailabilityResult {
   roomTypesPushed: number;
   entries: number;
   skipped?: string;
+  // Task id(s) Channex's response carries back — certification asks for these.
+  channexTaskIds?: string[];
 }
 
 export async function pushAvailabilityForOrg(
@@ -98,6 +100,9 @@ export async function pushAvailabilityForOrg(
 
   if (values.length === 0) return { ok: true, propertyId, roomTypesPushed: 0, entries: 0, skipped: "nothing to push" };
 
-  await channex.pushAvailability(values);
-  return { ok: true, propertyId, roomTypesPushed, entries: values.length };
+  const response = await channex.pushAvailability(values);
+  const channexTaskIds = Array.isArray(response)
+    ? response.map((r: any) => r?.id).filter((id: unknown): id is string => typeof id === "string")
+    : undefined;
+  return { ok: true, propertyId, roomTypesPushed, entries: values.length, channexTaskIds };
 }

@@ -1,3 +1,15 @@
+## [c7a9c95] - 2026-09-22
+
+fix: same unscoped-membership 403 in the manual full-sync route
+
+The manager-triggered branch of POST /api/channels/channex/push-availability
+(the "Sync availability" button in Channels settings — Channex
+certification Test #1, Full Sync) had the same .single()-throws-on-
+multi-row bug as the rate-overrides routes. Switches it to
+getPrimaryMembership().
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [3be1b79] - 2026-09-22
 
 fix: 403 on rate-override save for multi-org accounts

@@ -38,6 +38,8 @@ export interface PushRatesResult {
   ratePlansPushed: number;
   entries: number;
   skipped?: string;
+  // Task id(s) Channex's response carries back — certification asks for these.
+  channexTaskIds?: string[];
 }
 
 interface EffectiveValues {
@@ -179,6 +181,9 @@ export async function pushRatesForOrg(
 
   if (values.length === 0) return { ok: true, propertyId, ratePlansPushed: 0, entries: 0, skipped: "nothing to push" };
 
-  await channex.pushRestrictions(values);
-  return { ok: true, propertyId, ratePlansPushed, entries: values.length };
+  const response = await channex.pushRestrictions(values);
+  const channexTaskIds = Array.isArray(response)
+    ? response.map((r: any) => r?.id).filter((id: unknown): id is string => typeof id === "string")
+    : undefined;
+  return { ok: true, propertyId, ratePlansPushed, entries: values.length, channexTaskIds };
 }

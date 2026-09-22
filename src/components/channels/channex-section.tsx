@@ -141,7 +141,16 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
       const res = await fetch("/api/channels/channex/push-availability", { method: "POST" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t("channex.toastSyncFailed"));
-      toast.success(t("channex.toastAvailabilitySynced"));
+      // Certification (Test #1, Full Sync) asks for the task id Channex
+      // returns from each of the 2 calls — surface them so they're easy to
+      // copy without digging through devtools.
+      const taskIds: string[] = (data.results ?? []).flatMap((r: any) =>
+        [...(r.availability?.channexTaskIds ?? []), ...(r.rates?.channexTaskIds ?? [])]
+      );
+      toast.success(t("channex.toastAvailabilitySynced"), {
+        description: taskIds.length ? `Channex task IDs: ${taskIds.join(", ")}` : undefined,
+        duration: 30000,
+      });
     } catch (err: any) {
       toast.error(err.message || t("channex.toastSyncFailed"));
     } finally {
