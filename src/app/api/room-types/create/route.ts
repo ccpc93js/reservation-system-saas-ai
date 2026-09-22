@@ -57,6 +57,7 @@ export async function POST(request: Request) {
         closed_to_departure: body.closed_to_departure ?? false,
         min_stay_arrival: body.min_stay_arrival ?? null,
         min_stay_through: body.min_stay_through ?? null,
+        max_stay: body.max_stay ?? null,
       })
       .select("id")
       .single();

@@ -2,11 +2,12 @@
 //
 // Minimal fake Supabase client for unit tests. Implements only the
 // chainable query-builder methods actually used by src/lib code today:
-// select/eq/in/or/order/limit/single/maybeSingle, insert/update/upsert/
-// delete, and rpc(). Intentionally not a structural subtype of the real
-// SupabaseClient type — cast with `as unknown as SupabaseClient` at each
-// call site. Extend this file (don't reach for a full Postgrest emulator)
-// if a later test needs a method that isn't here yet.
+// select/eq/in/gte/lte/or/order/limit/single/maybeSingle, insert/update/upsert/
+// delete, rpc(), and auth.getUser() (via setUser()). Intentionally not a
+// structural subtype of the real SupabaseClient type — cast with
+// `as unknown as SupabaseClient` at each call site. Extend this file (don't
+// reach for a full Postgrest emulator) if a later test needs a method that
+// isn't here yet.
 
 type Row = Record<string, any>;
 type Filter = (row: Row) => boolean;
@@ -51,6 +52,14 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
   }
   in(col: string, vals: any[]) {
     this.filters.push((row) => vals.includes(row[col]));
+    return this;
+  }
+  gte(col: string, val: any) {
+    this.filters.push((row) => row[col] != null && row[col] >= val);
+    return this;
+  }
+  lte(col: string, val: any) {
+    this.filters.push((row) => row[col] != null && row[col] <= val);
     return this;
   }
   or(expr: string) {
@@ -163,6 +172,19 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
 export class FakeSupabaseClient {
   tables: Record<string, Row[]> = {};
   private rpcHandlers: Record<string, RpcHandler> = {};
+  private currentUser: { id: string } | null = null;
+
+  auth = {
+    getUser: async () => ({
+      data: { user: this.currentUser },
+      error: this.currentUser ? null : { message: "no user" },
+    }),
+  };
+
+  /** Set (or clear, with null) the user returned by auth.getUser(). */
+  setUser(user: { id: string } | null): void {
+    this.currentUser = user;
+  }
 
   /** Seed a table's starting rows (cloned, so tests can't mutate the input array by reference). */
   seed(table: string, rows: Row[]): void {

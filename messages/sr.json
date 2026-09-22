@@ -50,7 +50,8 @@
       "settingsBilling": "Naplata i plan",
       "housekeeping": "Domaćinstvo",
       "help": "Pomoć",
-      "notifications": "Obaveštenja"
+      "notifications": "Obaveštenja",
+      "rates": "Rates & Restrictions"
     },
     "role": {
       "owner": "Vlasnik",
@@ -674,7 +675,8 @@
         "delete": "Obriši",
         "cancel": "Otkaži",
         "saving": "Čuvanje...",
-        "save": "Sačuvaj"
+        "save": "Sačuvaj",
+        "maxStayLabel": "Max stay"
       },
       "refresh": "Osveži"
     },
@@ -1480,5 +1482,38 @@
     "allCategories": "Sve",
     "noResults": "Nijedan članak ne odgovara pretrazi.",
     "backToHelp": "Nazad u centar za pomoć"
+  },
+  "rates": {
+    "noOrgFound": "No organization found",
+    "title": "Rates & Restrictions",
+    "subtitle": "Set date-specific rates and restrictions that are pushed to your connected channels",
+    "formHeading": "Set an override",
+    "roomTypesLabel": "Room types",
+    "dateFromLabel": "From",
+    "dateToLabel": "To",
+    "rateLabel": "Rate",
+    "minStayArrivalLabel": "Min stay (arrival)",
+    "minStayThroughLabel": "Min stay (through)",
+    "maxStayLabel": "Max stay",
+    "stopSellLabel": "Stop sell",
+    "closedToArrivalLabel": "Closed to arrival",
+    "closedToDepartureLabel": "Closed to departure",
+    "saveButton": "Apply",
+    "errorNoRoomTypes": "Select at least one room type",
+    "errorInvalidDates": "Choose a valid date range",
+    "errorNoFields": "Enable at least one field to apply",
+    "toastSaveFailed": "Failed to save overrides",
+    "toastSaved": "{count, plural, one {# override saved} other {# overrides saved}}",
+    "toastSkippedRoomTypes": "{count, plural, one {# room type was skipped (may have been removed)} other {# room types were skipped (may have been removed)}}",
+    "toastListFailed": "Failed to load overrides",
+    "toastClearFailed": "Failed to clear override",
+    "listHeading": "Upcoming overrides",
+    "toLabel": "to",
+    "colDate": "Date",
+    "colRoomType": "Room type",
+    "colField": "Field",
+    "colValue": "Value",
+    "colActions": "Actions",
+    "noneYet": "No overrides in this date range"
   }
 }

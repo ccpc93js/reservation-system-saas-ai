@@ -71,4 +71,23 @@ describe("FakeSupabaseClient", () => {
     const db = new FakeSupabaseClient();
     await expect(db.rpc("nope")).rejects.toThrow(/no rpc handler registered/);
   });
+
+  it("gte/lte filter by comparison", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("nights", [{ date: "2026-07-01" }, { date: "2026-07-05" }, { date: "2026-07-10" }]);
+    const { data } = await db.from("nights").select("*").gte("date", "2026-07-02").lte("date", "2026-07-08");
+    expect(data).toEqual([{ date: "2026-07-05" }]);
+  });
+
+  it("auth.getUser() reflects setUser()", async () => {
+    const db = new FakeSupabaseClient();
+    let res = await db.auth.getUser();
+    expect(res.data.user).toBeNull();
+    expect(res.error).not.toBeNull();
+
+    db.setUser({ id: "user-1" });
+    res = await db.auth.getUser();
+    expect(res.data.user).toEqual({ id: "user-1" });
+    expect(res.error).toBeNull();
+  });
 });

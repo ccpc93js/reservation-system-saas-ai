@@ -264,6 +264,7 @@ export interface RestrictionValue {
   rates?: { occupancy: number; rate: number }[]; // per_person
   min_stay_arrival?: number;
   min_stay_through?: number;
+  max_stay?: number;
   stop_sell?: boolean;
   closed_to_arrival?: boolean;
   closed_to_departure?: boolean;

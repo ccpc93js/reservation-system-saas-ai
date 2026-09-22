@@ -134,6 +134,7 @@ export async function PATCH(
     if (body.closed_to_departure !== undefined) updateData.closed_to_departure = !!body.closed_to_departure;
     if (body.min_stay_arrival !== undefined) updateData.min_stay_arrival = body.min_stay_arrival ?? null;
     if (body.min_stay_through !== undefined) updateData.min_stay_through = body.min_stay_through ?? null;
+    if (body.max_stay !== undefined) updateData.max_stay = body.max_stay ?? null;
 
     updateData.updated_at = new Date().toISOString();
 
@@ -160,6 +161,7 @@ export async function PATCH(
       "closed_to_departure",
       "min_stay_arrival",
       "min_stay_through",
+      "max_stay",
     ].some((field) => body[field] !== undefined);
     if (restrictionFieldsChanged) {
       const today = new Date().toISOString().slice(0, 10);

@@ -1,3 +1,157 @@
+## [dd91ebc] - 2026-09-15
+
+fix: add SSR permission gate to rates page, surface skipped room types, dedupe validation field list
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [cf7c31d] - 2026-09-15
+
+feat: add Rates & Restrictions page
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [dbffa6f] - 2026-09-15
+
+fix: sync overrides list window and reset field toggles after a successful save
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [7245a23] - 2026-09-15
+
+feat: add RateOverridesClient bulk-edit form and overrides list
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [256360b] - 2026-09-15
+
+feat: add Rates nav entry to sidebar
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [9e392f7] - 2026-09-14
+
+i18n: add rates namespace and maxStayLabel across all locales
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [21bb9fa] - 2026-09-14
+
+feat: restrict the rates section to managers
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [bfefea9] - 2026-09-14
+
+test: add missing 401 case for PATCH /api/room-types/rate-overrides/[id]
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [184f1ca] - 2026-09-14
+
+feat: add PATCH /api/room-types/rate-overrides/[id] to clear one field
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [c172a01] - 2026-09-14
+
+fix: add error check for membership query; formalize auth mocking in FakeSupabaseClient
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [0da05bd] - 2026-09-14
+
+feat: add GET/POST /api/room-types/rate-overrides
+
+GET lists rate overrides in a date range (readable by any org member,
+including staff — viewing upcoming pricing/restriction plans isn't a
+mutation). POST bulk-applies overrides across room types and a date
+range, gated to manager+ roles via isManager(), consistent with the
+push-availability route's permission pattern.
+
+Reuses OVERRIDE_FIELD_KEYS from lib/rate-overrides instead of
+duplicating the field list, so the two stay in sync.
+
+Introduces this repo's first src/app/api/**/*.test.ts pattern: mock
+@/lib/supabase/server to return a FakeSupabaseClient with a dynamic
+auth.getUser(), and mock @/lib/rate-overrides so only the route's own
+wiring (auth, role gate, validation, response shape) is under test —
+applyRateOverrides's internals are already covered separately.
+
+## [e246703] - 2026-09-14
+
+feat: support max_stay as a standing room type restriction
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [46e168d] - 2026-09-14
+
+feat: add max_stay and rate-override validation schemas
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [641fcc6] - 2026-09-14
+
+fix: use native partial upsert to avoid TOCTOU race and row-cap truncation; expose skipped room types
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3d717dd] - 2026-09-14
+
+feat: add applyRateOverrides and clearRateOverrideField
+
+Business logic behind the bulk rate/restriction edit form: expands a
+room-type list + date range into per-date override rows, merging only
+the fields the caller touched, and enqueues a single Channex
+restrictions push for the whole edit scope.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [a3a1f77] - 2026-09-14
+
+refactor: clarify and dedupe ratePlansPushed in pushRatesForOrg
+
+Document that ratePlansPushed counts distinct rate plans processed, not
+entries sent, and compute it via a Set of rate_plan_ids (mirroring the
+roomTypeSet pattern in channex-availability.ts) instead of summing
+rpMap.get(rt.id)!.length per room type, avoiding theoretical double-counting.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [221a44f] - 2026-09-14
+
+feat: push per-date rate/restriction overrides, compressed, to every mapped rate plan
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [3578787] - 2026-09-14
+
+docs: mention gte/lte in FakeSupabaseClient method list comment
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [5d9c7bd] - 2026-09-14
+
+test: add gte/lte support to FakeSupabaseClient
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [b68cfe2] - 2026-09-14
+
+feat: add max_stay to Channex RestrictionValue
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [1f2c63a] - 2026-09-14
+
+feat: add room_type_rate_overrides table and room_types.max_stay column
+
+Per-date rate/restriction overrides for the Channex rate calendar, plus
+the standing max_stay restriction on room_types. Migration applied
+directly against the remote Supabase project and TypeScript types
+regenerated to match.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## Unreleased - 2026-07-28
 
 feat: full Notifications page with filter + search

@@ -13,6 +13,7 @@ const OWNER_ONLY: readonly Role[] = ["owner"];
 export const SECTION_ROLES: Record<string, readonly Role[]> = {
   analytics: MANAGERS,
   channels: MANAGERS,
+  rates: MANAGERS,
   "settings/property": MANAGERS,
   "settings/billing": OWNER_ONLY,
   // settings/team is open to all — staff see it read-only.
