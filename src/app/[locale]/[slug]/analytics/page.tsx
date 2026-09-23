@@ -11,21 +11,29 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ slug
   const { supabase, user } = await getServerUser();
   const t = await getTranslations("analytics");
 
-  const { slug: _slug } = await params;
+  const { slug } = await params;
 
   // Get org + plan
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id, plan")
+    .eq("slug", slug)
+    .single();
+  if (!org) redirect("/onboarding");
+
   const { data: membership } = await supabase
     .from("memberships")
-    .select("role, organizations(id, plan, slug)")
+    .select("role")
+    .eq("organization_id", org.id)
     .eq("user_id", user.id)
     .single();
+  if (!membership) redirect("/onboarding");
 
-  const orgId = (membership as any)?.organizations?.id;
-  const orgPlan = (membership as any)?.organizations?.plan ?? "free";
-  const orgSlug = (membership as any)?.organizations?.slug ?? "";
-  if (!orgId) redirect("/onboarding");
+  const orgId = org.id;
+  const orgPlan = org.plan ?? "free";
+  const orgSlug = slug;
   // Analytics is manager+ only.
-  if (!canAccessSection((membership as any).role, "analytics")) redirect(`/${orgSlug}/dashboard`);
+  if (!canAccessSection(membership.role, "analytics")) redirect(`/${orgSlug}/dashboard`);
 
   if (!hasFeature(orgPlan, "analytics")) {
     return (

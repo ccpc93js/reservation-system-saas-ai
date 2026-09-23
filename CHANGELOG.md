@@ -1,3 +1,19 @@
+## [392e311] - 2026-09-22
+
+feat: surface Channex task IDs from full sync for certification
+
+Channex certification Test #1 (Full Sync) requires submitting the
+task id Channex returns in each of the 2 API responses (availability,
+rates/restrictions) — per their docs, data[].id on a successful
+response. pushAvailabilityForOrg/pushRatesForOrg were awaiting and
+discarding that response entirely.
+
+Captures channexTaskIds on both result types and surfaces them in the
+"Sync availability" button's success toast, so they're copyable
+without digging through devtools network tab.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [c7a9c95] - 2026-09-22
 
 fix: same unscoped-membership 403 in the manual full-sync route

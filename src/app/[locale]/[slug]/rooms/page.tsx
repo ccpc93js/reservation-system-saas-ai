@@ -7,15 +7,23 @@ import { ChevronDown } from "lucide-react";
 
 type Membership = { organization_id: string };
 
-export default async function RoomsPage() {
+export default async function RoomsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { supabase, user } = await getServerUser();
   const t = await getTranslations("rooms");
 
   // Get current user's organization
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+  if (!org) return <div className="text-sm text-muted-foreground">{t("noOrgFound")}</div>;
 
   const { data: membershipRaw } = await supabase
     .from("memberships")
     .select("organization_id")
+    .eq("organization_id", org.id)
     .eq("user_id", user.id)
     .single();
 

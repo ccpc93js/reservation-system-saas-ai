@@ -3,15 +3,24 @@ import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import ReservationsListClient from "@/components/reservations/reservations-list-client";
 
-export default async function ReservationsPage() {
+export default async function ReservationsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const t = await getTranslations("reservations");
   const supabase = await createServerClient();
   const { data: { user: _authUser } } = await supabase.auth.getUser();
 
   // Get org context
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+  if (!org) return <div>{t("errorLoading")}</div>;
+
   const { data: membership, error } = await supabase
     .from("memberships")
     .select("organization_id")
+    .eq("organization_id", org.id)
     .eq("user_id", _authUser?.id ?? "")
     .single();
 
@@ -19,7 +28,7 @@ export default async function ReservationsPage() {
     return <div>{t("errorLoading")}</div>;
   }
 
-  const orgId = (membership as any).organization_id as string;
+  const orgId = org.id;
 
   // Load initial reservations (first page, 25 per page)
   const { data: reservations } = await supabase

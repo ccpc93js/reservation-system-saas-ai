@@ -2,15 +2,24 @@ import { getTranslations } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase/server";
 import GuestListClient from "@/components/guests/guest-list-client";
 
-export default async function GuestsPage() {
+export default async function GuestsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const supabase = await createServerClient();
   const { data: { user: _authUser } } = await supabase.auth.getUser();
   const t = await getTranslations("guests");
 
   // Get org context
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+  if (!org) return <div>{t("errorLoading")}</div>;
+
   const { data: membership, error } = await supabase
     .from("memberships")
     .select("organization_id")
+    .eq("organization_id", org.id)
     .eq("user_id", _authUser?.id ?? "")
     .single();
 
@@ -18,7 +27,7 @@ export default async function GuestsPage() {
     return <div>{t("errorLoading")}</div>;
   }
 
-  const orgId = (membership as any).organization_id as string;
+  const orgId = org.id;
 
   // Load initial guests (first page, 25 per page)
   const { data: guests } = await supabase

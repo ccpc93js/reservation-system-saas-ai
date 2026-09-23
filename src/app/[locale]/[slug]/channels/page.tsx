@@ -12,19 +12,26 @@ export default async function ChannelsPage({ params }: { params: Promise<{ slug:
   const { data: { user: _authUser } } = await supabase.auth.getUser();
   const t = await getTranslations("channels");
 
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id, plan")
+    .eq("slug", slug)
+    .single();
+  if (!org) return <div>{t("errorLoading")}</div>;
+
   const { data: membership } = await supabase
     .from("memberships")
-    .select("organization_id, role, organizations(plan)")
+    .select("role")
+    .eq("organization_id", org.id)
     .eq("user_id", _authUser?.id ?? "")
     .single();
-
   if (!membership) return <div>{t("errorLoading")}</div>;
 
   // Channel Manager is manager+ only.
-  if (!canAccessSection((membership as any).role, "channels")) redirect(`/${slug}/dashboard`);
+  if (!canAccessSection(membership.role, "channels")) redirect(`/${slug}/dashboard`);
 
-  const orgId = (membership as any).organization_id as string;
-  const plan = (membership as any).organizations?.plan ?? "free";
+  const orgId = org.id;
+  const plan = org.plan ?? "free";
 
   if (!hasFeature(plan, "channels")) {
     return (
