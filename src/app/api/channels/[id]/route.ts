@@ -1,24 +1,21 @@
 import { createServerClient } from "@/lib/supabase/server";
 import type { TablesUpdate } from "@/lib/types/database";
 import { isManager } from "@/lib/permissions";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 async function getOrgAndVerify(supabase: any, userId: string, channelId: string) {
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("organization_id, role")
-    .eq("user_id", userId)
-    .single();
+  const membership = await getPrimaryMembership(supabase, userId);
   if (!membership) return null;
-  if (!isManager((membership as any).role)) return null;
+  if (!isManager(membership.role)) return null;
 
   const { data: channel } = await supabase
     .from("channels")
     .select("id, organization_id")
     .eq("id", channelId)
-    .eq("organization_id", membership.organization_id)
+    .eq("organization_id", membership.organizationId)
     .single();
 
-  return channel ? { orgId: membership.organization_id, channel } : null;
+  return channel ? { orgId: membership.organizationId, channel } : null;
 }
 
 export async function PATCH(

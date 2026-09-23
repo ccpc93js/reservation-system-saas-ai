@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 export async function GET(request: Request) {
   try {
@@ -7,17 +8,13 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
+    const membership = await getPrimaryMembership(supabase, user.id);
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
 
     const { data: channels, error } = await supabase
       .from("channels")
       .select("*, beds(id, name, rooms(id, name)), room_types(id, name)")
-      .eq("organization_id", membership.organization_id)
+      .eq("organization_id", membership.organizationId)
       .order("created_at", { ascending: false });
 
     if (error) return Response.json({ error: error.message }, { status: 400 });
@@ -33,13 +30,9 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: membership } = await supabase
-      .from("memberships")
-      .select("organization_id, role")
-      .eq("user_id", user.id)
-      .single();
+    const membership = await getPrimaryMembership(supabase, user.id);
     if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
-    if (!isManager((membership as any).role)) return Response.json({ error: "Forbidden" }, { status: 403 });
+    if (!isManager(membership.role)) return Response.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await request.json();
     const { name, platform, ical_url, bed_id, color, mapping_mode, room_type_id, allotment } = body;
@@ -55,7 +48,7 @@ export async function POST(request: Request) {
     const { data: channel, error } = await supabase
       .from("channels")
       .insert({
-        organization_id: membership.organization_id,
+        organization_id: membership.organizationId,
         name,
         platform,
         ical_url: ical_url || null,

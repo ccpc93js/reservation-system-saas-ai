@@ -3,6 +3,7 @@ import { isManager } from "@/lib/permissions";
 import { hasFeature } from "@/lib/plan";
 import { connectChannel, disconnectChannel } from "@/lib/channels/channex-connect";
 import { ChannexConfigError } from "@/lib/channels/channex";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 // Phase 5 — Connect flow. POST creates + activates the OTA channel from the
 // owner's mapping; DELETE (?id=<channelRowId>) disconnects it. Manager-only,
@@ -10,16 +11,13 @@ import { ChannexConfigError } from "@/lib/channels/channex";
 async function authorize(supabase: Awaited<ReturnType<typeof createServerClient>>) {
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) return { error: "Unauthorized", status: 401 as const };
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("organization_id, role, organizations(plan)")
-    .eq("user_id", user.id)
-    .single();
+  const membership = await getPrimaryMembership(supabase, user.id);
   if (!membership) return { error: "No organization", status: 403 as const };
-  if (!isManager((membership as any).role)) return { error: "Forbidden", status: 403 as const };
-  const plan = (membership as any).organizations?.plan ?? "free";
+  if (!isManager(membership.role)) return { error: "Forbidden", status: 403 as const };
+  const { data: org } = await supabase.from("organizations").select("plan").eq("id", membership.organizationId).single();
+  const plan = org?.plan ?? "free";
   if (!hasFeature(plan, "channels")) return { error: "Upgrade to Pro to connect OTA channels", status: 402 as const };
-  return { orgId: (membership as any).organization_id as string };
+  return { orgId: membership.organizationId };
 }
 
 export async function POST(request: Request) {

@@ -1,6 +1,7 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { notifyOrg } from "@/lib/notifications";
 import { enqueueAvailability } from "@/lib/channels/channex-outbox";
+import { getPrimaryMembership } from "@/lib/org-membership";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const ical = require("node-ical");
 
@@ -68,13 +69,9 @@ export async function POST(
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
       triggeredBy = user.id;
 
-      const { data: membership } = await supabase
-        .from("memberships")
-        .select("organization_id")
-        .eq("user_id", user.id)
-        .single();
+      const membership = await getPrimaryMembership(supabase, user.id);
       if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
-      orgId = (membership as any).organization_id;
+      orgId = membership.organizationId;
     }
 
     if (!orgId) {

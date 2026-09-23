@@ -1,5 +1,6 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { getSiteOrigin } from "@/lib/site-url";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 // Vercel automatically sends `Authorization: Bearer $CRON_SECRET` for cron jobs
 // when CRON_SECRET is set in project env vars. Manual callers must do the same.
@@ -25,13 +26,9 @@ export async function POST(request: Request) {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-      const { data: membership } = await supabase
-        .from("memberships")
-        .select("organization_id")
-        .eq("user_id", user.id)
-        .single();
+      const membership = await getPrimaryMembership(supabase, user.id);
       if (!membership) return Response.json({ error: "No organization" }, { status: 403 });
-      orgIds = [(membership as any).organization_id];
+      orgIds = [membership.organizationId];
     }
 
     const supabase = await createServiceClient();

@@ -1,3 +1,24 @@
+## [ad69097] - 2026-09-23
+
+fix: scope every [slug] page's org lookup by slug, not just user_id
+
+The "Error loading channels" you just hit on the Channels page was the
+same unscoped-membership bug in its 11th spot: channels, calendar,
+reservations, rooms, analytics, guests, housekeeping,
+check-in-pending, settings/team, settings/property, settings/billing
+all looked up "the caller's org" via memberships.eq(user_id).single()
+alone, which throws for this 3-membership account and, even for a
+single-org user, ignored the [slug] in the URL entirely.
+
+All now resolve the org by slug first (matching checkin-history/
+page.tsx, dashboard/page.tsx, rates/page.tsx from the last two fixes)
+and scope the membership/role check to that org id. This closes out
+every [locale]/[slug]/* page — the API routes (~40 files, same
+pattern) are the remaining known instance of this bug, not touched
+here.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [392e311] - 2026-09-22
 
 feat: surface Channex task IDs from full sync for certification

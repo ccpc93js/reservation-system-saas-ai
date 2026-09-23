@@ -1,20 +1,17 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { listPendingMods, applyModification, dismissModification } from "@/lib/channels/channex-mods";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 // Pending OTA booking modifications (from "modified" revisions). GET lists them;
 // POST { modId, action: "apply" | "dismiss" } resolves one. Manager-only.
 async function auth(supabase: Awaited<ReturnType<typeof createServerClient>>) {
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) return { error: "Unauthorized", status: 401 as const };
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("organization_id, role")
-    .eq("user_id", user.id)
-    .single();
+  const membership = await getPrimaryMembership(supabase, user.id);
   if (!membership) return { error: "No organization", status: 403 as const };
-  if (!isManager((membership as any).role)) return { error: "Forbidden", status: 403 as const };
-  return { orgId: (membership as any).organization_id as string };
+  if (!isManager(membership.role)) return { error: "Forbidden", status: 403 as const };
+  return { orgId: membership.organizationId };
 }
 
 export async function GET() {
