@@ -2,6 +2,7 @@ import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { processOutbox } from "@/lib/channels/channex-outbox";
 import { ChannexConfigError } from "@/lib/channels/channex";
+import { getPrimaryMembership } from "@/lib/org-membership";
 
 // Channex outbox worker. Drains due outbox rows, coalescing per (org, kind)
 // into single availability / restrictions pushes, rate-limited with backoff.
@@ -17,8 +18,8 @@ export async function POST(request: Request) {
       const supabase = await createServerClient();
       const { data: { user }, error } = await supabase.auth.getUser();
       if (error || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-      const { data: membership } = await supabase.from("memberships").select("role").eq("user_id", user.id).single();
-      if (!membership || !isManager((membership as any).role)) {
+      const membership = await getPrimaryMembership(supabase, user.id);
+      if (!membership || !isManager(membership.role)) {
         return Response.json({ error: "Forbidden" }, { status: 403 });
       }
     }

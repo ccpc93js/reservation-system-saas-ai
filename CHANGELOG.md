@@ -1,3 +1,19 @@
+## [ba9bce3] - 2026-09-23
+
+fix: every API route the Channels page calls has the same 403/unscoped bug
+
+The "modifications" 403 you just saw was the same unscoped-membership
+bug, in every endpoint the Channels page actually calls: the pending
+OTA-modifications poll, provision ("Sync structure"), connect/options
+and connect/disconnect (the OTA wizard + trash icon), sync-all ("Sync
+All"), the plain channels list/create route, and the per-channel
+get/patch/delete + per-channel sync routes used by sync-all's fan-out.
+
+All switched to getPrimaryMembership(). This closes out the Channels
+page's full click surface for this account.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [ad69097] - 2026-09-23
 
 fix: scope every [slug] page's org lookup by slug, not just user_id

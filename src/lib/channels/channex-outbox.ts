@@ -60,6 +60,9 @@ export interface OutboxResult {
   errored: number;
   calls: number;
   rateLimited: boolean;
+  // Task id(s) Channex's response carries back for each group actually
+  // pushed this invocation — certification asks for these.
+  channexTaskIds: string[];
 }
 
 interface Group {
@@ -113,16 +116,16 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
   }
 
   let sent = 0, retried = 0, errored = 0, calls = 0, rateLimited = false;
+  const channexTaskIds: string[] = [];
 
   for (const g of groups.values()) {
     if (calls >= maxCalls) { rateLimited = true; break; }
     const rtIds = g.rtIds ? [...g.rtIds] : undefined;
     try {
-      if (g.kind === "availability") {
-        await pushAvailabilityForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds });
-      } else {
-        await pushRatesForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds });
-      }
+      const result = g.kind === "availability"
+        ? await pushAvailabilityForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds })
+        : await pushRatesForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds });
+      if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;
       await supabase.from("channex_outbox").update({ status: "sent", sent_at: new Date().toISOString() }).in("id", g.ids);
       sent += g.ids.length;
@@ -152,5 +155,5 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     }
   }
 
-  return { processed: rows.length, sent, retried, errored, calls, rateLimited };
+  return { processed: rows.length, sent, retried, errored, calls, rateLimited, channexTaskIds };
 }
