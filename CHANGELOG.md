@@ -1,3 +1,9 @@
+## [89b4a9b] - 2026-10-06
+
+docs: update CHANGELOG with outbox task-id commit
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [a41791d] - 2026-09-23
 
 feat: surface Channex task IDs from outbox drain + fix its own 403
