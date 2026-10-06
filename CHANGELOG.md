@@ -1,3 +1,21 @@
+## [a41791d] - 2026-09-23
+
+feat: surface Channex task IDs from outbox drain + fix its own 403
+
+Certification Test #2 (single date, single rate) needs the task id
+from that specific edit's Channex call — but a normal edit goes
+through the outbox (async, drained by cron or manual flush), and
+processOutbox discarded pushRatesForOrg/pushAvailabilityForOrg's
+response just like push-availability did before. Threads
+channexTaskIds through processOutbox's return and into
+/api/channels/channex/outbox/process's JSON response.
+
+Also fixes the same unscoped-membership bug on that route's own
+manager-auth path (line 20) — it would have 403'd for this account
+before ever reaching processOutbox.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [ba9bce3] - 2026-09-23
 
 fix: every API route the Channels page calls has the same 403/unscoped bug
