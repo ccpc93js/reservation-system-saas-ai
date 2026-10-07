@@ -115,7 +115,10 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
     const rows = this.tableRows();
 
     if (this.op === "select") {
-      let result = rows.filter((r) => this.filters.every((f) => f(r)));
+      // Clone matched rows — a real client deserializes a fresh response per
+      // query, so a row read here must not be the same object a later
+      // insert/update/delete mutates in place.
+      let result = rows.filter((r) => this.filters.every((f) => f(r))).map((r) => ({ ...r }));
       if (this.orderCol) {
         const col = this.orderCol;
         const dir = this.orderAscending ? 1 : -1;

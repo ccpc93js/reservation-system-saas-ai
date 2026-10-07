@@ -1,3 +1,14 @@
+## [fd2066a] - 2026-10-06
+
+chore: track node version pin, superpowers docs, and skills lockfile
+
+.nvmrc, skills-lock.json, and the rate-calendar/test-infra planning
+docs under docs/superpowers/ were sitting untracked since earlier
+sessions. Also ignores supabase/.temp/ (the Supabase CLI's own local
+cache, not meant to be tracked).
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [89b4a9b] - 2026-10-06
 
 docs: update CHANGELOG with outbox task-id commit

@@ -1,8 +1,10 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { updateReservationSchema } from "@/lib/validations/reservation";
 import { finalizeCheckout } from "@/lib/checkout";
+import { enqueueAvailability } from "@/lib/channels/channex-outbox";
 
 type ReservationOrg = { organization_id: string };
+type ReservationOrgWithStay = { organization_id: string; check_in: string; check_out: string; status: string };
 
 const GUEST_IDENTITY_FIELDS = `
   id, first_name, last_name, date_of_birth, nationality, country_of_birth,
@@ -114,11 +116,11 @@ export async function PATCH(
     // Get reservation to verify access
     const { data: reservationRaw, error: resError } = await supabase
       .from("reservations")
-      .select("organization_id")
+      .select("organization_id, check_in, check_out, status")
       .eq("id", id)
       .single();
 
-    const reservation = reservationRaw as ReservationOrg | null;
+    const reservation = reservationRaw as ReservationOrgWithStay | null;
 
     if (resError || !reservation) {
       return Response.json(
@@ -196,6 +198,13 @@ export async function PATCH(
         );
     }
 
+    // Freed beds → push the restored availability to Channex (no-op if not
+    // connected). Only on the transition into cancelled, not on every save
+    // of an already-cancelled reservation.
+    if (updateData.status === "cancelled" && reservation.status !== "cancelled") {
+      await enqueueAvailability(supabase as any, reservation.organization_id, reservation.check_in, reservation.check_out);
+    }
+
     // Update registry actual_check_out_at when checking out
     if (updateData.status === "checked_out") {
       await (supabase as any)
@@ -239,11 +248,11 @@ export async function DELETE(
     // Get reservation to verify access
     const { data: reservationRaw, error: resError } = await supabase
       .from("reservations")
-      .select("organization_id")
+      .select("organization_id, check_in, check_out")
       .eq("id", id)
       .single();
 
-    const reservation = reservationRaw as ReservationOrg | null;
+    const reservation = reservationRaw as (ReservationOrg & { check_in: string; check_out: string }) | null;
 
     if (resError || !reservation) {
       return Response.json(
@@ -279,6 +288,9 @@ export async function DELETE(
         { status: 400 }
       );
     }
+
+    // Freed beds → push the restored availability to Channex (no-op if not connected).
+    await enqueueAvailability(supabase as any, reservation.organization_id, reservation.check_in, reservation.check_out);
 
     return Response.json({ success: true });
   } catch (error) {
