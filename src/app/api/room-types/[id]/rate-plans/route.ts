@@ -53,8 +53,20 @@ export async function POST(
 
     if (error) return Response.json({ error: "Failed to create rate plan" }, { status: 400 });
 
-    // Provision it on Channex immediately — safe to no-op if the org isn't connected.
-    await provisionOrg(supabase, membership.organizationId);
+    // Provision it on Channex immediately — safe to no-op if the org isn't
+    // connected. The rate plan already exists locally at this point; a
+    // provisioning failure (or an unhandled exception from provisionOrg's own
+    // unguarded setup queries) must not turn an already-successful create
+    // into a misleading 500 — log it and let the existing manual "sync now"
+    // recovery path (and the next scheduled provisioning run) catch up.
+    try {
+      const result = await provisionOrg(supabase, membership.organizationId);
+      if (!result.ok) {
+        console.error(`provisionOrg failed after creating rate plan ${(ratePlan as any).id}:`, result.warnings, result.rows.filter((r) => r.action === "error"));
+      }
+    } catch (provisionError) {
+      console.error(`provisionOrg threw after creating rate plan ${(ratePlan as any).id}:`, provisionError);
+    }
 
     return Response.json({ rate_plan: ratePlan }, { status: 201 });
   } catch (error) {

@@ -66,4 +66,28 @@ describe("POST /api/room-types/[id]/rate-plans", () => {
     expect(data.rate_plan.id).toBe(db.tables.rate_plans[0].id);
     expect(provisionOrg).toHaveBeenCalledWith(db, "org-1");
   });
+
+  it("still returns 201 with the created rate plan if provisioning throws", async () => {
+    db.seed("room_types", [{ id: "rt-1", organization_id: "org-1" }]);
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
+    vi.mocked(provisionOrg).mockRejectedValueOnce(new Error("Channex unreachable"));
+
+    const res = await POST(jsonRequest({ name: "Bed & Breakfast", base_price: 120 }), params());
+    const data = await res.json();
+
+    expect(res.status).toBe(201);
+    expect(data.rate_plan).toMatchObject({ name: "Bed & Breakfast", base_price: 120 });
+    expect(db.tables.rate_plans).toHaveLength(1);
+  });
+
+  it("still returns 201 if provisioning resolves but reports failure", async () => {
+    db.seed("room_types", [{ id: "rt-1", organization_id: "org-1" }]);
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
+    vi.mocked(provisionOrg).mockResolvedValueOnce({ ok: false, rows: [{ name: "Bed & Breakfast", kind: "rate_plan", action: "error", warning: "422" }], warnings: [], propertyId: "prop-1" });
+
+    const res = await POST(jsonRequest({ name: "Bed & Breakfast", base_price: 120 }), params());
+
+    expect(res.status).toBe(201);
+    expect(db.tables.rate_plans).toHaveLength(1);
+  });
 });
