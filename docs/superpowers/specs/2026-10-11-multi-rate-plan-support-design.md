@@ -197,6 +197,41 @@ back to sending everything for that push — correct, just not maximally
 sparse; a rare case and not worth the complexity of per-row-sparse batching
 within one push.
 
+## Room type dialog (`src/components/rooms/room-types-dialog.tsx`) — rate plan CRUD lives here
+
+**Correction found during planning:** `room_types.base_price` and its
+restriction columns aren't only read by the Channex push path — this
+dialog is the primary UI for setting them, both on room type creation and
+edit (`src/app/api/room-types/create/route.ts`,
+`src/app/api/room-types/[id]/route.ts`, `src/lib/validations/room.ts` all
+read/write these fields). An earlier draft of this spec proposed a
+separate new "Rate Plans" management section on the Rates & Restrictions
+page instead, which would have left this dialog writing to now-stale
+`room_types` columns no push code reads anymore — the same
+two-sources-of-truth shape as the cancellation-sync bug fixed earlier this
+session. Rate plan CRUD belongs where managers already go to manage a room
+type's economics.
+
+The dialog's single flat "Pricing & Restrictions" section becomes a list
+of named rate plans, each with its own price/restrictions form (the exact
+fields that exist today — base price, stop sell, CTA, CTD, min stay
+arrival/through, max stay — just repeated per plan instead of once).
+Minimum one rate plan per room type, enforced in the UI: a brand-new room
+type starts with one plan pre-named `"Standard Rate"` and its `is_default`
+set, editable like any other field (including renaming) but not
+removable while it's the only one. Additional rate plans: add, edit,
+rename, delete (delete blocked if it's the last remaining plan on that
+room type, or has existing `room_type_rate_overrides` rows — surface the
+conflict, require clearing those overrides first rather than silently
+cascading).
+
+`room-types/create/route.ts` creates the room type row (physical
+attributes only) plus its one default `rate_plans` row in the same
+request. `room-types/[id]/route.ts` (PATCH) drops the pricing/restriction
+fields from its own payload — those now go through new rate-plan-scoped
+endpoints (see Testing section) — and `validations/room.ts` narrows to
+physical attributes only, matching.
+
 ## Rates & Restrictions page
 
 Room type selection gains a second step: once a room type is checked, its
@@ -205,17 +240,9 @@ type's single rate plan pre-checked when only one exists — **today's UI
 flow is pixel-identical for every org that hasn't added a second rate
 plan**. `applyRateOverrides`'s `roomTypeIds` parameter becomes
 `ratePlanIds`; the API route (`/api/room-types/rate-overrides`) and its
-validation schema follow the same rename.
-
-A new, small "Rate Plans" management section lives on the Rates &
-Restrictions page itself (not `room-types-dialog.tsx`, which stays focused
-on physical attributes only — name/capacity/gender — consistent with the
-split this feature is making). Per room type: list its rate plans, add a
-new named one with its own base price, edit/rename, delete (blocked if it's
-the `is_default` one or has existing overrides — require reassigning or
-clearing first). Adding a rate plan triggers provisioning for that one
-plan via the existing `provisionOrg` (idempotent, safe to call for a
-single new row).
+validation schema follow the same rename. No rate-plan CRUD lives on this
+page — that's the room type dialog's job, above; this page only reads
+`rate_plans` to populate the picker.
 
 ## Testing
 
@@ -237,6 +264,13 @@ single new row).
 - `rate-overrides.test.ts` (extend): `ratePlanIds` rename; touched-fields
   passed through to `enqueueRestrictions`.
 - API route tests (`rate-overrides/route.test.ts`): payload shape rename.
+- `room-types/create/route.test.ts` (new): creating a room type also
+  creates its default rate plan with the submitted price/restrictions.
+- New rate-plan CRUD endpoints (`room-types/[id]/rate-plans/route.ts` POST,
+  `room-types/[id]/rate-plans/[rateplanId]/route.ts` PATCH/DELETE) each get
+  a route test: create succeeds and provisions; delete is blocked with the
+  last-remaining-plan and has-overrides cases exercised explicitly; PATCH
+  updates only the fields sent.
 
 ## Rollout
 
