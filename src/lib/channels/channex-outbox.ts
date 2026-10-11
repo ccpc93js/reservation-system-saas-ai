@@ -28,7 +28,8 @@ async function enqueue(
   kind: OutboxKind,
   from?: string,
   to?: string,
-  roomTypeIds?: string[]
+  roomTypeIds?: string[],
+  touchedFields?: string[]
 ): Promise<void> {
   if (!from || !to) return;
   // Skip orgs that aren't connected to Channex — no junk rows for iCal-only or
@@ -40,6 +41,7 @@ async function enqueue(
     from_date: from,
     to_date: to,
     room_type_ids: roomTypeIds && roomTypeIds.length ? roomTypeIds : null,
+    ...(touchedFields && touchedFields.length ? { touched_fields: touchedFields } : {}),
   });
 }
 
@@ -48,9 +50,9 @@ export function enqueueAvailability(supabase: SupabaseClient, orgId: string, fro
   return enqueue(supabase, orgId, "availability", from, to, roomTypeIds);
 }
 
-/** Enqueue a rate/restriction delta (e.g. after a base_price change). */
-export function enqueueRestrictions(supabase: SupabaseClient, orgId: string, from?: string, to?: string, roomTypeIds?: string[]) {
-  return enqueue(supabase, orgId, "restrictions", from, to, roomTypeIds);
+/** Enqueue a rate/restriction delta (e.g. after a base_price change). roomTypeIds here holds rate_plan ids. */
+export function enqueueRestrictions(supabase: SupabaseClient, orgId: string, from?: string, to?: string, roomTypeIds?: string[], touchedFields?: string[]) {
+  return enqueue(supabase, orgId, "restrictions", from, to, roomTypeIds, touchedFields);
 }
 
 export interface OutboxResult {
@@ -70,9 +72,11 @@ interface Group {
   kind: OutboxKind;
   from: string;
   to: string;
-  rtIds: Set<string> | null; // null = all provisioned room types
+  rtIds: Set<string> | null; // null = all provisioned room types/rate plans
   ids: string[];
   attempts: number;
+  touchedFields: Set<string> | null; // null = unknown row seen, or any row's touched_fields was null -> full snapshot
+  touchedFieldsKnown: boolean; // becomes false the moment we need a fallback
 }
 
 // Worker: coalesce due rows per (org, kind), push once each, rate-limited.
@@ -82,7 +86,7 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
   const nowIso = new Date().toISOString();
   const { data: due } = await supabase
     .from("channex_outbox")
-    .select("id, organization_id, kind, from_date, to_date, room_type_ids, attempts")
+    .select("id, organization_id, kind, from_date, to_date, room_type_ids, attempts, touched_fields")
     .eq("status", "pending")
     .or(`next_attempt_at.is.null,next_attempt_at.lte.${nowIso}`)
     .order("created_at", { ascending: true })
@@ -102,6 +106,8 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
         rtIds: row.room_type_ids ? new Set<string>(row.room_type_ids) : null,
         ids: [],
         attempts: 0,
+        touchedFields: row.touched_fields ? new Set<string>(row.touched_fields) : null,
+        touchedFieldsKnown: !!row.touched_fields,
       };
       groups.set(key, g);
     } else {
@@ -110,6 +116,13 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
       // A "null = all room types" row widens the group to all.
       if (g.rtIds === null || row.room_type_ids === null) g.rtIds = null;
       else for (const id of row.room_type_ids) g.rtIds.add(id);
+
+      if (!row.touched_fields) {
+        g.touchedFields = null;
+        g.touchedFieldsKnown = false;
+      } else if (g.touchedFieldsKnown) {
+        for (const f of row.touched_fields) g.touchedFields!.add(f);
+      }
     }
     g.ids.push(row.id);
     g.attempts = Math.max(g.attempts, row.attempts ?? 0);
@@ -124,7 +137,19 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     try {
       const result = g.kind === "availability"
         ? await pushAvailabilityForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds })
-        : await pushRatesForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds });
+        : await pushRatesForOrg(supabase, g.orgId, {
+            from: g.from,
+            to: g.to,
+            roomTypeLocalIds: rtIds,
+            // channex-outbox.ts stores touched_fields as opaque strings — it has
+            // no reason to import rate-overrides.ts's OverrideFieldKey union just
+            // for this field's type. Cast at this one call site instead, where
+            // we hand off into the module that actually defines and checks
+            // against that literal union.
+            touchedFields: g.touchedFieldsKnown && g.touchedFields
+              ? (g.touchedFields as unknown as Set<import("../rate-overrides").OverrideFieldKey>)
+              : undefined,
+          });
       if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;
       await supabase.from("channex_outbox").update({ status: "sent", sent_at: new Date().toISOString() }).in("id", g.ids);

@@ -43,6 +43,20 @@ describe("enqueueAvailability / enqueueRestrictions", () => {
     await enqueueAvailability(db as unknown as SupabaseClient, orgId, undefined, undefined);
     expect(db.tables.channex_outbox ?? []).toHaveLength(0);
   });
+
+  it("stores touched_fields on the inserted row when enqueueRestrictions is given one", async () => {
+    const db = new FakeSupabaseClient();
+    provisioned(db);
+    await enqueueRestrictions(db as unknown as SupabaseClient, orgId, "2026-07-01", "2026-07-02", ["rp-1"], ["rate", "stop_sell"]);
+    expect(db.tables.channex_outbox[0]).toMatchObject({ touched_fields: ["rate", "stop_sell"] });
+  });
+
+  it("leaves touched_fields null when enqueueRestrictions isn't given any", async () => {
+    const db = new FakeSupabaseClient();
+    provisioned(db);
+    await enqueueRestrictions(db as unknown as SupabaseClient, orgId, "2026-07-01", "2026-07-02", ["rp-1"]);
+    expect(db.tables.channex_outbox[0].touched_fields).toBeUndefined();
+  });
 });
 
 describe("processOutbox", () => {
@@ -142,5 +156,64 @@ describe("processOutbox", () => {
     expect(result.calls).toBe(1);
     const statuses = db.tables.channex_outbox.map((r: any) => r.status).sort();
     expect(statuses).toEqual(["pending", "sent"]);
+  });
+});
+
+describe("processOutbox — touched_fields union on coalesced groups", () => {
+  beforeEach(() => {
+    vi.mocked(pushRatesForOrg).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
+  });
+
+  function restrictionsRow(overrides: Partial<Record<string, any>> = {}) {
+    return {
+      id: overrides.id ?? "row-1",
+      organization_id: orgId,
+      kind: "restrictions",
+      from_date: "2026-07-01",
+      to_date: "2026-07-02",
+      room_type_ids: ["rp-1"],
+      status: "pending",
+      attempts: 0,
+      next_attempt_at: null,
+      created_at: "2026-01-01T00:00:00Z",
+      touched_fields: null,
+      ...overrides,
+    };
+  }
+
+  it("passes a single group's touched_fields through unchanged", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [restrictionsRow({ touched_fields: ["rate"] })]);
+
+    await processOutbox(db as unknown as SupabaseClient);
+
+    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
+    expect(opts?.touchedFields).toEqual(new Set(["rate"]));
+  });
+
+  it("unions touched_fields across coalesced rows in the same group", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [
+      restrictionsRow({ id: "a", touched_fields: ["rate"] }),
+      restrictionsRow({ id: "b", touched_fields: ["stop_sell"] }),
+    ]);
+
+    await processOutbox(db as unknown as SupabaseClient);
+
+    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
+    expect(opts?.touchedFields).toEqual(new Set(["rate", "stop_sell"]));
+  });
+
+  it("falls back to no filter (full snapshot) if any coalesced row has touched_fields: null", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [
+      restrictionsRow({ id: "a", touched_fields: ["rate"] }),
+      restrictionsRow({ id: "b", touched_fields: null }),
+    ]);
+
+    await processOutbox(db as unknown as SupabaseClient);
+
+    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
+    expect(opts?.touchedFields).toBeUndefined();
   });
 });
