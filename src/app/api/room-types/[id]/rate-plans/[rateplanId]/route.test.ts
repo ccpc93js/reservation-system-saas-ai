@@ -9,6 +9,9 @@ vi.mock("@/lib/supabase/server", () => ({
 vi.mock("@/lib/channels/channex-provision", () => ({
   provisionOrg: vi.fn().mockResolvedValue({ ok: true, rows: [], warnings: [], propertyId: "prop-1" }),
 }));
+vi.mock("@/lib/channels/channex-outbox", () => ({
+  enqueueRestrictions: vi.fn().mockResolvedValue(undefined),
+}));
 
 import { PATCH, DELETE } from "./route";
 
@@ -33,6 +36,27 @@ describe("PATCH /api/room-types/[id]/rate-plans/[rateplanId]", () => {
 
     expect(res.status).toBe(200);
     expect(db.tables.rate_plans[0]).toMatchObject({ base_price: 150, name: "BAR" });
+  });
+
+  it("enqueues a restrictions push when a priced/restricted field changes", async () => {
+    const { enqueueRestrictions } = await import("@/lib/channels/channex-outbox");
+    db.seed("rate_plans", [{ id: "rp-1", organization_id: "org-1", room_type_id: "rt-1", name: "BAR", base_price: 100, is_default: false }]);
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
+
+    await PATCH(patchRequest({ base_price: 150 }), params());
+
+    expect(enqueueRestrictions).toHaveBeenCalledWith(db, "org-1", expect.any(String), expect.any(String), ["rp-1"]);
+  });
+
+  it("does not enqueue a push when only the name changes", async () => {
+    const { enqueueRestrictions } = await import("@/lib/channels/channex-outbox");
+    vi.mocked(enqueueRestrictions).mockClear();
+    db.seed("rate_plans", [{ id: "rp-1", organization_id: "org-1", room_type_id: "rt-1", name: "BAR", base_price: 100, is_default: false }]);
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
+
+    await PATCH(patchRequest({ name: "Best Available Rate" }), params());
+
+    expect(enqueueRestrictions).not.toHaveBeenCalled();
   });
 });
 
