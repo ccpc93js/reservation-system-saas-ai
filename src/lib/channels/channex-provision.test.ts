@@ -85,4 +85,21 @@ describe("provisionOrg — rate plans", () => {
     expect(channex.createRatePlan).not.toHaveBeenCalled();
     expect(channex.updateRatePlan).toHaveBeenCalledWith("channex-existing", expect.anything());
   });
+
+  it("skips a room type's rate plans (with a clear reason) when that room type fails to provision", async () => {
+    const db = new FakeSupabaseClient();
+    seedOrgAndRoom(db);
+    db.seed("rate_plans", [
+      { id: "rp-1", organization_id: orgId, room_type_id: "rt-1", name: "Standard Rate", base_price: 100, is_default: true },
+    ]);
+    vi.mocked(channex.createRoomType).mockRejectedValueOnce(new Error("Channex 422"));
+
+    const result = await provisionOrg(db as unknown as SupabaseClient, orgId);
+
+    expect(channex.createRatePlan).not.toHaveBeenCalled();
+    const roomTypeRow = result.rows.find((r) => r.kind === "room_type");
+    expect(roomTypeRow).toMatchObject({ action: "error" });
+    const ratePlanRow = result.rows.find((r) => r.kind === "rate_plan");
+    expect(ratePlanRow).toMatchObject({ action: "skipped", warning: "room type not provisioned" });
+  });
 });

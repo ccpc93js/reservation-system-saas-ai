@@ -56,16 +56,25 @@ export async function runDoctor(supabase: SupabaseClient, orgId: string): Promis
   add("provisioned", !!propertyId, propertyId ? `property ${propertyId}` : "org has no Channex property link — run provisioning");
   if (!propertyId) return { ok: false, orgId, propertyId, checks };
 
-  // 4. Every room type has a room_type + rate_plan mapping.
+  // 4. Every room type has a room_type mapping, and every rate plan (a room
+  // type can have several) has its own rate_plan mapping.
   const { data: roomTypes } = await supabase.from("room_types").select("id, name").eq("organization_id", orgId);
+  const { data: ratePlans } = await supabase.from("rate_plans").select("id, name, room_type_id").eq("organization_id", orgId);
   const rtLinked = new Set(rows.filter((r) => r.kind === "room_type").map((r) => r.local_id));
   const rpLinked = new Set(rows.filter((r) => r.kind === "rate_plan").map((r) => r.local_id));
+  const roomTypeNames = new Map((roomTypes as { id: string; name: string }[] ?? []).map((rt) => [rt.id, rt.name]));
   const missing: string[] = [];
   for (const rt of (roomTypes as { id: string; name: string }[]) ?? []) {
     if (!rtLinked.has(rt.id)) missing.push(`${rt.name} (room type)`);
-    if (!rpLinked.has(rt.id)) missing.push(`${rt.name} (rate plan)`);
   }
-  add("mappings_complete", missing.length === 0, missing.length === 0 ? `all ${(roomTypes ?? []).length} room types mapped` : `unmapped: ${missing.join(", ")}`);
+  for (const rp of (ratePlans as { id: string; name: string; room_type_id: string }[]) ?? []) {
+    if (!rpLinked.has(rp.id)) {
+      const rtName = roomTypeNames.get(rp.room_type_id) ?? rp.room_type_id;
+      missing.push(`${rtName} — ${rp.name} (rate plan)`);
+    }
+  }
+  const totalChecked = (roomTypes ?? []).length + (ratePlans ?? []).length;
+  add("mappings_complete", missing.length === 0, missing.length === 0 ? `all ${totalChecked} room types/rate plans mapped` : `unmapped: ${missing.join(", ")}`);
 
   // 5. Sampled availability readback matches locally-computed free beds.
   try {
