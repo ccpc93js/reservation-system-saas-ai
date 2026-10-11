@@ -7,7 +7,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { pushAvailabilityForOrg } from "./channex-availability";
 import { pushRatesForOrg } from "./channex-rates";
-import { ChannexError } from "./channex";
+import { ChannexError, OVERRIDE_FIELD_KEYS, type OverrideFieldKey } from "./channex";
 
 type OutboxKind = "availability" | "restrictions";
 
@@ -75,8 +75,17 @@ interface Group {
   rtIds: Set<string> | null; // null = all provisioned room types/rate plans
   ids: string[];
   attempts: number;
-  touchedFields: Set<string> | null; // null = unknown row seen, or any row's touched_fields was null -> full snapshot
+  touchedFields: Set<OverrideFieldKey> | null; // null = unknown row seen, or any row's touched_fields was null -> full snapshot
   touchedFieldsKnown: boolean; // becomes false the moment we need a fallback
+}
+
+// touched_fields is a plain text[] column with no CHECK constraint, so a row
+// read back from the DB could in principle contain a stale/garbage value —
+// drop anything that isn't a real OverrideFieldKey rather than trusting it.
+function toOverrideFieldKeys(fields: string[] | null | undefined): Set<OverrideFieldKey> | null {
+  if (!fields || fields.length === 0) return null;
+  const valid = fields.filter((f): f is OverrideFieldKey => (OVERRIDE_FIELD_KEYS as readonly string[]).includes(f));
+  return valid.length > 0 ? new Set(valid) : null;
 }
 
 // Worker: coalesce due rows per (org, kind), push once each, rate-limited.
@@ -98,6 +107,7 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     const key = `${row.organization_id}:${row.kind}`;
     let g = groups.get(key);
     if (!g) {
+      const seeded = toOverrideFieldKeys(row.touched_fields);
       g = {
         orgId: row.organization_id,
         kind: row.kind,
@@ -106,8 +116,8 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
         rtIds: row.room_type_ids ? new Set<string>(row.room_type_ids) : null,
         ids: [],
         attempts: 0,
-        touchedFields: row.touched_fields ? new Set<string>(row.touched_fields) : null,
-        touchedFieldsKnown: !!row.touched_fields,
+        touchedFields: seeded,
+        touchedFieldsKnown: seeded !== null,
       };
       groups.set(key, g);
     } else {
@@ -117,11 +127,12 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
       if (g.rtIds === null || row.room_type_ids === null) g.rtIds = null;
       else for (const id of row.room_type_ids) g.rtIds.add(id);
 
-      if (!row.touched_fields) {
+      const incoming = toOverrideFieldKeys(row.touched_fields);
+      if (incoming === null) {
         g.touchedFields = null;
         g.touchedFieldsKnown = false;
       } else if (g.touchedFieldsKnown) {
-        for (const f of row.touched_fields) g.touchedFields!.add(f);
+        for (const f of incoming) g.touchedFields!.add(f);
       }
     }
     g.ids.push(row.id);
@@ -141,14 +152,7 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
             from: g.from,
             to: g.to,
             roomTypeLocalIds: rtIds,
-            // channex-outbox.ts stores touched_fields as opaque strings — it has
-            // no reason to import rate-overrides.ts's OverrideFieldKey union just
-            // for this field's type. Cast at this one call site instead, where
-            // we hand off into the module that actually defines and checks
-            // against that literal union.
-            touchedFields: g.touchedFieldsKnown && g.touchedFields
-              ? (g.touchedFields as unknown as Set<import("../rate-overrides").OverrideFieldKey>)
-              : undefined,
+            touchedFields: g.touchedFieldsKnown && g.touchedFields ? g.touchedFields : undefined,
           });
       if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;

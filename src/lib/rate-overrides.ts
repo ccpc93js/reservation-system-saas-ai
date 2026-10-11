@@ -7,6 +7,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { addDaysISO } from "./channels/channex-rates";
 import { enqueueRestrictions } from "./channels/channex-outbox";
+import { OVERRIDE_FIELD_KEYS, type OverrideFieldKey } from "./channels/channex";
+
+// Re-exported for existing callers (route handlers, validation schemas) —
+// the canonical definition lives in channex.ts since other Channex-push
+// modules besides this one need it too.
+export { OVERRIDE_FIELD_KEYS, type OverrideFieldKey };
 
 export interface RateOverrideFields {
   rate?: number;
@@ -31,17 +37,6 @@ export interface ApplyRateOverridesResult {
   skippedRatePlanIds: string[];
   error?: string;
 }
-
-export const OVERRIDE_FIELD_KEYS = [
-  "rate",
-  "min_stay_arrival",
-  "min_stay_through",
-  "max_stay",
-  "stop_sell",
-  "closed_to_arrival",
-  "closed_to_departure",
-] as const;
-export type OverrideFieldKey = (typeof OVERRIDE_FIELD_KEYS)[number];
 
 function dateRangeInclusive(from: string, to: string): string[] {
   const dates: string[] = [];

@@ -216,4 +216,17 @@ describe("processOutbox — touched_fields union on coalesced groups", () => {
     const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
     expect(opts?.touchedFields).toBeUndefined();
   });
+
+  it("stays in fallback regardless of row order (null row first, known row second)", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [
+      restrictionsRow({ id: "a", touched_fields: null }),
+      restrictionsRow({ id: "b", touched_fields: ["rate"] }),
+    ]);
+
+    await processOutbox(db as unknown as SupabaseClient);
+
+    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
+    expect(opts?.touchedFields).toBeUndefined();
+  });
 });

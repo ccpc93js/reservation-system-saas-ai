@@ -270,6 +270,22 @@ export interface RestrictionValue {
   closed_to_departure?: boolean;
 }
 
+// The editable subset of RestrictionValue's fields (excludes push-target
+// metadata: property_id, rate_plan_id, date_from/date_to). Lives here, not in
+// a business-logic file like rate-overrides.ts, because multiple generic
+// Channex-push modules (the outbox queue, the rates push path) need this set
+// without depending on one specific feature's UI-form logic.
+export const OVERRIDE_FIELD_KEYS = [
+  "rate",
+  "min_stay_arrival",
+  "min_stay_through",
+  "max_stay",
+  "stop_sell",
+  "closed_to_arrival",
+  "closed_to_departure",
+] as const;
+export type OverrideFieldKey = (typeof OVERRIDE_FIELD_KEYS)[number];
+
 // ─── Endpoints ───────────────────────────────────────────────────────────────
 
 export const channex = {
