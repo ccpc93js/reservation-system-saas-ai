@@ -7,8 +7,11 @@
 // Mapping model (see docs/plans/2026-07-07-channex-implementation-plan.md):
 //   dorm    -> sold per bed:  count_of_rooms = active beds, occ 1, room_kind dorm
 //   private -> sold per room: count_of_rooms = rooms,       occ = capacity, room
-// Rate plan: one per room type, sell_mode per_room, occupancy clamped to
-// occ_adults (Channex 422s if a rate plan occupancy exceeds the room type's).
+// Rate plans: one Channex rate plan per local rate_plans row (a room type can
+// have several — e.g. "Best Available Rate" vs "Bed & Breakfast" — each with
+// its own price/restrictions and its own Channex mapping). sell_mode
+// per_room, occupancy clamped to occ_adults (Channex 422s if a rate plan
+// occupancy exceeds the room type's).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { channex, toChannexMinor, ChannexError } from "./channex";
@@ -76,7 +79,7 @@ export async function provisionOrg(supabase: SupabaseClient, orgId: string): Pro
 
   const { data: roomTypes } = await supabase
     .from("room_types")
-    .select("id, name, type, capacity, base_price")
+    .select("id, name, type, capacity")
     .eq("organization_id", orgId)
     .order("created_at", { ascending: true });
 
@@ -141,8 +144,10 @@ export async function provisionOrg(supabase: SupabaseClient, orgId: string): Pro
   if (!propertyId) return { propertyId: null, rows, warnings, ok: false };
   const propId: string = propertyId;
 
-  // 3 + 4. Room types then their rate plans.
-  for (const rt of (roomTypes as { id: string; name: string; type: string; capacity: number; base_price: number }[]) ?? []) {
+  // 3. Room types (physical attributes only).
+  const channexRoomTypeIds = new Map<string, string>(); // local room_type id -> channex id, for rate plans below
+
+  for (const rt of (roomTypes as { id: string; name: string; type: string; capacity: number }[]) ?? []) {
     const isDorm = rt.type === "dorm";
     const capacity = Math.max(1, rt.capacity || 1);
     const countOfRooms = isDorm ? (bedCount.get(rt.id) ?? 0) : (roomCount.get(rt.id) ?? 0);
@@ -153,7 +158,6 @@ export async function provisionOrg(supabase: SupabaseClient, orgId: string): Pro
       continue;
     }
 
-    let channexRoomTypeId: string;
     try {
       const existing = await getLink(supabase, orgId, "room_type", rt.id);
       const attrs = {
@@ -169,31 +173,46 @@ export async function provisionOrg(supabase: SupabaseClient, orgId: string): Pro
         room_kind: (isDorm ? "dorm" : "room") as "dorm" | "room",
       };
       const res = existing ? await channex.updateRoomType(existing, attrs) : await channex.createRoomType(attrs);
-      channexRoomTypeId = res.id;
+      channexRoomTypeIds.set(rt.id, res.id);
       await saveLink(supabase, orgId, "room_type", rt.id, res.id);
       rows.push({ name: rt.name, kind: "room_type", action: existing ? "updated" : "created", channexId: res.id });
     } catch (err) {
       rows.push({ name: rt.name, kind: "room_type", action: "error", warning: errMsg(err) });
-      continue; // no room type -> can't create its rate plan
     }
+  }
+
+  // 4. Rate plans — one Channex rate plan per local rate_plans row.
+  const { data: ratePlans } = await supabase
+    .from("rate_plans")
+    .select("id, room_type_id, name, base_price")
+    .eq("organization_id", orgId);
+
+  for (const rp of (ratePlans as { id: string; room_type_id: string; name: string; base_price: number }[]) ?? []) {
+    const channexRoomTypeId = channexRoomTypeIds.get(rp.room_type_id);
+    if (!channexRoomTypeId) {
+      rows.push({ name: rp.name, kind: "rate_plan", action: "skipped", warning: "room type not provisioned" });
+      continue;
+    }
+    const roomType = ((roomTypes as any[]) ?? []).find((rt) => rt.id === rp.room_type_id);
+    const isDorm = roomType?.type === "dorm";
+    const occAdults = isDorm ? 1 : Math.max(1, roomType?.capacity || 1);
 
     try {
-      const existing = await getLink(supabase, orgId, "rate_plan", rt.id);
+      const existing = await getLink(supabase, orgId, "rate_plan", rp.id);
       const attrs = {
         property_id: propId,
         room_type_id: channexRoomTypeId,
-        title: "Standard Rate",
+        title: rp.name,
         currency,
         sell_mode: "per_room" as const,
         rate_mode: "manual" as const,
-        // occupancy clamped to occ_adults; is_primary marks the default option.
-        options: [{ occupancy: occAdults, is_primary: true, rate: toChannexMinor(rt.base_price ?? 0) }],
+        options: [{ occupancy: occAdults, is_primary: true, rate: toChannexMinor(rp.base_price ?? 0) }],
       };
       const res = existing ? await channex.updateRatePlan(existing, attrs) : await channex.createRatePlan(attrs);
-      await saveLink(supabase, orgId, "rate_plan", rt.id, res.id);
-      rows.push({ name: `${rt.name} — Standard Rate`, kind: "rate_plan", action: existing ? "updated" : "created", channexId: res.id });
+      await saveLink(supabase, orgId, "rate_plan", rp.id, res.id);
+      rows.push({ name: rp.name, kind: "rate_plan", action: existing ? "updated" : "created", channexId: res.id });
     } catch (err) {
-      rows.push({ name: `${rt.name} — Standard Rate`, kind: "rate_plan", action: "error", warning: errMsg(err) });
+      rows.push({ name: rp.name, kind: "rate_plan", action: "error", warning: errMsg(err) });
     }
   }
 
