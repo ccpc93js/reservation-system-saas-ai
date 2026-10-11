@@ -1,7 +1,8 @@
 // Business logic behind the "Rates & Restrictions" bulk-edit form: writes
-// per-date overrides for one or more room types over a date range, merging
+// per-date overrides for one or more rate plans over a date range, merging
 // only the fields the caller actually touched, then enqueues a single
-// Channex restrictions push covering the whole scope of the edit.
+// Channex restrictions push covering the whole scope of the edit, tagged
+// with which fields were touched (so the push can be sparse).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { addDaysISO } from "./channels/channex-rates";
@@ -18,7 +19,7 @@ export interface RateOverrideFields {
 }
 
 export interface ApplyRateOverridesInput {
-  roomTypeIds: string[];
+  ratePlanIds: string[];
   dateFrom: string; // inclusive
   dateTo: string; // inclusive
   fields: RateOverrideFields;
@@ -27,7 +28,7 @@ export interface ApplyRateOverridesInput {
 export interface ApplyRateOverridesResult {
   ok: boolean;
   rowsWritten: number;
-  skippedRoomTypeIds: string[];
+  skippedRatePlanIds: string[];
   error?: string;
 }
 
@@ -53,23 +54,23 @@ export async function applyRateOverrides(
   orgId: string,
   input: ApplyRateOverridesInput
 ): Promise<ApplyRateOverridesResult> {
-  const { roomTypeIds, dateFrom, dateTo, fields } = input;
+  const { ratePlanIds, dateFrom, dateTo, fields } = input;
   const touchedKeys = OVERRIDE_FIELD_KEYS.filter((k) => fields[k] !== undefined);
-  if (roomTypeIds.length === 0 || touchedKeys.length === 0 || dateTo < dateFrom) {
-    return { ok: false, rowsWritten: 0, skippedRoomTypeIds: [], error: "invalid input" };
+  if (ratePlanIds.length === 0 || touchedKeys.length === 0 || dateTo < dateFrom) {
+    return { ok: false, rowsWritten: 0, skippedRatePlanIds: [], error: "invalid input" };
   }
 
-  // Only touch room types that actually belong to this org.
+  // Only touch rate plans that actually belong to this org.
   const { data: owned } = await supabase
-    .from("room_types")
+    .from("rate_plans")
     .select("id")
     .eq("organization_id", orgId)
-    .in("id", roomTypeIds);
+    .in("id", ratePlanIds);
   const ownedIds = new Set(((owned as { id: string }[]) ?? []).map((r) => r.id));
-  const validRoomTypeIds = roomTypeIds.filter((id) => ownedIds.has(id));
-  const skippedRoomTypeIds = roomTypeIds.filter((id) => !ownedIds.has(id));
-  if (validRoomTypeIds.length === 0) {
-    return { ok: false, rowsWritten: 0, skippedRoomTypeIds: roomTypeIds, error: "no matching room types" };
+  const validRatePlanIds = ratePlanIds.filter((id) => ownedIds.has(id));
+  const skippedRatePlanIds = ratePlanIds.filter((id) => !ownedIds.has(id));
+  if (validRatePlanIds.length === 0) {
+    return { ok: false, rowsWritten: 0, skippedRatePlanIds: ratePlanIds, error: "no matching rate plans" };
   }
 
   const dates = dateRangeInclusive(dateFrom, dateTo);
@@ -77,15 +78,13 @@ export async function applyRateOverrides(
   // Partial upsert: each row carries only the primary-key columns plus the
   // fields actually touched by this edit. PostgREST upsert only SETs the
   // columns present in the payload on conflict, so untouched columns on an
-  // existing row are left alone — no read-then-merge, so no silent
-  // truncation on a large existing-row scan and no TOCTOU race with a
-  // concurrent edit clobbering it with a stale snapshot.
+  // existing row are left alone.
   const upsertRows: Record<string, unknown>[] = [];
-  for (const roomTypeId of validRoomTypeIds) {
+  for (const ratePlanId of validRatePlanIds) {
     for (const date of dates) {
       const row: Record<string, unknown> = {
         organization_id: orgId,
-        room_type_id: roomTypeId,
+        rate_plan_id: ratePlanId,
         date,
         updated_at: new Date().toISOString(),
       };
@@ -96,12 +95,12 @@ export async function applyRateOverrides(
 
   const { error } = await supabase
     .from("room_type_rate_overrides")
-    .upsert(upsertRows, { onConflict: "room_type_id,date" });
-  if (error) return { ok: false, rowsWritten: 0, skippedRoomTypeIds, error: error.message };
+    .upsert(upsertRows, { onConflict: "rate_plan_id,date" });
+  if (error) return { ok: false, rowsWritten: 0, skippedRatePlanIds, error: error.message };
 
-  await enqueueRestrictions(supabase, orgId, dateFrom, addDaysISO(dateTo, 1), validRoomTypeIds);
+  await enqueueRestrictions(supabase, orgId, dateFrom, addDaysISO(dateTo, 1), validRatePlanIds, touchedKeys as string[]);
 
-  return { ok: true, rowsWritten: upsertRows.length, skippedRoomTypeIds };
+  return { ok: true, rowsWritten: upsertRows.length, skippedRatePlanIds };
 }
 
 export async function clearRateOverrideField(
@@ -112,7 +111,7 @@ export async function clearRateOverrideField(
 ): Promise<{ ok: boolean; error?: string }> {
   const { data: row, error: fetchError } = await supabase
     .from("room_type_rate_overrides")
-    .select("id, room_type_id, date")
+    .select("id, rate_plan_id, date")
     .eq("id", overrideId)
     .eq("organization_id", orgId)
     .maybeSingle();
@@ -125,6 +124,6 @@ export async function clearRateOverrideField(
   if (error) return { ok: false, error: error.message };
 
   const date = (row as any).date;
-  await enqueueRestrictions(supabase, orgId, date, addDaysISO(date, 1), [(row as any).room_type_id]);
+  await enqueueRestrictions(supabase, orgId, date, addDaysISO(date, 1), [(row as any).rate_plan_id], [field]);
   return { ok: true };
 }
