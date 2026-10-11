@@ -39,26 +39,26 @@ describe("POST /api/room-types/rate-overrides", () => {
 
   it("returns 403 for a staff member", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
-    const res = await POST(jsonRequest({ room_type_ids: ["rt-1"], date_from: "2026-11-01", date_to: "2026-11-01", rate: 100 }));
+    const res = await POST(jsonRequest({ rate_plan_ids: ["rt-1"], date_from: "2026-11-01", date_to: "2026-11-01", rate: 100 }));
     expect(res.status).toBe(403);
   });
 
   it("returns 400 when the payload fails validation", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
-    const res = await POST(jsonRequest({ room_type_ids: [], date_from: "2026-11-01", date_to: "2026-11-01", rate: 100 }));
+    const res = await POST(jsonRequest({ rate_plan_ids: [], date_from: "2026-11-01", date_to: "2026-11-01", rate: 100 }));
     expect(res.status).toBe(400);
     expect(applyRateOverrides).not.toHaveBeenCalled();
   });
 
   it("calls applyRateOverrides with only the touched fields for a manager", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
-    vi.mocked(applyRateOverrides).mockResolvedValue({ ok: true, rowsWritten: 2, skippedRoomTypeIds: [] });
+    vi.mocked(applyRateOverrides).mockResolvedValue({ ok: true, rowsWritten: 2, skippedRatePlanIds: [] });
 
-    const res = await POST(jsonRequest({ room_type_ids: ["rt-1"], date_from: "2026-11-01", date_to: "2026-11-02", rate: 333 }));
+    const res = await POST(jsonRequest({ rate_plan_ids: ["rp-1"], date_from: "2026-11-01", date_to: "2026-11-02", rate: 333 }));
 
     expect(res.status).toBe(200);
     expect(applyRateOverrides).toHaveBeenCalledWith(expect.anything(), "org-1", {
-      roomTypeIds: ["rt-1"],
+      ratePlanIds: ["rp-1"],
       dateFrom: "2026-11-01",
       dateTo: "2026-11-02",
       fields: { rate: 333 },

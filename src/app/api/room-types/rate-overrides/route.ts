@@ -58,14 +58,14 @@ export async function POST(request: Request) {
     }
 
     const result = await applyRateOverrides(supabase, membership.organizationId, {
-      roomTypeIds: body.room_type_ids,
+      ratePlanIds: body.rate_plan_ids,
       dateFrom: body.date_from,
       dateTo: body.date_to,
       fields,
     });
 
     if (!result.ok) return Response.json({ error: result.error || "Failed to apply overrides" }, { status: 400 });
-    return Response.json({ success: true, rows_written: result.rowsWritten, skipped_room_type_ids: result.skippedRoomTypeIds });
+    return Response.json({ success: true, rows_written: result.rowsWritten, skipped_rate_plan_ids: result.skippedRatePlanIds });
   } catch (error) {
     console.error("Error applying rate overrides:", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
