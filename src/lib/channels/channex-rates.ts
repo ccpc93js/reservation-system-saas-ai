@@ -13,7 +13,7 @@
 // past dates.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { channex, toChannexMinor, type RestrictionValue, type OverrideFieldKey } from "./channex";
+import { channex, toChannexMinor, OVERRIDE_FIELD_KEYS, type RestrictionValue, type OverrideFieldKey } from "./channex";
 
 export function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
@@ -51,10 +51,11 @@ interface EffectiveValues {
   max_stay: number | null;
 }
 
-const COMPARE_KEYS = [
-  "rate", "stop_sell", "closed_to_arrival", "closed_to_departure",
-  "min_stay_arrival", "min_stay_through", "max_stay",
-] as const satisfies readonly (keyof EffectiveValues)[];
+// Reuse the canonical field list rather than hand-listing it again — a
+// second, independently-maintained copy here would let a future field
+// addition silently skip comparison/output, which is exactly the class of
+// bug this sparse-push feature exists to prevent.
+const COMPARE_KEYS = OVERRIDE_FIELD_KEYS satisfies readonly (keyof EffectiveValues)[];
 
 function sameValues(a: EffectiveValues, b: EffectiveValues, touchedFields?: Set<OverrideFieldKey>): boolean {
   for (const key of COMPARE_KEYS) {

@@ -197,6 +197,51 @@ describe("pushRatesForOrg", () => {
     });
   });
 
+  it("with touchedFields, an override on an untouched field doesn't fragment the compressed run", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+    db.seed("room_type_rate_overrides", [
+      { id: "ov-1", organization_id: orgId, rate_plan_id: "rp-1", date: "2026-07-02", rate: null, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: true, closed_to_arrival: null, closed_to_departure: null },
+    ]);
+
+    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, {
+      from: "2026-07-01", to: "2026-07-04",
+      touchedFields: new Set(["rate"]),
+    });
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    // stop_sell genuinely differs on 07-02 (override sets it true), but
+    // touchedFields only cares about "rate" — which is 100 every night since
+    // the override row's own rate is null — so the run stays whole.
+    expect(values).toEqual([
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-01", date_to: "2026-07-03", rate: 10000 },
+    ]);
+  });
+
+  it("with touchedFields, an override on the touched field does fragment the run", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+    db.seed("room_type_rate_overrides", [
+      { id: "ov-1", organization_id: orgId, rate_plan_id: "rp-1", date: "2026-07-02", rate: 333, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
+    ]);
+
+    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, {
+      from: "2026-07-01", to: "2026-07-04",
+      touchedFields: new Set(["rate"]),
+    });
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values).toEqual([
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-01", date_to: "2026-07-01", rate: 10000 },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-02", date_to: "2026-07-02", rate: 33300 },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-03", date_to: "2026-07-03", rate: 10000 },
+    ]);
+  });
+
   it("without touchedFields (full sync), behavior is unchanged — every field included", async () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
