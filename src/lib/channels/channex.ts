@@ -284,6 +284,13 @@ export const OVERRIDE_FIELD_KEYS = [
   "closed_to_arrival",
   "closed_to_departure",
 ] as const;
+
+// Same fields, named as they appear on a rate_plans row / request body
+// ("base_price") rather than Channex's internal RestrictionValue field
+// ("rate") — for callers that need to check "did this request touch a
+// restriction field" against raw body/DB keys without hand-maintaining
+// their own copy of this list.
+export const RESTRICTION_BODY_FIELDS = OVERRIDE_FIELD_KEYS.map((k) => (k === "rate" ? "base_price" : k));
 export type OverrideFieldKey = (typeof OVERRIDE_FIELD_KEYS)[number];
 
 // ─── Endpoints ───────────────────────────────────────────────────────────────

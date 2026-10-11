@@ -3,6 +3,7 @@ import { isManager } from "@/lib/permissions";
 import { updateRatePlanSchema } from "@/lib/validations/rate-plan";
 import { getPrimaryMembership } from "@/lib/org-membership";
 import { enqueueRestrictions } from "@/lib/channels/channex-outbox";
+import { RESTRICTION_BODY_FIELDS } from "@/lib/channels/channex";
 
 export async function PATCH(
   request: Request,
@@ -42,10 +43,7 @@ export async function PATCH(
     const { error } = await (supabase.from("rate_plans") as any).update(updateData).eq("id", rateplanId);
     if (error) return Response.json({ error: "Failed to update rate plan" }, { status: 400 });
 
-    const restrictionFieldsChanged = [
-      "base_price", "stop_sell", "closed_to_arrival", "closed_to_departure",
-      "min_stay_arrival", "min_stay_through", "max_stay",
-    ].some((field) => body[field] !== undefined);
+    const restrictionFieldsChanged = RESTRICTION_BODY_FIELDS.some((field) => body[field] !== undefined);
     if (restrictionFieldsChanged) {
       const today = new Date().toISOString().slice(0, 10);
       const horizon = new Date(Date.now() + 500 * 86400000).toISOString().slice(0, 10);
