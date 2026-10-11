@@ -268,6 +268,7 @@ export type Database = {
           sent_at: string | null
           status: string
           to_date: string
+          touched_fields: string[] | null
         }
         Insert: {
           attempts?: number
@@ -282,6 +283,7 @@ export type Database = {
           sent_at?: string | null
           status?: string
           to_date: string
+          touched_fields?: string[] | null
         }
         Update: {
           attempts?: number
@@ -296,6 +298,7 @@ export type Database = {
           sent_at?: string | null
           status?: string
           to_date?: string
+          touched_fields?: string[] | null
         }
         Relationships: [
           {
@@ -771,6 +774,72 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_plans: {
+        Row: {
+          base_price: number
+          closed_to_arrival: boolean
+          closed_to_departure: boolean
+          created_at: string
+          id: string
+          is_default: boolean
+          max_stay: number | null
+          min_stay_arrival: number | null
+          min_stay_through: number | null
+          name: string
+          organization_id: string
+          room_type_id: string
+          stop_sell: boolean
+          updated_at: string
+        }
+        Insert: {
+          base_price: number
+          closed_to_arrival?: boolean
+          closed_to_departure?: boolean
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          max_stay?: number | null
+          min_stay_arrival?: number | null
+          min_stay_through?: number | null
+          name: string
+          organization_id: string
+          room_type_id: string
+          stop_sell?: boolean
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          closed_to_arrival?: boolean
+          closed_to_departure?: boolean
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          max_stay?: number | null
+          min_stay_arrival?: number | null
+          min_stay_through?: number | null
+          name?: string
+          organization_id?: string
+          room_type_id?: string
+          stop_sell?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rate_plans_room_type_id_fkey"
+            columns: ["room_type_id"]
+            isOneToOne: false
+            referencedRelation: "room_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reservation_guests: {
         Row: {
           created_at: string
@@ -1074,6 +1143,7 @@ export type Database = {
           min_stay_through: number | null
           organization_id: string
           rate: number | null
+          rate_plan_id: string
           room_type_id: string
           stop_sell: boolean | null
           updated_at: string
@@ -1089,6 +1159,7 @@ export type Database = {
           min_stay_through?: number | null
           organization_id: string
           rate?: number | null
+          rate_plan_id: string
           room_type_id: string
           stop_sell?: boolean | null
           updated_at?: string
@@ -1104,6 +1175,7 @@ export type Database = {
           min_stay_through?: number | null
           organization_id?: string
           rate?: number | null
+          rate_plan_id?: string
           room_type_id?: string
           stop_sell?: boolean | null
           updated_at?: string
@@ -1114,6 +1186,13 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "room_type_rate_overrides_rate_plan_id_fkey"
+            columns: ["rate_plan_id"]
+            isOneToOne: false
+            referencedRelation: "rate_plans"
             referencedColumns: ["id"]
           },
           {
