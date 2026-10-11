@@ -107,6 +107,16 @@ export default function RoomTypeDialog({
         min_stay_arrival: null, min_stay_through: null, max_stay: null,
       });
       setRatePlans([]);
+    } else {
+      // Dialog closed (X / Escape / click-outside, not just the explicit
+      // Cancel buttons) — clear rate-plan-list-local state so a leftover
+      // in-progress edit or "add new" draft from THIS room type doesn't
+      // reappear pre-filled the next time the dialog opens for a
+      // different one.
+      setEditingRatePlanId(null);
+      setRatePlanDrafts({});
+      setAddingRatePlan(false);
+      setNewRatePlan(emptyNewRatePlanForm);
     }
   }, [open, isEditing]);
 
@@ -392,9 +402,10 @@ export default function RoomTypeDialog({
                     step="0.01"
                     min="0"
                     {...register("base_price", { valueAsNumber: true })}
-                    className="w-full px-3 py-2 border border-border rounded-lg disabled:opacity-50"
+                    className={`w-full px-3 py-2 border rounded-lg ${errors.base_price ? "border-red-500" : "border-border"} disabled:opacity-50`}
                     disabled={isLoading || isDeleting}
                   />
+                  {errors.base_price && <p className="text-red-500 text-sm mt-1">{errors.base_price.message}</p>}
                   <p className="text-xs text-muted-foreground mt-1">{t("basePriceHintCreatesDefaultPlan")}</p>
                 </div>
               )}
@@ -409,6 +420,7 @@ export default function RoomTypeDialog({
                 className="w-full px-3 py-2 border border-border rounded-lg bg-background disabled:opacity-50"
                 disabled={isLoading || isDeleting}
               />
+              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
             </div>
 
             {!isEditing && (
@@ -431,15 +443,18 @@ export default function RoomTypeDialog({
                 <div className="grid grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs font-medium mb-1">{t("minStayArrivalLabel")}</label>
-                    <input type="number" min="1" {...register("min_stay_arrival", { valueAsNumber: true })} className="w-full px-2 py-1.5 border border-border rounded-lg text-sm" disabled={isLoading} />
+                    <input type="number" min="1" {...register("min_stay_arrival", { valueAsNumber: true })} className={`w-full px-2 py-1.5 border rounded-lg text-sm ${errors.min_stay_arrival ? "border-red-500" : "border-border"}`} disabled={isLoading} />
+                    {errors.min_stay_arrival && <p className="text-red-500 text-sm mt-1">{errors.min_stay_arrival.message}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-medium mb-1">{t("minStayThroughLabel")}</label>
-                    <input type="number" min="1" {...register("min_stay_through", { valueAsNumber: true })} className="w-full px-2 py-1.5 border border-border rounded-lg text-sm" disabled={isLoading} />
+                    <input type="number" min="1" {...register("min_stay_through", { valueAsNumber: true })} className={`w-full px-2 py-1.5 border rounded-lg text-sm ${errors.min_stay_through ? "border-red-500" : "border-border"}`} disabled={isLoading} />
+                    {errors.min_stay_through && <p className="text-red-500 text-sm mt-1">{errors.min_stay_through.message}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-medium mb-1">{t("maxStayLabel")}</label>
-                    <input type="number" min="1" {...register("max_stay", { valueAsNumber: true })} className="w-full px-2 py-1.5 border border-border rounded-lg text-sm" disabled={isLoading} />
+                    <input type="number" min="1" {...register("max_stay", { valueAsNumber: true })} className={`w-full px-2 py-1.5 border rounded-lg text-sm ${errors.max_stay ? "border-red-500" : "border-border"}`} disabled={isLoading} />
+                    {errors.max_stay && <p className="text-red-500 text-sm mt-1">{errors.max_stay.message}</p>}
                   </div>
                 </div>
               </div>
