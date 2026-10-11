@@ -67,7 +67,11 @@ export async function applyRateOverrides(
     .eq("organization_id", orgId)
     .in("id", ratePlanIds);
   const ownedIds = new Set(((owned as { id: string }[]) ?? []).map((r) => r.id));
-  const validRatePlanIds = ratePlanIds.filter((id) => ownedIds.has(id));
+  // Dedupe: a repeated id would otherwise produce two upsert rows with the
+  // same (rate_plan_id, date) conflict target in one statement, which
+  // Postgres rejects ("ON CONFLICT DO UPDATE command cannot affect row a
+  // second time").
+  const validRatePlanIds = [...new Set(ratePlanIds.filter((id) => ownedIds.has(id)))];
   const skippedRatePlanIds = ratePlanIds.filter((id) => !ownedIds.has(id));
   if (validRatePlanIds.length === 0) {
     return { ok: false, rowsWritten: 0, skippedRatePlanIds: ratePlanIds, error: "no matching rate plans" };
