@@ -11,7 +11,11 @@ const optionalNumber = () =>
     .nullable()
     .optional();
 
-// Room Type Schemas
+// Room Type Schemas — physical attributes only. Pricing/restrictions moved
+// to rate_plans (see src/lib/validations/rate-plan.ts); create requests
+// still accept them here (to seed the auto-created default rate plan in
+// one request) but update requests for an existing room type no longer do
+// — edit the default rate plan via its own endpoint instead.
 export const createRoomTypeSchema = yup.object().shape({
   name: yup.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters").required("Room type name is required"),
   type: yup.string().oneOf(["dorm", "private"], "Type must be either dorm or private").required("Room type is required"),
@@ -27,11 +31,12 @@ export const createRoomTypeSchema = yup.object().shape({
   max_stay: optionalNumber().min(1, "Max stay must be at least 1 night"),
 });
 
-export const updateRoomTypeSchema = createRoomTypeSchema.shape({
+export const updateRoomTypeSchema = yup.object().shape({
   name: yup.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters").optional(),
   type: yup.string().oneOf(["dorm", "private"], "Type must be either dorm or private").optional(),
+  gender: yup.string().oneOf(["", "mixed", "female", "male"], "Invalid gender selection").nullable(),
   capacity: yup.number().min(1, "Capacity must be at least 1").max(20, "Capacity must be at most 20").optional(),
-  base_price: yup.number().min(0.01, "Price must be greater than 0").optional(),
+  description: yup.string().max(500, "Description must be at most 500 characters").nullable().optional(),
 });
 
 // Room Schemas
