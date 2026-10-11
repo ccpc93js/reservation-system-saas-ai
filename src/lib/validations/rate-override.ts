@@ -12,7 +12,7 @@ const optionalNumber = () =>
 export const applyRateOverridesSchema = yup
   .object()
   .shape({
-    room_type_ids: yup.array().of(yup.string().required()).min(1, "Select at least one room type").required(),
+    rate_plan_ids: yup.array().of(yup.string().required()).min(1, "Select at least one rate plan").required(),
     date_from: yup.string().required("Start date is required"),
     date_to: yup
       .string()
