@@ -5,7 +5,11 @@ import { canAccessSection } from "@/lib/permissions";
 import { redirect } from "next/navigation";
 
 type Membership = { organization_id: string; role: string };
-type RoomTypeOption = { id: string; name: string };
+export interface RoomTypeWithRatePlans {
+  id: string;
+  name: string;
+  rate_plans: { id: string; name: string; is_default: boolean }[];
+}
 
 export default async function RatesPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -38,7 +42,7 @@ export default async function RatesPage({ params }: { params: Promise<{ slug: st
 
   const { data: roomTypes = [] } = await supabase
     .from("room_types")
-    .select("id, name")
+    .select("id, name, rate_plans(id, name, is_default)")
     .eq("organization_id", membership.organization_id)
     .order("name", { ascending: true });
 
@@ -50,7 +54,7 @@ export default async function RatesPage({ params }: { params: Promise<{ slug: st
       </div>
 
       <div className="bg-surface rounded-xl border border-border shadow-sm p-4">
-        <RateOverridesClient roomTypes={(roomTypes ?? []) as RoomTypeOption[]} />
+        <RateOverridesClient roomTypes={(roomTypes ?? []) as RoomTypeWithRatePlans[]} />
       </div>
     </div>
   );

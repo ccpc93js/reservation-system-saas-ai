@@ -5,14 +5,20 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Loader2, X } from "lucide-react";
 
+interface RatePlanOption {
+  id: string;
+  name: string;
+  is_default: boolean;
+}
 interface RoomTypeOption {
   id: string;
   name: string;
+  rate_plans: RatePlanOption[];
 }
 
 interface OverrideRow {
   id: string;
-  room_type_id: string;
+  rate_plan_id: string;
   date: string;
   rate: number | null;
   min_stay_arrival: number | null;
@@ -24,13 +30,8 @@ interface OverrideRow {
 }
 
 const FIELD_KEYS = [
-  "rate",
-  "min_stay_arrival",
-  "min_stay_through",
-  "max_stay",
-  "stop_sell",
-  "closed_to_arrival",
-  "closed_to_departure",
+  "rate", "min_stay_arrival", "min_stay_through", "max_stay",
+  "stop_sell", "closed_to_arrival", "closed_to_departure",
 ] as const;
 type FieldKey = (typeof FIELD_KEYS)[number];
 
@@ -55,6 +56,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
   const t = useTranslations("rates");
 
   const [selectedRoomTypeIds, setSelectedRoomTypeIds] = useState<string[]>([]);
+  const [selectedRatePlanIds, setSelectedRatePlanIds] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [enabledFields, setEnabledFields] = useState<Record<FieldKey, boolean>>({
@@ -99,8 +101,28 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
     fetchOverrides();
   }, [fetchOverrides]);
 
+  // Selecting a room type auto-selects its rate plans (just the default one
+  // if that's all it has — matches today's UX for every org with one plan
+  // per room type exactly). Deselecting a room type drops its rate plans
+  // from the selection too.
   const toggleRoomType = (id: string) => {
-    setSelectedRoomTypeIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    const roomType = roomTypes.find((rt) => rt.id === id);
+    setSelectedRoomTypeIds((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
+      return next;
+    });
+    setSelectedRatePlanIds((prev) => {
+      const planIds = roomType?.rate_plans.map((rp) => rp.id) ?? [];
+      const alreadySelected = selectedRoomTypeIds.includes(id);
+      if (alreadySelected) {
+        return prev.filter((pid) => !planIds.includes(pid));
+      }
+      return [...prev, ...planIds];
+    });
+  };
+
+  const toggleRatePlan = (id: string) => {
+    setSelectedRatePlanIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   const toggleField = (key: FieldKey) => {
@@ -108,7 +130,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
   };
 
   const handleSave = async () => {
-    if (selectedRoomTypeIds.length === 0) {
+    if (selectedRatePlanIds.length === 0) {
       toast.error(t("errorNoRoomTypes"));
       return;
     }
@@ -123,7 +145,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
     }
 
     const body: Record<string, unknown> = {
-      room_type_ids: selectedRoomTypeIds,
+      rate_plan_ids: selectedRatePlanIds,
       date_from: dateFrom,
       date_to: dateTo,
     };
@@ -143,24 +165,17 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
         return;
       }
       toast.success(t("toastSaved", { count: data.rows_written }));
-      if (data.skipped_room_type_ids?.length > 0) {
-        toast.warning(t("toastSkippedRoomTypes", { count: data.skipped_room_type_ids.length }));
+      if (data.skipped_rate_plan_ids?.length > 0) {
+        toast.warning(t("toastSkippedRoomTypes", { count: data.skipped_rate_plan_ids.length }));
       }
 
-      // Expand the list window (never shrink it) so the just-saved range is visible.
       const newListFrom = dateFrom < listFrom ? dateFrom : listFrom;
       const newListTo = dateTo > listTo ? dateTo : listTo;
       const windowChanged = newListFrom !== listFrom || newListTo !== listTo;
       if (newListFrom !== listFrom) setListFrom(newListFrom);
       if (newListTo !== listTo) setListTo(newListTo);
-      if (!windowChanged) {
-        // Window already covers the saved range; the listFrom/listTo effect
-        // won't fire, so refetch explicitly to pick up the new data.
-        fetchOverrides();
-      }
+      if (!windowChanged) fetchOverrides();
 
-      // Reset "apply this field" toggles so stale enabled fields from this
-      // save don't silently carry over into the next edit.
       setEnabledFields({
         rate: false, min_stay_arrival: false, min_stay_through: false, max_stay: false,
         stop_sell: false, closed_to_arrival: false, closed_to_departure: false,
@@ -191,7 +206,13 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
     }
   };
 
-  const roomTypeName = (id: string) => roomTypes.find((rt) => rt.id === id)?.name ?? id;
+  const ratePlanLabel = (id: string) => {
+    for (const rt of roomTypes) {
+      const rp = rt.rate_plans.find((p) => p.id === id);
+      if (rp) return rt.rate_plans.length > 1 ? `${rt.name} — ${rp.name}` : rt.name;
+    }
+    return id;
+  };
 
   return (
     <div className="space-y-8">
@@ -200,12 +221,24 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
 
         <div>
           <label className="block text-sm font-medium mb-1">{t("roomTypesLabel")}</label>
-          <div className="flex flex-wrap gap-3">
+          <div className="space-y-2">
             {roomTypes.map((rt) => (
-              <label key={rt.id} className="flex items-center gap-2 text-sm border border-border rounded-lg px-3 py-2">
-                <input type="checkbox" checked={selectedRoomTypeIds.includes(rt.id)} onChange={() => toggleRoomType(rt.id)} />
-                {rt.name}
-              </label>
+              <div key={rt.id} className="border border-border rounded-lg px-3 py-2">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <input type="checkbox" checked={selectedRoomTypeIds.includes(rt.id)} onChange={() => toggleRoomType(rt.id)} />
+                  {rt.name}
+                </label>
+                {selectedRoomTypeIds.includes(rt.id) && rt.rate_plans.length > 1 && (
+                  <div className="flex flex-wrap gap-3 mt-2 ml-6">
+                    {rt.rate_plans.map((rp) => (
+                      <label key={rp.id} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <input type="checkbox" checked={selectedRatePlanIds.includes(rp.id)} onChange={() => toggleRatePlan(rp.id)} />
+                        {rp.name}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -213,21 +246,11 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">{t("dateFromLabel")}</label>
-            <input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-            />
+            <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="w-full px-3 py-2 border border-border rounded-lg bg-background" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">{t("dateToLabel")}</label>
-            <input
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-            />
+            <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="w-full px-3 py-2 border border-border rounded-lg bg-background" />
           </div>
         </div>
 
@@ -281,19 +304,9 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-xl font-semibold">{t("listHeading")}</h2>
           <div className="flex items-center gap-2">
-            <input
-              type="date"
-              value={listFrom}
-              onChange={(e) => setListFrom(e.target.value)}
-              className="px-2 py-1 border border-border rounded-lg bg-background text-sm"
-            />
+            <input type="date" value={listFrom} onChange={(e) => setListFrom(e.target.value)} className="px-2 py-1 border border-border rounded-lg bg-background text-sm" />
             <span className="text-sm text-muted-foreground">{t("toLabel")}</span>
-            <input
-              type="date"
-              value={listTo}
-              onChange={(e) => setListTo(e.target.value)}
-              className="px-2 py-1 border border-border rounded-lg bg-background text-sm"
-            />
+            <input type="date" value={listTo} onChange={(e) => setListTo(e.target.value)} className="px-2 py-1 border border-border rounded-lg bg-background text-sm" />
           </div>
         </div>
 
@@ -320,7 +333,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
                   FIELD_KEYS.filter((key) => row[key] !== null).map((key) => (
                     <tr key={`${row.id}-${key}`} className="border-b hover:bg-background">
                       <td className="px-4 py-2 text-sm">{row.date}</td>
-                      <td className="px-4 py-2 text-sm">{roomTypeName(row.room_type_id)}</td>
+                      <td className="px-4 py-2 text-sm">{ratePlanLabel(row.rate_plan_id)}</td>
                       <td className="px-4 py-2 text-sm">{t(FIELD_LABEL_KEYS[key])}</td>
                       <td className="px-4 py-2 text-sm">{String(row[key])}</td>
                       <td className="px-4 py-2 text-sm">
