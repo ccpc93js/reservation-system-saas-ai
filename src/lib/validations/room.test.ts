@@ -71,16 +71,31 @@ describe("createRoomTypeSchema", () => {
 });
 
 describe("updateRoomTypeSchema", () => {
-  it("accepts a partial update with only base_price", async () => {
-    await expect(updateRoomTypeSchema.validate({ base_price: 30 })).resolves.toBeTruthy();
+  // Pricing/restrictions moved to rate_plans — this schema validates only
+  // physical attributes now (name/type/gender/capacity/description).
+  // base_price and friends are no longer fields it knows about at all, so
+  // it neither requires nor rejects them; a caller sending them here gets
+  // no validation error, but the route layer (room-types/[id]/route.ts)
+  // is what actually drops them before writing, not this schema.
+
+  it("accepts a partial update with only capacity", async () => {
+    await expect(updateRoomTypeSchema.validate({ capacity: 4 })).resolves.toBeTruthy();
   });
 
   it("accepts an empty object (all fields optional on update)", async () => {
     await expect(updateRoomTypeSchema.validate({})).resolves.toBeTruthy();
   });
 
-  it("still rejects an out-of-range base_price when provided", async () => {
-    await expect(updateRoomTypeSchema.validate({ base_price: -5 })).rejects.toThrow();
+  it("rejects a name that's too short, same as on create", async () => {
+    await expect(updateRoomTypeSchema.validate({ name: "A" })).rejects.toThrow();
+  });
+
+  it("rejects capacity above 20, same as on create", async () => {
+    await expect(updateRoomTypeSchema.validate({ capacity: 21 })).rejects.toThrow();
+  });
+
+  it("no longer validates base_price — it's not a field of this schema anymore", async () => {
+    await expect(updateRoomTypeSchema.validate({ base_price: -5 })).resolves.toBeTruthy();
   });
 });
 

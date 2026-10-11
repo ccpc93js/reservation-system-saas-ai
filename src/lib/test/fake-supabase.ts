@@ -112,6 +112,9 @@ class FakeQueryBuilder implements PromiseLike<{ data: any; error: any }> {
   }
 
   private run(): { data: any; error: any } {
+    const forced = this.client.takeForcedError(this.table, this.op);
+    if (forced) return { data: null, error: forced };
+
     const rows = this.tableRows();
 
     if (this.op === "select") {
@@ -185,6 +188,7 @@ export class FakeSupabaseClient {
   tables: Record<string, Row[]> = {};
   private rpcHandlers: Record<string, RpcHandler> = {};
   private currentUser: { id: string } | null = null;
+  private forcedErrors: Record<string, { message: string }> = {};
 
   auth = {
     getUser: async () => ({
@@ -206,6 +210,24 @@ export class FakeSupabaseClient {
   /** Register a canned handler for supabase.rpc(name, args). */
   onRpc(name: string, handler: RpcHandler): void {
     this.rpcHandlers[name] = handler;
+  }
+
+  /**
+   * Make the next `op` on `table` return `{data: null, error: {message}}`
+   * instead of succeeding — for testing a handler's own error-handling path
+   * (e.g. "insert succeeds but a later, non-fatal insert fails"). One-shot:
+   * consumed by the first matching call, not sticky across the test.
+   */
+  forceError(table: string, op: "select" | "insert" | "update" | "upsert" | "delete", message = "forced error"): void {
+    this.forcedErrors[`${table}:${op}`] = { message };
+  }
+
+  /** @internal consumed by FakeQueryBuilder.run() */
+  takeForcedError(table: string, op: string): { message: string } | null {
+    const key = `${table}:${op}`;
+    const err = this.forcedErrors[key];
+    if (err) delete this.forcedErrors[key];
+    return err ?? null;
   }
 
   from(table: string): FakeQueryBuilder {

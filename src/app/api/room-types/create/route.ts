@@ -80,8 +80,11 @@ export async function POST(request: Request) {
     if (ratePlanError) {
       console.error("Default rate plan creation error:", ratePlanError);
       // Room type was created; surface this but don't fail the whole
-      // request — the room-type dialog's rate-plans list will show it
-      // missing and the manager can add one manually.
+      // request. Today this leaves the room type with zero rate plans and
+      // no in-app way to notice or fix it short of direct DB access — the
+      // room-type dialog doesn't yet show or manage a rate-plans list.
+      // That recovery UI is a later task; until it ships, treat this log
+      // line as the only signal.
     }
 
     return Response.json(

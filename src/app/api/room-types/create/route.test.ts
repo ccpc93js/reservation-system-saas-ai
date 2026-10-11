@@ -78,4 +78,16 @@ describe("POST /api/room-types/create", () => {
       min_stay_arrival: null, min_stay_through: null, max_stay: null,
     });
   });
+
+  it("still returns 201 with the room type if the default rate plan insert fails", async () => {
+    db.forceError("rate_plans", "insert", "simulated failure");
+
+    const res = await POST(jsonRequest({ name: "Twin Room", type: "private", capacity: 2, base_price: 100 }));
+    const data = await res.json();
+
+    expect(res.status).toBe(201);
+    expect(data.room_type_id).toBeDefined();
+    expect(db.tables.room_types).toHaveLength(1);
+    expect(db.tables.rate_plans ?? []).toHaveLength(0);
+  });
 });
