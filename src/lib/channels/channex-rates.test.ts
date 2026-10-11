@@ -16,24 +16,20 @@ import { pushRatesForOrg } from "./channex-rates";
 
 const orgId = "org-1";
 
-function seedProvisioned(db: FakeSupabaseClient, roomTypes: any[]) {
+function seedProvisioned(db: FakeSupabaseClient, ratePlans: any[]) {
   db.seed("channel_provider_links", [
     { kind: "property", local_id: orgId, channex_id: "prop-1", organization_id: orgId },
-    ...roomTypes.map((rt) => ({
+    ...ratePlans.map((rp) => ({
       kind: "rate_plan",
-      local_id: rt.id,
-      channex_id: `rp-${rt.id}`,
+      local_id: rp.id,
+      channex_id: `channex-${rp.id}`,
       organization_id: orgId,
     })),
   ]);
-  db.seed("room_types", roomTypes.map((rt) => ({ ...rt, organization_id: orgId })));
+  db.seed("rate_plans", ratePlans.map((rp) => ({ ...rp, organization_id: orgId })));
 }
 
 describe("pushRatesForOrg", () => {
-  // pushRatesForOrg clamps `from` to today (`opts.from > todayISO() ? opts.from
-  // : todayISO()`), so date assertions below need "today" pinned before the
-  // fixture dates — otherwise this test silently breaks once real "today"
-  // passes 2026-07-01.
   beforeEach(() => {
     vi.mocked(channex.pushRestrictions).mockClear();
     vi.useFakeTimers();
@@ -53,7 +49,8 @@ describe("pushRatesForOrg", () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
       {
-        id: "rt-1",
+        id: "rp-1",
+        room_type_id: "rt-1",
         base_price: "25.00",
         stop_sell: false,
         closed_to_arrival: true,
@@ -70,15 +67,14 @@ describe("pushRatesForOrg", () => {
     expect(values).toEqual([
       {
         property_id: "prop-1",
-        rate_plan_id: "rp-rt-1",
+        rate_plan_id: "channex-rp-1",
         date_from: "2026-07-01",
-        date_to: "2026-07-02", // to is exclusive; last night is one before it
+        date_to: "2026-07-02",
         rate: 2500,
         stop_sell: false,
         closed_to_arrival: true,
         closed_to_departure: false,
         min_stay_arrival: 2,
-        // min_stay_through omitted entirely — null, not sent as null
       },
     ]);
   });
@@ -86,15 +82,7 @@ describe("pushRatesForOrg", () => {
   it("omits null min-stay fields rather than sending null", async () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
-      {
-        id: "rt-1",
-        base_price: "25.00",
-        stop_sell: false,
-        closed_to_arrival: false,
-        closed_to_departure: false,
-        min_stay_arrival: null,
-        min_stay_through: null,
-      },
+      { id: "rp-1", room_type_id: "rt-1", base_price: "25.00", stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null },
     ]);
 
     await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
@@ -104,118 +92,120 @@ describe("pushRatesForOrg", () => {
     expect(values[0]).not.toHaveProperty("min_stay_through");
   });
 
-  it("only pushes room types that have a mapped rate plan", async () => {
+  it("only pushes rate plans that have a mapped Channex id", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channel_provider_links", [
       { kind: "property", local_id: orgId, channex_id: "prop-1", organization_id: orgId },
-      // rt-mapped has a rate_plan link; rt-unmapped does not
-      { kind: "rate_plan", local_id: "rt-mapped", channex_id: "rp-mapped", organization_id: orgId },
+      { kind: "rate_plan", local_id: "rp-mapped", channex_id: "channex-mapped", organization_id: orgId },
     ]);
-    db.seed("room_types", [
-      { id: "rt-mapped", organization_id: orgId, base_price: 10, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null },
-      { id: "rt-unmapped", organization_id: orgId, base_price: 10, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null },
+    db.seed("rate_plans", [
+      { id: "rp-mapped", organization_id: orgId, room_type_id: "rt-1", base_price: 10, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null },
+      { id: "rp-unmapped", organization_id: orgId, room_type_id: "rt-1", base_price: 10, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null },
     ]);
 
     await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
 
     const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
     expect(values).toHaveLength(1);
-    expect(values[0].rate_plan_id).toBe("rp-mapped");
+    expect(values[0].rate_plan_id).toBe("channex-mapped");
   });
 
-  it("an override's rate wins over base_price for its date; other dates fall back", async () => {
+  it("an override's rate wins over the rate plan's base_price for its date; other dates fall back", async () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
-      { id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
     ]);
     db.seed("room_type_rate_overrides", [
-      { id: "ov-1", organization_id: orgId, room_type_id: "rt-1", date: "2026-07-02", rate: 333, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
+      { id: "ov-1", organization_id: orgId, rate_plan_id: "rp-1", date: "2026-07-02", rate: 333, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
     ]);
 
     await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-04" });
 
     const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
     expect(values).toEqual([
-      { property_id: "prop-1", rate_plan_id: "rp-rt-1", date_from: "2026-07-01", date_to: "2026-07-01", rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
-      { property_id: "prop-1", rate_plan_id: "rp-rt-1", date_from: "2026-07-02", date_to: "2026-07-02", rate: 33300, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
-      { property_id: "prop-1", rate_plan_id: "rp-rt-1", date_from: "2026-07-03", date_to: "2026-07-03", rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-01", date_to: "2026-07-01", rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-02", date_to: "2026-07-02", rate: 33300, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-03", date_to: "2026-07-03", rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false },
     ]);
   });
 
-  it("an override that only sets rate leaves restriction fields inherited from the room type", async () => {
+  it("compresses consecutive identical nights into one entry per rate plan", async () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
-      { id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: true, closed_to_departure: false, min_stay_arrival: 2, min_stay_through: null, max_stay: null },
-    ]);
-    db.seed("room_type_rate_overrides", [
-      { id: "ov-1", organization_id: orgId, room_type_id: "rt-1", date: "2026-07-01", rate: 333, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
-    ]);
-
-    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
-
-    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
-    expect(values[0]).toEqual({
-      property_id: "prop-1", rate_plan_id: "rp-rt-1", date_from: "2026-07-01", date_to: "2026-07-01",
-      rate: 33300, stop_sell: false, closed_to_arrival: true, closed_to_departure: false, min_stay_arrival: 2,
-    });
-  });
-
-  it("compresses consecutive identical nights into one entry per room type", async () => {
-    const db = new FakeSupabaseClient();
-    seedProvisioned(db, [
-      { id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
-      { id: "rt-2", base_price: 200, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-2", room_type_id: "rt-2", base_price: 200, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
     ]);
 
     await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-11" });
 
     const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
     expect(values).toHaveLength(2);
-    expect(values.find((v: any) => v.rate_plan_id === "rp-rt-1")).toMatchObject({ date_from: "2026-07-01", date_to: "2026-07-10", rate: 10000 });
-    expect(values.find((v: any) => v.rate_plan_id === "rp-rt-2")).toMatchObject({ date_from: "2026-07-01", date_to: "2026-07-10", rate: 20000 });
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-1")).toMatchObject({ date_from: "2026-07-01", date_to: "2026-07-10", rate: 10000 });
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-2")).toMatchObject({ date_from: "2026-07-01", date_to: "2026-07-10", rate: 20000 });
   });
 
-  it("includes max_stay when set (override or standing) and omits it when neither sets it", async () => {
+  it("two rate plans on the same room type push independently with their own prices", async () => {
     const db = new FakeSupabaseClient();
     seedProvisioned(db, [
-      { id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: 14 },
-    ]);
-    db.seed("room_type_rate_overrides", [
-      { id: "ov-1", organization_id: orgId, room_type_id: "rt-1", date: "2026-07-02", rate: null, min_stay_arrival: null, min_stay_through: null, max_stay: 3, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
-    ]);
-
-    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-03" });
-
-    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
-    expect(values[0]).toMatchObject({ date_from: "2026-07-01", date_to: "2026-07-01", max_stay: 14 });
-    expect(values[1]).toMatchObject({ date_from: "2026-07-02", date_to: "2026-07-02", max_stay: 3 });
-  });
-
-  it("omits max_stay entirely when neither override nor standing value sets it", async () => {
-    const db = new FakeSupabaseClient();
-    seedProvisioned(db, [
-      { id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
-    ]);
-    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
-    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
-    expect(values[0]).not.toHaveProperty("max_stay");
-  });
-
-  it("pushes the same effective values to every rate plan mapped to a room type", async () => {
-    const db = new FakeSupabaseClient();
-    db.seed("channel_provider_links", [
-      { kind: "property", local_id: orgId, channex_id: "prop-1", organization_id: orgId },
-      { kind: "rate_plan", local_id: "rt-1", channex_id: "rp-bar", organization_id: orgId },
-      { kind: "rate_plan", local_id: "rt-1", channex_id: "rp-bnb", organization_id: orgId },
-    ]);
-    db.seed("room_types", [
-      { id: "rt-1", organization_id: orgId, base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-bar", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-bnb", room_type_id: "rt-1", base_price: 120, stop_sell: false, closed_to_arrival: true, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
     ]);
 
     await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
 
     const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
-    expect(values.map((v: any) => v.rate_plan_id).sort()).toEqual(["rp-bar", "rp-bnb"]);
-    expect(values.every((v: any) => v.date_from === "2026-07-01" && v.date_to === "2026-07-01" && v.rate === 10000)).toBe(true);
+    expect(values).toHaveLength(2);
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-bar")).toMatchObject({ rate: 10000, closed_to_arrival: false });
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-bnb")).toMatchObject({ rate: 12000, closed_to_arrival: true });
+  });
+
+  it("with touchedFields, includes only those fields even though others have effective values", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: true, closed_to_arrival: true, closed_to_departure: true, min_stay_arrival: 3, min_stay_through: null, max_stay: null },
+    ]);
+
+    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, {
+      from: "2026-07-01", to: "2026-07-02",
+      touchedFields: new Set(["rate"]),
+    });
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values[0]).toEqual({
+      property_id: "prop-1", rate_plan_id: "channex-rp-1",
+      date_from: "2026-07-01", date_to: "2026-07-01",
+      rate: 10000,
+    });
+  });
+
+  it("with touchedFields, omits min/max stay even when a value is set, if not in the touched set", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: 5, min_stay_through: null, max_stay: 14 },
+    ]);
+
+    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, {
+      from: "2026-07-01", to: "2026-07-02",
+      touchedFields: new Set(["stop_sell"]),
+    });
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values[0]).toEqual({
+      property_id: "prop-1", rate_plan_id: "channex-rp-1",
+      date_from: "2026-07-01", date_to: "2026-07-01",
+      stop_sell: false,
+    });
+  });
+
+  it("without touchedFields (full sync), behavior is unchanged — every field included", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+
+    await pushRatesForOrg(db as unknown as SupabaseClient, orgId, { from: "2026-07-01", to: "2026-07-02" });
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values[0]).toMatchObject({ rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false });
   });
 });
