@@ -109,6 +109,36 @@ describe("processOutbox", () => {
     expect(opts?.roomTypeLocalIds).toBeUndefined();
   });
 
+  it("persists the Channex task ids returned by the push onto the sent rows", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [
+      pendingRow({ id: "a" }),
+      pendingRow({ id: "b", from_date: "2026-07-03", to_date: "2026-07-05" }),
+    ]);
+    vi.mocked(pushAvailabilityForOrg).mockResolvedValue({
+      ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1,
+      channexTaskIds: ["task-1", "task-2"],
+    });
+
+    const result = await processOutbox(db as unknown as SupabaseClient);
+
+    expect(result.channexTaskIds).toEqual(["task-1", "task-2"]);
+    expect(db.tables.channex_outbox[0].task_ids).toEqual(["task-1", "task-2"]);
+    expect(db.tables.channex_outbox[1].task_ids).toEqual(["task-1", "task-2"]);
+  });
+
+  it("leaves task_ids unset when the push response carries no task ids", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [pendingRow()]);
+    vi.mocked(pushAvailabilityForOrg).mockResolvedValue({
+      ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1,
+    });
+
+    await processOutbox(db as unknown as SupabaseClient);
+
+    expect(db.tables.channex_outbox[0].task_ids).toBeUndefined();
+  });
+
   it("retries with exponential backoff on a transient (network) push failure", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [pendingRow()]);

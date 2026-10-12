@@ -267,6 +267,7 @@ export type Database = {
           room_type_ids: string[] | null
           sent_at: string | null
           status: string
+          task_ids: string[] | null
           to_date: string
           touched_fields: string[] | null
         }
@@ -282,6 +283,7 @@ export type Database = {
           room_type_ids?: string[] | null
           sent_at?: string | null
           status?: string
+          task_ids?: string[] | null
           to_date: string
           touched_fields?: string[] | null
         }
@@ -297,6 +299,7 @@ export type Database = {
           room_type_ids?: string[] | null
           sent_at?: string | null
           status?: string
+          task_ids?: string[] | null
           to_date?: string
           touched_fields?: string[] | null
         }

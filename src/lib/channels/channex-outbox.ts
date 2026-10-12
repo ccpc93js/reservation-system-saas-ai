@@ -156,7 +156,11 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
           });
       if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;
-      await supabase.from("channex_outbox").update({ status: "sent", sent_at: new Date().toISOString() }).in("id", g.ids);
+      await supabase.from("channex_outbox").update({
+        status: "sent",
+        sent_at: new Date().toISOString(),
+        ...(result.channexTaskIds && result.channexTaskIds.length ? { task_ids: result.channexTaskIds } : {}),
+      }).in("id", g.ids);
       sent += g.ids.length;
     } catch (err) {
       calls++; // a failed call still hit the API
