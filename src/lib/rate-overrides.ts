@@ -55,35 +55,43 @@ export async function applyRateOverrides(
     return { ok: false, rowsWritten: 0, skippedRatePlanIds: [], error: "invalid input" };
   }
 
-  // Only touch rate plans that actually belong to this org.
+  // Only touch rate plans that actually belong to this org. room_type_id is
+  // also fetched here (not just id) because room_type_rate_overrides keeps
+  // it as a denormalized, NOT NULL column — every existing room-type-scoped
+  // query depends on it being populated, so it must be set on every insert,
+  // not just carried over on updates.
   const { data: owned } = await supabase
     .from("rate_plans")
-    .select("id")
+    .select("id, room_type_id")
     .eq("organization_id", orgId)
     .in("id", ratePlanIds);
-  const ownedIds = new Set(((owned as { id: string }[]) ?? []).map((r) => r.id));
+  const roomTypeIdByRatePlanId = new Map(
+    ((owned as { id: string; room_type_id: string }[]) ?? []).map((r) => [r.id, r.room_type_id])
+  );
   // Dedupe: a repeated id would otherwise produce two upsert rows with the
   // same (rate_plan_id, date) conflict target in one statement, which
   // Postgres rejects ("ON CONFLICT DO UPDATE command cannot affect row a
   // second time").
-  const validRatePlanIds = [...new Set(ratePlanIds.filter((id) => ownedIds.has(id)))];
-  const skippedRatePlanIds = ratePlanIds.filter((id) => !ownedIds.has(id));
+  const validRatePlanIds = [...new Set(ratePlanIds.filter((id) => roomTypeIdByRatePlanId.has(id)))];
+  const skippedRatePlanIds = ratePlanIds.filter((id) => !roomTypeIdByRatePlanId.has(id));
   if (validRatePlanIds.length === 0) {
     return { ok: false, rowsWritten: 0, skippedRatePlanIds: ratePlanIds, error: "no matching rate plans" };
   }
 
   const dates = dateRangeInclusive(dateFrom, dateTo);
 
-  // Partial upsert: each row carries only the primary-key columns plus the
-  // fields actually touched by this edit. PostgREST upsert only SETs the
-  // columns present in the payload on conflict, so untouched columns on an
-  // existing row are left alone.
+  // Partial upsert: each row carries only the primary-key columns (plus the
+  // denormalized room_type_id, required on insert) and the fields actually
+  // touched by this edit. PostgREST upsert only SETs the columns present in
+  // the payload on conflict, so untouched columns on an existing row are
+  // left alone.
   const upsertRows: Record<string, unknown>[] = [];
   for (const ratePlanId of validRatePlanIds) {
     for (const date of dates) {
       const row: Record<string, unknown> = {
         organization_id: orgId,
         rate_plan_id: ratePlanId,
+        room_type_id: roomTypeIdByRatePlanId.get(ratePlanId),
         date,
         updated_at: new Date().toISOString(),
       };

@@ -27,6 +27,7 @@ describe("applyRateOverrides", () => {
     expect(db.tables.room_type_rate_overrides).toHaveLength(1);
     expect(db.tables.room_type_rate_overrides[0]).toMatchObject({
       rate_plan_id: "rp-1",
+      room_type_id: "rt-1",
       date: "2026-11-21",
       rate: 333,
     });
