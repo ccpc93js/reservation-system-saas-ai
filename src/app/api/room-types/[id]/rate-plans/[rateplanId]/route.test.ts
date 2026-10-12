@@ -38,14 +38,31 @@ describe("PATCH /api/room-types/[id]/rate-plans/[rateplanId]", () => {
     expect(db.tables.rate_plans[0]).toMatchObject({ base_price: 150, name: "BAR" });
   });
 
-  it("enqueues a restrictions push when a priced/restricted field changes", async () => {
+  it("enqueues a sparse restrictions push naming only the touched field", async () => {
     const { enqueueRestrictions } = await import("@/lib/channels/channex-outbox");
     db.seed("rate_plans", [{ id: "rp-1", organization_id: "org-1", room_type_id: "rt-1", name: "BAR", base_price: 100, is_default: false }]);
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
 
     await PATCH(patchRequest({ base_price: 150 }), params());
 
-    expect(enqueueRestrictions).toHaveBeenCalledWith(db, "org-1", expect.any(String), expect.any(String), ["rp-1"]);
+    // base_price (the request/DB field name) maps to "rate" (the
+    // OverrideFieldKey/Channex field name) — editing just the price must not
+    // also claim every other restriction field was touched.
+    expect(enqueueRestrictions).toHaveBeenCalledWith(db, "org-1", expect.any(String), expect.any(String), ["rp-1"], ["rate"]);
+  });
+
+  it("names every field actually touched when more than one changes", async () => {
+    const { enqueueRestrictions } = await import("@/lib/channels/channex-outbox");
+    db.seed("rate_plans", [{ id: "rp-1", organization_id: "org-1", room_type_id: "rt-1", name: "BAR", base_price: 100, is_default: false }]);
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
+
+    await PATCH(patchRequest({ base_price: 150, stop_sell: true, name: "Best Available Rate" }), params());
+
+    const call = vi.mocked(enqueueRestrictions).mock.calls.at(-1)!;
+    expect(call[0]).toBe(db);
+    expect(call[1]).toBe("org-1");
+    expect(call[4]).toEqual(["rp-1"]);
+    expect(new Set(call[5])).toEqual(new Set(["rate", "stop_sell"]));
   });
 
   it("does not enqueue a push when only the name changes", async () => {

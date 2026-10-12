@@ -293,6 +293,22 @@ export const OVERRIDE_FIELD_KEYS = [
 export const RESTRICTION_BODY_FIELDS = OVERRIDE_FIELD_KEYS.map((k) => (k === "rate" ? "base_price" : k));
 export type OverrideFieldKey = (typeof OVERRIDE_FIELD_KEYS)[number];
 
+// Given a PATCH body keyed by RESTRICTION_BODY_FIELDS names, returns exactly
+// which OverrideFieldKeys it touched — for callers enqueueing a sparse
+// (touched-fields-only) push instead of a full-snapshot one. A standing-value
+// edit (e.g. via the room-type dialog's rate-plan editor) still needs the
+// full future date window pushed (every date from today is affected), but
+// which FIELDS to include is a separate question from which DATES — this
+// answers the field question so the push doesn't re-send every restriction
+// field just because one changed.
+export function touchedOverrideFields(body: Record<string, unknown>): Set<OverrideFieldKey> | undefined {
+  const touched = new Set<OverrideFieldKey>();
+  OVERRIDE_FIELD_KEYS.forEach((key, i) => {
+    if (body[RESTRICTION_BODY_FIELDS[i]] !== undefined) touched.add(key);
+  });
+  return touched.size > 0 ? touched : undefined;
+}
+
 // ─── Endpoints ───────────────────────────────────────────────────────────────
 
 export const channex = {
