@@ -663,6 +663,7 @@
         "gender_female": "Female",
         "capacityLabel": "Capacity (beds) *",
         "basePriceLabel": "Base Price ($) *",
+        "basePriceHintCreatesDefaultPlan": "This creates the room type's first rate plan — add more from the edit screen.",
         "descriptionLabel": "Description (optional)",
         "descriptionPlaceholder": "Room type description",
         "channelRestrictionsHeading": "Channel restrictions",
@@ -676,7 +677,22 @@
         "cancel": "Cancel",
         "saving": "Saving...",
         "save": "Save",
-        "maxStayLabel": "Max stay"
+        "maxStayLabel": "Max stay",
+        "ratePlans": {
+          "heading": "Rate plans",
+          "addNew": "Add rate plan",
+          "defaultBadge": "default",
+          "edit": "Edit",
+          "namePlaceholder": "e.g. Bed & Breakfast",
+          "confirmDelete": "Delete this rate plan? This can't be undone.",
+          "errorNameAndPriceRequired": "Name and price are required",
+          "toastSaved": "Rate plan updated",
+          "toastSaveFailed": "Failed to update rate plan",
+          "toastAdded": "Rate plan added",
+          "toastAddFailed": "Failed to add rate plan",
+          "toastDeleted": "Rate plan deleted",
+          "toastDeleteFailed": "Failed to delete rate plan"
+        }
       },
       "refresh": "Refresh"
     },

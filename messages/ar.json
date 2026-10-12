@@ -663,6 +663,7 @@
         "gender_female": "نساء",
         "capacityLabel": "السعة (الأسرّة) *",
         "basePriceLabel": "السعر الأساسي ($) *",
+        "basePriceHintCreatesDefaultPlan": "This creates the room type's first rate plan — add more from the edit screen.",
         "descriptionLabel": "الوصف (اختياري)",
         "descriptionPlaceholder": "وصف نوع الغرفة",
         "deleting": "جارٍ الحذف...",
@@ -670,7 +671,22 @@
         "cancel": "إلغاء",
         "saving": "جارٍ الحفظ...",
         "save": "حفظ",
-        "maxStayLabel": "Max stay"
+        "maxStayLabel": "Max stay",
+        "ratePlans": {
+          "heading": "Rate plans",
+          "addNew": "Add rate plan",
+          "defaultBadge": "default",
+          "edit": "Edit",
+          "namePlaceholder": "e.g. Bed & Breakfast",
+          "confirmDelete": "Delete this rate plan? This can't be undone.",
+          "errorNameAndPriceRequired": "Name and price are required",
+          "toastSaved": "Rate plan updated",
+          "toastSaveFailed": "Failed to update rate plan",
+          "toastAdded": "Rate plan added",
+          "toastAddFailed": "Failed to add rate plan",
+          "toastDeleted": "Rate plan deleted",
+          "toastDeleteFailed": "Failed to delete rate plan"
+        }
       },
       "refresh": "تحديث"
     },

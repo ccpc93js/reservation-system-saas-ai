@@ -663,6 +663,7 @@
         "gender_female": "Женский",
         "capacityLabel": "Вместимость (кроватей) *",
         "basePriceLabel": "Базовая цена ($) *",
+        "basePriceHintCreatesDefaultPlan": "This creates the room type's first rate plan — add more from the edit screen.",
         "descriptionLabel": "Описание (необязательно)",
         "descriptionPlaceholder": "Описание типа номера",
         "channelRestrictionsHeading": "Ограничения канала",
@@ -676,7 +677,22 @@
         "cancel": "Отмена",
         "saving": "Сохранение...",
         "save": "Сохранить",
-        "maxStayLabel": "Max stay"
+        "maxStayLabel": "Max stay",
+        "ratePlans": {
+          "heading": "Rate plans",
+          "addNew": "Add rate plan",
+          "defaultBadge": "default",
+          "edit": "Edit",
+          "namePlaceholder": "e.g. Bed & Breakfast",
+          "confirmDelete": "Delete this rate plan? This can't be undone.",
+          "errorNameAndPriceRequired": "Name and price are required",
+          "toastSaved": "Rate plan updated",
+          "toastSaveFailed": "Failed to update rate plan",
+          "toastAdded": "Rate plan added",
+          "toastAddFailed": "Failed to add rate plan",
+          "toastDeleted": "Rate plan deleted",
+          "toastDeleteFailed": "Failed to delete rate plan"
+        }
       },
       "refresh": "Обновить"
     },
