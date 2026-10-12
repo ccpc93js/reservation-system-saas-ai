@@ -1,7 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { updateRatePlanSchema } from "@/lib/validations/rate-plan";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 import { enqueueRestrictions } from "@/lib/channels/channex-outbox";
 import { touchedOverrideFields } from "@/lib/channels/channex";
 
@@ -15,18 +15,18 @@ export async function PATCH(
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership || !isManager(membership.role)) {
-      return Response.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const { data: ratePlan } = await supabase
       .from("rate_plans")
-      .select("id")
+      .select("id, organization_id")
       .eq("id", rateplanId)
-      .eq("organization_id", membership.organizationId)
       .maybeSingle();
     if (!ratePlan) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+
+    const membership = await getMembershipForOrg(supabase, user.id, (ratePlan as any).organization_id);
+    if (!membership) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+    if (!isManager(membership.role)) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const body = await request.json();
     try {
@@ -71,18 +71,18 @@ export async function DELETE(
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership || !isManager(membership.role)) {
-      return Response.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const { data: ratePlan } = await supabase
       .from("rate_plans")
-      .select("id, is_default")
+      .select("id, is_default, organization_id")
       .eq("id", rateplanId)
-      .eq("organization_id", membership.organizationId)
       .maybeSingle();
     if (!ratePlan) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+
+    const membership = await getMembershipForOrg(supabase, user.id, (ratePlan as any).organization_id);
+    if (!membership) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+    if (!isManager(membership.role)) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
     if ((ratePlan as any).is_default) {
       return Response.json({ error: "Can't delete a room type's only (default) rate plan" }, { status: 409 });
     }

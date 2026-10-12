@@ -2,7 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { createRatePlanSchema } from "@/lib/validations/rate-plan";
 import { provisionOrg } from "@/lib/channels/channex-provision";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 export async function POST(
   request: Request,
@@ -14,18 +14,18 @@ export async function POST(
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership || !isManager(membership.role)) {
-      return Response.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const { data: roomType } = await supabase
       .from("room_types")
-      .select("id")
+      .select("id, organization_id")
       .eq("id", roomTypeId)
-      .eq("organization_id", membership.organizationId)
       .maybeSingle();
     if (!roomType) return Response.json({ error: "Room type not found" }, { status: 404 });
+
+    const membership = await getMembershipForOrg(supabase, user.id, (roomType as any).organization_id);
+    if (!membership) return Response.json({ error: "Room type not found" }, { status: 404 });
+    if (!isManager(membership.role)) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const body = await request.json();
     try {

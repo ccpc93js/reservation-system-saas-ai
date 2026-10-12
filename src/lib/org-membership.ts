@@ -36,3 +36,25 @@ export async function getPrimaryMembership(
   if (!data) return null;
   return { organizationId: (data as any).organization_id, role: (data as any).role };
 }
+
+// For routes anchored on a specific resource (room type, rate plan, override):
+// the resource's own organization_id is the authority on which org this request
+// is "for", not the caller's primary/oldest membership. Checks whether the user
+// has ANY membership in that specific org and returns its role for a permission
+// check; null means "not a member there" (caller should treat as not-found, to
+// avoid revealing the resource exists in an org the user can't see).
+export async function getMembershipForOrg(
+  supabase: SupabaseClient,
+  userId: string,
+  organizationId: string
+): Promise<{ organizationId: string; role: string } | null> {
+  const { data } = await supabase
+    .from("memberships")
+    .select("organization_id, role")
+    .eq("user_id", userId)
+    .eq("organization_id", organizationId)
+    .maybeSingle();
+
+  if (!data) return null;
+  return { organizationId: (data as any).organization_id, role: (data as any).role };
+}

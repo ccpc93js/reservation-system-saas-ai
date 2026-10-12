@@ -36,12 +36,14 @@ describe("PATCH /api/room-types/rate-overrides/[id]", () => {
   });
 
   it("returns 403 for a staff member", async () => {
+    db.seed("room_type_rate_overrides", [{ id: "ov-1", organization_id: "org-1" }]);
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
     const res = await PATCH(patchRequest({ field: "rate" }), { params: Promise.resolve({ id: "ov-1" }) });
     expect(res.status).toBe(403);
   });
 
   it("returns 400 for an invalid field name", async () => {
+    db.seed("room_type_rate_overrides", [{ id: "ov-1", organization_id: "org-1" }]);
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
     const res = await PATCH(patchRequest({ field: "not_a_real_field" }), { params: Promise.resolve({ id: "ov-1" }) });
     expect(res.status).toBe(400);
@@ -49,6 +51,7 @@ describe("PATCH /api/room-types/rate-overrides/[id]", () => {
   });
 
   it("clears the field for a manager", async () => {
+    db.seed("room_type_rate_overrides", [{ id: "ov-1", organization_id: "org-1" }]);
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);
     vi.mocked(clearRateOverrideField).mockResolvedValue({ ok: true });
 
@@ -56,5 +59,19 @@ describe("PATCH /api/room-types/rate-overrides/[id]", () => {
 
     expect(res.status).toBe(200);
     expect(clearRateOverrideField).toHaveBeenCalledWith(expect.anything(), "org-1", "ov-1", "rate");
+  });
+
+  it("succeeds when the override's org is a non-primary membership", async () => {
+    db.seed("room_type_rate_overrides", [{ id: "ov-1", organization_id: "org-2" }]);
+    db.seed("memberships", [
+      { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+      { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+    ]);
+    vi.mocked(clearRateOverrideField).mockResolvedValue({ ok: true });
+
+    const res = await PATCH(patchRequest({ field: "rate" }), { params: Promise.resolve({ id: "ov-1" }) });
+
+    expect(res.status).toBe(200);
+    expect(clearRateOverrideField).toHaveBeenCalledWith(expect.anything(), "org-2", "ov-1", "rate");
   });
 });

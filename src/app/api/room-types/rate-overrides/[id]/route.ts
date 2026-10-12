@@ -1,7 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { clearRateOverrideField, OVERRIDE_FIELD_KEYS, type OverrideFieldKey } from "@/lib/rate-overrides";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 export async function PATCH(
   request: Request,
@@ -16,8 +16,16 @@ export async function PATCH(
     } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership || !isManager(membership.role)) {
+    const { data: overrideRow } = await supabase
+      .from("room_type_rate_overrides")
+      .select("organization_id")
+      .eq("id", id)
+      .maybeSingle();
+    if (!overrideRow) return Response.json({ error: "not found" }, { status: 404 });
+
+    const membership = await getMembershipForOrg(supabase, user.id, (overrideRow as any).organization_id);
+    if (!membership) return Response.json({ error: "not found" }, { status: 404 });
+    if (!isManager(membership.role)) {
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 

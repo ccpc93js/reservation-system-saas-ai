@@ -65,6 +65,19 @@ describe("PATCH /api/room-types/[id]/rate-plans/[rateplanId]", () => {
     expect(new Set(call[5])).toEqual(new Set(["rate", "stop_sell"]));
   });
 
+  it("succeeds when the rate plan's org is a non-primary membership", async () => {
+    db.seed("rate_plans", [{ id: "rp-1", organization_id: "org-2", room_type_id: "rt-1", name: "BAR", base_price: 100, is_default: false }]);
+    db.seed("memberships", [
+      { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+      { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+    ]);
+
+    const res = await PATCH(patchRequest({ base_price: 150 }), params());
+
+    expect(res.status).toBe(200);
+    expect(db.tables.rate_plans[0]).toMatchObject({ base_price: 150 });
+  });
+
   it("does not enqueue a push when only the name changes", async () => {
     const { enqueueRestrictions } = await import("@/lib/channels/channex-outbox");
     vi.mocked(enqueueRestrictions).mockClear();
@@ -110,6 +123,22 @@ describe("DELETE /api/room-types/[id]/rate-plans/[rateplanId]", () => {
 
     expect(res.status).toBe(409);
     expect(db.tables.rate_plans).toHaveLength(1);
+  });
+
+  it("succeeds deleting when the rate plan's org is a non-primary membership", async () => {
+    db.seed("rate_plans", [
+      { id: "rp-default", organization_id: "org-2", room_type_id: "rt-1", name: "Standard Rate", is_default: true },
+      { id: "rp-1", organization_id: "org-2", room_type_id: "rt-1", name: "BAR", is_default: false },
+    ]);
+    db.seed("memberships", [
+      { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+      { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+    ]);
+
+    const res = await del();
+
+    expect(res.status).toBe(200);
+    expect(db.tables.rate_plans.find((r: any) => r.id === "rp-1")).toBeUndefined();
   });
 
   it("refuses to delete a rate plan that has existing overrides", async () => {

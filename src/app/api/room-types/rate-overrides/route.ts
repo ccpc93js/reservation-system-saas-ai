@@ -2,7 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { applyRateOverridesSchema } from "@/lib/validations/rate-override";
 import { applyRateOverrides, OVERRIDE_FIELD_KEYS } from "@/lib/rate-overrides";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getPrimaryMembership, getMembershipForOrg } from "@/lib/org-membership";
 
 export async function GET(request: Request) {
   try {
@@ -40,16 +40,29 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership || !isManager(membership.role)) {
-      return Response.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const body = await request.json();
     try {
       await applyRateOverridesSchema.validate(body);
     } catch (validationError: any) {
       return Response.json({ error: validationError.message }, { status: 400 });
+    }
+
+    // The caller's primary/oldest membership is the wrong authority here: the
+    // rate plans being edited belong to whichever org the user is currently
+    // working in, which may not be their primary one. Anchor on the first
+    // targeted rate plan's own org instead; applyRateOverrides already skips
+    // (via skippedRatePlanIds) any requested id that doesn't belong to it.
+    const { data: anchorRatePlan } = await supabase
+      .from("rate_plans")
+      .select("organization_id")
+      .eq("id", body.rate_plan_ids[0])
+      .maybeSingle();
+    if (!anchorRatePlan) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+
+    const membership = await getMembershipForOrg(supabase, user.id, (anchorRatePlan as any).organization_id);
+    if (!membership) return Response.json({ error: "Rate plan not found" }, { status: 404 });
+    if (!isManager(membership.role)) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const fields: Record<string, unknown> = {};

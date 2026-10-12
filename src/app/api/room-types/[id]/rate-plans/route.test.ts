@@ -51,6 +51,17 @@ describe("POST /api/room-types/[id]/rate-plans", () => {
     expect(res.status).toBe(404);
   });
 
+  it("succeeds when the room type's org is a non-primary membership", async () => {
+    db.seed("room_types", [{ id: "rt-1", organization_id: "org-2" }]);
+    db.seed("memberships", [
+      { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+      { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+    ]);
+    const res = await POST(jsonRequest({ name: "BAR", base_price: 100 }), params());
+    expect(res.status).toBe(201);
+    expect(db.tables.rate_plans[0]).toMatchObject({ organization_id: "org-2" });
+  });
+
   it("creates a non-default rate plan and provisions it", async () => {
     db.seed("room_types", [{ id: "rt-1", organization_id: "org-1" }]);
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "manager" }]);

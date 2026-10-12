@@ -50,6 +50,16 @@ describe("room-types/[id] route", () => {
       const res = await GET(new Request("http://localhost"), params("rt-2"));
       expect(res.status).toBe(404);
     });
+
+    it("succeeds when the resource's org is a non-primary membership", async () => {
+      db.seed("memberships", [
+        { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+        { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+      ]);
+      db.seed("room_types", [{ id: "rt-2", organization_id: "org-2", name: "Non-Primary Org Room", type: "private", capacity: 1, base_price: 50 }]);
+      const res = await GET(new Request("http://localhost"), params("rt-2"));
+      expect(res.status).toBe(200);
+    });
   });
 
   describe("PATCH", () => {
