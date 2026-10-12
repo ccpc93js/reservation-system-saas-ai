@@ -131,7 +131,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
 
   const handleSave = async () => {
     if (selectedRatePlanIds.length === 0) {
-      toast.error(t("errorNoRoomTypes"));
+      toast.error(t("errorNoRatePlans"));
       return;
     }
     if (!dateFrom || !dateTo || dateTo < dateFrom) {
@@ -166,7 +166,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
       }
       toast.success(t("toastSaved", { count: data.rows_written }));
       if (data.skipped_rate_plan_ids?.length > 0) {
-        toast.warning(t("toastSkippedRoomTypes", { count: data.skipped_rate_plan_ids.length }));
+        toast.warning(t("toastSkippedRatePlans", { count: data.skipped_rate_plan_ids.length }));
       }
 
       const newListFrom = dateFrom < listFrom ? dateFrom : listFrom;
