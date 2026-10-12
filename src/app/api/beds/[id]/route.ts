@@ -1,5 +1,16 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { updateBedSchema } from "@/lib/validations/room";
+import { getMembershipForOrg } from "@/lib/org-membership";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+// The caller's primary/oldest org membership is the wrong authority for a
+// request anchored on a specific bed: a user with several memberships may
+// be working in a non-primary org, and that org owns the resource.
+async function loadOwnedBed(supabase: SupabaseClient, bedId: string, select: string) {
+  const { data: bed } = await supabase.from("beds").select(select).eq("id", bedId).maybeSingle();
+  if (!bed) return null;
+  return bed as any;
+}
 
 export async function GET(
   _request: Request,
@@ -19,29 +30,14 @@ export async function GET(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Fetch bed
+    const bed = await loadOwnedBed(supabase, id, "*, rooms(id, name, floor, room_types(name, type))");
+    if (!bed) {
+      return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 
-    // Fetch bed
-    const { data: bed, error: bedError } = await supabase
-      .from("beds")
-      .select("*, rooms(id, name, floor, room_types(name, type))")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (bedError || !bed) {
+    const membership = await getMembershipForOrg(supabase, user.id, bed.organization_id);
+    if (!membership) {
       return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 
@@ -82,29 +78,14 @@ export async function PATCH(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Verify bed exists and belongs to org
+    const bed = await loadOwnedBed(supabase, id, "id, organization_id");
+    if (!bed) {
+      return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 
-    // Verify bed exists and belongs to org
-    const { data: bed, error: bedError } = await supabase
-      .from("beds")
-      .select("id")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (bedError || !bed) {
+    const membership = await getMembershipForOrg(supabase, user.id, bed.organization_id);
+    if (!membership) {
       return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 
@@ -171,29 +152,14 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Verify bed exists and belongs to org
+    const bed = await loadOwnedBed(supabase, id, "id, organization_id");
+    if (!bed) {
+      return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 
-    // Verify bed exists and belongs to org
-    const { data: bed, error: bedError } = await supabase
-      .from("beds")
-      .select("id")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (bedError || !bed) {
+    const membership = await getMembershipForOrg(supabase, user.id, bed.organization_id);
+    if (!membership) {
       return Response.json({ error: "Bed not found" }, { status: 404 });
     }
 

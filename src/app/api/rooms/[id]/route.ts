@@ -1,5 +1,16 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { updateRoomSchema } from "@/lib/validations/room";
+import { getMembershipForOrg } from "@/lib/org-membership";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+// The caller's primary/oldest org membership is the wrong authority for a
+// request anchored on a specific room: a user with several memberships may
+// be working in a non-primary org, and that org owns the resource.
+async function loadOwnedRoom(supabase: SupabaseClient, roomId: string, select: string) {
+  const { data: room } = await supabase.from("rooms").select(select).eq("id", roomId).maybeSingle();
+  if (!room) return null;
+  return room as any;
+}
 
 export async function GET(
   _request: Request,
@@ -19,29 +30,14 @@ export async function GET(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Fetch room
+    const room = await loadOwnedRoom(supabase, id, "*, room_types(id, name, type, capacity, base_price)");
+    if (!room) {
+      return Response.json({ error: "Room not found" }, { status: 404 });
     }
 
-    // Fetch room
-    const { data: room, error: roomError } = await supabase
-      .from("rooms")
-      .select("*, room_types(id, name, type, capacity, base_price)")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (roomError || !room) {
+    const membership = await getMembershipForOrg(supabase, user.id, room.organization_id);
+    if (!membership) {
       return Response.json({ error: "Room not found" }, { status: 404 });
     }
 
@@ -82,29 +78,14 @@ export async function PATCH(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Verify room exists and belongs to org
+    const room = await loadOwnedRoom(supabase, id, "id, organization_id");
+    if (!room) {
+      return Response.json({ error: "Room not found" }, { status: 404 });
     }
 
-    // Verify room exists and belongs to org
-    const { data: room, error: roomError } = await supabase
-      .from("rooms")
-      .select("id")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (roomError || !room) {
+    const membership = await getMembershipForOrg(supabase, user.id, room.organization_id);
+    if (!membership) {
       return Response.json({ error: "Room not found" }, { status: 404 });
     }
 
@@ -171,29 +152,14 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id")
-      .eq("user_id", user.id)
-      .single();
-
-    if (membershipError || !membership) {
-      return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
-      );
+    // Verify room exists and belongs to org
+    const room = await loadOwnedRoom(supabase, id, "id, organization_id");
+    if (!room) {
+      return Response.json({ error: "Room not found" }, { status: 404 });
     }
 
-    // Verify room exists and belongs to org
-    const { data: room, error: roomError } = await supabase
-      .from("rooms")
-      .select("id")
-      .eq("id", id)
-      .eq("organization_id", (membership as any).organization_id)
-      .single();
-
-    if (roomError || !room) {
+    const membership = await getMembershipForOrg(supabase, user.id, room.organization_id);
+    if (!membership) {
       return Response.json({ error: "Room not found" }, { status: 404 });
     }
 

@@ -1,6 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { createBedSchema } from "@/lib/validations/room";
 import { canAddBed, getBedLimit } from "@/lib/plan";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 export async function POST(request: Request) {
   try {
@@ -16,22 +17,42 @@ export async function POST(request: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's organization + plan
-    const { data: membership, error: membershipError } = await supabase
-      .from("memberships")
-      .select("organization_id, organizations(plan)")
-      .eq("user_id", user.id)
-      .single();
+    const body = await request.json();
 
-    if (membershipError || !membership) {
+    try {
+      await createBedSchema.validate(body);
+    } catch (validationError: any) {
       return Response.json(
-        { error: "You don't have access to any organization" },
-        { status: 403 }
+        { error: validationError.message },
+        { status: 400 }
       );
     }
 
-    const orgId = membership.organization_id;
-    const plan = (membership as any).organizations?.plan ?? "free";
+    // The bed being created belongs to whichever org owns body.room_id —
+    // the caller's primary/oldest membership is the wrong authority when
+    // the user has several memberships and is working in a non-primary one.
+    const { data: room } = await supabase
+      .from("rooms")
+      .select("organization_id")
+      .eq("id", body.room_id)
+      .maybeSingle();
+    if (!room) {
+      return Response.json({ error: "Room not found" }, { status: 404 });
+    }
+
+    const membership = await getMembershipForOrg(supabase, user.id, (room as any).organization_id);
+    if (!membership) {
+      return Response.json({ error: "Room not found" }, { status: 404 });
+    }
+
+    const { data: org } = await supabase
+      .from("organizations")
+      .select("plan")
+      .eq("id", membership.organizationId)
+      .maybeSingle();
+
+    const orgId = membership.organizationId;
+    const plan = (org as any)?.plan ?? "free";
 
     // Check bed limit
     const { count: currentBeds } = await supabase
@@ -50,23 +71,11 @@ export async function POST(request: Request) {
       }, { status: 403 });
     }
 
-    // Parse and validate request body
-    const body = await request.json();
-
-    try {
-      await createBedSchema.validate(body);
-    } catch (validationError: any) {
-      return Response.json(
-        { error: validationError.message },
-        { status: 400 }
-      );
-    }
-
     // Create bed
     const { data: newBed, error: bedError } = await (supabase
       .from("beds") as any)
       .insert({
-        organization_id: (membership as any).organization_id,
+        organization_id: orgId,
         room_id: body.room_id,
         name: body.name,
         position: body.position || null,
