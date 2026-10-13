@@ -17,12 +17,16 @@ export async function POST(request: Request) {
       const supabase = await createServerClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-      const { data: membership } = await supabase
+      // This endpoint drains an account-wide feed (not scoped to one org), so
+      // there's no single resource to anchor an org check on — the right
+      // question is just "is this user a manager of any org they belong to".
+      // .single() throws (PGRST116) for a user with more than one membership
+      // row, which turned every multi-org user's manual trigger into a 403.
+      const { data: memberships } = await supabase
         .from("memberships")
         .select("role")
-        .eq("user_id", user.id)
-        .single();
-      if (!membership || !isManager((membership as any).role)) {
+        .eq("user_id", user.id);
+      if (!memberships?.some((m) => isManager((m as any).role))) {
         return Response.json({ error: "Forbidden" }, { status: 403 });
       }
     }
