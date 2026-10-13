@@ -5,7 +5,7 @@ import { FakeSupabaseClient } from "@/lib/test/fake-supabase";
 vi.mock("./channex-outbox", () => ({ enqueueAvailability: vi.fn().mockResolvedValue(undefined) }));
 vi.mock("@/lib/notifications", () => ({ notifyOrg: vi.fn().mockResolvedValue(undefined) }));
 
-import { applyRevision, type ApplyResult } from "./channex-bookings";
+import { applyRevision, applyAndLogRevision, type ApplyResult } from "./channex-bookings";
 import type { RevisionAttributes } from "./channex";
 
 const orgId = "org-1";
@@ -136,5 +136,51 @@ describe("applyRevision", () => {
     );
     expect(result.action).toBe("error");
     expect(result.warning).toMatch(/not mapped/);
+  });
+});
+
+describe("applyAndLogRevision", () => {
+  it("logs the revision_id, booking_id, action and reservation_id for a created booking", async () => {
+    const db = baseDb();
+    db.seed("channex_revisions", []);
+    const result = await applyAndLogRevision(db as unknown as SupabaseClient, "revision-abc", revision());
+
+    expect(result.action).toBe("created");
+    expect(db.tables.channex_revisions).toHaveLength(1);
+    expect(db.tables.channex_revisions[0]).toMatchObject({
+      revision_id: "revision-abc",
+      booking_id: "booking-1",
+      action: "created",
+      reservation_id: result.reservationId,
+    });
+  });
+
+  it("logs a cancelled revision too, with no reservation_id required to differ", async () => {
+    const db = baseDb();
+    db.seed("reservations", [{ id: "existing-1", organization_id: orgId, external_id: "booking-1", status: "confirmed" }]);
+    db.seed("channex_revisions", []);
+    await applyAndLogRevision(db as unknown as SupabaseClient, "revision-cancel", revision({ status: "cancelled" }));
+
+    expect(db.tables.channex_revisions).toHaveLength(1);
+    expect(db.tables.channex_revisions[0]).toMatchObject({
+      revision_id: "revision-cancel",
+      booking_id: "booking-1",
+      action: "cancelled",
+      reservation_id: "existing-1",
+    });
+  });
+
+  it("still returns the apply result even though logging happens as a side effect", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_revisions", []);
+    const result = await applyAndLogRevision(
+      db as unknown as SupabaseClient,
+      "revision-skip",
+      revision({ property_id: "unmapped-property" })
+    );
+
+    expect(result.action).toBe("skipped");
+    expect(db.tables.channex_revisions).toHaveLength(1);
+    expect(db.tables.channex_revisions[0].action).toBe("skipped");
   });
 });

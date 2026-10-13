@@ -254,6 +254,54 @@ export type Database = {
           },
         ]
       }
+      channex_revisions: {
+        Row: {
+          action: string
+          booking_id: string
+          id: string
+          organization_id: string | null
+          received_at: string
+          reservation_id: string | null
+          revision_id: string
+          warning: string | null
+        }
+        Insert: {
+          action: string
+          booking_id: string
+          id?: string
+          organization_id?: string | null
+          received_at?: string
+          reservation_id?: string | null
+          revision_id: string
+          warning?: string | null
+        }
+        Update: {
+          action?: string
+          booking_id?: string
+          id?: string
+          organization_id?: string | null
+          received_at?: string
+          reservation_id?: string | null
+          revision_id?: string
+          warning?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channex_revisions_org_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channex_revisions_reservation_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channex_outbox: {
         Row: {
           attempts: number

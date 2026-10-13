@@ -261,6 +261,36 @@ export async function applyRevision(
   }
 }
 
+// Record that a revision was received and how it was applied — the only
+// evidence trail for inbound certification tests, since revision_id is
+// otherwise used once (fetch, apply, ack) and discarded; once acked it also
+// drops out of Channex's own /booking_revisions/feed, so it's unrecoverable
+// after the fact if we don't log it ourselves.
+async function logRevision(supabase: SupabaseClient, revisionId: string, res: ApplyResult): Promise<void> {
+  try {
+    await supabase.from("channex_revisions").insert({
+      revision_id: revisionId,
+      booking_id: res.bookingId,
+      action: res.action,
+      reservation_id: res.reservationId ?? null,
+      warning: res.warning ?? null,
+    });
+  } catch (err) {
+    console.error("channex_revisions log insert failed:", err);
+  }
+}
+
+/** applyRevision, plus a permanent log row for certification evidence. */
+export async function applyAndLogRevision(
+  supabase: SupabaseClient,
+  revisionId: string,
+  attrs: RevisionAttributes
+): Promise<ApplyResult> {
+  const res = await applyRevision(supabase, attrs);
+  await logRevision(supabase, revisionId, res);
+  return res;
+}
+
 export interface DrainSummary {
   processed: number;
   acked: number;
@@ -282,7 +312,7 @@ export async function drainFeed(supabase: SupabaseClient): Promise<DrainSummary>
 
     let ackedThisPage = 0;
     for (const rev of items) {
-      const res = await applyRevision(supabase, rev.attributes);
+      const res = await applyAndLogRevision(supabase, rev.id, rev.attributes);
       summary.processed++;
       summary.byAction[res.action] = (summary.byAction[res.action] ?? 0) + 1;
 

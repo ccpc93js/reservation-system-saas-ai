@@ -1,6 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { channex } from "@/lib/channels/channex";
-import { applyRevision } from "@/lib/channels/channex-bookings";
+import { applyAndLogRevision } from "@/lib/channels/channex-bookings";
 
 // Phase 3 — inbound booking webhook (low-latency push). Channex POSTs a
 // notification carrying a revision_id; the pull is the source of truth, so we
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     // Pull the authoritative revision, apply, then ack.
     const revision = await channex.getRevision(revisionId);
     const service = await createServiceClient();
-    const result = await applyRevision(service as any, revision.attributes);
+    const result = await applyAndLogRevision(service as any, revisionId, revision.attributes);
 
     if (result.action !== "error") {
       await channex.ackRevision(revisionId);
