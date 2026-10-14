@@ -3,12 +3,15 @@ import { isManager } from "@/lib/permissions";
 import { pushAvailabilityForOrg } from "@/lib/channels/channex-availability";
 import { pushRatesForOrg } from "@/lib/channels/channex-rates";
 import { ChannexConfigError } from "@/lib/channels/channex";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 // Phase 4 — availability (ARI) reconcile push. Pushes free-bed counts over a
 // long horizon to Channex. Run nightly (cron) as drift correction across all
-// provisioned orgs, or manually by a manager for their own org. Per-booking
-// decrements happen inline in applyRevision; this is the safety net.
+// provisioned orgs, or manually by a manager for the org whose Channel
+// Manager page they're on — NOT their primary/oldest membership, which may be
+// a different org entirely for a multi-org user. The caller tells us which
+// org (it's a page they're already viewing, not secret), and we verify their
+// membership in THAT org.
 export async function POST(request: Request) {
   try {
     const auth = request.headers.get("authorization");
@@ -28,11 +31,14 @@ export async function POST(request: Request) {
       const supabase = await createServerClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-      const membership = await getPrimaryMembership(supabase, user.id);
+      const body = await request.json().catch(() => ({}));
+      const orgId: string | undefined = body?.orgId;
+      if (!orgId) return Response.json({ error: "orgId is required" }, { status: 400 });
+      const membership = await getMembershipForOrg(supabase, user.id, orgId);
       if (!membership || !isManager(membership.role)) {
         return Response.json({ error: "Forbidden" }, { status: 403 });
       }
-      orgIds = [membership.organizationId];
+      orgIds = [orgId];
     }
 
     // Full sync = 2 API calls per property (availability + rates), 500-day

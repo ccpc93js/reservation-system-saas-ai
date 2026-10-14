@@ -1,23 +1,26 @@
 import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { listPendingMods, applyModification, dismissModification } from "@/lib/channels/channex-mods";
-import { getPrimaryMembership } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 // Pending OTA booking modifications (from "modified" revisions). GET lists them;
-// POST { modId, action: "apply" | "dismiss" } resolves one. Manager-only.
-async function auth(supabase: Awaited<ReturnType<typeof createServerClient>>) {
+// POST { orgId, modId, action: "apply" | "dismiss" } resolves one. Manager-only,
+// for the org the caller explicitly names — NOT their primary/oldest
+// membership, which may be a different org for a multi-org user.
+async function authForOrg(supabase: Awaited<ReturnType<typeof createServerClient>>, orgId: string | undefined) {
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) return { error: "Unauthorized", status: 401 as const };
-  const membership = await getPrimaryMembership(supabase, user.id);
-  if (!membership) return { error: "No organization", status: 403 as const };
-  if (!isManager(membership.role)) return { error: "Forbidden", status: 403 as const };
-  return { orgId: membership.organizationId };
+  if (!orgId) return { error: "orgId is required", status: 400 as const };
+  const membership = await getMembershipForOrg(supabase, user.id, orgId);
+  if (!membership || !isManager(membership.role)) return { error: "Forbidden", status: 403 as const };
+  return { orgId };
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const supabase = await createServerClient();
-    const a = await auth(supabase);
+    const orgId = new URL(request.url).searchParams.get("orgId") ?? undefined;
+    const a = await authForOrg(supabase, orgId);
     if ("error" in a) return Response.json({ error: a.error }, { status: a.status });
     const service = await createServiceClient();
     const mods = await listPendingMods(service as any, a.orgId);
@@ -31,10 +34,10 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const supabase = await createServerClient();
-    const a = await auth(supabase);
+    const { orgId, modId, action } = await request.json();
+    const a = await authForOrg(supabase, orgId);
     if ("error" in a) return Response.json({ error: a.error }, { status: a.status });
 
-    const { modId, action } = await request.json();
     if (!modId || !["apply", "dismiss"].includes(action)) {
       return Response.json({ error: "modId and action ('apply'|'dismiss') are required" }, { status: 400 });
     }

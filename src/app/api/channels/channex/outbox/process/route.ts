@@ -2,12 +2,14 @@ import { createServerClient, createServiceClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { processOutbox } from "@/lib/channels/channex-outbox";
 import { ChannexConfigError } from "@/lib/channels/channex";
-import { getPrimaryMembership } from "@/lib/org-membership";
 
-// Channex outbox worker. Drains due outbox rows, coalescing per (org, kind)
-// into single availability / restrictions pushes, rate-limited with backoff.
-// Meant to run on a short cron (~1 min) so PMS changes reach Channex within a
-// batch window. Cron via CRON_SECRET, or a manager for a manual flush.
+// Channex outbox worker. Drains due outbox rows (across every org — it's not
+// scoped to one), coalescing per (org, kind) into single availability /
+// restrictions pushes, rate-limited with backoff. Meant to run on a short
+// cron (~1 min) so PMS changes reach Channex within a batch window. Cron via
+// CRON_SECRET, or a manager for a manual flush — the right question for a
+// manual trigger is "is this user a manager of any org they belong to", not
+// their primary/oldest membership (which may not even be a manager role).
 export async function POST(request: Request) {
   try {
     const auth = request.headers.get("authorization");
@@ -18,8 +20,11 @@ export async function POST(request: Request) {
       const supabase = await createServerClient();
       const { data: { user }, error } = await supabase.auth.getUser();
       if (error || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-      const membership = await getPrimaryMembership(supabase, user.id);
-      if (!membership || !isManager(membership.role)) {
+      const { data: memberships } = await supabase
+        .from("memberships")
+        .select("role")
+        .eq("user_id", user.id);
+      if (!memberships?.some((m) => isManager((m as any).role))) {
         return Response.json({ error: "Forbidden" }, { status: 403 });
       }
     }

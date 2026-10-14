@@ -68,7 +68,7 @@ interface Props {
 
 type WizardStep = "hotel" | "mapping";
 
-export default function ChannexSection({ initialChannexChannels, roomTypes }: Props) {
+export default function ChannexSection({ orgId, initialChannexChannels, roomTypes }: Props) {
   const t = useTranslations("channels");
   const [channels, setChannels] = useState<ChannexChannel[]>(initialChannexChannels);
   const [provisioning, setProvisioning] = useState(false);
@@ -92,11 +92,11 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
   const [resolvingMod, setResolvingMod] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/channels/channex/modifications")
+    fetch(`/api/channels/channex/modifications?orgId=${orgId}`)
       .then((r) => (r.ok ? r.json() : { mods: [] }))
       .then((d) => setMods(d.mods ?? []))
       .catch(() => {});
-  }, []);
+  }, [orgId]);
 
   const resolveMod = async (mod: PendingMod, action: "apply" | "dismiss") => {
     setResolvingMod(mod.id);
@@ -104,7 +104,7 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
       const res = await fetch("/api/channels/channex/modifications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ modId: mod.id, action }),
+        body: JSON.stringify({ orgId, modId: mod.id, action }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || t("channex.toastModFailed"));
@@ -122,7 +122,11 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
   const runProvision = async () => {
     setProvisioning(true);
     try {
-      const res = await fetch("/api/channels/channex/provision", { method: "POST" });
+      const res = await fetch("/api/channels/channex/provision", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orgId }),
+      });
       const data = await res.json();
       if (!res.ok && !data.ok) throw new Error(data.error || t("channex.toastProvisionFailed"));
       const created = (data.rows ?? []).filter((r: any) => r.action === "created").length;
@@ -138,7 +142,11 @@ export default function ChannexSection({ initialChannexChannels, roomTypes }: Pr
   const runSyncAvailability = async () => {
     setSyncing(true);
     try {
-      const res = await fetch("/api/channels/channex/push-availability", { method: "POST" });
+      const res = await fetch("/api/channels/channex/push-availability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orgId }),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t("channex.toastSyncFailed"));
       // Certification (Test #1, Full Sync) asks for the task id Channex
