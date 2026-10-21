@@ -5,7 +5,7 @@
 // deltas (each row scopes a date window + optional room types).
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { pushAvailabilityForOrg } from "./channex-availability";
+import { pushAvailabilityForOrgScoped, type AvailabilityScope } from "./channex-availability";
 import { pushRatesForOrgScoped, type RateScope } from "./channex-rates";
 import { ChannexError, OVERRIDE_FIELD_KEYS, type OverrideFieldKey } from "./channex";
 
@@ -70,14 +70,14 @@ export interface OutboxResult {
 interface Group {
   orgId: string;
   kind: OutboxKind;
-  from: string; // availability only: union window (safe — recomputed fresh per push, never stale)
-  to: string;
-  rtIds: Set<string> | null; // availability only: null = all provisioned room types
   ids: string[];
   attempts: number;
-  // restrictions only: one entry per coalesced row, each keeping its own
-  // date range/rate-plan(s)/touched-fields — never unioned into one flat
-  // window. See pushRatesForOrgScoped's doc comment for why.
+  // One entry per coalesced row, each keeping its own date range/room-or-
+  // rate-plan filter/touched-fields — never unioned into one flat window.
+  // See pushRatesForOrgScoped's and pushAvailabilityForOrgScoped's doc
+  // comments for why. (AvailabilityScope is a subset of RateScope's shape,
+  // so the same array serves both kinds — touchedFields is simply unused
+  // when kind is "availability".)
   scopes: RateScope[];
 }
 
@@ -109,23 +109,8 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     const key = `${row.organization_id}:${row.kind}`;
     let g = groups.get(key);
     if (!g) {
-      g = {
-        orgId: row.organization_id,
-        kind: row.kind,
-        from: row.from_date,
-        to: row.to_date,
-        rtIds: row.room_type_ids ? new Set<string>(row.room_type_ids) : null,
-        ids: [],
-        attempts: 0,
-        scopes: [],
-      };
+      g = { orgId: row.organization_id, kind: row.kind, ids: [], attempts: 0, scopes: [] };
       groups.set(key, g);
-    } else {
-      if (row.from_date < g.from) g.from = row.from_date;
-      if (row.to_date > g.to) g.to = row.to_date;
-      // A "null = all room types" row widens the group to all.
-      if (g.rtIds === null || row.room_type_ids === null) g.rtIds = null;
-      else for (const id of row.room_type_ids) g.rtIds.add(id);
     }
     g.scopes.push({
       from: row.from_date,
@@ -142,10 +127,9 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
 
   for (const g of groups.values()) {
     if (calls >= maxCalls) { rateLimited = true; break; }
-    const rtIds = g.rtIds ? [...g.rtIds] : undefined;
     try {
       const result = g.kind === "availability"
-        ? await pushAvailabilityForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds })
+        ? await pushAvailabilityForOrgScoped(supabase, g.orgId, g.scopes as AvailabilityScope[])
         : await pushRatesForOrgScoped(supabase, g.orgId, g.scopes);
       if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;

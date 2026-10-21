@@ -3,10 +3,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { FakeSupabaseClient } from "@/lib/test/fake-supabase";
 
-vi.mock("./channex-availability", () => ({ pushAvailabilityForOrg: vi.fn() }));
+vi.mock("./channex-availability", () => ({ pushAvailabilityForOrgScoped: vi.fn() }));
 vi.mock("./channex-rates", () => ({ pushRatesForOrgScoped: vi.fn() }));
 
-import { pushAvailabilityForOrg } from "./channex-availability";
+import { pushAvailabilityForOrgScoped } from "./channex-availability";
 import { pushRatesForOrgScoped } from "./channex-rates";
 import { enqueueAvailability, enqueueRestrictions, processOutbox } from "./channex-outbox";
 
@@ -59,9 +59,9 @@ describe("enqueueAvailability / enqueueRestrictions", () => {
   });
 });
 
-describe("processOutbox", () => {
+describe("processOutbox — availability rows coalesce into one scoped call", () => {
   beforeEach(() => {
-    vi.mocked(pushAvailabilityForOrg).mockReset().mockResolvedValue({ ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1 });
+    vi.mocked(pushAvailabilityForOrgScoped).mockReset().mockResolvedValue({ ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1 });
     vi.mocked(pushRatesForOrgScoped).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
   });
 
@@ -90,23 +90,43 @@ describe("processOutbox", () => {
 
     const result = await processOutbox(db as unknown as SupabaseClient);
 
-    expect(pushAvailabilityForOrg).toHaveBeenCalledTimes(1);
-    expect(pushAvailabilityForOrg).toHaveBeenCalledWith(db, orgId, { from: "2026-07-01", to: "2026-07-05", roomTypeLocalIds: undefined });
+    expect(pushAvailabilityForOrgScoped).toHaveBeenCalledTimes(1);
     expect(result.sent).toBe(2);
     expect(db.tables.channex_outbox.every((r: any) => r.status === "sent")).toBe(true);
   });
 
-  it("widens to all room types (undefined filter) if any grouped row has room_type_ids: null", async () => {
+  it("coalesces several rows into one call, each keeping its own date range and room type — never unioned", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [
-      pendingRow({ id: "a", room_type_ids: ["rt-1"] }),
-      pendingRow({ id: "b", room_type_ids: null }),
+      pendingRow({ id: "a", room_type_ids: ["rt-twin"], from_date: "2026-11-10", to_date: "2026-11-17" }),
+      pendingRow({ id: "b", room_type_ids: ["rt-double"], from_date: "2026-11-17", to_date: "2026-11-25" }),
     ]);
+
+    const result = await processOutbox(db as unknown as SupabaseClient);
+
+    // One call total — this is what certification actually checks (call count
+    // and, separately, exact date coverage per room type).
+    expect(pushAvailabilityForOrgScoped).toHaveBeenCalledTimes(1);
+    expect(result.calls).toBe(1);
+    const [, , scopes] = vi.mocked(pushAvailabilityForOrgScoped).mock.calls[0];
+    // Each row's own narrow range survives untouched — no row's date range
+    // got widened to cover the other row's dates (the production bug:
+    // unioning the group's window pushed BOTH room types' availability
+    // across the full 10–24 Nov span instead of each one's own sub-range).
+    expect(scopes).toEqual([
+      { from: "2026-11-10", to: "2026-11-17", roomTypeLocalIds: ["rt-twin"], touchedFields: undefined },
+      { from: "2026-11-17", to: "2026-11-25", roomTypeLocalIds: ["rt-double"], touchedFields: undefined },
+    ]);
+  });
+
+  it("a row with room_type_ids: null becomes an all-room-types scope", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [pendingRow({ room_type_ids: null })]);
 
     await processOutbox(db as unknown as SupabaseClient);
 
-    const [, , opts] = vi.mocked(pushAvailabilityForOrg).mock.calls[0];
-    expect(opts?.roomTypeLocalIds).toBeUndefined();
+    const [, , scopes] = vi.mocked(pushAvailabilityForOrgScoped).mock.calls[0];
+    expect(scopes[0].roomTypeLocalIds).toBeUndefined();
   });
 
   it("persists the Channex task ids returned by the push onto the sent rows", async () => {
@@ -115,7 +135,7 @@ describe("processOutbox", () => {
       pendingRow({ id: "a" }),
       pendingRow({ id: "b", from_date: "2026-07-03", to_date: "2026-07-05" }),
     ]);
-    vi.mocked(pushAvailabilityForOrg).mockResolvedValue({
+    vi.mocked(pushAvailabilityForOrgScoped).mockResolvedValue({
       ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1,
       channexTaskIds: ["task-1", "task-2"],
     });
@@ -130,7 +150,7 @@ describe("processOutbox", () => {
   it("leaves task_ids unset when the push response carries no task ids", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [pendingRow()]);
-    vi.mocked(pushAvailabilityForOrg).mockResolvedValue({
+    vi.mocked(pushAvailabilityForOrgScoped).mockResolvedValue({
       ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1,
     });
 
@@ -142,7 +162,7 @@ describe("processOutbox", () => {
   it("retries with exponential backoff on a transient (network) push failure", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [pendingRow()]);
-    vi.mocked(pushAvailabilityForOrg).mockRejectedValue(Object.assign(new Error("timeout"), { status: undefined }));
+    vi.mocked(pushAvailabilityForOrgScoped).mockRejectedValue(Object.assign(new Error("timeout"), { status: undefined }));
 
     const before = Date.now();
     const result = await processOutbox(db as unknown as SupabaseClient);
@@ -161,7 +181,7 @@ describe("processOutbox", () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [pendingRow()]);
     const { ChannexError } = await import("./channex");
-    vi.mocked(pushAvailabilityForOrg).mockRejectedValue(new ChannexError(422, "bad_request", "nope"));
+    vi.mocked(pushAvailabilityForOrgScoped).mockRejectedValue(new ChannexError(422, "bad_request", "nope"));
 
     const result = await processOutbox(db as unknown as SupabaseClient);
 
