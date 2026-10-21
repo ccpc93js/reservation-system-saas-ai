@@ -12,7 +12,7 @@ vi.mock("./channex", async (importOriginal) => {
 });
 
 import { channex } from "./channex";
-import { pushRatesForOrg } from "./channex-rates";
+import { pushRatesForOrg, pushRatesForOrgScoped } from "./channex-rates";
 
 const orgId = "org-1";
 
@@ -252,5 +252,96 @@ describe("pushRatesForOrg", () => {
 
     const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
     expect(values[0]).toMatchObject({ rate: 10000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false });
+  });
+});
+
+describe("pushRatesForOrgScoped", () => {
+  beforeEach(() => {
+    vi.mocked(channex.pushRestrictions).mockClear();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-01T00:00:00Z"));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("sends nothing and makes no call for an empty scope list", async () => {
+    const db = new FakeSupabaseClient();
+    const result = await pushRatesForOrgScoped(db as unknown as SupabaseClient, orgId, []);
+    expect(result.skipped).toBe("no scopes");
+    expect(channex.pushRestrictions).not.toHaveBeenCalled();
+  });
+
+  // The actual certification regression: 3 rate plans, each with exactly one
+  // declared single date, batched by the outbox into one flush. The old flat-
+  // window grouping unioned these into one [min,max) span and recomputed
+  // every rate plan across the whole span, leaking baseline-default values
+  // ($100 instead of the real $333/$444/$456.23) into each other's declared
+  // date. Each scope here must produce an entry scoped to ONLY its own date.
+  it("batches independent single-date scopes for different rate plans into one call, each entry scoped to only its own date", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-twin-bar", room_type_id: "rt-twin", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-double-bar", room_type_id: "rt-double", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-double-bnb", room_type_id: "rt-double", base_price: 120, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+    db.seed("room_type_rate_overrides", [
+      { id: "ov-1", organization_id: orgId, rate_plan_id: "rp-twin-bar", date: "2026-11-21", rate: 333, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
+      { id: "ov-2", organization_id: orgId, rate_plan_id: "rp-double-bar", date: "2026-11-25", rate: 444, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
+      { id: "ov-3", organization_id: orgId, rate_plan_id: "rp-double-bnb", date: "2026-11-29", rate: 456.23, min_stay_arrival: null, min_stay_through: null, max_stay: null, stop_sell: null, closed_to_arrival: null, closed_to_departure: null },
+    ]);
+
+    const result = await pushRatesForOrgScoped(db as unknown as SupabaseClient, orgId, [
+      { from: "2026-11-21", to: "2026-11-22", roomTypeLocalIds: ["rp-twin-bar"], touchedFields: new Set(["rate"]) },
+      { from: "2026-11-25", to: "2026-11-26", roomTypeLocalIds: ["rp-double-bar"], touchedFields: new Set(["rate"]) },
+      { from: "2026-11-29", to: "2026-11-30", roomTypeLocalIds: ["rp-double-bnb"], touchedFields: new Set(["rate"]) },
+    ]);
+
+    // Exactly one HTTP call — this is the literal thing certification checks.
+    expect(channex.pushRestrictions).toHaveBeenCalledTimes(1);
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values).toEqual([
+      { property_id: "prop-1", rate_plan_id: "channex-rp-twin-bar", date_from: "2026-11-21", date_to: "2026-11-21", rate: 33300 },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-double-bar", date_from: "2026-11-25", date_to: "2026-11-25", rate: 44400 },
+      { property_id: "prop-1", rate_plan_id: "channex-rp-double-bnb", date_from: "2026-11-29", date_to: "2026-11-29", rate: 45623 },
+    ]);
+    expect(result.entries).toBe(3);
+  });
+
+  it("a scope without touchedFields (full snapshot) doesn't widen or leak into a sparse scope sharing the same call", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: true, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+      { id: "rp-2", room_type_id: "rt-2", base_price: 200, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+
+    await pushRatesForOrgScoped(db as unknown as SupabaseClient, orgId, [
+      { from: "2026-07-01", to: "2026-07-02", roomTypeLocalIds: ["rp-1"], touchedFields: new Set(["rate"]) },
+      { from: "2026-08-01", to: "2026-08-02", roomTypeLocalIds: ["rp-2"] }, // full snapshot, different month entirely
+    ]);
+
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values).toHaveLength(2);
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-1")).toEqual({
+      property_id: "prop-1", rate_plan_id: "channex-rp-1", date_from: "2026-07-01", date_to: "2026-07-01", rate: 10000,
+    });
+    expect(values.find((v: any) => v.rate_plan_id === "channex-rp-2")).toMatchObject({
+      date_from: "2026-08-01", date_to: "2026-08-01", rate: 20000, stop_sell: false, closed_to_arrival: false, closed_to_departure: false,
+    });
+  });
+
+  it("an unmapped roomTypeLocalIds filter in one scope produces no entries for it, without affecting other scopes", async () => {
+    const db = new FakeSupabaseClient();
+    seedProvisioned(db, [
+      { id: "rp-1", room_type_id: "rt-1", base_price: 100, stop_sell: false, closed_to_arrival: false, closed_to_departure: false, min_stay_arrival: null, min_stay_through: null, max_stay: null },
+    ]);
+
+    const result = await pushRatesForOrgScoped(db as unknown as SupabaseClient, orgId, [
+      { from: "2026-07-01", to: "2026-07-02", roomTypeLocalIds: ["rp-does-not-exist"] },
+      { from: "2026-07-01", to: "2026-07-02", roomTypeLocalIds: ["rp-1"], touchedFields: new Set(["rate"]) },
+    ]);
+
+    expect(result.entries).toBe(1);
+    const [values] = vi.mocked(channex.pushRestrictions).mock.calls[0];
+    expect(values).toHaveLength(1);
+    expect(values[0].rate_plan_id).toBe("channex-rp-1");
   });
 });

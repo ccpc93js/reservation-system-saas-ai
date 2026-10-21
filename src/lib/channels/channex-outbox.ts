@@ -6,7 +6,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { pushAvailabilityForOrg } from "./channex-availability";
-import { pushRatesForOrg } from "./channex-rates";
+import { pushRatesForOrgScoped, type RateScope } from "./channex-rates";
 import { ChannexError, OVERRIDE_FIELD_KEYS, type OverrideFieldKey } from "./channex";
 
 type OutboxKind = "availability" | "restrictions";
@@ -70,13 +70,15 @@ export interface OutboxResult {
 interface Group {
   orgId: string;
   kind: OutboxKind;
-  from: string;
+  from: string; // availability only: union window (safe — recomputed fresh per push, never stale)
   to: string;
-  rtIds: Set<string> | null; // null = all provisioned room types/rate plans
+  rtIds: Set<string> | null; // availability only: null = all provisioned room types
   ids: string[];
   attempts: number;
-  touchedFields: Set<OverrideFieldKey> | null; // null = unknown row seen, or any row's touched_fields was null -> full snapshot
-  touchedFieldsKnown: boolean; // becomes false the moment we need a fallback
+  // restrictions only: one entry per coalesced row, each keeping its own
+  // date range/rate-plan(s)/touched-fields — never unioned into one flat
+  // window. See pushRatesForOrgScoped's doc comment for why.
+  scopes: RateScope[];
 }
 
 // touched_fields is a plain text[] column with no CHECK constraint, so a row
@@ -107,7 +109,6 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     const key = `${row.organization_id}:${row.kind}`;
     let g = groups.get(key);
     if (!g) {
-      const seeded = toOverrideFieldKeys(row.touched_fields);
       g = {
         orgId: row.organization_id,
         kind: row.kind,
@@ -116,8 +117,7 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
         rtIds: row.room_type_ids ? new Set<string>(row.room_type_ids) : null,
         ids: [],
         attempts: 0,
-        touchedFields: seeded,
-        touchedFieldsKnown: seeded !== null,
+        scopes: [],
       };
       groups.set(key, g);
     } else {
@@ -126,15 +126,13 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
       // A "null = all room types" row widens the group to all.
       if (g.rtIds === null || row.room_type_ids === null) g.rtIds = null;
       else for (const id of row.room_type_ids) g.rtIds.add(id);
-
-      const incoming = toOverrideFieldKeys(row.touched_fields);
-      if (incoming === null) {
-        g.touchedFields = null;
-        g.touchedFieldsKnown = false;
-      } else if (g.touchedFieldsKnown) {
-        for (const f of incoming) g.touchedFields!.add(f);
-      }
     }
+    g.scopes.push({
+      from: row.from_date,
+      to: row.to_date,
+      roomTypeLocalIds: row.room_type_ids ?? undefined,
+      touchedFields: toOverrideFieldKeys(row.touched_fields) ?? undefined,
+    });
     g.ids.push(row.id);
     g.attempts = Math.max(g.attempts, row.attempts ?? 0);
   }
@@ -148,12 +146,7 @@ export async function processOutbox(supabase: SupabaseClient, maxCalls = 18): Pr
     try {
       const result = g.kind === "availability"
         ? await pushAvailabilityForOrg(supabase, g.orgId, { from: g.from, to: g.to, roomTypeLocalIds: rtIds })
-        : await pushRatesForOrg(supabase, g.orgId, {
-            from: g.from,
-            to: g.to,
-            roomTypeLocalIds: rtIds,
-            touchedFields: g.touchedFieldsKnown && g.touchedFields ? g.touchedFields : undefined,
-          });
+        : await pushRatesForOrgScoped(supabase, g.orgId, g.scopes);
       if (result.channexTaskIds) channexTaskIds.push(...result.channexTaskIds);
       calls++;
       await supabase.from("channex_outbox").update({

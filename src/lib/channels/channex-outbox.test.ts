@@ -4,10 +4,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { FakeSupabaseClient } from "@/lib/test/fake-supabase";
 
 vi.mock("./channex-availability", () => ({ pushAvailabilityForOrg: vi.fn() }));
-vi.mock("./channex-rates", () => ({ pushRatesForOrg: vi.fn() }));
+vi.mock("./channex-rates", () => ({ pushRatesForOrgScoped: vi.fn() }));
 
 import { pushAvailabilityForOrg } from "./channex-availability";
-import { pushRatesForOrg } from "./channex-rates";
+import { pushRatesForOrgScoped } from "./channex-rates";
 import { enqueueAvailability, enqueueRestrictions, processOutbox } from "./channex-outbox";
 
 const orgId = "org-1";
@@ -62,7 +62,7 @@ describe("enqueueAvailability / enqueueRestrictions", () => {
 describe("processOutbox", () => {
   beforeEach(() => {
     vi.mocked(pushAvailabilityForOrg).mockReset().mockResolvedValue({ ok: true, propertyId: "p", roomTypesPushed: 1, entries: 1 });
-    vi.mocked(pushRatesForOrg).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
+    vi.mocked(pushRatesForOrgScoped).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
   });
 
   function pendingRow(overrides: Partial<Record<string, any>> = {}) {
@@ -189,9 +189,9 @@ describe("processOutbox", () => {
   });
 });
 
-describe("processOutbox — touched_fields union on coalesced groups", () => {
+describe("processOutbox — restrictions rows coalesce into one scoped call", () => {
   beforeEach(() => {
-    vi.mocked(pushRatesForOrg).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
+    vi.mocked(pushRatesForOrgScoped).mockReset().mockResolvedValue({ ok: true, propertyId: "p", ratePlansPushed: 1, entries: 1 });
   });
 
   function restrictionsRow(overrides: Partial<Record<string, any>> = {}) {
@@ -211,52 +211,66 @@ describe("processOutbox — touched_fields union on coalesced groups", () => {
     };
   }
 
-  it("passes a single group's touched_fields through unchanged", async () => {
+  it("passes a single row through as one scope with its own touched_fields", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [restrictionsRow({ touched_fields: ["rate"] })]);
 
     await processOutbox(db as unknown as SupabaseClient);
 
-    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
-    expect(opts?.touchedFields).toEqual(new Set(["rate"]));
+    expect(pushRatesForOrgScoped).toHaveBeenCalledTimes(1);
+    const [, , scopes] = vi.mocked(pushRatesForOrgScoped).mock.calls[0];
+    expect(scopes).toEqual([
+      { from: "2026-07-01", to: "2026-07-02", roomTypeLocalIds: ["rp-1"], touchedFields: new Set(["rate"]) },
+    ]);
   });
 
-  it("unions touched_fields across coalesced rows in the same group", async () => {
+  it("coalesces several rows into one call, each keeping its own date range and rate plan — never unioned", async () => {
+    const db = new FakeSupabaseClient();
+    db.seed("channex_outbox", [
+      restrictionsRow({ id: "a", room_type_ids: ["rp-twin-bar"], from_date: "2026-11-21", to_date: "2026-11-22", touched_fields: ["rate"] }),
+      restrictionsRow({ id: "b", room_type_ids: ["rp-double-bar"], from_date: "2026-11-25", to_date: "2026-11-26", touched_fields: ["rate"] }),
+      restrictionsRow({ id: "c", room_type_ids: ["rp-double-bnb"], from_date: "2026-11-29", to_date: "2026-11-30", touched_fields: ["rate"] }),
+    ]);
+
+    const result = await processOutbox(db as unknown as SupabaseClient);
+
+    // One call total — this is what certification actually checks (call count).
+    expect(pushRatesForOrgScoped).toHaveBeenCalledTimes(1);
+    expect(result.calls).toBe(1);
+    const [, , scopes] = vi.mocked(pushRatesForOrgScoped).mock.calls[0];
+    // Each row's own narrow range survives untouched — no row's date range
+    // got widened to cover another row's dates (the actual production bug:
+    // a flat union window caused each rate plan's computation to span every
+    // other row's dates too, leaking baseline-default values into them).
+    expect(scopes).toEqual([
+      { from: "2026-11-21", to: "2026-11-22", roomTypeLocalIds: ["rp-twin-bar"], touchedFields: new Set(["rate"]) },
+      { from: "2026-11-25", to: "2026-11-26", roomTypeLocalIds: ["rp-double-bar"], touchedFields: new Set(["rate"]) },
+      { from: "2026-11-29", to: "2026-11-30", roomTypeLocalIds: ["rp-double-bnb"], touchedFields: new Set(["rate"]) },
+    ]);
+    expect(db.tables.channex_outbox.every((r: any) => r.status === "sent")).toBe(true);
+  });
+
+  it("a row with touched_fields: null becomes a full-snapshot scope without forcing other rows in the same call to full snapshot too", async () => {
     const db = new FakeSupabaseClient();
     db.seed("channex_outbox", [
       restrictionsRow({ id: "a", touched_fields: ["rate"] }),
-      restrictionsRow({ id: "b", touched_fields: ["stop_sell"] }),
+      restrictionsRow({ id: "b", room_type_ids: ["rp-2"], touched_fields: null }),
     ]);
 
     await processOutbox(db as unknown as SupabaseClient);
 
-    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
-    expect(opts?.touchedFields).toEqual(new Set(["rate", "stop_sell"]));
+    const [, , scopes] = vi.mocked(pushRatesForOrgScoped).mock.calls[0];
+    expect(scopes[0].touchedFields).toEqual(new Set(["rate"]));
+    expect(scopes[1].touchedFields).toBeUndefined();
   });
 
-  it("falls back to no filter (full snapshot) if any coalesced row has touched_fields: null", async () => {
+  it("a row with room_type_ids: null becomes an all-rate-plans scope", async () => {
     const db = new FakeSupabaseClient();
-    db.seed("channex_outbox", [
-      restrictionsRow({ id: "a", touched_fields: ["rate"] }),
-      restrictionsRow({ id: "b", touched_fields: null }),
-    ]);
+    db.seed("channex_outbox", [restrictionsRow({ room_type_ids: null })]);
 
     await processOutbox(db as unknown as SupabaseClient);
 
-    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
-    expect(opts?.touchedFields).toBeUndefined();
-  });
-
-  it("stays in fallback regardless of row order (null row first, known row second)", async () => {
-    const db = new FakeSupabaseClient();
-    db.seed("channex_outbox", [
-      restrictionsRow({ id: "a", touched_fields: null }),
-      restrictionsRow({ id: "b", touched_fields: ["rate"] }),
-    ]);
-
-    await processOutbox(db as unknown as SupabaseClient);
-
-    const [, , opts] = vi.mocked(pushRatesForOrg).mock.calls[0];
-    expect(opts?.touchedFields).toBeUndefined();
+    const [, , scopes] = vi.mocked(pushRatesForOrgScoped).mock.calls[0];
+    expect(scopes[0].roomTypeLocalIds).toBeUndefined();
   });
 });
