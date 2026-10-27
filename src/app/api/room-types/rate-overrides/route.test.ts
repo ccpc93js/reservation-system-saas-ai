@@ -90,16 +90,48 @@ describe("GET /api/room-types/rate-overrides", () => {
 
   it("returns 400 without from/to", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
-    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides"));
+    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?org_id=org-1"));
     expect(res.status).toBe(400);
+  });
+
+  it("returns 400 without org_id", async () => {
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
+    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?from=2026-11-01&to=2026-11-30"));
+    expect(res.status).toBe(400);
+  });
+
+  it("returns 403 for an org the caller isn't a member of", async () => {
+    db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
+    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?from=2026-11-01&to=2026-11-30&org_id=org-2"));
+    expect(res.status).toBe(403);
   });
 
   it("is readable by staff (read-only, not manager-gated)", async () => {
     db.seed("memberships", [{ user_id: "user-1", organization_id: "org-1", role: "staff" }]);
     db.seed("room_type_rate_overrides", [{ id: "ov-1", organization_id: "org-1", date: "2026-11-01" }]);
-    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?from=2026-11-01&to=2026-11-30"));
+    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?from=2026-11-01&to=2026-11-30&org_id=org-1"));
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.overrides).toHaveLength(1);
+  });
+
+  it("scopes to the requested org, not the caller's oldest membership", async () => {
+    // Regression for the exact bug behind a false-negative "Upcoming
+    // overrides" list in the UI: a caller whose oldest membership is org-1
+    // but who is viewing org-2's Rates & Restrictions page must see org-2's
+    // overrides, not org-1's (or nothing).
+    db.seed("memberships", [
+      { user_id: "user-1", organization_id: "org-1", role: "manager", created_at: "2026-01-01" },
+      { user_id: "user-1", organization_id: "org-2", role: "manager", created_at: "2026-02-01" },
+    ]);
+    db.seed("room_type_rate_overrides", [
+      { id: "ov-1", organization_id: "org-1", date: "2026-11-05" },
+      { id: "ov-2", organization_id: "org-2", date: "2026-11-05" },
+    ]);
+    const res = await GET(new Request("http://localhost/api/room-types/rate-overrides?from=2026-11-01&to=2026-11-10&org_id=org-2"));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.overrides).toHaveLength(1);
+    expect(data.overrides[0].id).toBe("ov-2");
   });
 });

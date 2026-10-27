@@ -50,9 +50,10 @@ const FIELD_LABEL_KEYS: Record<FieldKey, string> = {
 
 interface RateOverridesClientProps {
   roomTypes: RoomTypeOption[];
+  organizationId: string;
 }
 
-export default function RateOverridesClient({ roomTypes }: RateOverridesClientProps) {
+export default function RateOverridesClient({ roomTypes, organizationId }: RateOverridesClientProps) {
   const t = useTranslations("rates");
 
   const [selectedRoomTypeIds, setSelectedRoomTypeIds] = useState<string[]>([]);
@@ -81,7 +82,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
   const fetchOverrides = useCallback(async () => {
     setIsLoadingList(true);
     try {
-      const params = new URLSearchParams({ from: listFrom, to: listTo });
+      const params = new URLSearchParams({ from: listFrom, to: listTo, org_id: organizationId });
       const res = await fetch(`/api/room-types/rate-overrides?${params}`);
       const data = await res.json();
       if (!res.ok) {
@@ -95,7 +96,7 @@ export default function RateOverridesClient({ roomTypes }: RateOverridesClientPr
     } finally {
       setIsLoadingList(false);
     }
-  }, [listFrom, listTo, t]);
+  }, [listFrom, listTo, organizationId, t]);
 
   useEffect(() => {
     fetchOverrides();

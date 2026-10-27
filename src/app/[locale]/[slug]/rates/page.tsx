@@ -54,7 +54,7 @@ export default async function RatesPage({ params }: { params: Promise<{ slug: st
       </div>
 
       <div className="bg-surface rounded-xl border border-border shadow-sm p-4">
-        <RateOverridesClient roomTypes={(roomTypes ?? []) as RoomTypeWithRatePlans[]} />
+        <RateOverridesClient roomTypes={(roomTypes ?? []) as RoomTypeWithRatePlans[]} organizationId={membership.organization_id} />
       </div>
     </div>
   );

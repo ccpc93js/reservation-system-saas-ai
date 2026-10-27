@@ -2,7 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import { isManager } from "@/lib/permissions";
 import { applyRateOverridesSchema } from "@/lib/validations/rate-override";
 import { applyRateOverrides, OVERRIDE_FIELD_KEYS } from "@/lib/rate-overrides";
-import { getPrimaryMembership, getMembershipForOrg } from "@/lib/org-membership";
+import { getMembershipForOrg } from "@/lib/org-membership";
 
 export async function GET(request: Request) {
   try {
@@ -10,13 +10,20 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const membership = await getPrimaryMembership(supabase, user.id);
-    if (!membership) return Response.json({ error: "You don't have access to any organization" }, { status: 403 });
-
     const { searchParams } = new URL(request.url);
     const from = searchParams.get("from");
     const to = searchParams.get("to");
+    const orgId = searchParams.get("org_id");
     if (!from || !to) return Response.json({ error: "from and to are required" }, { status: 400 });
+    if (!orgId) return Response.json({ error: "org_id is required" }, { status: 400 });
+
+    // The page the caller is looking at (not their oldest/"primary" org
+    // membership) is the authority on which org this list is for — a user
+    // with more than one membership would otherwise silently see another
+    // org's overrides, or an incorrectly empty list for the org they're
+    // actually viewing. Same reasoning as POST/PATCH below.
+    const membership = await getMembershipForOrg(supabase, user.id, orgId);
+    if (!membership) return Response.json({ error: "You don't have access to this organization" }, { status: 403 });
 
     const { data, error } = await supabase
       .from("room_type_rate_overrides")
